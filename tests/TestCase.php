@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IndexZer0\EloquentFiltering\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -13,7 +15,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'IndexZer0\\EloquentFiltering\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'IndexZer0\\EloquentFiltering\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
     }
 
@@ -24,7 +26,7 @@ class TestCase extends Orchestra
         ];
     }
 
-    public function getEnvironmentSetUp($app)
+    public function getEnvironmentSetUp($app): void
     {
         config()->set('database.default', 'testing');
 
