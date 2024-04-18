@@ -1,0 +1,32 @@
+{
+    "preset": "psr12",
+    "rules": {
+        "@PSR12:risky": true,
+        "@PHP80Migration:risky": true,
+        "@PHP82Migration": true,
+        "@PHPUnit100Migration:risky": true,
+        "binary_operator_spaces": {
+            "default": "single_space",
+            "operators": {
+                "=>": "align_single_space_minimal"
+            }
+        },
+        "array_indentation": true,
+        "concat_space": {
+            "spacing": "one"
+        },
+        "whitespace_after_comma_in_array": {
+            "ensure_single_space": true
+        },
+        "cast_spaces": {
+            "space": "single"
+        },
+        "explicit_string_variable": true,
+        "fully_qualified_strict_types": {
+            "import_symbols": true
+        },
+        "unary_operator_spaces": true,
+        "logical_operators": true,
+        "array_push": true
+    }
+}
