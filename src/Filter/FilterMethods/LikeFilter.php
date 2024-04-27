@@ -4,20 +4,10 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
-use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
-use IndexZer0\EloquentFiltering\Filter\Contracts\TargetedFilterMethod;
 use IndexZer0\EloquentFiltering\Rules\Scalar;
 
-readonly class LikeFilter implements TargetedFilterMethod
+readonly class LikeFilter extends WhereFilter
 {
-    public function __construct(
-        public string $target,
-        public string|float|int $value,
-    ) {
-
-    }
-
     protected function valueBefore(): string
     {
         return '%';
@@ -38,12 +28,7 @@ readonly class LikeFilter implements TargetedFilterMethod
         return '$like';
     }
 
-    public function apply(Builder $query, FilterableList $filterableList): Builder
-    {
-        return $query->where($this->target, $this->getOperatorForQuery(), $this->getValueForQuery());
-    }
-
-    protected function getOperatorForQuery(): string
+    protected function operator(): string
     {
         if ($this->operatorPrefix() === '') {
             return 'LIKE';
@@ -51,7 +36,7 @@ readonly class LikeFilter implements TargetedFilterMethod
         return "{$this->operatorPrefix()} LIKE";
     }
 
-    protected function getValueForQuery()
+    protected function value(): string
     {
         return "{$this->valueBefore()}{$this->value}{$this->valueAfter()}";
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
-readonly class GreaterThanFilter extends EqualFilter
+readonly class GreaterThanFilter extends WhereFilter
 {
     protected function operator(): string
     {
