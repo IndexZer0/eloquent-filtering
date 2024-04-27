@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier as FilterApplierContract;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser as FilterParserContract;
+use IndexZer0\EloquentFiltering\Filter\FilterApplier;
+use IndexZer0\EloquentFiltering\Filter\FilterParser;
+use IndexZer0\EloquentFiltering\Filter\AvailableFilters;
+
+class EloquentFilteringServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        $this->app->bind(FilterParserContract::class, FilterParser::class);
+        $this->app->bind(FilterApplierContract::class, FilterApplier::class);
+        $this->app->singleton(AvailableFilters::class, AvailableFilters::class);
+    }
+}
