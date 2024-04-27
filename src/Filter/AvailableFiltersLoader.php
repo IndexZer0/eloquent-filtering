@@ -44,6 +44,7 @@ class AvailableFiltersLoader
         return collect([
             EqualFilter::class,
             NotEqualFilter::class,
+
             GreaterThanFilter::class,
             GreaterThanEqualToFilter::class,
             LessThanFilter::class,
@@ -57,9 +58,6 @@ class AvailableFiltersLoader
             NotLikeStartFilter::class,
             NotLikeEndFilter::class,
 
-            HasFilter::class,
-            DoesntHasFilter::class,
-
             OrFilter::class,
 
             NullFilter::class,
@@ -69,6 +67,10 @@ class AvailableFiltersLoader
 
             BetweenFilter::class,
             NotBetweenFilter::class,
+
+            // Relationship
+            HasFilter::class,
+            DoesntHasFilter::class,
         ]);
     }
 
