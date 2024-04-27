@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IndexZer0\EloquentFiltering\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
+use Illuminate\Database\Schema\Blueprint;
 use IndexZer0\EloquentFiltering\EloquentFilteringServiceProvider;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Manufacturer;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
@@ -13,7 +19,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'IndexZer0\\EloquentFiltering\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'IndexZer0\\EloquentFiltering\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
 
         $this->setUpDatabase($this->app);
