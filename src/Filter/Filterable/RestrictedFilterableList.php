@@ -26,7 +26,7 @@ readonly class RestrictedFilterableList implements FilterableList
     {
         if (!$filter->hasTarget()) {
             // Always allow filters without a specific target to be allowed.
-            // These are filters such as `$and`, and '$or'.
+            // These are filters such as '$or'.
             return $this;
         }
 
