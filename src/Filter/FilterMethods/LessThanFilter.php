@@ -6,13 +6,13 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
 readonly class LessThanFilter extends WhereFilter
 {
-    protected function operator(): string
-    {
-        return '<';
-    }
-
     public static function type(): string
     {
         return '$lt';
+    }
+
+    protected function operator(): string
+    {
+        return '<';
     }
 }

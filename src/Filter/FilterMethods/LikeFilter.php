@@ -6,6 +6,11 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
 readonly class LikeFilter extends WhereFilter
 {
+    public static function type(): string
+    {
+        return '$like';
+    }
+
     protected function valueBefore(): string
     {
         return '%';
@@ -14,11 +19,6 @@ readonly class LikeFilter extends WhereFilter
     protected function valueAfter(): string
     {
         return '%';
-    }
-
-    public static function type(): string
-    {
-        return '$like';
     }
 
     protected function operator(): string

@@ -22,14 +22,14 @@ readonly class InFilter implements TargetedFilterMethod
         return '$in';
     }
 
-    protected function getNot(): bool
+    protected function not(): bool
     {
         return false;
     }
 
     public function apply(Builder $query, FilterableList $filterableList): Builder
     {
-        return $query->whereIn($this->target, $this->value, not: $this->getNot());
+        return $query->whereIn($this->target, $this->value, not: $this->not());
     }
 
     public static function format(): array

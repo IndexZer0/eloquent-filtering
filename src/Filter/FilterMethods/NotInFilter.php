@@ -11,7 +11,7 @@ readonly class NotInFilter extends InFilter
         return '$notIn';
     }
 
-    protected function getNot(): bool
+    protected function not(): bool
     {
         return true;
     }
