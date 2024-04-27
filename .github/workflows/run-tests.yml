@@ -58,7 +58,7 @@ jobs:
         uses: codecov/codecov-action@v4.1.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-          slug: IndexZer0/laravel-validation-provider
+          slug: IndexZer0/eloquent-filtering
           files: ./build/logs/clover.xml # optional
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
