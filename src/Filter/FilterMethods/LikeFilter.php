@@ -18,11 +18,6 @@ readonly class LikeFilter extends WhereFilter
         return '%';
     }
 
-    protected function operatorPrefix(): string
-    {
-        return '';
-    }
-
     public static function type(): string
     {
         return '$like';
@@ -30,10 +25,7 @@ readonly class LikeFilter extends WhereFilter
 
     protected function operator(): string
     {
-        if ($this->operatorPrefix() === '') {
-            return 'LIKE';
-        }
-        return "{$this->operatorPrefix()} LIKE";
+        return 'LIKE';
     }
 
     protected function value(): string

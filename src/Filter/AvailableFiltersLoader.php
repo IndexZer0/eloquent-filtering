@@ -21,7 +21,9 @@ use IndexZer0\EloquentFiltering\Filter\FilterMethods\LikeStartFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\NotBetweenFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\NotEqualFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\NotInFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\NotLikeEndFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\NotLikeFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\NotLikeStartFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\NullFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\OrFilter;
 
@@ -48,9 +50,12 @@ class AvailableFiltersLoader
             LessThanEqualToFilter::class,
 
             LikeFilter::class,
-            LikeEndFilter::class,
             LikeStartFilter::class,
+            LikeEndFilter::class,
+
             NotLikeFilter::class,
+            NotLikeStartFilter::class,
+            NotLikeEndFilter::class,
 
             HasFilter::class,
             DoesntHasFilter::class,

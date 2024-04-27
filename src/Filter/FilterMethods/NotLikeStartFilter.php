@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
-readonly class NotLikeFilter extends LikeFilter
+readonly class NotLikeStartFilter extends NotLikeFilter
 {
-    protected function operator(): string
+    protected function valueBefore(): string
     {
-        return 'NOT LIKE';
+        return '';
     }
 
     public static function type(): string
     {
-        return '$notLike';
+        return '$notLike:start';
     }
 }
