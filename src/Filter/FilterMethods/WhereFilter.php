@@ -7,7 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\TargetedFilterMethod;
-use IndexZer0\EloquentFiltering\Rules\Scalar;
+use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 abstract readonly class WhereFilter implements TargetedFilterMethod
 {
@@ -37,7 +37,7 @@ abstract readonly class WhereFilter implements TargetedFilterMethod
     {
         return [
             'target' => ['required', 'string'],
-            'value'  => ['required', new Scalar()],
+            'value'  => ['required', new WhereValue()],
         ];
     }
 

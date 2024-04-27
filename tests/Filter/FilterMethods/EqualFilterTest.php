@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
@@ -41,3 +42,20 @@ it('can perform $eq filter', function (): void {
     expect($models->count())->toBe(1);
 
 });
+
+it('does not accept non scalar values', function (): void {
+
+    Author::filter(
+        [
+            [
+                'target' => 'name',
+                'type'   => '$eq',
+                'value'  => true,
+            ],
+        ],
+        Filter::allow(
+            Filter::column('name', ['$eq']),
+        )
+    );
+
+})->throws(MalformedFilterFormatException::class, '"$eq" filter does not match required format.');
