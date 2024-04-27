@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
-use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
-
 readonly class NotBetweenFilter extends BetweenFilter
 {
     public static function type(): string
@@ -14,8 +11,8 @@ readonly class NotBetweenFilter extends BetweenFilter
         return '$notBetween';
     }
 
-    public function apply(Builder $query, FilterableList $filterableList): Builder
+    protected function not(): bool
     {
-        return $query->whereBetween($this->target, $this->value, not: true);
+        return true;
     }
 }
