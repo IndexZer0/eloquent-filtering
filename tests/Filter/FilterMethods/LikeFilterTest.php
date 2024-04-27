@@ -8,15 +8,19 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 beforeEach(function (): void {
     Author::create([
         'id'   => 1,
-        'name' => 'Fred',
+        'name' => '__text__',
     ]);
     Author::create([
         'id'   => 2,
-        'name' => 'Fred2',
+        'name' => '__text',
     ]);
     Author::create([
         'id'   => 3,
-        'name' => 'James',
+        'name' => 'text__',
+    ]);
+    Author::create([
+        'id'   => 4,
+        'name' => 'other',
     ]);
 });
 
@@ -26,7 +30,7 @@ it('can perform $like filter', function (): void {
             [
                 'target' => 'name',
                 'type'   => '$like',
-                'value'  => 'red',
+                'value'  => 'text',
             ],
         ],
         Filter::allow(
@@ -35,13 +39,14 @@ it('can perform $like filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" LIKE '%red%'
+        select * from "authors" where "name" LIKE '%text%'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
 
     $models = $query->get();
 
-    expect($models->count())->toBe(2);
+    expect($models->count())->toBe(3)
+    ->and($models->pluck('name')->toArray())->toBe(['__text__', '__text', 'text__']);
 
 });

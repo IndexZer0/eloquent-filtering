@@ -8,15 +8,19 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 beforeEach(function (): void {
     Author::create([
         'id'   => 1,
-        'name' => 'Fred',
+        'name' => '__text__',
     ]);
     Author::create([
         'id'   => 2,
-        'name' => 'Fred2',
+        'name' => '__text',
     ]);
     Author::create([
         'id'   => 3,
-        'name' => 'James',
+        'name' => 'text__',
+    ]);
+    Author::create([
+        'id'   => 4,
+        'name' => 'other',
     ]);
 });
 
@@ -26,7 +30,7 @@ it('can perform $notLike filter', function (): void {
             [
                 'target' => 'name',
                 'type'   => '$notLike',
-                'value'  => 'red',
+                'value'  => 'text',
             ],
         ],
         Filter::allow(
@@ -35,7 +39,7 @@ it('can perform $notLike filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" NOT LIKE '%red%'
+        select * from "authors" where "name" NOT LIKE '%text%'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -43,6 +47,6 @@ it('can perform $notLike filter', function (): void {
     $models = $query->get();
 
     expect($models->count())->toBe(1)
-    ->and($models->first()->name)->toBe('James');
+    ->and($models->pluck('name')->toArray())->toBe(['other']);
 
 });
