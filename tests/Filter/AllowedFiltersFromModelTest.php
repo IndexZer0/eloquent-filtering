@@ -7,23 +7,23 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
 
 beforeEach(function (): void {
     Manufacturer::create([
-        'id' => 1,
-        'name' => 'Manufacturer 1'
+        'id'   => 1,
+        'name' => 'Manufacturer 1',
     ]);
     Product::create([
-        'id'   => 1,
+        'id'              => 1,
         'manufacturer_id' => 1,
-        'name' => 'Product 1',
+        'name'            => 'Product 1',
     ]);
 
     Manufacturer::create([
-        'id' => 2,
-        'name' => 'Manufacturer 2'
+        'id'   => 2,
+        'name' => 'Manufacturer 2',
     ]);
     Product::create([
-        'id'   => 2,
+        'id'              => 2,
         'manufacturer_id' => 2,
-        'name' => 'Product 2',
+        'name'            => 'Product 2',
     ]);
 });
 
