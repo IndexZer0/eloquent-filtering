@@ -18,10 +18,10 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         php: [8.3, 8.2]
-        laravel: [10.*, 11.*]
+        laravel: [10.*]
         stability: [prefer-lowest, prefer-stable]
         include:
-          - laravel: 11.*
+          - laravel: 10.*
             testbench: 9.*
             carbon: ^2.63
 
@@ -54,12 +54,12 @@ jobs:
       - name: Execute tests
         run: vendor/bin/pest --ci
 
-      #- name: Code Coverage Upload
-      #  uses: codecov/codecov-action@v4.1.0
-      #  with:
-      #    token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-      #    slug: IndexZer0/eloquent-filtering
-      #    files: ./build/logs/clover.xml # optional
-      #    name: codecov-umbrella # optional
-      #    fail_ci_if_error: true # optional (default = false)
-      #    verbose: true # optional (default = false)
+      - name: Code Coverage Upload
+        uses: codecov/codecov-action@v4.1.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          slug: IndexZer0/laravel-validation-provider
+          files: ./build/logs/clover.xml # optional
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
