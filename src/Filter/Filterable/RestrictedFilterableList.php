@@ -45,14 +45,4 @@ readonly class RestrictedFilterableList implements FilterableList
 
         DeniedFilterException::throw($filter);
     }
-
-    public function all(): array
-    {
-        return $this->list->all();
-    }
-
-    public function getColumns(): array
-    {
-
-    }
 }
