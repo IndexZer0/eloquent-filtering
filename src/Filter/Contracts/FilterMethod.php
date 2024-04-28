@@ -10,9 +10,7 @@ interface FilterMethod
 {
     public static function type(): string;
 
-    public function hasTarget(): bool;
-
     public static function format(): array;
 
-    public function apply(Builder $query, FilterableList $filterableList): Builder;
+    public function apply(Builder $query): Builder;
 }

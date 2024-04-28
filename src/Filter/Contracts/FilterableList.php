@@ -6,5 +6,5 @@ namespace IndexZer0\EloquentFiltering\Filter\Contracts;
 
 interface FilterableList
 {
-    public function ensureAllowed(FilterMethod $filter): FilterableList;
+    public function ensureAllowed(string $type, ?string $target): FilterableList;
 }

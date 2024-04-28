@@ -6,17 +6,22 @@ namespace IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
-use IndexZer0\EloquentFiltering\Filter\Contracts\TargetedFilterMethod;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFilter;
 
-readonly class KebabCaseFilter implements TargetedFilterMethod
+class KebabCaseFilter extends AbstractFilter
 {
     public function __construct(
-        public string $target,
-        public string $value,
+        protected string $target,
+        protected string $value,
     ) {
 
     }
+
+    /*
+     * -----------------------------
+     * Interface methods
+     * -----------------------------
+     */
 
     public static function type(): string
     {
@@ -31,28 +36,24 @@ readonly class KebabCaseFilter implements TargetedFilterMethod
         ];
     }
 
-    public function apply(Builder $query, FilterableList $filterableList): Builder
+    public function apply(Builder $query): Builder
     {
-        return $query->where(DB::raw($this->getTargetForQuery()), $this->getValueForQuery());
+        return $query->where(DB::raw($this->target()), $this->value());
     }
 
-    private function getTargetForQuery(): string
+    /*
+     * -----------------------------
+     * Filter specific methods
+     * -----------------------------
+     */
+
+    private function target(): string
     {
         return "LOWER(REPLACE({$this->target}, ' ', '-'))";
     }
 
-    private function getValueForQuery(): string
+    private function value(): string
     {
         return strtolower(str_replace(' ', '-', $this->value));
-    }
-
-    public function target(): string
-    {
-        return $this->target;
-    }
-
-    public function hasTarget(): true
-    {
-        return true;
     }
 }

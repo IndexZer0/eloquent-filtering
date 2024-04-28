@@ -4,12 +4,24 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
-readonly class NotLikeFilter extends LikeFilter
+class NotLikeFilter extends LikeFilter
 {
+    /*
+     * -----------------------------
+     * Interface methods
+     * -----------------------------
+     */
+
     public static function type(): string
     {
         return '$notLike';
     }
+
+    /*
+     * -----------------------------
+     * Filter specific methods
+     * -----------------------------
+     */
 
     protected function operator(): string
     {

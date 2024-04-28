@@ -11,7 +11,6 @@ interface FilterApplier
 {
     public function apply(
         Builder $query,
-        FilterableList $filterableList,
         FilterCollection $filters
     ): Builder;
 }

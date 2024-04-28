@@ -9,9 +9,9 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableDefinition;
 class FilterableRelation implements FilterableDefinition
 {
     public function __construct(
-        public string $target,
-        public array  $types,
-        public array  $filterableDefinitions,
+        protected string $target,
+        protected array  $types,
+        protected array  $filterableDefinitions,
     ) {
 
     }
@@ -24,5 +24,10 @@ class FilterableRelation implements FilterableDefinition
     public function types(): array
     {
         return $this->types;
+    }
+
+    public function definitions(): array
+    {
+        return $this->filterableDefinitions;
     }
 }

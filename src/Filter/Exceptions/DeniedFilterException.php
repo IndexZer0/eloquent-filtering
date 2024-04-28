@@ -6,13 +6,12 @@ namespace IndexZer0\EloquentFiltering\Filter\Exceptions;
 
 use Exception;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterException;
-use IndexZer0\EloquentFiltering\Filter\Contracts\TargetedFilterMethod;
 
 class DeniedFilterException extends Exception implements FilterException
 {
-    public static function throw(TargetedFilterMethod $filter): void
+    public function __construct(string $type, ?string $target)
     {
-        throw new self("\"{$filter::type()}\" filter for \"{$filter->target()}\" is not allowed");
+        parent::__construct("\"{$type}\" filter for \"{$target}\" is not allowed");
     }
 
     public function shouldSuppress(): bool

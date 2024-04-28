@@ -6,7 +6,7 @@ namespace IndexZer0\EloquentFiltering\Sort\Sortable;
 
 use IndexZer0\EloquentFiltering\Sort\Contracts\SortableList;
 
-readonly class UnrestrictedSortableList implements SortableList
+class UnrestrictedSortableList implements SortableList
 {
     public function ensureAllowed(string $column): bool
     {

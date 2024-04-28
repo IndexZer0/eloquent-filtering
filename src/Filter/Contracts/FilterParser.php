@@ -8,5 +8,5 @@ use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 
 interface FilterParser
 {
-    public function parse(array $filters): FilterCollection;
+    public function parse(array $filters, FilterableList $filterableList): FilterCollection;
 }

@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Suppression\Suppression;
 use IndexZer0\EloquentFiltering\Sort\Contracts\SortableList;
 
-readonly class SortApplier
+class SortApplier
 {
-    public function __construct(public SortableList $sortableList)
+    public function __construct(protected SortableList $sortableList)
     {
     }
 

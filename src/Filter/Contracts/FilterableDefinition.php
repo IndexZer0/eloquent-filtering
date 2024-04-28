@@ -9,4 +9,6 @@ interface FilterableDefinition
     public function target(): string;
 
     public function types(): array;
+
+    public function definitions(): array;
 }

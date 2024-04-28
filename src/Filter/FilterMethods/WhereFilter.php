@@ -5,33 +5,22 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
-use IndexZer0\EloquentFiltering\Filter\Contracts\TargetedFilterMethod;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFilter;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
-abstract readonly class WhereFilter implements TargetedFilterMethod
+abstract class WhereFilter extends AbstractFilter
 {
     public function __construct(
-        public string $target,
-        public string|float|int $value,
+        protected string $target,
+        protected string|float|int $value,
     ) {
     }
 
-    abstract protected function operator(): string;
-
-    protected function value(): string|float|int
-    {
-        return $this->value;
-    }
-
-    public function apply(Builder $query, FilterableList $filterableList): Builder
-    {
-        return $query->where(
-            $this->target(),
-            $this->operator(),
-            $this->value(),
-        );
-    }
+    /*
+     * -----------------------------
+     * Interface methods
+     * -----------------------------
+     */
 
     public static function format(): array
     {
@@ -41,13 +30,30 @@ abstract readonly class WhereFilter implements TargetedFilterMethod
         ];
     }
 
+    public function apply(Builder $query): Builder
+    {
+        return $query->where(
+            $this->target(),
+            $this->operator(),
+            $this->value(),
+        );
+    }
+
+    /*
+     * -----------------------------
+     * Filter specific methods
+     * -----------------------------
+     */
+
+    abstract protected function operator(): string;
+
+    protected function value(): string|float|int
+    {
+        return $this->value;
+    }
+
     public function target(): string
     {
         return $this->target;
-    }
-
-    public function hasTarget(): true
-    {
-        return true;
     }
 }

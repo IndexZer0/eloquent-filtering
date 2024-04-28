@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Sort\Sortable;
 
-readonly class SortableColumn
+class SortableColumn
 {
-    public function __construct(public string $target)
+    public function __construct(protected string $target)
     {
     }
 

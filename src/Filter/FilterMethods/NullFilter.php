@@ -5,26 +5,26 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
-use IndexZer0\EloquentFiltering\Filter\Contracts\TargetedFilterMethod;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFilter;
 
-readonly class NullFilter implements TargetedFilterMethod
+class NullFilter extends AbstractFilter
 {
     public function __construct(
-        public string $target,
-        public bool $value,
+        protected string $target,
+        protected bool $value,
     ) {
 
     }
 
+    /*
+     * -----------------------------
+     * Interface methods
+     * -----------------------------
+     */
+
     public static function type(): string
     {
         return '$null';
-    }
-
-    public function apply(Builder $query, FilterableList $filterableList): Builder
-    {
-        return $query->whereNull($this->target, not: !$this->value);
     }
 
     public static function format(): array
@@ -35,13 +35,8 @@ readonly class NullFilter implements TargetedFilterMethod
         ];
     }
 
-    public function target(): string
+    public function apply(Builder $query): Builder
     {
-        return $this->target;
-    }
-
-    public function hasTarget(): true
-    {
-        return true;
+        return $query->whereNull($this->target, not: !$this->value);
     }
 }

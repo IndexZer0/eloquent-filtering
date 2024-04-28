@@ -5,31 +5,26 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
-use IndexZer0\EloquentFiltering\Filter\Contracts\TargetedFilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 
-readonly class InFilter implements TargetedFilterMethod
+class InFilter implements FilterMethod
 {
     public function __construct(
-        public string $target,
-        public array $value,
+        protected string $target,
+        protected array $value,
     ) {
 
     }
 
+    /*
+     * -----------------------------
+     * Interface methods
+     * -----------------------------
+     */
+
     public static function type(): string
     {
         return '$in';
-    }
-
-    protected function not(): bool
-    {
-        return false;
-    }
-
-    public function apply(Builder $query, FilterableList $filterableList): Builder
-    {
-        return $query->whereIn($this->target, $this->value, not: $this->not());
     }
 
     public static function format(): array
@@ -40,13 +35,19 @@ readonly class InFilter implements TargetedFilterMethod
         ];
     }
 
-    public function target(): string
+    public function apply(Builder $query): Builder
     {
-        return $this->target;
+        return $query->whereIn($this->target, $this->value, not: $this->not());
     }
 
-    public function hasTarget(): true
+    /*
+     * -----------------------------
+     * Filter specific methods
+     * -----------------------------
+     */
+
+    protected function not(): bool
     {
-        return true;
+        return false;
     }
 }

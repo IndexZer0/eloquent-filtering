@@ -11,18 +11,18 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\FilterException;
 class MalformedFilterFormatException extends Exception implements FilterException
 {
     public function __construct(
-        private string              $filterClass,
+        private string              $type,
         private ValidationException $validationException
     ) {
         parent::__construct(
-            "\"{$this->filterClass::type()}\" filter does not match required format.",
+            "\"{$type}\" filter does not match required format.",
             previous: $validationException
         );
     }
 
-    public static function throw(string $filterClass, ValidationException $validationException): void
+    public static function throw(string $type, ValidationException $validationException): void
     {
-        throw new self($filterClass, $validationException);
+        throw new self($type, $validationException);
     }
 
     public function shouldSuppress(): bool

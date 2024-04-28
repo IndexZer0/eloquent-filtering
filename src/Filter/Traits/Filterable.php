@@ -20,13 +20,12 @@ trait Filterable
 
         /** @var FilterParser $filterParser */
         $filterParser = resolve(FilterParser::class);
-        $filters = $filterParser->parse($filters);
+        $filters = $filterParser->parse($filters, $filterableList ?? $this->allowedFilters());
 
         /** @var FilterApplier $filterApplier */
         $filterApplier = resolve(FilterApplier::class);
         return $filterApplier->apply(
             $query,
-            $filterableList ?? $this->allowedFilters(),
             $filters
         );
     }

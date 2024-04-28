@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Sort\Contracts\SortableList;
 use IndexZer0\EloquentFiltering\Sort\Exceptions\DeniedSortException;
 
-readonly class RestrictedSortableList implements SortableList
+class RestrictedSortableList implements SortableList
 {
-    private Collection $list;
+    protected Collection $list;
 
     public function __construct(SortableColumn ...$sortableColumns)
     {

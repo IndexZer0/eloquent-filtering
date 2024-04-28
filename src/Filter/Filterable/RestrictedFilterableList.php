@@ -8,12 +8,10 @@ use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableDefinition;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
-use IndexZer0\EloquentFiltering\Filter\Contracts\TargetedFilterMethod;
 
-readonly class RestrictedFilterableList implements FilterableList
+class RestrictedFilterableList implements FilterableList
 {
-    private Collection $list;
+    protected Collection $list;
 
     public function __construct(FilterableDefinition ...$filterableDefinitions)
     {
@@ -22,27 +20,21 @@ readonly class RestrictedFilterableList implements FilterableList
         );
     }
 
-    public function ensureAllowed(FilterMethod $filter): RestrictedFilterableList
+    public function ensureAllowed(string $type, ?string $target): RestrictedFilterableList
     {
-        if (!$filter->hasTarget()) {
+        // TODO - how does this work for a custom filter that shouldn't always be allowed?
+        if ($target === null) {
             // Always allow filters without a specific target to be allowed.
             // These are filters such as '$or'.
             return $this;
         }
 
-        if ($filter instanceof TargetedFilterMethod) {
-            foreach ($this->list as $filterableDefinition) {
-                if ($filterableDefinition->target() === $filter->target() &&
-                    in_array($filter->type(), $filterableDefinition->types())
-                ) {
-                    if ($filterableDefinition instanceof FilterableRelation) {
-                        return new self(...$filterableDefinition->filterableDefinitions);
-                    }
-                    return new self();
-                }
+        foreach ($this->list as $filterableDefinition) {
+            if ($filterableDefinition->target() === $target && in_array($type, $filterableDefinition->types())) {
+                return new self(...$filterableDefinition->definitions());
             }
         }
 
-        DeniedFilterException::throw($filter);
+        throw new DeniedFilterException($type, $target);
     }
 }
