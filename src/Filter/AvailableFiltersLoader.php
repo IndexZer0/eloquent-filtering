@@ -6,6 +6,7 @@ namespace IndexZer0\EloquentFiltering\Filter;
 
 use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Exceptions\DuplicateFiltersException;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\BetweenFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\DoesntHasFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\EqualFilter;
@@ -31,40 +32,58 @@ class AvailableFiltersLoader
 {
     public function __invoke(): Collection
     {
-        return $this->getPackageFilters()
-            ->merge($this->getCustomFilters())
-            ->keyBy(
-                fn (string $filterMethodClass) => /** @var $filterMethodClass FilterMethod */
-                $filterMethodClass::type()
-            );
+        $filters = $this->getPackageFilters()->merge($this->getCustomFilters());
+
+        $duplicateTypes = $filters->map(
+            fn(string $filterMethodFqcn) => /** @var $filterMethodFqcn FilterMethod */ $filterMethodFqcn::type()
+        )->duplicates();
+
+        if ($duplicateTypes->count() > 0) {
+            throw new DuplicateFiltersException($duplicateTypes->toArray());
+        }
+
+        return $filters->keyBy(
+            fn (string $filterMethodFqcn) => /** @var $filterMethodFqcn FilterMethod */
+            $filterMethodFqcn::type()
+        );
     }
 
     private function getPackageFilters(): Collection
     {
         return collect([
+            // Equal
             EqualFilter::class,
             NotEqualFilter::class,
 
+            // Greater Than
             GreaterThanFilter::class,
             GreaterThanEqualToFilter::class,
+
+            // Less Than
             LessThanFilter::class,
             LessThanEqualToFilter::class,
 
+            // Like
             LikeFilter::class,
             LikeStartFilter::class,
             LikeEndFilter::class,
 
+            // NotLike
             NotLikeFilter::class,
             NotLikeStartFilter::class,
             NotLikeEndFilter::class,
 
+            // Or
             OrFilter::class,
 
+            // Null
             NullFilter::class,
 
+            // In
             InFilter::class,
             NotInFilter::class,
 
+            // Between
             BetweenFilter::class,
             NotBetweenFilter::class,
 
