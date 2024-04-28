@@ -63,8 +63,7 @@ class FilterParser implements FilterParserContract
     private function parseChildFilters(
         array                        $filters,
         FilterableList               $filterableList,
-    ): FilterCollection
-    {
+    ): FilterCollection {
         /** @var FilterParser $filterParser */
         $filterParser = resolve(FilterParserContract::class);
 
