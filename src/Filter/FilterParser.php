@@ -20,9 +20,12 @@ class FilterParser implements FilterParserContract
 
     protected FilterableList $filterableList;
 
+    protected AvailableFilters $availableFilters;
+
     public function __construct()
     {
         $this->filterCollection = new FilterCollection();
+        $this->availableFilters = resolve(AvailableFilters::class);
     }
 
     public function parse(array $filters, FilterableList $filterableList): FilterCollection
@@ -84,9 +87,7 @@ class FilterParser implements FilterParserContract
 
     private function findFilterMethodFqcn(string $type): string
     {
-        /** @var AvailableFilters $availableFilters */
-        $availableFilters = resolve(AvailableFilters::class);
-        return $availableFilters->find($type);
+        return $this->availableFilters->find($type);
     }
 
     private function validateFilterFormat(array $filter, string $filterFqcn): array
