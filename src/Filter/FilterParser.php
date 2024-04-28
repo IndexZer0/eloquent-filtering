@@ -50,13 +50,28 @@ class FilterParser implements FilterParserContract
 
         if (is_a($filterFqcn, HasChildFilters::class, true)) {
 
-            /** @var FilterParser $filterParser */
-            $filterParser = resolve(FilterParserContract::class);
-            $validatedData['value'] = $filterParser->parse($validatedData['value'], $filterableList);
+            $validatedData[$filterFqcn::childFiltersKey()] = $this->parseChildFilters(
+                $validatedData[$filterFqcn::childFiltersKey()],
+                $filterableList
+            );
 
         }
 
         return new $filterFqcn(...$validatedData);
+    }
+
+    private function parseChildFilters(
+        array                        $filters,
+        FilterableList               $filterableList,
+    ): FilterCollection
+    {
+        /** @var FilterParser $filterParser */
+        $filterParser = resolve(FilterParserContract::class);
+
+        return $filterParser->parse(
+            $filters,
+            $filterableList
+        );
     }
 
     private function ensureFilterHasType(mixed $filter): string
