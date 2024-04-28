@@ -78,6 +78,11 @@ it('only accepts string, int, float for value', function (
         'expected_sql'     => 'select * from "authors" where "name" = 69.42',
         'expect_exception' => false,
     ],
+    'null' => [
+        'value'            => null,
+        'expected_sql'     => null,
+        'expect_exception' => true,
+    ],
     'bool' => [
         'value'            => true,
         'expected_sql'     => null,
