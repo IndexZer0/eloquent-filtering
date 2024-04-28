@@ -6,14 +6,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
-    Author::create([
-        'id'   => 1,
-        'name' => 'Fred',
-    ]);
-    Author::create([
-        'id'   => 2,
-        'name' => 'Frederick',
-    ]);
+    $this->createAuthors();
 });
 
 it('can perform $in filter', function (): void {
@@ -23,8 +16,8 @@ it('can perform $in filter', function (): void {
                 'target' => 'name',
                 'type'   => '$in',
                 'value'  => [
-                    'Fred',
-                    'Frederick',
+                    'George Raymond Richard Martin',
+                    'J. R. R. Tolkien',
                 ],
             ],
         ],
@@ -34,7 +27,7 @@ it('can perform $in filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" in ('Fred', 'Frederick')
+        select * from "authors" where "name" in ('George Raymond Richard Martin', 'J. R. R. Tolkien')
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

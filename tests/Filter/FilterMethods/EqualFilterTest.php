@@ -7,14 +7,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
-    Author::create([
-        'id'   => 1,
-        'name' => 'Fred',
-    ]);
-    Author::create([
-        'id'   => 2,
-        'name' => 'Fred2',
-    ]);
+    $this->createAuthors();
 });
 
 it('can perform $eq filter', function (): void {
@@ -23,7 +16,7 @@ it('can perform $eq filter', function (): void {
             [
                 'target' => 'name',
                 'type'   => '$eq',
-                'value'  => 'Fred',
+                'value'  => 'George Raymond Richard Martin',
             ],
         ],
         Filter::allow(
@@ -32,7 +25,7 @@ it('can perform $eq filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'Fred'
+        select * from "authors" where "name" = 'George Raymond Richard Martin'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

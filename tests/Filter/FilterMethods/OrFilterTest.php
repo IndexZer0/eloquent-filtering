@@ -6,14 +6,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
-    Author::create([
-        'id'   => 1,
-        'name' => 'Fred',
-    ]);
-    Author::create([
-        'id'   => 2,
-        'name' => 'Fred2',
-    ]);
+    $this->createAuthors();
 });
 
 it('can perform $or filter on base model', function (): void {
@@ -25,12 +18,12 @@ it('can perform $or filter on base model', function (): void {
                     [
                         'target' => 'name',
                         'type'   => '$eq',
-                        'value'  => 'Fred',
+                        'value'  => 'George Raymond Richard Martin',
                     ],
                     [
                         'target' => 'name',
                         'type'   => '$eq',
-                        'value'  => 'Fred2',
+                        'value'  => 'J. R. R. Tolkien',
                     ],
                 ],
             ],
@@ -41,7 +34,7 @@ it('can perform $or filter on base model', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where (("name" = 'Fred') or ("name" = 'Fred2'))
+        select * from "authors" where (("name" = 'George Raymond Richard Martin') or ("name" = 'J. R. R. Tolkien'))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

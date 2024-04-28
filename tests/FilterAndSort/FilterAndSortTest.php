@@ -7,18 +7,7 @@ use IndexZer0\EloquentFiltering\Sort\Sortable\Sort;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
-    Author::create([
-        'id'   => 1,
-        'name' => 'Name',
-    ]);
-    Author::create([
-        'id'   => 2,
-        'name' => 'Fred 1',
-    ]);
-    Author::create([
-        'id'   => 3,
-        'name' => 'Fred 2',
-    ]);
+    $this->createAuthors();
 });
 
 it('can filter and sort together', function (): void {
@@ -27,7 +16,7 @@ it('can filter and sort together', function (): void {
             [
                 'target' => 'name',
                 'type'   => '$like',
-                'value'  => 'Fred',
+                'value'  => 'R',
             ],
         ],
         Filter::allow(
@@ -46,7 +35,7 @@ it('can filter and sort together', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" LIKE '%Fred%' order by "name" desc
+        select * from "authors" where "name" LIKE '%R%' order by "name" desc
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -54,6 +43,6 @@ it('can filter and sort together', function (): void {
     $models = $query->get();
 
     expect($models->count())->toBe(2)
-        ->and($models->pluck('id')->toArray())->toBe([3, 2]);
+        ->and($models->pluck('id')->toArray())->toBe([2, 1]);
 
 });

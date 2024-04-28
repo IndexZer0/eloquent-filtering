@@ -5,24 +5,9 @@ declare(strict_types=1);
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
 
 beforeEach(function (): void {
-    Author::create([
-        'id'   => 1,
-        'name' => 'Fred',
-    ]);
-    Book::create([
-        'id'          => 1,
-        'author_id'   => 1,
-        'title'       => 'title',
-        'description' => 'description',
-    ]);
-
-    Author::create([
-        'id'   => 2,
-        'name' => 'Fred2',
-    ]);
+    $this->createAuthors();
 });
 
 it('can filter by relationship when allowed', function (): void {
@@ -51,7 +36,7 @@ it('can filter by relationship when allowed', function (): void {
 
     $models = $query->get();
 
-    expect($models->count())->toBe(1)
+    expect($models->count())->toBe(2)
         ->and($models->first()->id)->toBe(1);
 });
 
@@ -75,7 +60,7 @@ it('can filter by relationship when no filter list supplied', function (): void 
 
     $models = $query->get();
 
-    expect($models->count())->toBe(1)
+    expect($models->count())->toBe(2)
         ->and($models->first()->id)->toBe(1);
 });
 
@@ -100,7 +85,7 @@ it('can filter by relationship with "Filter::all()"', function (): void {
 
     $models = $query->get();
 
-    expect($models->count())->toBe(1)
+    expect($models->count())->toBe(2)
         ->and($models->first()->id)->toBe(1);
 });
 

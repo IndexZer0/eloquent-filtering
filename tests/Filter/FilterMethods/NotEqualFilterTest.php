@@ -6,14 +6,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
-    Author::create([
-        'id'   => 1,
-        'name' => 'Fred',
-    ]);
-    Author::create([
-        'id'   => 2,
-        'name' => 'Fred2',
-    ]);
+    $this->createAuthors();
 });
 
 it('can perform $notEq filter', function (): void {
@@ -22,7 +15,7 @@ it('can perform $notEq filter', function (): void {
             [
                 'target' => 'name',
                 'type'   => '$notEq',
-                'value'  => 'Fred2',
+                'value'  => 'J. R. R. Tolkien',
             ],
         ],
         Filter::allow(
@@ -31,7 +24,7 @@ it('can perform $notEq filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" != 'Fred2'
+        select * from "authors" where "name" != 'J. R. R. Tolkien'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

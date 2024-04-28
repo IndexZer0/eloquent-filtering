@@ -6,14 +6,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
-    Author::create([
-        'id'   => 1,
-        'name' => 'Fred',
-    ]);
-    Author::create([
-        'id'   => 2,
-        'name' => 'Frederick',
-    ]);
+    $this->createAuthors();
 });
 
 it('can perform $notIn filter', function (): void {
@@ -23,8 +16,8 @@ it('can perform $notIn filter', function (): void {
                 'target' => 'name',
                 'type'   => '$notIn',
                 'value'  => [
-                    'Freddy',
-                    'Frederickson',
+                    'J. K. Rowling',
+                    'William Shakespeare',
                 ],
             ],
         ],
@@ -34,7 +27,7 @@ it('can perform $notIn filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" not in ('Freddy', 'Frederickson')
+        select * from "authors" where "name" not in ('J. K. Rowling', 'William Shakespeare')
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

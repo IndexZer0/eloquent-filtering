@@ -3,27 +3,10 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\AuthorProfile;
 
 beforeEach(function (): void {
-    Author::create([
-        'id'   => 1,
-        'name' => 'Fred',
-    ]);
-    AuthorProfile::create([
-        'author_id' => 1,
-        'age'       => 20,
-    ]);
-
-    Author::create([
-        'id'   => 2,
-        'name' => 'Frederick',
-    ]);
-    AuthorProfile::create([
-        'author_id' => 2,
-        'age'       => 30,
-    ]);
+    $this->createAuthors();
 });
 
 it('can perform $lt filter', function (): void {

@@ -2,29 +2,10 @@
 
 declare(strict_types=1);
 
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Manufacturer;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
 
 beforeEach(function (): void {
-    Manufacturer::create([
-        'id'   => 1,
-        'name' => 'Manufacturer 1',
-    ]);
-    Product::create([
-        'id'              => 1,
-        'manufacturer_id' => 1,
-        'name'            => 'Product 1',
-    ]);
-
-    Manufacturer::create([
-        'id'   => 2,
-        'name' => 'Manufacturer 2',
-    ]);
-    Product::create([
-        'id'              => 2,
-        'manufacturer_id' => 2,
-        'name'            => 'Product 2',
-    ]);
+    $this->createManufacturers();
 });
 
 it('uses allowed filters from model as default', function (): void {

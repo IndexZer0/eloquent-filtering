@@ -5,39 +5,9 @@ declare(strict_types=1);
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
 
 beforeEach(function (): void {
-    Author::create([
-        'id'   => 1,
-        'name' => 'Fred',
-    ]);
-    Book::create([
-        'id'          => 1,
-        'author_id'   => 1,
-        'title'       => 'title',
-        'description' => 'description',
-    ]);
-    Comment::create([
-        'book_id' => 1,
-        'content' => 'This is a comment',
-    ]);
-
-    Author::create([
-        'id'   => 2,
-        'name' => 'Fred',
-    ]);
-    Book::create([
-        'id'          => 2,
-        'author_id'   => 2,
-        'title'       => 'title',
-        'description' => 'description',
-    ]);
-    Comment::create([
-        'book_id' => 2,
-        'content' => 'This is a another comment',
-    ]);
+    $this->createAuthors();
 });
 
 it('filters by nested relationships when allowed', function (): void {
@@ -47,7 +17,7 @@ it('filters by nested relationships when allowed', function (): void {
             [
                 'target' => 'name',
                 'type'   => '$eq',
-                'value'  => 'Fred',
+                'value'  => 'George Raymond Richard Martin',
             ],
             [
                 'target' => 'books',
@@ -56,20 +26,20 @@ it('filters by nested relationships when allowed', function (): void {
                     [
                         'target' => 'title',
                         'type'   => '$eq',
-                        'value'  => 'title',
+                        'value'  => 'A Game of Thrones',
                     ],
                     [
                         'type'  => '$or',
                         'value' => [
                             [
                                 'target' => 'description',
-                                'type'   => '$eq',
-                                'value'  => 'description',
+                                'type'   => '$like',
+                                'value'  => 'A Game of Thrones',
                             ],
                             [
                                 'target' => 'description',
-                                'type'   => '$eq',
-                                'value'  => 'description 2',
+                                'type'   => '$like',
+                                'value'  => 'Song of Ice and Fire',
                             ],
                         ],
                     ],
@@ -80,7 +50,7 @@ it('filters by nested relationships when allowed', function (): void {
                             [
                                 'target' => 'content',
                                 'type'   => '$eq',
-                                'value'  => 'This is a comment',
+                                'value'  => 'Thanks D&D :S',
                             ],
                         ],
                     ],
@@ -93,7 +63,7 @@ it('filters by nested relationships when allowed', function (): void {
                 'books',
                 ['$has'],
                 Filter::column('title', ['$eq']),
-                Filter::column('description', ['$eq']),
+                Filter::column('description', ['$like']),
                 Filter::relation(
                     'comments',
                     ['$has'],
@@ -104,7 +74,7 @@ it('filters by nested relationships when allowed', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'Fred' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'title' and (("description" = 'description') or ("description" = 'description 2')) and exists (select * from "comments" where "books"."id" = "comments"."book_id" and "content" = 'This is a comment'))
+        select * from "authors" where "name" = 'George Raymond Richard Martin' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'A Game of Thrones' and (("description" LIKE '%A Game of Thrones%') or ("description" LIKE '%Song of Ice and Fire%')) and exists (select * from "comments" where "books"."id" = "comments"."book_id" and "content" = 'Thanks D&D :S'))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -122,7 +92,7 @@ it('filters by nested relationships when no filter list supplied', function (): 
             [
                 'target' => 'name',
                 'type'   => '$eq',
-                'value'  => 'Fred',
+                'value'  => 'George Raymond Richard Martin',
             ],
             [
                 'target' => 'books',
@@ -131,20 +101,20 @@ it('filters by nested relationships when no filter list supplied', function (): 
                     [
                         'target' => 'title',
                         'type'   => '$eq',
-                        'value'  => 'title',
+                        'value'  => 'A Game of Thrones',
                     ],
                     [
                         'type'  => '$or',
                         'value' => [
                             [
                                 'target' => 'description',
-                                'type'   => '$eq',
-                                'value'  => 'description',
+                                'type'   => '$like',
+                                'value'  => 'A Game of Thrones',
                             ],
                             [
                                 'target' => 'description',
-                                'type'   => '$eq',
-                                'value'  => 'description 2',
+                                'type'   => '$like',
+                                'value'  => 'Song of Ice and Fire',
                             ],
                         ],
                     ],
@@ -155,7 +125,7 @@ it('filters by nested relationships when no filter list supplied', function (): 
                             [
                                 'target' => 'content',
                                 'type'   => '$eq',
-                                'value'  => 'This is a comment',
+                                'value'  => 'Thanks D&D :S',
                             ],
                         ],
                     ],
@@ -165,7 +135,7 @@ it('filters by nested relationships when no filter list supplied', function (): 
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'Fred' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'title' and (("description" = 'description') or ("description" = 'description 2')) and exists (select * from "comments" where "books"."id" = "comments"."book_id" and "content" = 'This is a comment'))
+        select * from "authors" where "name" = 'George Raymond Richard Martin' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'A Game of Thrones' and (("description" LIKE '%A Game of Thrones%') or ("description" LIKE '%Song of Ice and Fire%')) and exists (select * from "comments" where "books"."id" = "comments"."book_id" and "content" = 'Thanks D&D :S'))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -183,7 +153,7 @@ it('filters by nested relationships with "Filter::all()"', function (): void {
             [
                 'target' => 'name',
                 'type'   => '$eq',
-                'value'  => 'Fred',
+                'value'  => 'George Raymond Richard Martin',
             ],
             [
                 'target' => 'books',
@@ -192,20 +162,20 @@ it('filters by nested relationships with "Filter::all()"', function (): void {
                     [
                         'target' => 'title',
                         'type'   => '$eq',
-                        'value'  => 'title',
+                        'value'  => 'A Game of Thrones',
                     ],
                     [
                         'type'  => '$or',
                         'value' => [
                             [
                                 'target' => 'description',
-                                'type'   => '$eq',
-                                'value'  => 'description',
+                                'type'   => '$like',
+                                'value'  => 'A Game of Thrones',
                             ],
                             [
                                 'target' => 'description',
-                                'type'   => '$eq',
-                                'value'  => 'description 2',
+                                'type'   => '$like',
+                                'value'  => 'Song of Ice and Fire',
                             ],
                         ],
                     ],
@@ -216,7 +186,7 @@ it('filters by nested relationships with "Filter::all()"', function (): void {
                             [
                                 'target' => 'content',
                                 'type'   => '$eq',
-                                'value'  => 'This is a comment',
+                                'value'  => 'Thanks D&D :S',
                             ],
                         ],
                     ],
@@ -226,7 +196,7 @@ it('filters by nested relationships with "Filter::all()"', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'Fred' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'title' and (("description" = 'description') or ("description" = 'description 2')) and exists (select * from "comments" where "books"."id" = "comments"."book_id" and "content" = 'This is a comment'))
+        select * from "authors" where "name" = 'George Raymond Richard Martin' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'A Game of Thrones' and (("description" LIKE '%A Game of Thrones%') or ("description" LIKE '%Song of Ice and Fire%')) and exists (select * from "comments" where "books"."id" = "comments"."book_id" and "content" = 'Thanks D&D :S'))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -252,7 +222,7 @@ it('can not filter by nested relationship when not explicitly allowed | not supp
                             [
                                 'target' => 'content',
                                 'type'   => '$eq',
-                                'value'  => 'This is a comment',
+                                'value'  => 'Thanks D&D :S',
                             ],
                         ],
                     ],
@@ -273,9 +243,34 @@ it('can not filter by nested relationship when not explicitly allowed | suppress
     $query = Author::filter(
         [
             [
+                'target' => 'name',
+                'type'   => '$eq',
+                'value'  => 'George Raymond Richard Martin',
+            ],
+            [
                 'target' => 'books',
                 'type'   => '$has',
                 'value'  => [
+                    [
+                        'target' => 'title',
+                        'type'   => '$eq',
+                        'value'  => 'A Game of Thrones',
+                    ],
+                    [
+                        'type'  => '$or',
+                        'value' => [
+                            [
+                                'target' => 'description',
+                                'type'   => '$like',
+                                'value'  => 'A Game of Thrones',
+                            ],
+                            [
+                                'target' => 'description',
+                                'type'   => '$like',
+                                'value'  => 'Song of Ice and Fire',
+                            ],
+                        ],
+                    ],
                     [
                         'type'   => '$has',
                         'target' => 'comments',
@@ -283,7 +278,7 @@ it('can not filter by nested relationship when not explicitly allowed | suppress
                             [
                                 'target' => 'content',
                                 'type'   => '$eq',
-                                'value'  => 'This is a comment',
+                                'value'  => 'Thanks D&D :S',
                             ],
                         ],
                     ],

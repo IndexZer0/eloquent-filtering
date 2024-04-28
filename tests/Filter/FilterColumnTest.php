@@ -7,14 +7,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
-    Author::create([
-        'id'   => 1,
-        'name' => 'Fred',
-    ]);
-    Author::create([
-        'id'   => 2,
-        'name' => 'Fred2',
-    ]);
+    $this->createAuthors();
 });
 
 it('can filter by column when allowed', function (): void {
@@ -23,7 +16,7 @@ it('can filter by column when allowed', function (): void {
             [
                 'target' => 'name',
                 'type'   => '$eq',
-                'value'  => 'Fred',
+                'value'  => 'George Raymond Richard Martin',
             ],
         ],
         Filter::allow(
@@ -32,7 +25,7 @@ it('can filter by column when allowed', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'Fred'
+        select * from "authors" where "name" = 'George Raymond Richard Martin'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -50,13 +43,13 @@ it('can filter by column when no filter list supplied', function (): void {
             [
                 'target' => 'name',
                 'type'   => '$eq',
-                'value'  => 'Fred',
+                'value'  => 'George Raymond Richard Martin',
             ],
         ],
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'Fred'
+        select * from "authors" where "name" = 'George Raymond Richard Martin'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -74,14 +67,14 @@ it('can filter by column with "Filter::all()"', function (): void {
             [
                 'target' => 'name',
                 'type'   => '$eq',
-                'value'  => 'Fred',
+                'value'  => 'George Raymond Richard Martin',
             ],
         ],
         Filter::all()
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'Fred'
+        select * from "authors" where "name" = 'George Raymond Richard Martin'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -100,7 +93,7 @@ it('can not filter by column when not explicitly allowed | not suppressed', func
             [
                 'target' => 'name',
                 'type'   => '$eq',
-                'value'  => 'Fred',
+                'value'  => 'George Raymond Richard Martin',
             ],
         ],
         Filter::allow(),
@@ -117,7 +110,7 @@ it('can not filter by column when not explicitly allowed | suppressed', function
             [
                 'target' => 'name',
                 'type'   => '$eq',
-                'value'  => 'Fred',
+                'value'  => 'George Raymond Richard Martin',
             ],
         ],
         Filter::allow(),
