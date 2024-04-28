@@ -6,9 +6,10 @@ namespace IndexZer0\EloquentFiltering\Filter\Exceptions;
 
 use Exception;
 use Illuminate\Validation\ValidationException;
+use IndexZer0\EloquentFiltering\Contracts\SuppressibleException;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterException;
 
-class MalformedFilterFormatException extends Exception implements FilterException
+class MalformedFilterFormatException extends Exception implements FilterException, SuppressibleException
 {
     public function __construct(
         string              $type,
