@@ -35,7 +35,7 @@ class AvailableFiltersLoader
         $filters = $this->getPackageFilters()->merge($this->getCustomFilters());
 
         $duplicateTypes = $filters->map(
-            fn(string $filterMethodFqcn) => /** @var $filterMethodFqcn FilterMethod */ $filterMethodFqcn::type()
+            fn (string $filterMethodFqcn) => /** @var $filterMethodFqcn FilterMethod */ $filterMethodFqcn::type()
         )->duplicates();
 
         if ($duplicateTypes->count() > 0) {

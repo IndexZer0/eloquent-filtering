@@ -14,7 +14,7 @@ class DuplicateFiltersException extends Exception implements FilterException
         parent::__construct(
             sprintf(
                 "Filters with the following types have been registered more than once: \"%s\"",
-                join(', ', $types)
+                implode(', ', $types)
             )
         );
     }
