@@ -6,11 +6,11 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
 
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Contracts\HasChildFilters;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFilter;
 
-class OrFilter implements FilterMethod, HasChildFilters
+class OrFilter extends AbstractFilter implements HasChildFilters
 {
     public function __construct(
         protected FilterCollection $value,
