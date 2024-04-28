@@ -13,9 +13,9 @@ class Suppression
     {
         try {
             $callback();
-        } catch (SuppressibleException $fe) {
-            if (!$fe->shouldSuppress()) {
-                throw $fe;
+        } catch (SuppressibleException $se) {
+            if (!$se->shouldSuppress()) {
+                throw $se;
             }
         }
     }
