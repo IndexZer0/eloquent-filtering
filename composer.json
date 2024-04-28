@@ -1,12 +1,23 @@
 {
-    "name": "24657691-indexzer0/eloquent-filtering",
-    "description": "This is my package eloquent-filtering",
+    "name": "indexzer0/eloquent-filtering",
+    "description": "Powerful eloquent filtering",
     "keywords": [
         "IndexZer0",
         "laravel",
-        "eloquent-filtering"
+        "eloquent-filtering",
+        "Nested",
+        "Nesting",
+        "Column",
+        "Relationships",
+        "Eloquent",
+        "Filtering",
+        "Filters",
+        "Filter",
+        "Custom Filters",
+        "Sorting",
+        "Sort"
     ],
-    "homepage": "https://github.com/24657691-indexzer0/eloquent-filtering",
+    "homepage": "https://github.com/indexzer0/eloquent-filtering",
     "license": "MIT",
     "authors": [
         {
@@ -74,10 +85,7 @@
         "laravel": {
             "providers": [
                 "IndexZer0\\EloquentFiltering\\EloquentFilteringServiceProvider"
-            ],
-            "aliases": {
-                "EloquentFiltering": "IndexZer0\\EloquentFiltering\\Facades\\EloquentFiltering"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
