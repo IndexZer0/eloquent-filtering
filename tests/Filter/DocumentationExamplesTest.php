@@ -12,7 +12,7 @@ it('EqualFilter | $eq', function (): void {
             'type'   => '$eq',
             'target' => 'name',
             'value'  => 'Taylor',
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -29,7 +29,7 @@ it('NotEqualFilter | $notEq', function (): void {
             'type'   => '$notEq',
             'target' => 'name',
             'value'  => 'Taylor',
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -46,7 +46,7 @@ it('GreaterThanFilter | $gt', function (): void {
             'type'   => '$gt',
             'target' => 'age',
             'value'  => 18,
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -63,7 +63,7 @@ it('GreaterThanEqualToFilter | $gte', function (): void {
             'type'   => '$gte',
             'target' => 'age',
             'value'  => 18,
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -80,7 +80,7 @@ it('LessThanFilter | $lt', function (): void {
             'type'   => '$lt',
             'target' => 'age',
             'value'  => 18,
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -97,7 +97,7 @@ it('LessThanEqualToFilter | $lte', function (): void {
             'type'   => '$lte',
             'target' => 'age',
             'value'  => 18,
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -114,7 +114,7 @@ it('LikeFilter | $like', function (): void {
             'type'   => '$like',
             'target' => 'description',
             'value'  => 'Laravel',
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -131,7 +131,7 @@ it('LikeStartFilter | $like:start', function (): void {
             'type'   => '$like:start',
             'target' => 'description',
             'value'  => 'Laravel',
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -148,7 +148,7 @@ it('LikeEndFilter | $like:end', function (): void {
             'type'   => '$like:end',
             'target' => 'description',
             'value'  => 'Laravel',
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -165,7 +165,7 @@ it('NotLikeFilter | $notLike', function (): void {
             'type'   => '$notLike',
             'target' => 'description',
             'value'  => 'Laravel',
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -182,7 +182,7 @@ it('NotLikeStartFilter | $notLike:start', function (): void {
             'type'   => '$notLike:start',
             'target' => 'description',
             'value'  => 'Laravel',
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -199,7 +199,7 @@ it('NotLikeEndFilter | $notLike:end', function (): void {
             'type'   => '$notLike:end',
             'target' => 'description',
             'value'  => 'Laravel',
-        ]
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -224,9 +224,9 @@ it('OrFilter | $or', function (): void {
                     'type'   => '$like',
                     'target' => 'content',
                     'value'  => 'boring',
-                ]
-            ]
-        ]
+                ],
+            ],
+        ],
     ])->toRawSql();
 
     $expectedSql = <<< SQL
@@ -264,7 +264,7 @@ it('InFilter | $in', function (): void {
         [
             'type'   => '$in',
             'target' => 'name',
-            'value'  => ['Taylor', 'Otwell',]
+            'value'  => ['Taylor', 'Otwell', ],
         ],
     ])->toRawSql();
 
@@ -281,7 +281,7 @@ it('NotInFilter | $notIn', function (): void {
         [
             'type'   => '$notIn',
             'target' => 'name',
-            'value'  => ['Nuno', 'Maduro',]
+            'value'  => ['Nuno', 'Maduro', ],
         ],
     ])->toRawSql();
 
@@ -298,7 +298,7 @@ it('BetweenFilter | $between', function (): void {
         [
             'type'   => '$between',
             'target' => 'age',
-            'value'  => [18, 65,],
+            'value'  => [18, 65, ],
         ],
     ])->toRawSql();
 
@@ -315,7 +315,7 @@ it('NotBetweenFilter | $notBetween', function (): void {
         [
             'type'   => '$notBetween',
             'target' => 'age',
-            'value'  => [18, 65,],
+            'value'  => [18, 65, ],
         ],
     ])->toRawSql();
 
@@ -337,8 +337,8 @@ it('HasFilter | $has', function (): void {
                     'type'   => '$like',
                     'target' => 'content',
                     'value'  => 'awesome',
-                ]
-            ]
+                ],
+            ],
         ],
     ])->toRawSql();
 
@@ -360,8 +360,8 @@ it('DoesntHasFilter | $doesntHas', function (): void {
                     'type'   => '$like',
                     'target' => 'content',
                     'value'  => 'boring',
-                ]
-            ]
+                ],
+            ],
         ],
     ])->toRawSql();
 
