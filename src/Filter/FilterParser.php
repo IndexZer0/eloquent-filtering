@@ -82,7 +82,7 @@ class FilterParser implements FilterParserContract
             $validator = Validator::make($filter, $filterFqcn::format());
             return $validator->safe()->all();
         } catch (ValidationException $ve) {
-            MalformedFilterFormatException::throw($filterFqcn::type(), $ve);
+            throw new MalformedFilterFormatException($filterFqcn::type(), $ve);
         }
     }
 }
