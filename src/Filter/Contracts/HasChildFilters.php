@@ -6,4 +6,5 @@ namespace IndexZer0\EloquentFiltering\Filter\Contracts;
 
 interface HasChildFilters
 {
+    public static function childFiltersKey(): string;
 }

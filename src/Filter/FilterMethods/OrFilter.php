@@ -47,4 +47,9 @@ class OrFilter implements FilterMethod, HasChildFilters
             }
         });
     }
+
+    public static function childFiltersKey(): string
+    {
+        return 'value';
+    }
 }

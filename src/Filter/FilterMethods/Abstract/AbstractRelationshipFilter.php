@@ -29,4 +29,9 @@ abstract class AbstractRelationshipFilter extends AbstractFilter implements HasC
             'value.*' => ['array'],
         ];
     }
+
+    public static function childFiltersKey(): string
+    {
+        return 'value';
+    }
 }
