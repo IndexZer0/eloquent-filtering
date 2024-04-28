@@ -111,7 +111,7 @@ it('can sort by column with "Sort::all()"', function (): void {
 
 it('can not sort by column when not explicitly allowed | not suppressed', function (): void {
 
-    $query = Author::sort(
+    Author::sort(
         [
             [
                 'target' => 'name',

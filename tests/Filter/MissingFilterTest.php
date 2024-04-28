@@ -27,7 +27,6 @@ it('ignores missing filter when suppressed', function (): void {
         select * from "authors"
         SQL;
 
-
     expect($query->toRawSql())->toBe($expectedSql);
 
     $models = $query->get();
@@ -47,4 +46,4 @@ it('errors when provided missing filter when not suppressed', function (): void 
         Filter::all()
     );
 
-})->expectException(MissingFilterException::class);
+})->throws(MissingFilterException::class, 'Can not find filter for "$this-filter-does-not-exist"');

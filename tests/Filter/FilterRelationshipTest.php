@@ -91,7 +91,7 @@ it('can filter by relationship with "Filter::all()"', function (): void {
 
 it('can not filter by relationship when not explicitly allowed | not suppressed', function (): void {
 
-    $query = Author::filter(
+    Author::filter(
         [
             [
                 'target' => 'books',

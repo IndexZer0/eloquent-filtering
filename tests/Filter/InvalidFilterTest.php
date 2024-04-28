@@ -26,9 +26,7 @@ it('throws exception when filter is invalid | not suppressed', function (mixed $
 
     Author::filter(
         [
-            [
-                'invalid-type-key' => '$null',
-            ],
+            $filter,
         ],
         Filter::all()
     );
@@ -37,15 +35,13 @@ it('throws exception when filter is invalid | not suppressed', function (mixed $
     ->with($dataSets)
     ->throws(InvalidFilterException::class, 'Filter must be an array containing `type` (string).');
 
-it('does not throw exception when filter is invalid | suppressed', function (): void {
+it('does not throw exception when filter is invalid | suppressed', function (mixed $filter): void {
 
     config()->set('eloquent-filtering.suppress.filter.invalid', true);
 
     $query = Author::filter(
         [
-            [
-                'invalid-type-key' => '$null',
-            ],
+            $filter,
         ],
         Filter::all()
     );
