@@ -46,8 +46,7 @@
     },
     "autoload": {
         "psr-4": {
-            "IndexZer0\\EloquentFiltering\\": "src/",
-            "IndexZer0\\EloquentFiltering\\Database\\Factories\\": "database/factories/"
+            "IndexZer0\\EloquentFiltering\\": "src/"
         }
     },
     "autoload-dev": {
