@@ -277,7 +277,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "name" != 'Taylor'
+select * from "people" where "age" > 18
 ```
 
 #### GreaterThanEqualToFilter
