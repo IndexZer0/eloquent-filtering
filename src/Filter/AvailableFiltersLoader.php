@@ -34,17 +34,13 @@ class AvailableFiltersLoader
     {
         $filters = $this->getPackageFilters()->merge($this->getCustomFilters());
 
-        $duplicateTypes = $filters->map(
-            fn (string $filterMethodFqcn) => /** @var $filterMethodFqcn FilterMethod */ $filterMethodFqcn::type()
-        )->duplicates();
-
-        if ($duplicateTypes->count() > 0) {
-            throw new DuplicateFiltersException($duplicateTypes->toArray());
-        }
+        $this->ensureNoDuplicateTypes($filters);
 
         return $filters->keyBy(
-            fn (string $filterMethodFqcn) => /** @var $filterMethodFqcn FilterMethod */
-            $filterMethodFqcn::type()
+            function (string $filterMethodFqcn) {
+                /** @var $filterMethodFqcn FilterMethod */
+                return $filterMethodFqcn::type();
+            }
         );
     }
 
@@ -97,5 +93,19 @@ class AvailableFiltersLoader
     {
         return collect(config('eloquent-filtering.custom_filters'))
             ->filter(fn ($filter) => is_a($filter, FilterMethod::class, true));
+    }
+
+    private function ensureNoDuplicateTypes(Collection $filters): void
+    {
+        $duplicateTypes = $filters->map(
+            function (string $filterMethodFqcn) {
+                /** @var $filterMethodFqcn FilterMethod */
+                return $filterMethodFqcn::type();
+            }
+        )->duplicates();
+
+        if ($duplicateTypes->count() > 0) {
+            throw new DuplicateFiltersException($duplicateTypes->toArray());
+        }
     }
 }
