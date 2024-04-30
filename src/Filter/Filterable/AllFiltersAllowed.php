@@ -6,7 +6,7 @@ namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
 
-class UnrestrictedFilterableList implements FilterableList
+class AllFiltersAllowed implements FilterableList
 {
     public function ensureAllowed(PendingFilter $pendingFilter): PendingFilter
     {
