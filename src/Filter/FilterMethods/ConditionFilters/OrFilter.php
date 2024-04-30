@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ConditionFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier;
 use IndexZer0\EloquentFiltering\Filter\Contracts\HasChildFilters;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractConditionFilter;
 
-class OrFilter extends AbstractFilter implements HasChildFilters
+class OrFilter extends AbstractConditionFilter implements HasChildFilters
 {
     public function __construct(
         protected FilterCollection $value,
