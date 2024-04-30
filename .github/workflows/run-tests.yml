@@ -54,6 +54,7 @@ jobs:
 
       - name: Code Coverage Upload
         uses: codecov/codecov-action@v4.3.0
+        if: matrix.php == '8.2' && matrix.laravel-testbench.laravel == '10.x' && matrix.stability == 'prefer-lowest'
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
           slug: IndexZer0/eloquent-filtering
