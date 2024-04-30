@@ -87,7 +87,7 @@ it('has the correct DeniedFilterException message', function (): void {
     Author::filter(
         [
             [
-                'type' => '$or',
+                'type'  => '$or',
                 'value' => [
                     [
                         'target' => 'name',
@@ -98,8 +98,8 @@ it('has the correct DeniedFilterException message', function (): void {
                         'target' => 'name',
                         'type'   => '$eq',
                         'value'  => 'J. R. R. Tolkien',
-                    ]
-                ]
+                    ],
+                ],
             ],
         ],
         Filter::allowNone()
@@ -122,7 +122,7 @@ it('must have at least two child filters', function (
         [
             [
                 'type' => '$or',
-                ...$value_container
+                ...$value_container,
             ],
         ],
         Filter::allowAll()
@@ -147,18 +147,18 @@ it('must have at least two child filters', function (
         'expect_exception' => true,
     ],
     'value only one element' => [
-        'value_container'  => ['value' => [
+        'value_container' => ['value' => [
             [
                 'target' => 'name',
                 'type'   => '$eq',
                 'value'  => 'George Raymond Richard Martin',
-            ]
+            ],
         ]],
         'expected_sql'     => null,
         'expect_exception' => true,
     ],
     'value two elements' => [
-        'value_container'  => ['value' => [
+        'value_container' => ['value' => [
             [
                 'target' => 'name',
                 'type'   => '$eq',
@@ -168,13 +168,13 @@ it('must have at least two child filters', function (
                 'target' => 'name',
                 'type'   => '$eq',
                 'value'  => 'J. R. R. Tolkien',
-            ]
+            ],
         ]],
         'expected_sql'     => 'select * from "authors" where (("name" = \'George Raymond Richard Martin\') or ("name" = \'J. R. R. Tolkien\'))',
         'expect_exception' => false,
     ],
     'value three elements' => [
-        'value_container'  => ['value' => [
+        'value_container' => ['value' => [
             [
                 'target' => 'name',
                 'type'   => '$eq',
@@ -189,7 +189,7 @@ it('must have at least two child filters', function (
                 'target' => 'name',
                 'type'   => '$eq',
                 'value'  => 'J. K. Rowling',
-            ]
+            ],
         ]],
         'expected_sql'     => 'select * from "authors" where (("name" = \'George Raymond Richard Martin\') or ("name" = \'J. R. R. Tolkien\') or ("name" = \'J. K. Rowling\'))',
         'expect_exception' => false,

@@ -348,10 +348,12 @@ it('honours the allowed filter list all the way down the nested relation chain |
         ],
         Filter::allowOnly(
             Filter::relation(
-                'books', ['$has'],
+                'books',
+                ['$has'],
                 Filter::allowOnly(
                     Filter::relation(
-                        'comments', ['$has'],
+                        'comments',
+                        ['$has'],
                     )
                 )
             )

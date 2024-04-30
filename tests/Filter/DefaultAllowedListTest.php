@@ -47,8 +47,8 @@ it('uses default allowed list from config', function (
         'default'          => 'none',
         'expect_exception' => true,
     ],
-    'all'  => [
+    'all' => [
         'default'          => 'all',
         'expect_exception' => false,
-    ]
+    ],
 ]);

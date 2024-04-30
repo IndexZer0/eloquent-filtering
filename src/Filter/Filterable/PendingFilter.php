@@ -50,7 +50,7 @@ class PendingFilter
 
     public function getDeniedMessage(): string
     {
-        $message ="\"{$this->type}\" filter%s is not allowed";
+        $message = "\"{$this->type}\" filter%s is not allowed";
 
         $target = is_a($this->filterFqcn, AppliesToTarget::class, true) ? $this->target() : null;
 

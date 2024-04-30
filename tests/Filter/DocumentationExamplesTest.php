@@ -294,7 +294,7 @@ it('InFilter | $in', function (): void {
         [
             'type'   => '$in',
             'target' => 'name',
-            'value'  => ['Taylor', 'Otwell',],
+            'value'  => ['Taylor', 'Otwell', ],
         ],
     ], Filter::allowOnly(
         Filter::column('name', ['$in']),
@@ -313,7 +313,7 @@ it('NotInFilter | $notIn', function (): void {
         [
             'type'   => '$notIn',
             'target' => 'name',
-            'value'  => ['Nuno', 'Maduro',],
+            'value'  => ['Nuno', 'Maduro', ],
         ],
     ], Filter::allowOnly(
         Filter::column('name', ['$notIn']),
@@ -332,7 +332,7 @@ it('BetweenFilter | $between', function (): void {
         [
             'type'   => '$between',
             'target' => 'age',
-            'value'  => [18, 65,],
+            'value'  => [18, 65, ],
         ],
     ], Filter::allowOnly(
         Filter::column('age', ['$between']),
@@ -351,7 +351,7 @@ it('NotBetweenFilter | $notBetween', function (): void {
         [
             'type'   => '$notBetween',
             'target' => 'age',
-            'value'  => [18, 65,],
+            'value'  => [18, 65, ],
         ],
     ], Filter::allowOnly(
         Filter::column('age', ['$notBetween']),
@@ -380,7 +380,8 @@ it('HasFilter | $has', function (): void {
         ],
     ], Filter::allowOnly(
         Filter::relation(
-            'comments', ['$has',],
+            'comments',
+            ['$has', ],
             Filter::allowOnly(
                 Filter::column('content', ['$like'])
             )
@@ -410,7 +411,8 @@ it('DoesntHasFilter | $doesntHas', function (): void {
         ],
     ], Filter::allowOnly(
         Filter::relation(
-            'comments', ['$doesntHas',],
+            'comments',
+            ['$doesntHas', ],
             Filter::allowOnly(
                 Filter::column('content', ['$like'])
             )
