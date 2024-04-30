@@ -154,7 +154,7 @@ class Product extends Model
     
     protected function allowedFilters(): FilterableList
     {
-        return Filter::allow(
+        return Filter::allowOnly(
             Filter::column('name', ['$eq']),
             Filter::relation(
                 'manufacturer', 
@@ -195,7 +195,7 @@ Product::filter(
 
 This package provides core filters that give you the ability to perform the vast majority of the filtering you'd need.
 
-| Target       | Filter                                                | Code             | Query                                                                 |
+| Usage        | Filter                                                | Code             | Query                                                                 |
 |--------------|-------------------------------------------------------|------------------|-----------------------------------------------------------------------|
 | Column       | [EqualFilter](#EqualFilter)                           | `$eq`            | `{$target} = {$value}`                                                |
 | Column       | [NotEqualFilter](#NotEqualFilter)                     | `$notEq`         | `{$target} != {$value}`                                               |
@@ -209,12 +209,13 @@ This package provides core filters that give you the ability to perform the vast
 | Column       | [NotLikeFilter](#NotLikeFilter)                       | `$notLike`       | `{$target} NOT LIKE '%{$value}%'`                                     |
 | Column       | [NotLikeStartFilter](#NotLikeStartFilter)             | `$notLike:start` | `{$target} NOT LIKE '{$value}%'`                                      |
 | Column       | [NotLikeEndFilter](#NotLikeEndFilter)                 | `$notLike:end`   | `{$target} NOT LIKE '%{$value}'`                                      |
-| Column       | [OrFilter](#OrFilter)                                 | `$or`            | `or`                                                                  |
 | Column       | [NullFilter](#NullFilter)                             | `$null`          | `{$target} is null` <code>&#124;&#124;</code> `{$target} is not null` |
 | Column       | [InFilter](#InFilter)                                 | `$in`            | `{$target} in ($value)`                                               |
 | Column       | [NotInFilter](#NotInFilter)                           | `$notIn`         | `{$target} not in ($value)`                                           |
 | Column       | [BetweenFilter](#BetweenFilter)                       | `$between`       | `{$target} between $value[0] and $value[1]`                           |
 | Column       | [NotBetweenFilter](#NotBetweenFilter)                 | `$notBetween`    | `{$target} not between $value[0] and $value[1]`                       |
+| JsonColumn   | [JsonContainsFilter](#JsonContainsFilter)             | `$jsonContains`  | `{$target} not between $value[0] and $value[1]`                       |
+| Condition    | [OrFilter](#OrFilter)                                 | `$or`            | `or`                                                                  |
 | Relationship | [HasFilter](#HasFilter)                               | `$has`           | `where exists (select * from {$target})`                              |
 | Relationship | [DoesntHasFilter](#DoesntHasFilter)                   | `$doesntHas`     | `where not exists (select * from {$target})`                          |
 
