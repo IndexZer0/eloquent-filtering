@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
-class NotLikeEndFilter extends NotLikeFilter
+class LikeEndFilter extends LikeFilter
 {
     /*
      * -----------------------------
@@ -14,7 +14,7 @@ class NotLikeEndFilter extends NotLikeFilter
 
     public static function type(): string
     {
-        return '$notLike:end';
+        return '$like:end';
     }
 
     /*

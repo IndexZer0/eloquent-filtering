@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
-class NotEqualFilter extends WhereFilter
+class NotInFilter extends InFilter
 {
     /*
      * -----------------------------
@@ -14,7 +14,7 @@ class NotEqualFilter extends WhereFilter
 
     public static function type(): string
     {
-        return '$notEq';
+        return '$notIn';
     }
 
     /*
@@ -23,8 +23,8 @@ class NotEqualFilter extends WhereFilter
      * -----------------------------
      */
 
-    protected function operator(): string
+    protected function not(): bool
     {
-        return '!=';
+        return true;
     }
 }

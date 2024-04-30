@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
-class NotBetweenFilter extends BetweenFilter
+class GreaterThanEqualToFilter extends WhereFilter
 {
     /*
      * -----------------------------
@@ -14,7 +14,7 @@ class NotBetweenFilter extends BetweenFilter
 
     public static function type(): string
     {
-        return '$notBetween';
+        return '$gte';
     }
 
     /*
@@ -23,8 +23,8 @@ class NotBetweenFilter extends BetweenFilter
      * -----------------------------
      */
 
-    protected function not(): bool
+    protected function operator(): string
     {
-        return true;
+        return '>=';
     }
 }

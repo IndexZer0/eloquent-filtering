@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
-class NotLikeStartFilter extends NotLikeFilter
+class EqualFilter extends WhereFilter
 {
     /*
      * -----------------------------
@@ -14,7 +14,7 @@ class NotLikeStartFilter extends NotLikeFilter
 
     public static function type(): string
     {
-        return '$notLike:start';
+        return '$eq';
     }
 
     /*
@@ -23,8 +23,8 @@ class NotLikeStartFilter extends NotLikeFilter
      * -----------------------------
      */
 
-    protected function valueBefore(): string
+    protected function operator(): string
     {
-        return '';
+        return '=';
     }
 }

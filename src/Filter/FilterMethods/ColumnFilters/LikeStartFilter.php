@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
-class LikeEndFilter extends LikeFilter
+class LikeStartFilter extends LikeFilter
 {
     /*
      * -----------------------------
@@ -14,7 +14,7 @@ class LikeEndFilter extends LikeFilter
 
     public static function type(): string
     {
-        return '$like:end';
+        return '$like:start';
     }
 
     /*
@@ -23,7 +23,7 @@ class LikeEndFilter extends LikeFilter
      * -----------------------------
      */
 
-    protected function valueAfter(): string
+    protected function valueBefore(): string
     {
         return '';
     }

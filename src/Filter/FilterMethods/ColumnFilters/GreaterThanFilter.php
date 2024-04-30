@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
-class GreaterThanEqualToFilter extends WhereFilter
+class GreaterThanFilter extends WhereFilter
 {
     /*
      * -----------------------------
@@ -14,7 +14,7 @@ class GreaterThanEqualToFilter extends WhereFilter
 
     public static function type(): string
     {
-        return '$gte';
+        return '$gt';
     }
 
     /*
@@ -25,6 +25,6 @@ class GreaterThanEqualToFilter extends WhereFilter
 
     protected function operator(): string
     {
-        return '>=';
+        return '>';
     }
 }

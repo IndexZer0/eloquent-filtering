@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
-class NotInFilter extends InFilter
+class NotBetweenFilter extends BetweenFilter
 {
     /*
      * -----------------------------
@@ -14,7 +14,7 @@ class NotInFilter extends InFilter
 
     public static function type(): string
     {
-        return '$notIn';
+        return '$notBetween';
     }
 
     /*

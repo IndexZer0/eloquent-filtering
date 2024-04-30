@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
-class NotLikeFilter extends LikeFilter
+class LessThanEqualToFilter extends WhereFilter
 {
     /*
      * -----------------------------
@@ -14,7 +14,7 @@ class NotLikeFilter extends LikeFilter
 
     public static function type(): string
     {
-        return '$notLike';
+        return '$lte';
     }
 
     /*
@@ -25,6 +25,6 @@ class NotLikeFilter extends LikeFilter
 
     protected function operator(): string
     {
-        return 'NOT LIKE';
+        return '<=';
     }
 }

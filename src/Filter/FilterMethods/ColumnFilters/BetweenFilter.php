@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractColumnFilter;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
-class BetweenFilter extends AbstractFilter
+class BetweenFilter extends AbstractColumnFilter
 {
     public function __construct(
         protected string $target,

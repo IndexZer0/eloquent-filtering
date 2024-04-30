@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractColumnFilter;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
-abstract class WhereFilter extends AbstractFilter
+abstract class WhereFilter extends AbstractColumnFilter
 {
     public function __construct(
-        protected string $target,
+        protected string           $target,
         protected string|float|int $value,
     ) {
     }
