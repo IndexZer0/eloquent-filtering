@@ -28,7 +28,7 @@ it('throws exception when filter is invalid | not suppressed', function (mixed $
         [
             $filter,
         ],
-        Filter::all()
+        Filter::allowAll()
     );
 
 })
@@ -43,7 +43,7 @@ it('does not throw exception when filter is invalid | suppressed', function (mix
         [
             $filter,
         ],
-        Filter::all()
+        Filter::allowAll()
     );
 
     $expectedSql = <<< SQL

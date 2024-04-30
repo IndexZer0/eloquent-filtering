@@ -20,7 +20,7 @@ it('can filter by relationship when allowed', function (): void {
                 'value'  => [],
             ],
         ],
-        Filter::allow(
+        Filter::allowOnly(
             Filter::relation(
                 'books',
                 ['$has'],
@@ -74,7 +74,7 @@ it('can filter by relationship with "Filter::all()"', function (): void {
                 'value'  => [],
             ],
         ],
-        Filter::all(),
+        Filter::allowAll(),
     );
 
     $expectedSql = <<< SQL
@@ -99,7 +99,7 @@ it('can not filter by relationship when not explicitly allowed | not suppressed'
                 'value'  => [],
             ],
         ],
-        Filter::allow(),
+        Filter::allowOnly(),
     );
 
 })->throws(DeniedFilterException::class, '"$has" filter for "books" is not allowed');
@@ -116,7 +116,7 @@ it('can not filter by relationship when not explicitly allowed | suppressed', fu
                 'value'  => [],
             ],
         ],
-        Filter::allow(),
+        Filter::allowOnly(),
     );
 
     $expectedSql = <<< SQL
