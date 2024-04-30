@@ -32,6 +32,8 @@ trait Filterable
 
     protected function allowedFilters(): FilterableList
     {
-        return Filter::allowAll(); // TODO should the default be to allowOnly() with none?
+        $defaultAllowedList = config('eloquent-filtering.default_allowed_list', 'none');
+
+        return $defaultAllowedList === 'none' ? Filter::allowNone() : Filter::allowAll();
     }
 }
