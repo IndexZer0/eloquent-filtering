@@ -18,13 +18,12 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         php: [8.3, 8.2]
-        laravel: [10.*, 11.*]
+        laravel-testbench: [ {laravel: 10.*, testbench: 8.*}, {laravel: 11.*, testbench: 9.*} ]
         stability: [prefer-lowest, prefer-stable]
         include:
-          - testbench: 8.*
-            carbon: ^2.63
+          - carbon: ^2.63
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel-testbench.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
@@ -44,7 +43,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel-testbench.laravel }}" "orchestra/testbench:${{ matrix.laravel-testbench.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: List Installed Dependencies
