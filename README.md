@@ -135,7 +135,7 @@ class Product extends Model
 
 ### Allowing Filters
 
-By default, all filters are allowed.
+By default, all filters are disallowed.
 
 You can specify specific filters in two ways:
 
@@ -178,12 +178,14 @@ class Product extends Model
 ```php
 Product::filter(
     $filters,
-    Filter::allow(
+    Filter::allowOnly(
         Filter::column('name', ['$eq']),
         Filter::relation(
             'manufacturer', 
             ['$has', '$doesntHas'],
-            Filter::column('name', ['$like'])
+            Filter::allowOnly(
+                Filter::column('name', ['$like'])
+            )
         )
     )
 )->get();
