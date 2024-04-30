@@ -8,7 +8,15 @@ use Illuminate\Database\Eloquent\Builder;
 
 interface FilterMethod
 {
+    public const USAGE_COLUMN = 'usage_column';
+    public const USAGE_RELATION = 'usage_relation';
+    public const USAGE_JSON_COLUMN = 'usage_json_column';
+    public const USAGE_CUSTOM = 'usage_custom';
+    public const USAGE_CONDITION = 'usage_condition';
+
     public static function type(): string;
+
+    public static function usage(): string;
 
     public static function format(): array;
 
