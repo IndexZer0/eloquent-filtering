@@ -37,7 +37,7 @@ it('can perform $eq filter', function (): void {
 });
 
 it('only accepts string, int, float for value', function (
-    mixed $value,
+    array $value_container,
     ?string $expected_sql,
     bool $expect_exception
 ): void {
@@ -52,7 +52,7 @@ it('only accepts string, int, float for value', function (
             [
                 'target' => 'name',
                 'type'   => '$eq',
-                'value'  => $value,
+                ...$value_container,
             ],
         ],
         Filter::allowOnly(
@@ -63,45 +63,57 @@ it('only accepts string, int, float for value', function (
     expect($query->toRawSql())->toBe($expected_sql);
 
 })->with([
-    'string' => [
-        'value'            => 'string',
-        'expected_sql'     => 'select * from "authors" where "name" = \'string\'',
-        'expect_exception' => false,
-    ],
-    'int' => [
-        'value'            => 420,
-        'expected_sql'     => 'select * from "authors" where "name" = 420',
-        'expect_exception' => false,
-    ],
-    'float' => [
-        'value'            => 69.420,
-        'expected_sql'     => 'select * from "authors" where "name" = 69.42',
-        'expect_exception' => false,
+    // Failing Cases
+    'no value' => [
+        'value_container'  => [],
+        'expected_sql'     => null,
+        'expect_exception' => true,
     ],
     'null' => [
-        'value'            => null,
+        'value_container'  => ['value' => null, ],
         'expected_sql'     => null,
         'expect_exception' => true,
     ],
     'bool' => [
-        'value'            => true,
+        'value_container'  => ['value' => true, ],
         'expected_sql'     => null,
         'expect_exception' => true,
     ],
-    // TODO - why failing on php 8.3?
-    /*'empty array' => [
-        'value'            => [],
+    'empty array' => [
+        'value_container'  => ['value' => [], ],
         'expected_sql'     => null,
         'expect_exception' => true,
     ],
     'non empty array' => [
-        'value'            => [1],
+        'value_container'  => ['value' => [1], ],
         'expected_sql'     => null,
         'expect_exception' => true,
-    ],*/
+    ],
     'object' => [
-        'value'            => new stdClass(),
+        'value_container'  => ['value' => new stdClass(), ],
         'expected_sql'     => null,
         'expect_exception' => true,
+    ],
+
+    // Success Cases
+    'int' => [
+        'value_container'  => ['value' => 420],
+        'expected_sql'     => 'select * from "authors" where "name" = 420',
+        'expect_exception' => false,
+    ],
+    'string' => [
+        'value_container'  => ['value' => 'string', ],
+        'expected_sql'     => 'select * from "authors" where "name" = \'string\'',
+        'expect_exception' => false,
+    ],
+    'numeric_string' => [
+        'value_container'  => ['value' => '1', ],
+        'expected_sql'     => 'select * from "authors" where "name" = \'1\'',
+        'expect_exception' => false,
+    ],
+    'float' => [
+        'value_container'  => ['value' => 420.69, ],
+        'expected_sql'     => 'select * from "authors" where "name" = 420.69',
+        'expect_exception' => false,
     ],
 ]);

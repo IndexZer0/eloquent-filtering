@@ -34,7 +34,7 @@ class JsonLengthFilter extends AbstractJsonColumnFilter
         return [
             'target'   => ['required', 'string'],
             'operator' => ['required', Rule::in(['=', '<', '<=', '>', '>='])],
-            'value'    => ['required', new StrictInteger()],
+            'value'    => ['required', new StrictInteger(), ],
         ];
     }
 

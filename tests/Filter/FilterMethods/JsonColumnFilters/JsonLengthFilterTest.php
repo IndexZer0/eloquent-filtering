@@ -39,9 +39,9 @@ it('can perform $jsonLength filter', function (): void {
 });
 
 it('only accepts int for value', function (
-    mixed $value,
+    array   $value_container,
     ?string $expected_sql,
-    bool $expect_exception
+    bool    $expect_exception
 ): void {
 
     if ($expect_exception) {
@@ -55,7 +55,7 @@ it('only accepts int for value', function (
                 'target'   => 'data->array',
                 'type'     => '$jsonLength',
                 'operator' => '=',
-                'value'    => $value,
+                ...$value_container,
             ],
         ],
         Filter::allowOnly(
@@ -66,45 +66,57 @@ it('only accepts int for value', function (
     expect($query->toRawSql())->toBe($expected_sql);
 
 })->with([
-    'int' => [
-        'value'            => 420,
-        'expected_sql'     => 'select * from "api_responses" where json_array_length("data", \'$."array"\') = 420',
-        'expect_exception' => false,
+    // Failing Cases
+    'no value' => [
+        'value_container'  => [],
+        'expected_sql'     => null,
+        'expect_exception' => true,
     ],
     'string' => [
-        'value'            => 'string',
+        'value_container'  => ['value' => 'string', ],
+        'expected_sql'     => null,
+        'expect_exception' => true,
+    ],
+    'numeric_string' => [
+        'value_container'  => ['value' => '1', ],
         'expected_sql'     => null,
         'expect_exception' => true,
     ],
     'float' => [
-        'value'            => 69.420,
+        'value_container'  => ['value' => 420.69, ],
         'expected_sql'     => null,
         'expect_exception' => true,
     ],
     'null' => [
-        'value'            => null,
+        'value_container'  => ['value' => null, ],
         'expected_sql'     => null,
         'expect_exception' => true,
     ],
     'bool' => [
-        'value'            => true,
+        'value_container'  => ['value' => true, ],
         'expected_sql'     => null,
         'expect_exception' => true,
     ],
-    // TODO why failing on php 8.3
-    /*'empty array' => [
-        'value'            => [],
+    'empty array' => [
+        'value_container'  => ['value' => [], ],
         'expected_sql'     => null,
         'expect_exception' => true,
     ],
     'non empty array' => [
-        'value'            => [1],
+        'value_container'  => ['value' => [1], ],
         'expected_sql'     => null,
         'expect_exception' => true,
-    ],*/
+    ],
     'object' => [
-        'value'            => new stdClass(),
+        'value_container'  => ['value' => new stdClass(), ],
         'expected_sql'     => null,
         'expect_exception' => true,
+    ],
+
+    // Success Cases
+    'int' => [
+        'value_container'  => ['value' => 420, ],
+        'expected_sql'     => 'select * from "api_responses" where json_array_length("data", \'$."array"\') = 420',
+        'expect_exception' => false,
     ],
 ]);
