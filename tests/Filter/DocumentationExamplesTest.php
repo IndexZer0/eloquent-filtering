@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Person;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Project;
@@ -13,7 +14,9 @@ it('EqualFilter | $eq', function (): void {
             'target' => 'name',
             'value'  => 'Taylor',
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('name', ['$eq'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "name" = 'Taylor'
@@ -30,7 +33,9 @@ it('NotEqualFilter | $notEq', function (): void {
             'target' => 'name',
             'value'  => 'Taylor',
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('name', ['$notEq'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "name" != 'Taylor'
@@ -47,7 +52,9 @@ it('GreaterThanFilter | $gt', function (): void {
             'target' => 'age',
             'value'  => 18,
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('age', ['$gt'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "age" > 18
@@ -64,7 +71,9 @@ it('GreaterThanEqualToFilter | $gte', function (): void {
             'target' => 'age',
             'value'  => 18,
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('age', ['$gte'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "age" >= 18
@@ -81,7 +90,9 @@ it('LessThanFilter | $lt', function (): void {
             'target' => 'age',
             'value'  => 18,
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('age', ['$lt'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "age" < 18
@@ -98,7 +109,9 @@ it('LessThanEqualToFilter | $lte', function (): void {
             'target' => 'age',
             'value'  => 18,
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('age', ['$lte'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "age" <= 18
@@ -115,7 +128,9 @@ it('LikeFilter | $like', function (): void {
             'target' => 'description',
             'value'  => 'Laravel',
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('description', ['$like'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "projects" where "description" LIKE '%Laravel%'
@@ -132,7 +147,9 @@ it('LikeStartFilter | $like:start', function (): void {
             'target' => 'description',
             'value'  => 'Laravel',
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('description', ['$like:start'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "projects" where "description" LIKE 'Laravel%'
@@ -149,7 +166,9 @@ it('LikeEndFilter | $like:end', function (): void {
             'target' => 'description',
             'value'  => 'Laravel',
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('description', ['$like:end'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "projects" where "description" LIKE '%Laravel'
@@ -164,12 +183,14 @@ it('NotLikeFilter | $notLike', function (): void {
         [
             'type'   => '$notLike',
             'target' => 'description',
-            'value'  => 'Laravel',
+            'value'  => 'Symfony',
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('description', ['$notLike'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where "description" NOT LIKE '%Laravel%'
+        select * from "projects" where "description" NOT LIKE '%Symfony%'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -181,12 +202,14 @@ it('NotLikeStartFilter | $notLike:start', function (): void {
         [
             'type'   => '$notLike:start',
             'target' => 'description',
-            'value'  => 'Laravel',
+            'value'  => 'Symfony',
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('description', ['$notLike:start'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where "description" NOT LIKE 'Laravel%'
+        select * from "projects" where "description" NOT LIKE 'Symfony%'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -198,12 +221,14 @@ it('NotLikeEndFilter | $notLike:end', function (): void {
         [
             'type'   => '$notLike:end',
             'target' => 'description',
-            'value'  => 'Laravel',
+            'value'  => 'Symfony',
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('description', ['$notLike:end'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where "description" NOT LIKE '%Laravel'
+        select * from "projects" where "description" NOT LIKE '%Symfony'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -227,7 +252,9 @@ it('OrFilter | $or', function (): void {
                 ],
             ],
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('content', ['$like'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
@@ -249,7 +276,10 @@ it('NullFilter | $null', function (): void {
             'target' => 'weight',
             'value'  => false,
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('age', ['$null']),
+        Filter::column('weight', ['$null'])
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "age" is null and "weight" is not null
@@ -264,9 +294,11 @@ it('InFilter | $in', function (): void {
         [
             'type'   => '$in',
             'target' => 'name',
-            'value'  => ['Taylor', 'Otwell', ],
+            'value'  => ['Taylor', 'Otwell',],
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('name', ['$in']),
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "name" in ('Taylor', 'Otwell')
@@ -281,9 +313,11 @@ it('NotInFilter | $notIn', function (): void {
         [
             'type'   => '$notIn',
             'target' => 'name',
-            'value'  => ['Nuno', 'Maduro', ],
+            'value'  => ['Nuno', 'Maduro',],
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('name', ['$notIn']),
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "name" not in ('Nuno', 'Maduro')
@@ -298,9 +332,11 @@ it('BetweenFilter | $between', function (): void {
         [
             'type'   => '$between',
             'target' => 'age',
-            'value'  => [18, 65, ],
+            'value'  => [18, 65,],
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('age', ['$between']),
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "age" between 18 and 65
@@ -315,9 +351,11 @@ it('NotBetweenFilter | $notBetween', function (): void {
         [
             'type'   => '$notBetween',
             'target' => 'age',
-            'value'  => [18, 65, ],
+            'value'  => [18, 65,],
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::column('age', ['$notBetween']),
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "people" where "age" not between 18 and 65
@@ -340,7 +378,14 @@ it('HasFilter | $has', function (): void {
                 ],
             ],
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::relation(
+            'comments', ['$has',],
+            Filter::allowOnly(
+                Filter::column('content', ['$like'])
+            )
+        )
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "projects" where exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "content" LIKE '%awesome%')
@@ -363,7 +408,14 @@ it('DoesntHasFilter | $doesntHas', function (): void {
                 ],
             ],
         ],
-    ])->toRawSql();
+    ], Filter::allowOnly(
+        Filter::relation(
+            'comments', ['$doesntHas',],
+            Filter::allowOnly(
+                Filter::column('content', ['$like'])
+            )
+        )
+    ))->toRawSql();
 
     $expectedSql = <<< SQL
         select * from "projects" where not exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "content" LIKE '%boring%')
