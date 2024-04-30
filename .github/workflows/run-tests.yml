@@ -55,7 +55,7 @@ jobs:
         run: vendor/bin/pest --ci
 
       - name: Code Coverage Upload
-        uses: codecov/codecov-action@v4.1.0
+        uses: codecov/codecov-action@v4.3.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
           slug: IndexZer0/eloquent-filtering
