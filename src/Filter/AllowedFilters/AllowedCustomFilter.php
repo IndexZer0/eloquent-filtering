@@ -8,7 +8,7 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
-use IndexZer0\EloquentFiltering\Filter\Filterable\UnrestrictedFilterableList;
+use IndexZer0\EloquentFiltering\Filter\Filterable\AllFiltersAllowed;
 
 class AllowedCustomFilter implements AllowedFilter
 {
@@ -18,7 +18,7 @@ class AllowedCustomFilter implements AllowedFilter
 
     public function allowedFilters(): FilterableList
     {
-        return new UnrestrictedFilterableList();
+        return new AllFiltersAllowed();
     }
 
     public function matches(PendingFilter $pendingFilter): bool
