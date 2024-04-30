@@ -14,7 +14,7 @@ class PendingFilter
         protected string $type,
         protected array $data,
         protected string $filterFqcn,
-        protected FilterableList $filterableList = new UnrestrictedFilterableList(),
+        protected FilterableList $filterableList = new AllFiltersAllowed(),
     ) {
     }
 
