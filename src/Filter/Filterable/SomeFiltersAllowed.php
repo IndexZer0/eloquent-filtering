@@ -10,7 +10,7 @@ use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
 
-class RestrictedFilterableList implements FilterableList
+class SomeFiltersAllowed implements FilterableList
 {
     protected Collection $allowedFilters;
 
