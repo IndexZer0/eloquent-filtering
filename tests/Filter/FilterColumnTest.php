@@ -37,8 +37,8 @@ it('can filter by column when allowed', function (): void {
 
 });
 
-it('can filter by column when no filter list supplied', function (): void {
-    $query = Author::filter(
+it('can not filter by column when no filter list supplied', function (): void {
+    Author::filter(
         [
             [
                 'target' => 'name',
@@ -48,20 +48,9 @@ it('can filter by column when no filter list supplied', function (): void {
         ],
     );
 
-    $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'George Raymond Richard Martin'
-        SQL;
+})->throws(DeniedFilterException::class, '"$eq" filter for "name" is not allowed');
 
-    expect($query->toRawSql())->toBe($expectedSql);
-
-    $models = $query->get();
-
-    expect($models->count())->toBe(1)
-        ->and($models->first()->id)->toBe(1);
-
-});
-
-it('can filter by column with "Filter::all()"', function (): void {
+it('can filter by column with "Filter::allowAll()"', function (): void {
     $query = Author::filter(
         [
             [
