@@ -19,7 +19,7 @@ it('can filter and sort together', function (): void {
                 'value'  => 'R',
             ],
         ],
-        Filter::allow(
+        Filter::allowOnly(
             Filter::column('name', ['$like']),
         ),
     )->sort(
