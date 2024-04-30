@@ -12,6 +12,7 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser as FilterParserCon
 use IndexZer0\EloquentFiltering\Filter\Contracts\HasChildFilters;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidFilterException;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
+use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Suppression\Suppression;
 
 class FilterParser implements FilterParserContract
@@ -49,18 +50,23 @@ class FilterParser implements FilterParserContract
 
         $validatedData = $this->validateFilterFormat($filter, $filterFqcn);
 
-        $filterableList = $this->filterableList->ensureAllowed($filterType, data_get($validatedData, 'target'));
+        $pendingFilter = $this->filterableList->ensureAllowed(
+            new PendingFilter($filterType, $validatedData, $filterFqcn)
+        );
 
         if (is_a($filterFqcn, HasChildFilters::class, true)) {
 
-            $validatedData[$filterFqcn::childFiltersKey()] = $this->parseChildFilters(
-                $validatedData[$filterFqcn::childFiltersKey()],
-                $filterableList
+            $data = $pendingFilter->data();
+            $data[$filterFqcn::childFiltersKey()] = $this->parseChildFilters(
+                $data[$filterFqcn::childFiltersKey()],
+                $pendingFilter->filterableList()
             );
+
+            $pendingFilter = $pendingFilter->withData($data);
 
         }
 
-        return new $filterFqcn(...$validatedData);
+        return $pendingFilter->createFilter();
     }
 
     private function parseChildFilters(
