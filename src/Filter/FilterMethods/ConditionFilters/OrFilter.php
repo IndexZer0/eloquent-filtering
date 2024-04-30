@@ -31,7 +31,7 @@ class OrFilter extends AbstractConditionFilter implements HasChildFilters
     public static function format(): array
     {
         return [
-            'value'   => ['required', 'array', 'min:1'],
+            'value'   => ['required', 'array', 'min:2'],
             'value.*' => ['array'],
         ];
     }
