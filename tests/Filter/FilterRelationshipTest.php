@@ -40,9 +40,9 @@ it('can filter by relationship when allowed', function (): void {
         ->and($models->first()->id)->toBe(1);
 });
 
-it('can filter by relationship when no filter list supplied', function (): void {
+it('can not filter by relationship when no filter list supplied', function (): void {
 
-    $query = Author::filter(
+    Author::filter(
         [
             [
                 'target' => 'books',
@@ -52,19 +52,9 @@ it('can filter by relationship when no filter list supplied', function (): void 
         ],
     );
 
-    $expectedSql = <<< SQL
-        select * from "authors" where exists (select * from "books" where "authors"."id" = "books"."author_id")
-        SQL;
+})->throws(DeniedFilterException::class, '"$has" filter for "books" is not allowed');;
 
-    expect($query->toRawSql())->toBe($expectedSql);
-
-    $models = $query->get();
-
-    expect($models->count())->toBe(2)
-        ->and($models->first()->id)->toBe(1);
-});
-
-it('can filter by relationship with "Filter::all()"', function (): void {
+it('can filter by relationship with "Filter::allowAll()"', function (): void {
 
     $query = Author::filter(
         [
