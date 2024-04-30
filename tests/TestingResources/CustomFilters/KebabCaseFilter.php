@@ -6,9 +6,9 @@ namespace IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractColumnFilter;
 
-class KebabCaseFilter extends AbstractFilter
+class KebabCaseFilter extends AbstractColumnFilter
 {
     public function __construct(
         protected string $target,

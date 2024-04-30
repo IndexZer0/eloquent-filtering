@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractColumnFilter;
 
-class DuplicateFilter extends AbstractFilter
+class DuplicateFilter extends AbstractColumnFilter
 {
     /*
      * -----------------------------
