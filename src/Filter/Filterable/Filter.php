@@ -13,22 +13,39 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
 
 class Filter
 {
-    public static function allowAll(): UnrestrictedFilterableList
+    /*
+     * -------------------------
+     * FilterableList
+     * -------------------------
+     */
+
+    public static function allowNone(): NoFiltersAllowed
     {
-        return new UnrestrictedFilterableList();
+        return new NoFiltersAllowed();
     }
 
-    public static function allowOnly(AllowedFilter ...$allowedFilters): RestrictedFilterableList
+    public static function allowAll(): AllFiltersAllowed
     {
-        return new RestrictedFilterableList(...$allowedFilters);
+        return new AllFiltersAllowed();
     }
+
+    public static function allowOnly(AllowedFilter ...$allowedFilters): SomeFiltersAllowed
+    {
+        return new SomeFiltersAllowed(...$allowedFilters);
+    }
+
+    /*
+     * -------------------------
+     * AllowedFilter
+     * -------------------------
+     */
 
     public static function column(string $target, array $types, ?string $alias = null): AllowedColumn
     {
         return new AllowedColumn($target, $types, $alias);
     }
 
-    public static function jsonColumn(string $target, array $types): AllowedColumn
+    public static function jsonColumn(string $target, array $types): AllowedJsonColumn
     {
         return new AllowedJsonColumn($target, $types);
     }
@@ -36,13 +53,13 @@ class Filter
     public static function relation(
         string $target,
         array $types,
-        FilterableList $allowedFilters = new RestrictedFilterableList(),
+        FilterableList $allowedFilters = new NoFiltersAllowed(),
         ?string $alias = null
     ): AllowedRelation {
         return new AllowedRelation($target, $types, $allowedFilters, $alias);
     }
 
-    public static function custom(array $types): AllowedFilter
+    public static function custom(array $types): AllowedCustomFilter
     {
         return new AllowedCustomFilter($types);
     }
