@@ -8,8 +8,8 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
 
 class UnrestrictedFilterableList implements FilterableList
 {
-    public function ensureAllowed(string $type, ?string $target): UnrestrictedFilterableList
+    public function ensureAllowed(PendingFilter $pendingFilter): PendingFilter
     {
-        return new self();
+        return $pendingFilter->withFilterableList($this);
     }
 }
