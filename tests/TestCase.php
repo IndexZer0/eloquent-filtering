@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Tests;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use IndexZer0\EloquentFiltering\EloquentFilteringServiceProvider;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ApiResponse;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\AuthorProfile;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
@@ -95,6 +96,14 @@ class TestCase extends Orchestra
             $table->string('description')->nullable();
             $table->timestamps();
         });
+
+        // Api Response
+        $schema->create('api_responses', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->json('data')->nullable();
+            $table->timestamps();
+        });
     }
 
     public function createAuthors(): void
@@ -158,6 +167,50 @@ class TestCase extends Orchestra
             'id'              => 2,
             'manufacturer_id' => 2,
             'name'            => 'Product 2',
+        ]);
+    }
+
+    public function createApiResponses(): void
+    {
+        ApiResponse::create([
+            'id'   => 1,
+            'name' => 'Api 1',
+            'data' => [
+                'array' => [
+                    'shared-array-value-1',
+                    'shared-array-value-2',
+                    'own-array-value-1',
+                    'own-array-value-2',
+                ],
+
+                'shared-key-1' => 'shared-value-1',
+                'shared-key-2' => 'shared-value-2',
+                'shared-key-3' => 'Api 1',
+
+                'own-key-1' => 'own-value-1',
+                'own-key-2' => 'own-value-2',
+                'own-key-3' => 'own-value-3',
+            ],
+        ]);
+        ApiResponse::create([
+            'id'   => 2,
+            'name' => 'Api 2',
+            'data' => [
+                'array' => [
+                    'shared-array-value-1',
+                    'shared-array-value-2',
+                    'own-array-value-3',
+                    'own-array-value-4',
+                ],
+
+                'shared-key-1' => 'shared-value-1',
+                'shared-key-2' => 'shared-value-2',
+                'shared-key-3' => 'Api 2',
+
+                'own-key-4' => 'own-value-4',
+                'own-key-5' => 'own-value-5',
+                'own-key-6' => 'own-value-6',
+            ],
         ]);
     }
 }
