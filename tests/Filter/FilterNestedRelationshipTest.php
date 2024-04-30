@@ -10,7 +10,7 @@ beforeEach(function (): void {
     $this->createAuthors();
 });
 
-it('filters by nested relationships when allowed', function (): void {
+it('can filter by nested relationships when allowed', function (): void {
 
     $query = Author::filter(
         [
@@ -89,9 +89,9 @@ it('filters by nested relationships when allowed', function (): void {
 
 });
 
-it('filters by nested relationships when no filter list supplied', function (): void {
+it('can not filter by nested relationships when no filter list supplied', function (): void {
 
-    $query = Author::filter(
+    Author::filter(
         [
             [
                 'target' => 'name',
@@ -138,19 +138,9 @@ it('filters by nested relationships when no filter list supplied', function (): 
         ],
     );
 
-    $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'George Raymond Richard Martin' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'A Game of Thrones' and (("description" LIKE '%A Game of Thrones%') or ("description" LIKE '%Song of Ice and Fire%')) and exists (select * from "comments" where "books"."id" = "comments"."book_id" and "content" = 'Thanks D&D :S'))
-        SQL;
+})->throws(DeniedFilterException::class, '"$eq" filter for "name" is not allowed');
 
-    expect($query->toRawSql())->toBe($expectedSql);
-
-    $models = $query->get();
-
-    expect($models->count())->toBe(1);
-
-});
-
-it('filters by nested relationships with "Filter::all()"', function (): void {
+it('can filters by nested relationships with "Filter::allowAll()"', function (): void {
 
     $query = Author::filter(
         [
@@ -197,6 +187,7 @@ it('filters by nested relationships with "Filter::all()"', function (): void {
                 ],
             ],
         ],
+        Filter::allowAll(),
     );
 
     $expectedSql = <<< SQL
@@ -296,6 +287,79 @@ it('can not filter by nested relationship when not explicitly allowed | suppress
 
     $expectedSql = <<< SQL
         select * from "authors" where exists (select * from "books" where "authors"."id" = "books"."author_id")
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(2);
+
+});
+
+it('honours the allowed filter list all the way down the nested relation chain | suppressed', function (): void {
+
+    config()->set('eloquent-filtering.suppress.filter.denied', true);
+
+    $query = Author::filter(
+        [
+            [
+                'target' => 'name',
+                'type'   => '$eq',
+                'value'  => 'George Raymond Richard Martin',
+            ],
+            [
+                'target' => 'books',
+                'type'   => '$has',
+                'value'  => [
+                    [
+                        'target' => 'title',
+                        'type'   => '$eq',
+                        'value'  => 'A Game of Thrones',
+                    ],
+                    [
+                        'type'  => '$or',
+                        'value' => [
+                            [
+                                'target' => 'description',
+                                'type'   => '$like',
+                                'value'  => 'A Game of Thrones',
+                            ],
+                            [
+                                'target' => 'description',
+                                'type'   => '$like',
+                                'value'  => 'Song of Ice and Fire',
+                            ],
+                        ],
+                    ],
+                    [
+                        'type'   => '$has',
+                        'target' => 'comments',
+                        'value'  => [
+                            [
+                                'target' => 'content',
+                                'type'   => '$eq',
+                                'value'  => 'Thanks D&D :S',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        Filter::allowOnly(
+            Filter::relation(
+                'books', ['$has'],
+                Filter::allowOnly(
+                    Filter::relation(
+                        'comments', ['$has'],
+                    )
+                )
+            )
+        ),
+    );
+
+    $expectedSql = <<< SQL
+        select * from "authors" where exists (select * from "books" where "authors"."id" = "books"."author_id" and exists (select * from "comments" where "books"."id" = "comments"."book_id"))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
