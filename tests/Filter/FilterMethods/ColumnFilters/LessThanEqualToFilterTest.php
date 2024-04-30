@@ -18,7 +18,7 @@ it('can perform $lte filter', function (): void {
                 'value'  => 30,
             ],
         ],
-        Filter::allow(
+        Filter::allowOnly(
             Filter::column('age', ['$lte']),
         )
     );

@@ -9,28 +9,31 @@ beforeEach(function (): void {
     $this->createAuthors();
 });
 
-it('can perform $notEq filter', function (): void {
+it('can perform $notIn filter', function (): void {
     $query = Author::filter(
         [
             [
                 'target' => 'name',
-                'type'   => '$notEq',
-                'value'  => 'J. R. R. Tolkien',
+                'type'   => '$notIn',
+                'value'  => [
+                    'J. K. Rowling',
+                    'William Shakespeare',
+                ],
             ],
         ],
-        Filter::allow(
-            Filter::column('name', ['$notEq']),
+        Filter::allowOnly(
+            Filter::column('name', ['$notIn']),
         )
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" != 'J. R. R. Tolkien'
+        select * from "authors" where "name" not in ('J. K. Rowling', 'William Shakespeare')
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
 
     $models = $query->get();
 
-    expect($models->count())->toBe(1);
+    expect($models->count())->toBe(2);
 
 });

@@ -22,7 +22,7 @@ it('can perform $null filter | null', function (): void {
                 'value'  => true,
             ],
         ],
-        Filter::allow(
+        Filter::allowOnly(
             Filter::column('name', ['$null']),
         )
     );
@@ -49,7 +49,7 @@ it('can perform $null filter | not null', function (): void {
                 'value'  => false,
             ],
         ],
-        Filter::allow(
+        Filter::allowOnly(
             Filter::column('name', ['$null']),
         )
     );

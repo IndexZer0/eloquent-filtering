@@ -24,22 +24,22 @@ beforeEach(function (): void {
     ]);
 });
 
-it('can perform $like filter', function (): void {
+it('can perform $notLike:end filter', function (): void {
     $query = Author::filter(
         [
             [
                 'target' => 'name',
-                'type'   => '$like',
+                'type'   => '$notLike:end',
                 'value'  => 'text',
             ],
         ],
-        Filter::allow(
-            Filter::column('name', ['$like']),
+        Filter::allowOnly(
+            Filter::column('name', ['$notLike:end']),
         )
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" LIKE '%text%'
+        select * from "authors" where "name" NOT LIKE '%text'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -47,6 +47,6 @@ it('can perform $like filter', function (): void {
     $models = $query->get();
 
     expect($models->count())->toBe(3)
-    ->and($models->pluck('name')->toArray())->toBe(['__text__', '__text', 'text__']);
+        ->and($models->pluck('name')->toArray())->toBe(['__text__', 'text__', 'other']);
 
 });

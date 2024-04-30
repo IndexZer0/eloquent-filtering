@@ -33,7 +33,7 @@ it('can perform $notLike:start filter', function (): void {
                 'value'  => 'text',
             ],
         ],
-        Filter::allow(
+        Filter::allowOnly(
             Filter::column('name', ['$notLike:start']),
         )
     );

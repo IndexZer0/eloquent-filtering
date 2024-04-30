@@ -9,32 +9,29 @@ beforeEach(function (): void {
     $this->createAuthors();
 });
 
-it('can perform $between filter', function (): void {
+it('can perform $gte filter', function (): void {
     $query = AuthorProfile::filter(
         [
             [
                 'target' => 'age',
-                'type'   => '$between',
-                'value'  => [
-                    19,
-                    21,
-                ],
+                'type'   => '$gte',
+                'value'  => 20,
             ],
         ],
-        Filter::allow(
-            Filter::column('age', ['$between']),
+        Filter::allowOnly(
+            Filter::column('age', ['$gte']),
         )
     );
 
     $expectedSql = <<< SQL
-        select * from "author_profiles" where "age" between 19 and 21
+        select * from "author_profiles" where "age" >= 20
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
 
     $models = $query->get();
 
-    expect($models->count())->toBe(1)
-    ->and($models->first()->id)->toBe(1);
+    expect($models->count())->toBe(2)
+    ->and($models->pluck('id')->toArray())->toBe([1, 2]);
 
 });

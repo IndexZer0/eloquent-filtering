@@ -21,7 +21,7 @@ it('can perform $in filter', function (): void {
                 ],
             ],
         ],
-        Filter::allow(
+        Filter::allowOnly(
             Filter::column('name', ['$in']),
         )
     );

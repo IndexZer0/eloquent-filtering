@@ -33,7 +33,7 @@ it('can perform $like:start filter', function (): void {
                 'value'  => 'text',
             ],
         ],
-        Filter::allow(
+        Filter::allowOnly(
             Filter::column('name', ['$like:start']),
         )
     );
