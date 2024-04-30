@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 return [
+    'default_allowed_list' => 'none',
+
     'suppress' => [
         'filter' => [
             'denied'           => false,
