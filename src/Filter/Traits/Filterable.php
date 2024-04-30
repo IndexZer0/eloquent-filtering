@@ -32,6 +32,6 @@ trait Filterable
 
     protected function allowedFilters(): FilterableList
     {
-        return Filter::all();
+        return Filter::allowAll(); // TODO should the default be to allowOnly() with none?
     }
 }
