@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
+use IndexZer0\EloquentFiltering\Filter\Contracts\AppliesToTarget;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 
@@ -49,8 +50,11 @@ class PendingFilter
 
     public function getDeniedMessage(): string
     {
-        // TODO target could not be string.
-        return "\"{$this->type}\" filter for \"{$this->target()}\" is not allowed";
+        $message ="\"{$this->type}\" filter%s is not allowed";
+
+        $target = is_a($this->filterFqcn, AppliesToTarget::class, true) ? $this->target() : null;
+
+        return sprintf($message, $target ? " for \"{$target}\"" : '');
     }
 
     public function withFilterableList(FilterableList $filterableList): PendingFilter
