@@ -11,4 +11,9 @@ readonly class Alias
         public ?string $targetAlias = null
     ) {
     }
+
+    public function isFor(string $target): bool
+    {
+        return $this->target === $target;
+    }
 }
