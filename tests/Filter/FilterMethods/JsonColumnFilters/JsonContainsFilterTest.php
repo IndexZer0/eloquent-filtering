@@ -19,7 +19,7 @@ it('can perform $jsonContains filter', function (): void {
                 'value'  => 'own-array-value-1',
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::jsonColumn('data->array', ['$jsonContains']),
         )
     );
@@ -65,7 +65,7 @@ it('supports various wildcard and non wildcard targets', function (
                 'value'  => 'own-array-value-1',
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::jsonColumn($allowed_target, ['$jsonContains']),
         )
     );

@@ -34,6 +34,6 @@ trait Filterable
     {
         $defaultAllowedList = config('eloquent-filtering.default_allowed_list', 'none');
 
-        return $defaultAllowedList === 'none' ? Filter::allowNone() : Filter::allowAll();
+        return $defaultAllowedList === 'none' ? Filter::none() : Filter::all();
     }
 }

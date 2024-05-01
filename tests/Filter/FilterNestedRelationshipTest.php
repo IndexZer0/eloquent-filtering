@@ -57,18 +57,18 @@ it('can filter by nested relationships when allowed', function (): void {
                 ],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('name', ['$eq']),
             Filter::relation(
                 'books',
                 ['$has'],
-                Filter::allowOnly(
+                Filter::only(
                     Filter::column('title', ['$eq']),
                     Filter::column('description', ['$like']),
                     Filter::relation(
                         'comments',
                         ['$has'],
-                        Filter::allowOnly(
+                        Filter::only(
                             Filter::column('content', ['$eq'])
                         )
                     )
@@ -187,7 +187,7 @@ it('can filters by nested relationships with "Filter::allowAll()"', function ():
                 ],
             ],
         ],
-        Filter::allowAll(),
+        Filter::all(),
     );
 
     $expectedSql = <<< SQL
@@ -224,7 +224,7 @@ it('can not filter by nested relationship when not explicitly allowed | not supp
                 ],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::relation('books', ['$has'])
         ),
     );
@@ -280,7 +280,7 @@ it('can not filter by nested relationship when not explicitly allowed | suppress
                 ],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::relation('books', ['$has'])
         ),
     );
@@ -346,11 +346,11 @@ it('honours the allowed filter list all the way down the nested relation chain |
                 ],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::relation(
                 'books',
                 ['$has'],
-                Filter::allowOnly(
+                Filter::only(
                     Filter::relation(
                         'comments',
                         ['$has'],

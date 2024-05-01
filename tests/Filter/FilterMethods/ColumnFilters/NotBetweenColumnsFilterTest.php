@@ -21,7 +21,7 @@ it('can perform $notBetweenColumns filter', function (): void {
                 ],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('price', ['$notBetweenColumns']),
         )
     );

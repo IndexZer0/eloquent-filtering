@@ -20,7 +20,7 @@ it('works with pagination', function (): void {
                 'value'  => 'George Raymond Richard Martin',
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('name', ['$eq']),
         )
     );

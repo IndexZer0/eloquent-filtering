@@ -29,7 +29,7 @@ it('uses alias when specified', function (
             'target' => 'name',
             'value'  => 'George Raymond Richard Martin',
         ],
-        'allowed_filters' => Filter::allowOnly(
+        'allowed_filters' => Filter::only(
             Filter::column(Target::alias('name', 'name_alias'), ['$eq'])
         ),
         'expected_sql' => 'select * from "authors" where "name_alias" = \'George Raymond Richard Martin\'',
@@ -40,7 +40,7 @@ it('uses alias when specified', function (
             'target' => 'documents',
             'value'  => [],
         ],
-        'allowed_filters' => Filter::allowOnly(
+        'allowed_filters' => Filter::only(
             Filter::relation(Target::alias('documents', 'books'), ['$has'])
         ),
         'expected_sql' => 'select * from "authors" where exists (select * from "books" where "authors"."id" = "books"."author_id")',

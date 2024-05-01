@@ -21,7 +21,7 @@ it('can perform $notIn filter', function (): void {
                 ],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('name', ['$notIn']),
         )
     );

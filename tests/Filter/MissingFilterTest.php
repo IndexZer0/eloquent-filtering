@@ -20,7 +20,7 @@ it('ignores missing filter when suppressed', function (): void {
                 'type' => '$this-filter-does-not-exist',
             ],
         ],
-        Filter::allowAll()
+        Filter::all()
     );
 
     $expectedSql = <<< SQL
@@ -43,7 +43,7 @@ it('errors when provided missing filter when not suppressed', function (): void 
                 'type' => '$this-filter-does-not-exist',
             ],
         ],
-        Filter::allowAll()
+        Filter::all()
     );
 
 })->throws(MissingFilterException::class, 'Can not find filter for "$this-filter-does-not-exist"');

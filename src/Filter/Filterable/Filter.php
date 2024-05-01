@@ -20,17 +20,17 @@ class Filter
      * -------------------------
      */
 
-    public static function allowNone(): NoFiltersAllowed
+    public static function none(): NoFiltersAllowed
     {
         return new NoFiltersAllowed();
     }
 
-    public static function allowAll(): AllFiltersAllowed
+    public static function all(): AllFiltersAllowed
     {
         return new AllFiltersAllowed();
     }
 
-    public static function allowOnly(AllowedFilter ...$allowedFilters): SomeFiltersAllowed
+    public static function only(AllowedFilter ...$allowedFilters): SomeFiltersAllowed
     {
         return new SomeFiltersAllowed(...$allowedFilters);
     }

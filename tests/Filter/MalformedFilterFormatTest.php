@@ -16,7 +16,7 @@ it('throws exception when filter format is invalid | not suppressed', function (
                 'value'  => 'value should be boolean',
             ],
         ],
-        Filter::allowAll()
+        Filter::all()
     );
 
 })->throws(MalformedFilterFormatException::class, '"$null" filter does not match required format.');
@@ -33,7 +33,7 @@ it('does not throw exception when filter format is invalid | suppressed', functi
                 'value'  => 'value should be boolean',
             ],
         ],
-        Filter::allowAll()
+        Filter::all()
     );
 
     $expectedSql = <<< SQL

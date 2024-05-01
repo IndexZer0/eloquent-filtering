@@ -18,7 +18,7 @@ it('can perform $gte filter', function (): void {
                 'value'  => 20,
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('age', ['$gte']),
         )
     );

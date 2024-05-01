@@ -30,7 +30,7 @@ it('can perform $or filter on base model', function (): void {
                 ],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('name', ['$eq']),
         )
     );
@@ -66,7 +66,7 @@ it('can perform $or filter | multiple exists', function (): void {
                 ],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::relation('books', ['$has', '$doesntHas']),
         )
     );
@@ -102,7 +102,7 @@ it('has the correct DeniedFilterException message', function (): void {
                 ],
             ],
         ],
-        Filter::allowNone()
+        Filter::none()
     );
 
 })->throws(DeniedFilterException::class, "\"\$or\" filter is not allowed");
@@ -125,7 +125,7 @@ it('must have at least two child filters', function (
                 ...$value_container,
             ],
         ],
-        Filter::allowAll()
+        Filter::all()
     );
 
     expect($query->toRawSql())->toBe($expected_sql);

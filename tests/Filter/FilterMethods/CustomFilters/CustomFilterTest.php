@@ -32,7 +32,7 @@ it('can perform a custom "custom" filter | $latest', function (): void {
                 'column2' => 'description',
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::custom(['$latest']),
         )
     );

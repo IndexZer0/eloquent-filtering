@@ -19,7 +19,7 @@ it('can perform $eq filter', function (): void {
                 'value'  => 'George Raymond Richard Martin',
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('name', ['$eq']),
         )
     );
@@ -55,7 +55,7 @@ it('only accepts string, int, float for value', function (
                 ...$value_container,
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('name', ['$eq']),
         )
     );

@@ -21,7 +21,7 @@ it('can perform $between filter', function (): void {
                 ],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('age', ['$between']),
         )
     );

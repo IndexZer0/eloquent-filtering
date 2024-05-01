@@ -18,7 +18,7 @@ it('can perform $notEq filter', function (): void {
                 'value'  => 'J. R. R. Tolkien',
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('name', ['$notEq']),
         )
     );

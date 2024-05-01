@@ -19,7 +19,7 @@ class Manufacturer extends Model
 
     protected function allowedFilters(): FilterableList
     {
-        return Filter::allowOnly(
+        return Filter::only(
             Filter::column('name', ['$eq'])
         );
     }

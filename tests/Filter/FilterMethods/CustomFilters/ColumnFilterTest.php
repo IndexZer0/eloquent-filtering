@@ -30,7 +30,7 @@ it('custom filter must be in config file', function (): void {
                 'value'  => 'This is A name',
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('name', ['$kebabCase']),
         )
     );
@@ -49,7 +49,7 @@ it('can perform a custom "column" filter | $kebabCase', function (): void {
                 'value'  => 'This is A name',
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('name', ['$kebabCase']),
         )
     );

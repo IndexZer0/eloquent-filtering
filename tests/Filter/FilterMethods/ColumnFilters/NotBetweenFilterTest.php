@@ -21,7 +21,7 @@ it('can perform $notBetween filter', function (): void {
                 ],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('age', ['$notBetween']),
         )
     );

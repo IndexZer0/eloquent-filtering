@@ -20,7 +20,7 @@ it('does not allow filters that are not for same usage', function (
         [
             $filter,
         ],
-        Filter::allowOnly(
+        Filter::only(
             $allowed_filter
         )
     );

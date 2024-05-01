@@ -19,7 +19,7 @@ it('can filter by column when allowed', function (): void {
                 'value'  => 'George Raymond Richard Martin',
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::column('name', ['$eq']),
         )
     );
@@ -59,7 +59,7 @@ it('can filter by column with "Filter::allowAll()"', function (): void {
                 'value'  => 'George Raymond Richard Martin',
             ],
         ],
-        Filter::allowAll()
+        Filter::all()
     );
 
     $expectedSql = <<< SQL
@@ -85,7 +85,7 @@ it('can not filter by column when not explicitly allowed | not suppressed', func
                 'value'  => 'George Raymond Richard Martin',
             ],
         ],
-        Filter::allowOnly(),
+        Filter::only(),
     );
 
 })->throws(DeniedFilterException::class, '"$eq" filter for "name" is not allowed');
@@ -102,7 +102,7 @@ it('can not filter by column when not explicitly allowed | suppressed', function
                 'value'  => 'George Raymond Richard Martin',
             ],
         ],
-        Filter::allowOnly(),
+        Filter::only(),
     );
 
     $expectedSql = <<< SQL

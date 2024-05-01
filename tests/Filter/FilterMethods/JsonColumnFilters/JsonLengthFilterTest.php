@@ -20,7 +20,7 @@ it('can perform $jsonLength filter', function (): void {
                 'value'    => 4,
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::jsonColumn('data->array', ['$jsonLength']),
         )
     );
@@ -58,7 +58,7 @@ it('only accepts int for value', function (
                 ...$value_container,
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::jsonColumn('data->array', ['$jsonLength']),
         )
     );

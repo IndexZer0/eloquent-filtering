@@ -18,7 +18,7 @@ it('can perform $has filter', function (): void {
                 'value'  => [],
             ],
         ],
-        Filter::allowOnly(
+        Filter::only(
             Filter::relation('books', ['$has']),
         )
     );
