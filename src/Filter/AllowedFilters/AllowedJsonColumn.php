@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Filterable\AllFiltersAllowed;
@@ -15,7 +16,7 @@ class AllowedJsonColumn implements AllowedFilter
 {
     public function __construct(
         protected string $target,
-        protected array $types,
+        protected AllowedTypes $types,
     ) {
     }
 
@@ -36,7 +37,7 @@ class AllowedJsonColumn implements AllowedFilter
             return false;
         }
 
-        if (!in_array($pendingFilter->type(), $this->types, true)) {
+        if (!$this->types->contains($pendingFilter->type())) {
             return false;
         }
 
