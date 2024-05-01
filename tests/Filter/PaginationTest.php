@@ -45,13 +45,12 @@ it('works with pagination', function (): void {
                 "George Raymond Richard Martin",
             ],
         ],
-    ]);
-
-    expect($paginator)->toBeInstanceOf(LengthAwarePaginator::class)
+    ])
+        ->and($paginator)->toBeInstanceOf(LengthAwarePaginator::class)
         ->and($paginator->count())->toBe(1)
         ->and($model = $paginator->getCollection()->first())->toBeInstanceOf(Author::class)
         ->and($model->name)->toBe('George Raymond Richard Martin');
 
     DB::disableQueryLog();
 
-})->only();
+});
