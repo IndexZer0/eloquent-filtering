@@ -12,6 +12,7 @@ use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedJsonColumn;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
+use IndexZer0\EloquentFiltering\Filter\Target\Target;
 use IndexZer0\EloquentFiltering\Filter\Types\Types;
 
 class Filter
@@ -76,7 +77,7 @@ class Filter
     private static function createAlias(string|Alias $target): Alias
     {
         if (is_string($target)) {
-            return new Alias($target);
+            return Target::alias($target);
         }
 
         return $target;
