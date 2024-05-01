@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
-use IndexZer0\EloquentFiltering\Filter\AllowedTypes\SomeTypesAllowed;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Target\Alias;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedColumn;
@@ -13,6 +12,7 @@ use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedJsonColumn;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
+use IndexZer0\EloquentFiltering\Filter\Types\Types;
 
 class Filter
 {
@@ -85,7 +85,7 @@ class Filter
     private static function createTypes(array|AllowedTypes $types): AllowedTypes
     {
         if (is_array($types)) {
-            return new SomeTypesAllowed($types);
+            return Types::only($types);
         }
 
         return $types;
