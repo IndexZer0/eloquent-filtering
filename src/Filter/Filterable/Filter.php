@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
+use IndexZer0\EloquentFiltering\Filter\AllowedTypes\SomeTypesAllowed;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Target\Alias;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedColumn;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedCustomFilter;
@@ -41,14 +43,17 @@ class Filter
      * -------------------------
      */
 
-    public static function column(string|Alias $target, array $types): AllowedColumn
+    public static function column(string|Alias $target, array|AllowedTypes $types): AllowedColumn
     {
-        return new AllowedColumn(self::createAlias($target), $types);
+        return new AllowedColumn(
+            self::createAlias($target),
+            self::createTypes($types)
+        );
     }
 
-    public static function jsonColumn(string $target, array $types): AllowedJsonColumn
+    public static function jsonColumn(string $target, array|AllowedTypes $types): AllowedJsonColumn
     {
-        return new AllowedJsonColumn($target, $types);
+        return new AllowedJsonColumn($target, self::createTypes($types));
     }
 
     public static function relation(
@@ -56,12 +61,16 @@ class Filter
         array $types,
         FilterableList $allowedFilters = new NoFiltersAllowed(),
     ): AllowedRelation {
-        return new AllowedRelation(self::createAlias($target), $types, $allowedFilters);
+        return new AllowedRelation(
+            self::createAlias($target),
+            self::createTypes($types),
+            $allowedFilters
+        );
     }
 
-    public static function custom(array $types): AllowedCustomFilter
+    public static function custom(array|AllowedTypes $types): AllowedCustomFilter
     {
-        return new AllowedCustomFilter($types);
+        return new AllowedCustomFilter(self::createTypes($types));
     }
 
     private static function createAlias(string|Alias $target): Alias
@@ -71,5 +80,14 @@ class Filter
         }
 
         return $target;
+    }
+
+    private static function createTypes(array|AllowedTypes $types): AllowedTypes
+    {
+        if (is_array($types)) {
+            return new SomeTypesAllowed($types);
+        }
+
+        return $types;
     }
 }
