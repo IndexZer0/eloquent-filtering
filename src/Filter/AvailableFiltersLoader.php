@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter;
 use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DuplicateFiltersException;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\BetweenColumnsFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\BetweenFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\EqualFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\GreaterThanEqualToFilter;
@@ -17,6 +18,7 @@ use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\LessThanFilte
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\LikeEndFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\LikeFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\LikeStartFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\NotBetweenColumnsFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\NotBetweenFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\NotEqualFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters\NotInFilter;
@@ -67,7 +69,7 @@ class AvailableFiltersLoader
             LikeStartFilter::class,
             LikeEndFilter::class,
 
-            // NotLike
+            // Not Like
             NotLikeFilter::class,
             NotLikeStartFilter::class,
             NotLikeEndFilter::class,
@@ -85,6 +87,10 @@ class AvailableFiltersLoader
             // Between
             BetweenFilter::class,
             NotBetweenFilter::class,
+
+            // Between Columns
+            BetweenColumnsFilter::class,
+            NotBetweenColumnsFilter::class,
 
             // Json
             JsonContainsFilter::class,
