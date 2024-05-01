@@ -16,6 +16,12 @@ class AllowedCustomFilter implements AllowedFilter
     {
     }
 
+    /*
+     * -----------------------------
+     * Interface methods
+     * -----------------------------
+     */
+
     public function allowedFilters(): FilterableList
     {
         return new AllFiltersAllowed();

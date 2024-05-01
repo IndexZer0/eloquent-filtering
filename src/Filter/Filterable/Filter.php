@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
+use IndexZer0\EloquentFiltering\Filter\Target\Alias;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedColumn;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedCustomFilter;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedJsonColumn;
@@ -40,9 +41,9 @@ class Filter
      * -------------------------
      */
 
-    public static function column(string $target, array $types, ?string $alias = null): AllowedColumn
+    public static function column(string|Alias $target, array $types): AllowedColumn
     {
-        return new AllowedColumn($target, $types, $alias);
+        return new AllowedColumn(self::createAlias($target), $types);
     }
 
     public static function jsonColumn(string $target, array $types): AllowedJsonColumn
@@ -51,16 +52,24 @@ class Filter
     }
 
     public static function relation(
-        string $target,
+        string|Alias $target,
         array $types,
         FilterableList $allowedFilters = new NoFiltersAllowed(),
-        ?string $alias = null
     ): AllowedRelation {
-        return new AllowedRelation($target, $types, $allowedFilters, $alias);
+        return new AllowedRelation(self::createAlias($target), $types, $allowedFilters);
     }
 
     public static function custom(array $types): AllowedCustomFilter
     {
         return new AllowedCustomFilter($types);
+    }
+
+    private static function createAlias(string|Alias $target): Alias
+    {
+        if (is_string($target)) {
+            return new Alias($target);
+        }
+
+        return $target;
     }
 }
