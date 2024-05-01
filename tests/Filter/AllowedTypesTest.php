@@ -27,7 +27,7 @@ it('can have all types allowed', function (): void {
                 'target' => 'name',
                 'type'   => '$in',
                 'value'  => [
-                    'George Raymond Richard Martin'
+                    'George Raymond Richard Martin',
                 ],
             ],
         ],
