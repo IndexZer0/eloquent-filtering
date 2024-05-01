@@ -94,6 +94,9 @@ class TestCase extends Orchestra
             $table->foreignIdFor(Manufacturer::class);
             $table->string('name');
             $table->string('description')->nullable();
+            $table->integer('price')->nullable();
+            $table->integer('min_allowed_price')->nullable();
+            $table->integer('max_allowed_price')->nullable();
             $table->timestamps();
         });
 
@@ -154,9 +157,12 @@ class TestCase extends Orchestra
             'name' => 'Manufacturer 1',
         ]);
         Product::create([
-            'id'              => 1,
-            'manufacturer_id' => 1,
-            'name'            => 'Product 1',
+            'id'                => 1,
+            'manufacturer_id'   => 1,
+            'name'              => 'Product 1',
+            'price'             => 20,
+            'min_allowed_price' => 10,
+            'max_allowed_price' => 30,
         ]);
 
         Manufacturer::create([
@@ -164,9 +170,12 @@ class TestCase extends Orchestra
             'name' => 'Manufacturer 2',
         ]);
         Product::create([
-            'id'              => 2,
-            'manufacturer_id' => 2,
-            'name'            => 'Product 2',
+            'id'                => 2,
+            'manufacturer_id'   => 2,
+            'name'              => 'Product 2',
+            'price'             => 25,
+            'min_allowed_price' => 10,
+            'max_allowed_price' => 30,
         ]);
     }
 
