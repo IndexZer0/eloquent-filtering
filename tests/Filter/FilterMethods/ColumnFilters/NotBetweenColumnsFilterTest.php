@@ -36,4 +36,4 @@ it('can perform $notBetweenColumns filter', function (): void {
 
     expect($models->count())->toBe(0);
 
-})->only();
+});
