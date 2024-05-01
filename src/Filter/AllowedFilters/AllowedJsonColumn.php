@@ -6,6 +6,7 @@ namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
+use IndexZer0\EloquentFiltering\Filter\Helpers\JsonPath;
 
 class AllowedJsonColumn extends AllowedColumn
 {
@@ -15,7 +16,16 @@ class AllowedJsonColumn extends AllowedColumn
             return false;
         }
 
-        return in_array($pendingFilter->type(), $this->types, true) &&
-            $this->target === $pendingFilter->target();
+        if (!in_array($pendingFilter->type(), $this->types, true)) {
+            return false;
+        }
+
+        return $this->targetMatches($pendingFilter->target());
+    }
+
+    private function targetMatches(string $target): bool
+    {
+        $jsonPath = JsonPath::of($this->target);
+        return $jsonPath->allows($target);
     }
 }
