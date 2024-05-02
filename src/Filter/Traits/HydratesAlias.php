@@ -14,7 +14,7 @@ trait HydratesAlias
         $filterFqcn = $pendingFilter->filterFqcn();
         $data = $pendingFilter->data();
 
-        if ($alias->hasAlias()) {
+        if ($alias->targetAlias !== null) {
             $data[$filterFqcn::targetKey()] = $alias->targetAlias;
         }
 
