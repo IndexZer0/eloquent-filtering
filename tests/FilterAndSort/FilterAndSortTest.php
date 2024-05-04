@@ -29,7 +29,7 @@ it('can filter and sort together', function (): void {
                 'value'  => 'desc',
             ],
         ],
-        Sort::allow(
+        Sort::only(
             Sort::column('name')
         ),
     );

@@ -44,7 +44,7 @@ it('can sort by column when allowed', function (): void {
                 'value'  => 'desc',
             ],
         ],
-        Sort::allow(
+        Sort::only(
             Sort::column('name'),
         )
     );
@@ -118,7 +118,7 @@ it('can not sort by column when not explicitly allowed | not suppressed', functi
                 'value'  => 'desc',
             ],
         ],
-        Sort::allow(),
+        Sort::only(),
     );
 
 })->throws(DeniedSortException::class, '"name" sort is not allowed');
@@ -134,7 +134,7 @@ it('can not filter by column when not explicitly allowed | suppressed', function
                 'value'  => 'desc',
             ],
         ],
-        Sort::allow(),
+        Sort::only(),
     );
 
     $expectedSql = <<< SQL
