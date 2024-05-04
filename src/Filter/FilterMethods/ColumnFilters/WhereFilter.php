@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
 use Illuminate\Database\Eloquent\Builder;
+use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractColumnFilter;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 abstract class WhereFilter extends AbstractColumnFilter
 {
     public function __construct(
-        protected string           $target,
+        protected Target           $target,
         protected string|float|int $value,
     ) {
     }
@@ -54,6 +56,14 @@ abstract class WhereFilter extends AbstractColumnFilter
 
     public function target(): string
     {
-        return $this->target;
+        return $this->target->getReal();
+    }
+
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->target(),
+            $approvedFilter->data_get('value')
+        );
     }
 }
