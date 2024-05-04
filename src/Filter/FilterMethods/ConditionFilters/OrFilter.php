@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ConditionFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier;
 use IndexZer0\EloquentFiltering\Filter\Contracts\HasChildFilters;
+use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractConditionFilter;
 
@@ -46,6 +47,13 @@ class OrFilter extends AbstractConditionFilter implements HasChildFilters
                 });
             }
         });
+    }
+
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->childFilters()
+        );
     }
 
     public static function childFiltersKey(): string
