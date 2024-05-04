@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 
-class NoFiltersAllowed implements FilterableList
+class NoFiltersAllowed implements AllowedFilterList
 {
-    public function ensureAllowed(PendingFilter $pendingFilter): PendingFilter
+    public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter
     {
         throw new DeniedFilterException($pendingFilter);
     }
