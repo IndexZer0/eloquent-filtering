@@ -27,9 +27,7 @@ it('can perform a custom "custom" filter | $latest', function (): void {
     $query = Book::filter(
         [
             [
-                'type'    => '$latest',
-                'column1' => 'title',
-                'column2' => 'description',
+                'type' => '$latest',
             ],
         ],
         Filter::only(
