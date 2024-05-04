@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\ColumnFilters;
 
 use Illuminate\Database\Eloquent\Builder;
+use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractColumnFilter;
 
 class BetweenColumnsFilter extends AbstractColumnFilter
 {
     public function __construct(
-        protected string $target,
+        protected Target $target,
         protected array $value,
     ) {
     }
@@ -37,7 +39,15 @@ class BetweenColumnsFilter extends AbstractColumnFilter
 
     public function apply(Builder $query): Builder
     {
-        return $query->whereBetweenColumns($this->target, $this->value, not: $this->not());
+        return $query->whereBetweenColumns($this->target->getReal(), $this->value, not: $this->not());
+    }
+
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->target(),
+            $approvedFilter->data_get('value'),
+        );
     }
 
     /*
