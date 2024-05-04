@@ -6,15 +6,32 @@ namespace IndexZer0\EloquentFiltering\Sort\Sortable;
 
 class Sort
 {
-    public static function all(): UnrestrictedSortableList
+    /*
+     * -------------------------
+     * AllowedSortList
+     * -------------------------
+     */
+
+    public static function none(): NoSortsAllowed
     {
-        return new UnrestrictedSortableList();
+        return new NoSortsAllowed();
     }
 
-    public static function allow(SortableColumn ...$sortableColumns): RestrictedSortableList
+    public static function all(): AllSortsAllowed
     {
-        return new RestrictedSortableList(...$sortableColumns);
+        return new AllSortsAllowed();
     }
+
+    public static function only(SortableColumn ...$sortableColumns): SomeSortsAllowed
+    {
+        return new SomeSortsAllowed(...$sortableColumns);
+    }
+
+    /*
+     * -------------------------
+     * AllowedSort
+     * -------------------------
+     */
 
     public static function column(string $target): SortableColumn
     {
