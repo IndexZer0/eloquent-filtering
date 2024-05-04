@@ -8,10 +8,13 @@ use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\Traits\EnsuresChildFiltersAllowed;
 
-class SomeFiltersAllowed implements FilterableList
+class SomeFiltersAllowed implements AllowedFilterList
 {
+    use EnsuresChildFiltersAllowed;
+
     protected Collection $allowedFilters;
 
     public function __construct(AllowedFilter ...$allowedFilters)
@@ -19,17 +22,26 @@ class SomeFiltersAllowed implements FilterableList
         $this->allowedFilters = collect($allowedFilters);
     }
 
-    public function ensureAllowed(PendingFilter $pendingFilter): PendingFilter
+    public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter
     {
-        if ($pendingFilter->usage() === FilterMethod::USAGE_CONDITION) {
+        if ($pendingFilter->is(FilterMethod::USAGE_CONDITION)) {
             // These are filters such as '$or'.
-            return $pendingFilter->withFilterableList($this);
+            return $pendingFilter->approveWith(
+                childFilters: $this->ensureChildFiltersAllowed($pendingFilter, $this)
+            );
         }
 
         foreach ($this->allowedFilters as $allowedFilter) {
             if ($allowedFilter->matches($pendingFilter)) {
-                $pendingFilter = $allowedFilter->hydrate($pendingFilter);
-                return $pendingFilter->withFilterableList($allowedFilter->allowedFilters());
+
+                $allowedChildFilters = $allowedFilter->allowedFilters();
+
+                $childFilters = $this->ensureChildFiltersAllowed($pendingFilter, $allowedChildFilters);
+
+                return $pendingFilter->approveWith(
+                    $allowedFilter->getTarget($pendingFilter),
+                    $childFilters
+                );
             }
         }
 

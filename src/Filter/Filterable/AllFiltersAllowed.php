@@ -4,12 +4,22 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Target\AliasedTarget;
+use IndexZer0\EloquentFiltering\Filter\Traits\EnsuresChildFiltersAllowed;
 
-class AllFiltersAllowed implements FilterableList
+class AllFiltersAllowed implements AllowedFilterList
 {
-    public function ensureAllowed(PendingFilter $pendingFilter): PendingFilter
+    use EnsuresChildFiltersAllowed;
+
+    public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter
     {
-        return $pendingFilter->withFilterableList($this);
+        $childFilters = $this->ensureChildFiltersAllowed($pendingFilter, $this);
+
+        return $pendingFilter->approveWith(
+            $pendingFilter->is(FilterMethod::USAGE_CONDITION) ? null : new AliasedTarget($pendingFilter->desiredTarget()),
+            $childFilters
+        );
     }
 }
