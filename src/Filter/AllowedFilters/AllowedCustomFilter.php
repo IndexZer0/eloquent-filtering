@@ -6,8 +6,9 @@ namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\AllFiltersAllowed;
 
@@ -23,22 +24,22 @@ class AllowedCustomFilter implements AllowedFilter
      * -----------------------------
      */
 
-    public function allowedFilters(): FilterableList
+    public function allowedFilters(): AllowedFilterList
     {
         return new AllFiltersAllowed();
     }
 
     public function matches(PendingFilter $pendingFilter): bool
     {
-        if ($pendingFilter->usage() !== FilterMethod::USAGE_CUSTOM) {
+        if (!$pendingFilter->is(FilterMethod::USAGE_CUSTOM)) {
             return false;
         }
 
         return $this->types->contains($pendingFilter->type());
     }
 
-    public function hydrate(PendingFilter $pendingFilter): PendingFilter
+    public function getTarget(PendingFilter $pendingFilter): ?Target
     {
-        return $pendingFilter;
+        return null;
     }
 }

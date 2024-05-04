@@ -6,21 +6,18 @@ namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
-use IndexZer0\EloquentFiltering\Filter\Target\Alias;
-use IndexZer0\EloquentFiltering\Filter\Traits\HydratesAlias;
 
 class AllowedRelation implements AllowedFilter
 {
-    use HydratesAlias;
-
     public function __construct(
-        protected Alias $target,
-        protected AllowedTypes $types,
-        protected FilterableList $allowedFilters,
-        protected ?string $alias = null,
+        protected Target            $target,
+        protected AllowedTypes      $types,
+        protected AllowedFilterList $allowedFilters,
+        protected ?string           $alias = null,
     ) {
     }
 
@@ -30,23 +27,23 @@ class AllowedRelation implements AllowedFilter
      * -----------------------------
      */
 
-    public function allowedFilters(): FilterableList
+    public function allowedFilters(): AllowedFilterList
     {
         return $this->allowedFilters;
     }
 
     public function matches(PendingFilter $pendingFilter): bool
     {
-        if ($pendingFilter->usage() !== FilterMethod::USAGE_RELATION) {
+        if (!$pendingFilter->is(FilterMethod::USAGE_RELATION)) {
             return false;
         }
 
         return $this->types->contains($pendingFilter->type()) &&
-            $this->target->isFor($pendingFilter->target());
+            $this->target->isFor($pendingFilter->desiredTarget());
     }
 
-    public function hydrate(PendingFilter $pendingFilter): PendingFilter
+    public function getTarget(PendingFilter $pendingFilter): ?Target
     {
-        return $this->hydrateAlias($pendingFilter, $this->target);
+        return $this->target;
     }
 }

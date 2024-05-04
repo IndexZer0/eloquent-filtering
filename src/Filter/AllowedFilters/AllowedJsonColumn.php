@@ -6,16 +6,17 @@ namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Filterable\AllFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
-use IndexZer0\EloquentFiltering\Filter\Helpers\JsonPath;
+use IndexZer0\EloquentFiltering\Filter\Target\JsonPathTarget;
 
 class AllowedJsonColumn implements AllowedFilter
 {
     public function __construct(
-        protected string $target,
+        protected JsonPathTarget $target,
         protected AllowedTypes $types,
     ) {
     }
@@ -26,14 +27,14 @@ class AllowedJsonColumn implements AllowedFilter
      * -----------------------------
      */
 
-    public function allowedFilters(): FilterableList
+    public function allowedFilters(): AllowedFilterList
     {
         return new AllFiltersAllowed();
     }
 
     public function matches(PendingFilter $pendingFilter): bool
     {
-        if ($pendingFilter->usage() !== FilterMethod::USAGE_JSON_COLUMN) {
+        if (!$pendingFilter->is(FilterMethod::USAGE_JSON_COLUMN)) {
             return false;
         }
 
@@ -41,23 +42,12 @@ class AllowedJsonColumn implements AllowedFilter
             return false;
         }
 
-        return $this->targetMatches($pendingFilter->target());
+        return $this->target->isFor($pendingFilter->desiredTarget());
     }
 
-    public function hydrate(PendingFilter $pendingFilter): PendingFilter
-    {
-        return $pendingFilter;
-    }
 
-    /*
-     * -----------------------------
-     * Class specific methods
-     * -----------------------------
-     */
-
-    private function targetMatches(string $target): bool
+    public function getTarget(PendingFilter $pendingFilter): ?Target
     {
-        $jsonPath = JsonPath::of($this->target);
-        return $jsonPath->allows($target);
+        return new JsonPathTarget($pendingFilter->desiredTarget());
     }
 }
