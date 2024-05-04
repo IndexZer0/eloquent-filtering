@@ -140,7 +140,7 @@ it('can not filter by nested relationships when no filter list supplied', functi
 
 })->throws(DeniedFilterException::class, '"$eq" filter for "name" is not allowed');
 
-it('can filters by nested relationships with "Filter::allowAll()"', function (): void {
+it('can filters by nested relationships with "Filter::all()"', function (): void {
 
     $query = Author::filter(
         [

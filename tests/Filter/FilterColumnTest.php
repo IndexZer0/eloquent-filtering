@@ -50,7 +50,7 @@ it('can not filter by column when no filter list supplied', function (): void {
 
 })->throws(DeniedFilterException::class, '"$eq" filter for "name" is not allowed');
 
-it('can filter by column with "Filter::allowAll()"', function (): void {
+it('can filter by column with "Filter::all()"', function (): void {
     $query = Author::filter(
         [
             [

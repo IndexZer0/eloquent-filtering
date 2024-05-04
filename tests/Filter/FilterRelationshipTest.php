@@ -54,7 +54,7 @@ it('can not filter by relationship when no filter list supplied', function (): v
 
 })->throws(DeniedFilterException::class, '"$has" filter for "books" is not allowed');
 
-it('can filter by relationship with "Filter::allowAll()"', function (): void {
+it('can filter by relationship with "Filter::all()"', function (): void {
 
     $query = Author::filter(
         [
