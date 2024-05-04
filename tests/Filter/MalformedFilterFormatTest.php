@@ -23,7 +23,7 @@ it('throws exception when filter format is invalid | not suppressed', function (
 
 it('does not throw exception when filter format is invalid | suppressed', function (): void {
 
-    config()->set('eloquent-filtering.suppress.filter.malformed_format', true);
+    $this->setSuppression("filter.malformed_format", true);
 
     $query = Author::filter(
         [

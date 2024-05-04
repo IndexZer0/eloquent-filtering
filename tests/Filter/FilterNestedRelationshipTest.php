@@ -233,7 +233,7 @@ it('can not filter by nested relationship when not explicitly allowed | not supp
 
 it('can not filter by nested relationship when not explicitly allowed | suppressed', function (): void {
 
-    config()->set('eloquent-filtering.suppress.filter.denied', true);
+    $this->setSuppression("filter.denied", true);
 
     $query = Author::filter(
         [
@@ -299,7 +299,7 @@ it('can not filter by nested relationship when not explicitly allowed | suppress
 
 it('honours the allowed filter list all the way down the nested relation chain | suppressed', function (): void {
 
-    config()->set('eloquent-filtering.suppress.filter.denied', true);
+    $this->setSuppression("filter.denied", true);
 
     $query = Author::filter(
         [

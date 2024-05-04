@@ -125,7 +125,7 @@ it('can not sort by column when not explicitly allowed | not suppressed', functi
 
 it('can not filter by column when not explicitly allowed | suppressed', function (): void {
 
-    config()->set('eloquent-filtering.suppress.sort.denied', true);
+    $this->setSuppression("sort.denied", true);
 
     $query = Author::sort(
         [

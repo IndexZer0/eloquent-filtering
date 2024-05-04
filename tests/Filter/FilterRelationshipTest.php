@@ -96,7 +96,7 @@ it('can not filter by relationship when not explicitly allowed | not suppressed'
 
 it('can not filter by relationship when not explicitly allowed | suppressed', function (): void {
 
-    config()->set('eloquent-filtering.suppress.filter.denied', true);
+    $this->setSuppression("filter.denied", true);
 
     $query = Author::filter(
         [

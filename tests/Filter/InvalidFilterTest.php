@@ -37,7 +37,7 @@ it('throws exception when filter is invalid | not suppressed', function (mixed $
 
 it('does not throw exception when filter is invalid | suppressed', function (mixed $filter): void {
 
-    config()->set('eloquent-filtering.suppress.filter.invalid', true);
+    $this->setSuppression("filter.invalid", true);
 
     $query = Author::filter(
         [
