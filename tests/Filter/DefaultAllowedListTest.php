@@ -14,7 +14,7 @@ it('uses default allowed list from config', function (
     bool   $expect_exception,
 ): void {
 
-    config()->set('eloquent-filtering.default_allowed_list', $default);
+    config()->set('eloquent-filtering.default_allowed_filter_list', $default);
 
     if ($expect_exception) {
         $this->expectException(DeniedFilterException::class);

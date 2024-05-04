@@ -32,7 +32,7 @@ trait Filterable
 
     protected function allowedFilters(): AllowedFilterList
     {
-        $defaultAllowedList = config('eloquent-filtering.default_allowed_list', 'none');
+        $defaultAllowedList = config('eloquent-filtering.default_allowed_filter_list', 'none');
 
         return $defaultAllowedList === 'none' ? Filter::none() : Filter::all();
     }
