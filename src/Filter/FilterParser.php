@@ -6,10 +6,9 @@ namespace IndexZer0\EloquentFiltering\Filter;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser as FilterParserContract;
-use IndexZer0\EloquentFiltering\Filter\Contracts\HasChildFilters;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidFilterException;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
@@ -19,7 +18,7 @@ class FilterParser implements FilterParserContract
 {
     protected FilterCollection $filterCollection;
 
-    protected FilterableList $filterableList;
+    protected AllowedFilterList $allowedFilterList;
 
     protected AvailableFilters $availableFilters;
 
@@ -29,9 +28,9 @@ class FilterParser implements FilterParserContract
         $this->availableFilters = resolve(AvailableFilters::class);
     }
 
-    public function parse(array $filters, FilterableList $filterableList): FilterCollection
+    public function parse(array $filters, AllowedFilterList $allowedFilterList): FilterCollection
     {
-        $this->filterableList = $filterableList;
+        $this->allowedFilterList = $allowedFilterList;
 
         foreach ($filters as $filter) {
             Suppression::honour(function () use ($filter): void {
@@ -50,36 +49,11 @@ class FilterParser implements FilterParserContract
 
         $validatedData = $this->validateFilterFormat($filter, $filterFqcn);
 
-        $pendingFilter = $this->filterableList->ensureAllowed(
-            new PendingFilter($filterType, $validatedData, $filterFqcn)
+        $approvedFilter = $this->allowedFilterList->ensureAllowed(
+            new PendingFilter($filterType, $filterFqcn, $validatedData)
         );
 
-        if (is_a($filterFqcn, HasChildFilters::class, true)) {
-
-            $data = $pendingFilter->data();
-            $data[$filterFqcn::childFiltersKey()] = $this->parseChildFilters(
-                $data[$filterFqcn::childFiltersKey()],
-                $pendingFilter->filterableList()
-            );
-
-            $pendingFilter = $pendingFilter->withData($data);
-
-        }
-
-        return $pendingFilter->createFilter();
-    }
-
-    private function parseChildFilters(
-        array                        $filters,
-        FilterableList               $filterableList,
-    ): FilterCollection {
-        /** @var FilterParser $filterParser */
-        $filterParser = resolve(FilterParserContract::class);
-
-        return $filterParser->parse(
-            $filters,
-            $filterableList
-        );
+        return $approvedFilter->createFilter();
     }
 
     private function ensureFilterHasType(mixed $filter): string
