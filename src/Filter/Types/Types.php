@@ -16,6 +16,11 @@ class Types
 
     public static function only(array $types): SomeTypesAllowed
     {
-        return new SomeTypesAllowed($types);
+        return new SomeTypesAllowed($types, except: false);
+    }
+
+    public static function except(array $types): SomeTypesAllowed
+    {
+        return new SomeTypesAllowed($types, except: true);
     }
 }
