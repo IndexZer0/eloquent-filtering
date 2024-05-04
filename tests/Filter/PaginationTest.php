@@ -21,7 +21,7 @@ it('works with pagination', function (): void {
             ],
         ],
         Filter::only(
-            Filter::column('name', ['$eq']),
+            Filter::field('name', ['$eq']),
         )
     );
 

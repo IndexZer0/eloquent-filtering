@@ -12,10 +12,10 @@ class SomeSortsAllowed implements AllowedSortList
 {
     protected Collection $list;
 
-    public function __construct(SortableColumn ...$sortableColumns)
+    public function __construct(SortableField ...$sortableFields)
     {
-        $this->list = collect($sortableColumns)->keyBy(
-            fn (SortableColumn $sortableColumn) => $sortableColumn->target()
+        $this->list = collect($sortableFields)->keyBy(
+            fn (SortableField $sortableFields) => $sortableFields->target()
         );
     }
 

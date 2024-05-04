@@ -31,13 +31,13 @@ it('custom filter must be in config file', function (): void {
             ],
         ],
         Filter::only(
-            Filter::column('name', ['$kebabCase']),
+            Filter::field('name', ['$kebabCase']),
         )
     );
 
 })->throws(MissingFilterException::class, 'Can not find filter for "$kebabCase"');
 
-it('can perform a custom "column" filter | $kebabCase', function (): void {
+it('can perform a custom "field" filter | $kebabCase', function (): void {
 
     config()->set('eloquent-filtering.custom_filters', [KebabCaseFilter::class]);
 
@@ -50,7 +50,7 @@ it('can perform a custom "column" filter | $kebabCase', function (): void {
             ],
         ],
         Filter::only(
-            Filter::column('name', ['$kebabCase']),
+            Filter::field('name', ['$kebabCase']),
         )
     );
 

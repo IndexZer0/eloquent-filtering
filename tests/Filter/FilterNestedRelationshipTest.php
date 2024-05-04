@@ -58,18 +58,18 @@ it('can filter by nested relationships when allowed', function (): void {
             ],
         ],
         Filter::only(
-            Filter::column('name', ['$eq']),
+            Filter::field('name', ['$eq']),
             Filter::relation(
                 'books',
                 ['$has'],
                 Filter::only(
-                    Filter::column('title', ['$eq']),
-                    Filter::column('description', ['$like']),
+                    Filter::field('title', ['$eq']),
+                    Filter::field('description', ['$like']),
                     Filter::relation(
                         'comments',
                         ['$has'],
                         Filter::only(
-                            Filter::column('content', ['$eq'])
+                            Filter::field('content', ['$eq'])
                         )
                     )
                 )

@@ -22,9 +22,9 @@ class Sort
         return new AllSortsAllowed();
     }
 
-    public static function only(SortableColumn ...$sortableColumns): SomeSortsAllowed
+    public static function only(SortableField ...$sortableFields): SomeSortsAllowed
     {
-        return new SomeSortsAllowed(...$sortableColumns);
+        return new SomeSortsAllowed(...$sortableFields);
     }
 
     /*
@@ -33,9 +33,9 @@ class Sort
      * -------------------------
      */
 
-    public static function column(string $target): SortableColumn
+    public static function field(string $target): SortableField
     {
-        return new SortableColumn($target);
+        return new SortableField($target);
     }
 
     /* public static function relation(string $target, array $types, FilterableDefinition ...$filterableDefinitions): FilterableRelation

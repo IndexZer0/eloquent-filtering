@@ -7,9 +7,9 @@ namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Contracts\Target as TargetContract;
 use IndexZer0\EloquentFiltering\Filter\Target\AliasedTarget;
-use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedColumn;
+use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedCustomFilter;
-use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedJsonColumn;
+use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedJsonField;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
@@ -46,17 +46,17 @@ class Filter
      * -------------------------
      */
 
-    public static function column(string|AliasedTarget $target, array|AllowedTypes $types): AllowedColumn
+    public static function field(string|AliasedTarget $target, array|AllowedTypes $types): AllowedField
     {
-        return new AllowedColumn(
+        return new AllowedField(
             self::createAlias($target),
             self::createTypes($types)
         );
     }
 
-    public static function jsonColumn(string $target, array|AllowedTypes $types): AllowedJsonColumn
+    public static function jsonField(string $target, array|AllowedTypes $types): AllowedJsonField
     {
-        return new AllowedJsonColumn(
+        return new AllowedJsonField(
             new JsonPathTarget($target),
             self::createTypes($types)
         );

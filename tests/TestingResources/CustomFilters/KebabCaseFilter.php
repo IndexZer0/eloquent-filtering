@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractColumnFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 
-class KebabCaseFilter extends AbstractColumnFilter
+class KebabCaseFilter extends AbstractFieldFilter
 {
     public function __construct(
         protected Target $target,

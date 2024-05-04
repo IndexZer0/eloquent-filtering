@@ -6,7 +6,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Target\Target;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
-it('can alias column | column filter', function (): void {
+it('can alias field | field filter', function (): void {
 
     $query = Author::filter(
         [
@@ -17,7 +17,7 @@ it('can alias column | column filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::column(Target::alias('name', 'name_alias'), ['$eq'])
+            Filter::field(Target::alias('name', 'name_alias'), ['$eq'])
         )
     );
 

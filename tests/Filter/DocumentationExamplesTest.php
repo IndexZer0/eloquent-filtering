@@ -15,7 +15,7 @@ it('EqualFilter | $eq', function (): void {
             'value'  => 'Taylor',
         ],
     ], Filter::only(
-        Filter::column('name', ['$eq'])
+        Filter::field('name', ['$eq'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -34,7 +34,7 @@ it('NotEqualFilter | $notEq', function (): void {
             'value'  => 'Taylor',
         ],
     ], Filter::only(
-        Filter::column('name', ['$notEq'])
+        Filter::field('name', ['$notEq'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -53,7 +53,7 @@ it('GreaterThanFilter | $gt', function (): void {
             'value'  => 18,
         ],
     ], Filter::only(
-        Filter::column('age', ['$gt'])
+        Filter::field('age', ['$gt'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -72,7 +72,7 @@ it('GreaterThanEqualToFilter | $gte', function (): void {
             'value'  => 18,
         ],
     ], Filter::only(
-        Filter::column('age', ['$gte'])
+        Filter::field('age', ['$gte'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -91,7 +91,7 @@ it('LessThanFilter | $lt', function (): void {
             'value'  => 18,
         ],
     ], Filter::only(
-        Filter::column('age', ['$lt'])
+        Filter::field('age', ['$lt'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -110,7 +110,7 @@ it('LessThanEqualToFilter | $lte', function (): void {
             'value'  => 18,
         ],
     ], Filter::only(
-        Filter::column('age', ['$lte'])
+        Filter::field('age', ['$lte'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -129,7 +129,7 @@ it('LikeFilter | $like', function (): void {
             'value'  => 'Laravel',
         ],
     ], Filter::only(
-        Filter::column('description', ['$like'])
+        Filter::field('description', ['$like'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -148,7 +148,7 @@ it('LikeStartFilter | $like:start', function (): void {
             'value'  => 'Laravel',
         ],
     ], Filter::only(
-        Filter::column('description', ['$like:start'])
+        Filter::field('description', ['$like:start'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -167,7 +167,7 @@ it('LikeEndFilter | $like:end', function (): void {
             'value'  => 'Laravel',
         ],
     ], Filter::only(
-        Filter::column('description', ['$like:end'])
+        Filter::field('description', ['$like:end'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -186,7 +186,7 @@ it('NotLikeFilter | $notLike', function (): void {
             'value'  => 'Symfony',
         ],
     ], Filter::only(
-        Filter::column('description', ['$notLike'])
+        Filter::field('description', ['$notLike'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -205,7 +205,7 @@ it('NotLikeStartFilter | $notLike:start', function (): void {
             'value'  => 'Symfony',
         ],
     ], Filter::only(
-        Filter::column('description', ['$notLike:start'])
+        Filter::field('description', ['$notLike:start'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -224,7 +224,7 @@ it('NotLikeEndFilter | $notLike:end', function (): void {
             'value'  => 'Symfony',
         ],
     ], Filter::only(
-        Filter::column('description', ['$notLike:end'])
+        Filter::field('description', ['$notLike:end'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -253,7 +253,7 @@ it('OrFilter | $or', function (): void {
             ],
         ],
     ], Filter::only(
-        Filter::column('content', ['$like'])
+        Filter::field('content', ['$like'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -277,8 +277,8 @@ it('NullFilter | $null', function (): void {
             'value'  => false,
         ],
     ], Filter::only(
-        Filter::column('age', ['$null']),
-        Filter::column('weight', ['$null'])
+        Filter::field('age', ['$null']),
+        Filter::field('weight', ['$null'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -297,7 +297,7 @@ it('InFilter | $in', function (): void {
             'value'  => ['Taylor', 'Otwell', ],
         ],
     ], Filter::only(
-        Filter::column('name', ['$in']),
+        Filter::field('name', ['$in']),
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -316,7 +316,7 @@ it('NotInFilter | $notIn', function (): void {
             'value'  => ['Nuno', 'Maduro', ],
         ],
     ], Filter::only(
-        Filter::column('name', ['$notIn']),
+        Filter::field('name', ['$notIn']),
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -335,7 +335,7 @@ it('BetweenFilter | $between', function (): void {
             'value'  => [18, 65, ],
         ],
     ], Filter::only(
-        Filter::column('age', ['$between']),
+        Filter::field('age', ['$between']),
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -354,7 +354,7 @@ it('NotBetweenFilter | $notBetween', function (): void {
             'value'  => [18, 65, ],
         ],
     ], Filter::only(
-        Filter::column('age', ['$notBetween']),
+        Filter::field('age', ['$notBetween']),
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -383,7 +383,7 @@ it('HasFilter | $has', function (): void {
             'comments',
             ['$has', ],
             Filter::only(
-                Filter::column('content', ['$like'])
+                Filter::field('content', ['$like'])
             )
         )
     ))->toRawSql();
@@ -414,7 +414,7 @@ it('DoesntHasFilter | $doesntHas', function (): void {
             'comments',
             ['$doesntHas', ],
             Filter::only(
-                Filter::column('content', ['$like'])
+                Filter::field('content', ['$like'])
             )
         )
     ))->toRawSql();

@@ -20,7 +20,7 @@ it('can filter and sort together', function (): void {
             ],
         ],
         Filter::only(
-            Filter::column('name', ['$like']),
+            Filter::field('name', ['$like']),
         ),
     )->sort(
         [
@@ -30,7 +30,7 @@ it('can filter and sort together', function (): void {
             ],
         ],
         Sort::only(
-            Sort::column('name')
+            Sort::field('name')
         ),
     );
 

@@ -6,9 +6,9 @@ namespace IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractColumnFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 
-class DuplicateFilter extends AbstractColumnFilter
+class DuplicateFilter extends AbstractFieldFilter
 {
     /*
      * -----------------------------
@@ -28,7 +28,7 @@ class DuplicateFilter extends AbstractColumnFilter
 
     public function apply(Builder $query): Builder
     {
-        return $query->where('column', 'value');
+        return $query->where('field', 'value');
     }
 
     public static function from(ApprovedFilter $approvedFilter): static

@@ -32,7 +32,7 @@ it('can have all types allowed', function (): void {
             ],
         ],
         Filter::only(
-            Filter::column('name', Types::all()),
+            Filter::field('name', Types::all()),
         )
     );
 
@@ -74,7 +74,7 @@ it('can have only some types allowed | only', function (): void {
             ],
         ],
         Filter::only(
-            Filter::column('name', Types::only(['$eq', '$like'])),
+            Filter::field('name', Types::only(['$eq', '$like'])),
         )
     );
 
@@ -116,7 +116,7 @@ it('can have only some types allowed | except', function (): void {
             ],
         ],
         Filter::only(
-            Filter::column('name', Types::except(['$in'])),
+            Filter::field('name', Types::except(['$in'])),
         )
     );
 

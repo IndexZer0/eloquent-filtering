@@ -21,7 +21,7 @@ class Product extends Model
     protected function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::column('name', ['$eq'])
+            Filter::field('name', ['$eq'])
         );
     }
 

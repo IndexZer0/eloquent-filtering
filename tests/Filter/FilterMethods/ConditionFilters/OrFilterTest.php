@@ -31,7 +31,7 @@ it('can perform $or filter on base model', function (): void {
             ],
         ],
         Filter::only(
-            Filter::column('name', ['$eq']),
+            Filter::field('name', ['$eq']),
         )
     );
 

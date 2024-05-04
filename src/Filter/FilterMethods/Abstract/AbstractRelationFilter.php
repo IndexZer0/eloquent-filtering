@@ -10,7 +10,7 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 
-abstract class AbstractRelationFilter extends AbstractColumnFilter implements HasChildFilters
+abstract class AbstractRelationFilter extends AbstractFieldFilter implements HasChildFilters
 {
     public function __construct(
         protected Target           $target,
