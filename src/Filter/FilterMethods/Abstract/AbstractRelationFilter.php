@@ -6,12 +6,14 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Contracts\HasChildFilters;
+use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 
 abstract class AbstractRelationFilter extends AbstractColumnFilter implements HasChildFilters
 {
     public function __construct(
-        protected string           $target,
+        protected Target           $target,
         protected FilterCollection $value,
     ) {
     }
@@ -34,6 +36,14 @@ abstract class AbstractRelationFilter extends AbstractColumnFilter implements Ha
             'value'   => ['array'],
             'value.*' => ['array'],
         ];
+    }
+
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->target(),
+            $approvedFilter->childFilters(),
+        );
     }
 
     public static function childFiltersKey(): string
