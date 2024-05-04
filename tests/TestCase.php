@@ -222,4 +222,9 @@ class TestCase extends Orchestra
             ],
         ]);
     }
+
+    protected function setSuppression(string $type, bool $value): void
+    {
+        config()->set("eloquent-filtering.suppress.{$type}", $value);
+    }
 }
