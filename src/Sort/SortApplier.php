@@ -6,11 +6,11 @@ namespace IndexZer0\EloquentFiltering\Sort;
 
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Suppression\Suppression;
-use IndexZer0\EloquentFiltering\Sort\Contracts\SortableList;
+use IndexZer0\EloquentFiltering\Sort\Contracts\AllowedSortList;
 
 class SortApplier
 {
-    public function __construct(protected SortableList $sortableList)
+    public function __construct(protected AllowedSortList $allowedSortList)
     {
     }
 
@@ -27,7 +27,7 @@ class SortApplier
 
     private function applySort(Builder $query, array $sort): Builder
     {
-        $this->sortableList->ensureAllowed($sort['target']);
+        $this->allowedSortList->ensureAllowed($sort['target']);
 
         return $query->orderBy($sort['target'], $sort['value']);
     }
