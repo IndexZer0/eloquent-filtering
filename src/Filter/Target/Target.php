@@ -6,8 +6,8 @@ namespace IndexZer0\EloquentFiltering\Filter\Target;
 
 class Target
 {
-    public static function alias(string $target, ?string $targetAlias = null): Alias
+    public static function alias(string $target, ?string $targetAlias = null): AliasedTarget
     {
-        return new Alias($target, $targetAlias);
+        return new AliasedTarget($target, $targetAlias);
     }
 }
