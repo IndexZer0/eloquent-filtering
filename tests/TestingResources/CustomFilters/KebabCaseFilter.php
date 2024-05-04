@@ -6,12 +6,14 @@ namespace IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractColumnFilter;
 
 class KebabCaseFilter extends AbstractColumnFilter
 {
     public function __construct(
-        protected string $target,
+        protected Target $target,
         protected string $value,
     ) {
 
@@ -41,6 +43,14 @@ class KebabCaseFilter extends AbstractColumnFilter
         return $query->where(DB::raw($this->target()), $this->value());
     }
 
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->target(),
+            $approvedFilter->data_get('value'),
+        );
+    }
+
     /*
      * -----------------------------
      * Filter specific methods
@@ -49,7 +59,7 @@ class KebabCaseFilter extends AbstractColumnFilter
 
     private function target(): string
     {
-        return "LOWER(REPLACE({$this->target}, ' ', '-'))";
+        return "LOWER(REPLACE({$this->target->getReal()}, ' ', '-'))";
     }
 
     private function value(): string
