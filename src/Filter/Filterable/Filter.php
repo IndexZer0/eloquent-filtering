@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
-use IndexZer0\EloquentFiltering\Filter\Target\Alias;
+use IndexZer0\EloquentFiltering\Filter\Contracts\Target as TargetContract;
+use IndexZer0\EloquentFiltering\Filter\Target\AliasedTarget;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedColumn;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedCustomFilter;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedJsonColumn;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\Target\JsonPathTarget;
 use IndexZer0\EloquentFiltering\Filter\Target\Target;
 use IndexZer0\EloquentFiltering\Filter\Types\Types;
 
@@ -19,7 +21,7 @@ class Filter
 {
     /*
      * -------------------------
-     * FilterableList
+     * AllowedFilterList
      * -------------------------
      */
 
@@ -44,7 +46,7 @@ class Filter
      * -------------------------
      */
 
-    public static function column(string|Alias $target, array|AllowedTypes $types): AllowedColumn
+    public static function column(string|AliasedTarget $target, array|AllowedTypes $types): AllowedColumn
     {
         return new AllowedColumn(
             self::createAlias($target),
@@ -54,13 +56,16 @@ class Filter
 
     public static function jsonColumn(string $target, array|AllowedTypes $types): AllowedJsonColumn
     {
-        return new AllowedJsonColumn($target, self::createTypes($types));
+        return new AllowedJsonColumn(
+            new JsonPathTarget($target),
+            self::createTypes($types)
+        );
     }
 
     public static function relation(
-        string|Alias $target,
-        array $types,
-        FilterableList $allowedFilters = new NoFiltersAllowed(),
+        string|AliasedTarget $target,
+        array                $types,
+        AllowedFilterList    $allowedFilters = new NoFiltersAllowed(),
     ): AllowedRelation {
         return new AllowedRelation(
             self::createAlias($target),
@@ -74,7 +79,13 @@ class Filter
         return new AllowedCustomFilter(self::createTypes($types));
     }
 
-    private static function createAlias(string|Alias $target): Alias
+    /*
+     * -------------------------
+     * Target
+     * -------------------------
+     */
+
+    private static function createAlias(string|AliasedTarget $target): TargetContract
     {
         if (is_string($target)) {
             return Target::alias($target);
@@ -82,6 +93,12 @@ class Filter
 
         return $target;
     }
+
+    /*
+     * -------------------------
+     * Types
+     * -------------------------
+     */
 
     private static function createTypes(array|AllowedTypes $types): AllowedTypes
     {
