@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
+use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 
 interface FilterMethod
 {
@@ -21,4 +22,6 @@ interface FilterMethod
     public static function format(): array;
 
     public function apply(Builder $query): Builder;
+
+    public static function from(ApprovedFilter $approvedFilter): static;
 }
