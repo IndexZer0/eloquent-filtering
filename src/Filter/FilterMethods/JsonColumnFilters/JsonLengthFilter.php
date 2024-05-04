@@ -6,13 +6,15 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\JsonColumnFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\Rule;
+use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractJsonColumnFilter;
 use IndexZer0\EloquentFiltering\Rules\StrictInteger;
 
 class JsonLengthFilter extends AbstractJsonColumnFilter
 {
     public function __construct(
-        protected string $target,
+        protected Target $target,
         protected string $operator,
         protected int    $value,
     ) {
@@ -41,9 +43,18 @@ class JsonLengthFilter extends AbstractJsonColumnFilter
     public function apply(Builder $query): Builder
     {
         return $query->whereJsonLength(
-            $this->target,
+            $this->target->getReal(),
             $this->operator,
             $this->value,
+        );
+    }
+
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->target(),
+            $approvedFilter->data_get('operator'),
+            $approvedFilter->data_get('value'),
         );
     }
 }
