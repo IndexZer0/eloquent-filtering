@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Sort\Sortable;
 
 use Illuminate\Support\Collection;
-use IndexZer0\EloquentFiltering\Sort\Contracts\SortableList;
+use IndexZer0\EloquentFiltering\Sort\Contracts\AllowedSortList;
 use IndexZer0\EloquentFiltering\Sort\Exceptions\DeniedSortException;
 
-class RestrictedSortableList implements SortableList
+class SomeSortsAllowed implements AllowedSortList
 {
     protected Collection $list;
 
@@ -19,10 +19,10 @@ class RestrictedSortableList implements SortableList
         );
     }
 
-    public function ensureAllowed(string $column): bool
+    public function ensureAllowed(string $field): bool
     {
-        if (!$this->list->has($column)) {
-            DeniedSortException::throw($column);
+        if (!$this->list->has($field)) {
+            DeniedSortException::throw($field);
         }
 
         return true;
