@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
+use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AppliesToTarget;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
-use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 
 class ApprovedFilter

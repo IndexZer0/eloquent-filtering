@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\Target;
+namespace IndexZer0\EloquentFiltering\Target;
 
 class Target
 {

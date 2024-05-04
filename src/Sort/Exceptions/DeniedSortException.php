@@ -10,9 +10,9 @@ use IndexZer0\EloquentFiltering\Sort\Contracts\SortException;
 
 class DeniedSortException extends Exception implements SortException, SuppressibleException
 {
-    public static function throw(string $field): void
+    public function __construct(string $field = "")
     {
-        throw new self("\"{$field}\" sort is not allowed");
+        parent::__construct("\"{$field}\" sort is not allowed");
     }
 
     public function shouldSuppress(): bool

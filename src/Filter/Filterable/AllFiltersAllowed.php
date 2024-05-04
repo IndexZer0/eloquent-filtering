@@ -6,8 +6,8 @@ namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
-use IndexZer0\EloquentFiltering\Filter\Target\AliasedTarget;
 use IndexZer0\EloquentFiltering\Filter\Traits\EnsuresChildFiltersAllowed;
+use IndexZer0\EloquentFiltering\Target\AliasedTarget;
 
 class AllFiltersAllowed implements AllowedFilterList
 {

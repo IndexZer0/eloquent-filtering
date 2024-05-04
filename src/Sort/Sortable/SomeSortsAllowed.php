@@ -10,21 +10,21 @@ use IndexZer0\EloquentFiltering\Sort\Exceptions\DeniedSortException;
 
 class SomeSortsAllowed implements AllowedSortList
 {
-    protected Collection $list;
+    protected Collection $allowedSorts;
 
     public function __construct(SortableField ...$sortableFields)
     {
-        $this->list = collect($sortableFields)->keyBy(
-            fn (SortableField $sortableFields) => $sortableFields->target()
-        );
+        $this->allowedSorts = collect($sortableFields);
     }
 
     public function ensureAllowed(string $field): bool
     {
-        if (!$this->list->has($field)) {
-            DeniedSortException::throw($field);
+        foreach ($this->allowedSorts as $allowedSort) {
+            if ($allowedSort->target()->isFor($field)) {
+                return true;
+            }
         }
 
-        return true;
+        throw new DeniedSortException($field);
     }
 }

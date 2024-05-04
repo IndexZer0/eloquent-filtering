@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
-use IndexZer0\EloquentFiltering\Filter\Contracts\Target as TargetContract;
-use IndexZer0\EloquentFiltering\Filter\Target\AliasedTarget;
-use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
+use IndexZer0\EloquentFiltering\Contracts\Target as TargetContract;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedCustomFilter;
+use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedJsonField;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
-use IndexZer0\EloquentFiltering\Filter\Target\JsonPathTarget;
-use IndexZer0\EloquentFiltering\Filter\Target\Target;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Types\Types;
+use IndexZer0\EloquentFiltering\Target\AliasedTarget;
+use IndexZer0\EloquentFiltering\Target\JsonPathTarget;
+use IndexZer0\EloquentFiltering\Target\Target;
 
 class Filter
 {

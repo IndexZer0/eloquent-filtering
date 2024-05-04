@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\Target;
+namespace IndexZer0\EloquentFiltering\Target;
 
-use IndexZer0\EloquentFiltering\Filter\Contracts\Target as TargetContract;
+use IndexZer0\EloquentFiltering\Contracts\Target as TargetContract;
 
 readonly class AliasedTarget implements TargetContract
 {

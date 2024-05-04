@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
+use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
-use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 
 class AllowedRelation implements AllowedFilter
