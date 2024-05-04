@@ -8,13 +8,16 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 
 class SomeTypesAllowed implements AllowedTypes
 {
-    public function __construct(public array $types = [])
-    {
-
+    public function __construct(
+        protected array $types = [],
+        protected bool $except = false,
+    ) {
     }
 
     public function contains(string $type): bool
     {
-        return in_array($type, $this->types, true);
+        $inTypes = in_array($type, $this->types, true);
+
+        return $this->except ? !$inTypes : $inTypes;
     }
 }
