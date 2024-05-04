@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\JsonColumnFilters;
 
 use Illuminate\Database\Eloquent\Builder;
+use IndexZer0\EloquentFiltering\Filter\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractJsonColumnFilter;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 class JsonContainsFilter extends AbstractJsonColumnFilter
 {
     public function __construct(
-        protected string $target,
+        protected Target $target,
         protected string|float|int $value,
     ) {
     }
@@ -38,9 +40,17 @@ class JsonContainsFilter extends AbstractJsonColumnFilter
     public function apply(Builder $query): Builder
     {
         return $query->whereJsonContains(
-            $this->target,
+            $this->target->getReal(),
             $this->value,
             not: $this->not()
+        );
+    }
+
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->target(),
+            $approvedFilter->data_get('value'),
         );
     }
 
