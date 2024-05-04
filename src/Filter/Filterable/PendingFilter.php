@@ -58,8 +58,7 @@ class PendingFilter
     public function approveWith(
         ?Target           $target = null,
         ?FilterCollection $childFilters = null
-    ): ApprovedFilter
-    {
+    ): ApprovedFilter {
         return new ApprovedFilter(
             $this->filterFqcn,
             $this->data,
