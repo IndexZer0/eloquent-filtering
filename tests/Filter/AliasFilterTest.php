@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
-use IndexZer0\EloquentFiltering\Filter\Target\Target;
+use IndexZer0\EloquentFiltering\Target\Target;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 it('can alias field | field filter', function (): void {
