@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Sort\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Sort\Contracts\SortableList;
-use IndexZer0\EloquentFiltering\Sort\Sortable\UnrestrictedSortableList;
+use IndexZer0\EloquentFiltering\Sort\Contracts\AllowedSortList;
+use IndexZer0\EloquentFiltering\Sort\Sortable\Sort;
 use IndexZer0\EloquentFiltering\Sort\SortApplier;
 
 trait Sortable
@@ -14,11 +14,18 @@ trait Sortable
     public function scopeSort(
         Builder $query,
         array $sorts,
-        SortableList $sortableList = new UnrestrictedSortableList()
+        ?AllowedSortList $allowedSortList = null
     ): Builder {
 
-        $sortApplier = new SortApplier($sortableList);
+        $sortApplier = new SortApplier($allowedSortList ?? $this->allowedSorts());
         return $sortApplier->apply($query, $sorts);
 
+    }
+
+    protected function allowedSorts(): AllowedSortList
+    {
+        $defaultAllowedList = config('eloquent-filtering.default_allowed_sort_list', 'none');
+
+        return $defaultAllowedList === 'none' ? Sort::none() : Sort::all();
     }
 }
