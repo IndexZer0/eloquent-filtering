@@ -25,11 +25,6 @@ readonly class AliasedTarget implements TargetContract
         return $this->target === $target;
     }
 
-    public function hasAlias(): bool
-    {
-        return $this->targetAlias !== null;
-    }
-
     public function getReal(): string
     {
         return $this->targetAlias ?? $this->target;

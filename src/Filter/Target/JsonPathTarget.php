@@ -26,11 +26,6 @@ readonly class JsonPathTarget implements TargetContract
         return $jsonPath->allows($target);
     }
 
-    public function hasAlias(): bool
-    {
-        return false;
-    }
-
     public function getReal(): string
     {
         return $this->target;
