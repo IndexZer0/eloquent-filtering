@@ -23,7 +23,7 @@ class HasFilter extends AbstractRelationFilter
 
     public function apply(Builder $query): Builder
     {
-        return $query->whereHas($this->target, function (Builder $query): void {
+        return $query->whereHas($this->target->getReal(), function (Builder $query): void {
 
             /** @var FilterApplier $filterApplier */
             $filterApplier = resolve(FilterApplier::class);
