@@ -20,11 +20,6 @@ class LatestFilter extends AbstractCustomFilter
         return '$latest';
     }
 
-    public static function format(): array
-    {
-        return [];
-    }
-
     public function apply(Builder $query): Builder
     {
         return $query->latest();
