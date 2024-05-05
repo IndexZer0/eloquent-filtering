@@ -8,6 +8,8 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser as FilterParserCon
 use IndexZer0\EloquentFiltering\Filter\FilterApplier;
 use IndexZer0\EloquentFiltering\Filter\FilterParser;
 use IndexZer0\EloquentFiltering\Filter\AvailableFilters;
+use IndexZer0\EloquentFiltering\Sort\Contracts\SortValidator as SortValidatorContract;
+use IndexZer0\EloquentFiltering\Sort\SortValidator;
 
 class EloquentFilteringServiceProvider extends ServiceProvider
 {
@@ -16,5 +18,7 @@ class EloquentFilteringServiceProvider extends ServiceProvider
         $this->app->bind(FilterParserContract::class, FilterParser::class);
         $this->app->bind(FilterApplierContract::class, FilterApplier::class);
         $this->app->singleton(AvailableFilters::class, AvailableFilters::class);
+
+        $this->app->bind(SortValidatorContract::class, SortValidator::class);
     }
 }

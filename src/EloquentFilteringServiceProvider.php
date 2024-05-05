@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering;
 
 use IndexZer0\EloquentFiltering\Filter\AvailableFilters;
+use IndexZer0\EloquentFiltering\Sort\Contracts\SortValidator as SortValidatorContract;
+use IndexZer0\EloquentFiltering\Sort\SortValidator;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use IndexZer0\EloquentFiltering\Commands\EloquentFilteringCommand;
@@ -40,5 +42,7 @@ class EloquentFilteringServiceProvider extends PackageServiceProvider
         $this->app->bind(FilterParserContract::class, FilterParser::class);
         $this->app->bind(FilterApplierContract::class, FilterApplier::class);
         $this->app->singleton(AvailableFilters::class, AvailableFilters::class);
+
+        $this->app->bind(SortValidatorContract::class, SortValidator::class);
     }
 }
