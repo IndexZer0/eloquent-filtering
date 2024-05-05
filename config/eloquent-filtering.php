@@ -14,7 +14,8 @@ return [
             'malformed_format' => false,
         ],
         'sort' => [
-            'denied' => false,
+            'denied'           => false,
+            'malformed_format' => false,
         ],
     ],
 
