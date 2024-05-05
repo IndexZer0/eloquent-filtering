@@ -9,7 +9,7 @@ beforeEach(function (): void {
     $this->createAuthors();
 });
 
-it('uses default allowed list from config', function (
+it('uses default allowed filter list from config', function (
     string $default,
     bool   $expect_exception,
 ): void {
