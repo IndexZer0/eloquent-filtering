@@ -63,7 +63,7 @@ it('can sort by field when allowed', function (): void {
 });
 
 it('can sort by field when no sort list supplied', function (): void {
-    $query = Author::sort(
+    Author::sort(
         [
             [
                 'target' => 'name',
@@ -72,18 +72,7 @@ it('can sort by field when no sort list supplied', function (): void {
         ],
     );
 
-    $expectedSql = <<< SQL
-        select * from "authors" order by "name" desc
-        SQL;
-
-    expect($query->toRawSql())->toBe($expectedSql);
-
-    $models = $query->get();
-
-    expect($models->count())->toBe(3)
-        ->and($models->pluck('id')->toArray())->toBe([3, 2, 1]);
-
-});
+})->throws(DeniedSortException::class, '"name" sort is not allowed');
 
 it('can sort by field with "Sort::all()"', function (): void {
     $query = Author::sort(
