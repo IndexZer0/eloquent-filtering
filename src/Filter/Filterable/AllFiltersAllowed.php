@@ -15,6 +15,8 @@ class AllFiltersAllowed implements AllowedFilterList
 
     public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter
     {
+        // TODO allow developer to specify alias when allowing all.
+
         $childFilters = $this->ensureChildFiltersAllowed($pendingFilter, $this);
 
         return $pendingFilter->approveWith(
