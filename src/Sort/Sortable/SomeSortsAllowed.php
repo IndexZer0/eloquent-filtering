@@ -17,14 +17,14 @@ class SomeSortsAllowed implements AllowedSortList
         $this->allowedSorts = collect($sortableFields);
     }
 
-    public function ensureAllowed(string $field): bool
+    public function ensureAllowed(PendingSort $pendingSort): ApprovedSort
     {
         foreach ($this->allowedSorts as $allowedSort) {
-            if ($allowedSort->target()->isFor($field)) {
-                return true;
+            if ($allowedSort->target()->isFor($pendingSort->target())) {
+                return $pendingSort->approveWith($allowedSort->target());
             }
         }
 
-        throw new DeniedSortException($field);
+        throw new DeniedSortException($pendingSort);
     }
 }
