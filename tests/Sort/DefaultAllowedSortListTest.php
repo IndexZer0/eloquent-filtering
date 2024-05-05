@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Sort\Exceptions\DeniedSortException;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
@@ -40,7 +39,7 @@ it('uses default allowed sort list from config', function (
     $models = $query->get();
 
     expect($models->count())->toBe(2)
-        ->and($models->pluck('id')->toArray())->toBe([1,2]);
+        ->and($models->pluck('id')->toArray())->toBe([1, 2]);
 
 })->with([
     'none' => [

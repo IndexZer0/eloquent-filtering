@@ -11,7 +11,8 @@ use IndexZer0\EloquentFiltering\Sort\Contracts\SortException;
 
 class MalformedSortFormatException extends Exception implements SortException, SuppressibleException
 {
-    public function __construct(ValidationException $validationException) {
+    public function __construct(ValidationException $validationException)
+    {
         parent::__construct(
             "a sort does not match required format.",
             previous: $validationException

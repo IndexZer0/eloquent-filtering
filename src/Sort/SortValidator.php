@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IndexZer0\EloquentFiltering\Sort;
 
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +25,7 @@ class SortValidator implements SortValidatorContract
     {
         foreach ($sorts as $sort) {
             Suppression::honour(
-                fn() => $this->ensureSortIsValid($sort),
+                fn () => $this->ensureSortIsValid($sort),
             );
         }
 
