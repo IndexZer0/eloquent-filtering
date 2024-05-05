@@ -6,19 +6,24 @@ namespace IndexZer0\EloquentFiltering\Sort\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Sort\Contracts\AllowedSortList;
+use IndexZer0\EloquentFiltering\Sort\Contracts\SortValidator;
 use IndexZer0\EloquentFiltering\Sort\Sortable\Sort;
 use IndexZer0\EloquentFiltering\Sort\SortApplier;
 
 trait Sortable
 {
     public function scopeSort(
-        Builder $query,
-        array $sorts,
+        Builder          $query,
+        array            $pendingSorts,
         ?AllowedSortList $allowedSortList = null
     ): Builder {
 
+        /** @var SortValidator $sortValidator */
+        $sortValidator = resolve(SortValidator::class);
+        $pendingSorts = $sortValidator->validate($pendingSorts);
+
         $sortApplier = new SortApplier($allowedSortList ?? $this->allowedSorts());
-        return $sortApplier->apply($query, $sorts);
+        return $sortApplier->apply($query, $pendingSorts);
 
     }
 

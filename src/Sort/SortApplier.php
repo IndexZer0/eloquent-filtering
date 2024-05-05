@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Sort;
 
 use Illuminate\Database\Eloquent\Builder;
+use IndexZer0\EloquentFiltering\Sort\Sortable\PendingSort;
 use IndexZer0\EloquentFiltering\Suppression\Suppression;
 use IndexZer0\EloquentFiltering\Sort\Contracts\AllowedSortList;
 
@@ -14,7 +15,7 @@ class SortApplier
     {
     }
 
-    public function apply(Builder $query, array $sorts): Builder
+    public function apply(Builder $query, PendingSortCollection $sorts): Builder
     {
         foreach ($sorts as $sort) {
             Suppression::honour(
@@ -25,10 +26,10 @@ class SortApplier
         return $query;
     }
 
-    private function applySort(Builder $query, array $sort): Builder
+    private function applySort(Builder $query, PendingSort $pendingSort): Builder
     {
-        $this->allowedSortList->ensureAllowed($sort['target']);
+        $approvedSort = $this->allowedSortList->ensureAllowed($pendingSort);
 
-        return $query->orderBy($sort['target'], $sort['value']);
+        return $query->orderBy($approvedSort->target()->getReal(), $approvedSort->direction());
     }
 }
