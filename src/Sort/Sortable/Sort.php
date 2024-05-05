@@ -21,9 +21,9 @@ class Sort
         return new NoSortsAllowed();
     }
 
-    public static function all(): AllSortsAllowed
+    public static function all(AliasedTarget ...$targets): AllSortsAllowed
     {
-        return new AllSortsAllowed();
+        return new AllSortsAllowed(...$targets);
     }
 
     public static function only(SortableField ...$sortableFields): SomeSortsAllowed

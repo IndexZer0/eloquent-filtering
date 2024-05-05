@@ -36,7 +36,7 @@ beforeEach(function (): void {
     ]);
 });
 
-it('can alias field | field sort', function (): void {
+it('can alias field | Sort::field', function (): void {
 
     $query = Author::sort(
         [
@@ -47,6 +47,29 @@ it('can alias field | field sort', function (): void {
         ],
         Sort::only(
             Sort::field(Target::alias('name', 'name_alias'))
+        )
+    );
+
+    $expectedSql = <<< SQL
+        select * from "authors" order by "name_alias" desc
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+});
+
+
+it('can alias field | Sort::all()', function (): void {
+
+    $query = Author::sort(
+        [
+            [
+                'target' => 'name',
+                'value'  => 'desc',
+            ],
+        ],
+        Sort::all(
+            Target::alias('name', 'name_alias')
         )
     );
 
