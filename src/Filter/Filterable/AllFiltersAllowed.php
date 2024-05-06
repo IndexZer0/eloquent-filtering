@@ -44,7 +44,7 @@ class AllFiltersAllowed implements AllowedFilterList
         }
 
         if ($target instanceof AliasedRelationTarget) {
-            $allowedFilterList = new self(...$target->getChildrenTargets());
+            $allowedFilterList = new self(...$target->getChildTargets());
         }
 
         $childFilters = $this->ensureChildFiltersAllowed($pendingFilter, $allowedFilterList);

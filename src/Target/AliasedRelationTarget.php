@@ -24,7 +24,7 @@ readonly class AliasedRelationTarget extends AliasedTarget
      * -----------------------------
      */
 
-    public function getChildrenTargets(): array
+    public function getChildTargets(): array
     {
         return $this->targets;
     }
