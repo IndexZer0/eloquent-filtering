@@ -48,6 +48,6 @@ class AllowedJsonField implements AllowedFilter
 
     public function getTarget(PendingFilter $pendingFilter): ?Target
     {
-        return new JsonPathTarget($pendingFilter->desiredTarget());
+        return \IndexZer0\EloquentFiltering\Target\Target::alias($this->target->target(), $pendingFilter->desiredTarget());
     }
 }
