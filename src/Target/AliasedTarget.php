@@ -29,4 +29,9 @@ readonly class AliasedTarget implements TargetContract
     {
         return $this->targetAlias ?? $this->target;
     }
+
+    public function target(): string
+    {
+        return $this->target;
+    }
 }

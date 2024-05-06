@@ -30,4 +30,9 @@ readonly class JsonPathTarget implements TargetContract
     {
         return $this->target;
     }
+
+    public function target(): string
+    {
+        return $this->target;
+    }
 }

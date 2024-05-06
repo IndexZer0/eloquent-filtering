@@ -9,4 +9,6 @@ interface Target
     public function isFor(string $target): bool;
 
     public function getReal(): string;
+
+    public function target(): string;
 }
