@@ -13,7 +13,7 @@ use IndexZer0\EloquentFiltering\Rules\StrictInteger;
 
 class JsonLengthFilter extends AbstractJsonFieldFilter
 {
-    public function __construct(
+    final public function __construct(
         protected Target $target,
         protected string $operator,
         protected int    $value,

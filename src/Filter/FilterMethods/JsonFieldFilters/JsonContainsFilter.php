@@ -12,7 +12,7 @@ use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 class JsonContainsFilter extends AbstractJsonFieldFilter
 {
-    public function __construct(
+    final public function __construct(
         protected Target $target,
         protected string|float|int $value,
     ) {
