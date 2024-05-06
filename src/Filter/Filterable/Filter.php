@@ -30,9 +30,9 @@ class Filter
         return new NoFiltersAllowed();
     }
 
-    public static function all(): AllFiltersAllowed
+    public static function all(TargetContract ...$targets): AllFiltersAllowed
     {
-        return new AllFiltersAllowed();
+        return new AllFiltersAllowed(...$targets);
     }
 
     public static function only(AllowedFilter ...$allowedFilters): SomeFiltersAllowed
