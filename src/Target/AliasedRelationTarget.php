@@ -6,7 +6,7 @@ namespace IndexZer0\EloquentFiltering\Target;
 
 use IndexZer0\EloquentFiltering\Contracts\Target as TargetContract;
 
-readonly class AliasedRelationTarget implements TargetContract
+readonly class AliasedRelationTarget extends AliasedTarget
 {
     public array $targets;
 
@@ -20,24 +20,9 @@ readonly class AliasedRelationTarget implements TargetContract
 
     /*
      * -----------------------------
-     * Interface methods
+     * AliasedRelationTarget methods
      * -----------------------------
      */
-
-    public function isFor(string $target): bool
-    {
-        return $this->target === $target;
-    }
-
-    public function getReal(): string
-    {
-        return $this->targetAlias ?? $this->target;
-    }
-
-    public function target(): string
-    {
-        return $this->target;
-    }
 
     public function getChildrenTargets(): array
     {
