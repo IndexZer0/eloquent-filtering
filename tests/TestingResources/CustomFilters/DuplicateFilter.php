@@ -26,13 +26,13 @@ class DuplicateFilter extends AbstractFieldFilter
         return [];
     }
 
-    public function apply(Builder $query): Builder
-    {
-        return $query->where('field', 'value');
-    }
-
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static();
+    }
+
+    public function apply(Builder $query): Builder
+    {
+        return $query->where('field', 'value');
     }
 }

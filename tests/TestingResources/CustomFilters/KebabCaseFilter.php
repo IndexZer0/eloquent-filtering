@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use IndexZer0\EloquentFiltering\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 
@@ -38,17 +39,17 @@ class KebabCaseFilter extends AbstractFieldFilter
         ];
     }
 
-    public function apply(Builder $query): Builder
-    {
-        return $query->where(DB::raw($this->target()), $this->value());
-    }
-
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
             $approvedFilter->target(),
             $approvedFilter->data_get('value'),
         );
+    }
+
+    public function apply(Builder $query): Builder
+    {
+        return $query->where(DB::raw($this->target()), $this->value());
     }
 
     /*
