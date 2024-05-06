@@ -12,7 +12,7 @@ use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 class BetweenFilter extends AbstractFieldFilter
 {
-    public function __construct(
+    final public function __construct(
         protected Target $target,
         protected array $value,
     ) {

@@ -12,7 +12,7 @@ use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 
 abstract class AbstractRelationFilter extends AbstractFieldFilter implements HasChildFilters
 {
-    public function __construct(
+    final public function __construct(
         protected Target           $target,
         protected FilterCollection $value,
     ) {

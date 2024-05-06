@@ -13,7 +13,7 @@ use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractConditionF
 
 class OrFilter extends AbstractConditionFilter implements HasChildFilters
 {
-    public function __construct(
+    final public function __construct(
         protected FilterCollection $value,
     ) {
     }

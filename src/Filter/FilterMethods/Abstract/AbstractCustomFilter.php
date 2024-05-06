@@ -9,6 +9,10 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 
 abstract class AbstractCustomFilter implements FilterMethod
 {
+    final public function __construct()
+    {
+    }
+
     /*
      * -----------------------------
      * Interface methods
