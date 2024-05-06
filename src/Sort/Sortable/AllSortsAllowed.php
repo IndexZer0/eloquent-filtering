@@ -22,9 +22,8 @@ class AllSortsAllowed implements AllowedSortList
 
     public function ensureAllowed(PendingSort $pendingSort): ApprovedSort
     {
-        $target = $this->targets->get($pendingSort->target());
         return $pendingSort->approveWith(
-            $target ?? Target::alias($pendingSort->target()),
+            $this->targets->get($pendingSort->target()) ?? Target::alias($pendingSort->target()),
         );
     }
 }
