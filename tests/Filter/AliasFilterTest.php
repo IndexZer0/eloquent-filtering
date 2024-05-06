@@ -114,14 +114,16 @@ it('can alias relations field | Filter::all()', function (): void {
                     [
                         'type'   => '$eq',
                         'target' => 'target_from_request_1',
-                        'value'  => 'Game Of Thrones'
+                        'value'  => 'Game Of Thrones',
                     ],
                 ],
             ],
         ],
         Filter::all(
             Target::alias('target_from_request_1', 'name'),
-            Target::relationAlias('target_from_request_2', 'books',
+            Target::relationAlias(
+                'target_from_request_2',
+                'books',
                 Target::alias('target_from_request_1', 'title')
             ),
         )
@@ -134,5 +136,3 @@ it('can alias relations field | Filter::all()', function (): void {
     expect($query->toRawSql())->toBe($expectedSql);
 
 });
-
-
