@@ -7,13 +7,12 @@ namespace IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use IndexZer0\EloquentFiltering\Contracts\Target;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 
 class KebabCaseFilter extends AbstractFieldFilter
 {
-    public function __construct(
+    final public function __construct(
         protected Target $target,
         protected string $value,
     ) {
