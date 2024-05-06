@@ -32,6 +32,14 @@ abstract class WhereFilter extends AbstractFieldFilter
         ];
     }
 
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->target(),
+            $approvedFilter->data_get('value')
+        );
+    }
+
     public function apply(Builder $query): Builder
     {
         return $query->where(
@@ -57,13 +65,5 @@ abstract class WhereFilter extends AbstractFieldFilter
     public function target(): string
     {
         return $this->target->getReal();
-    }
-
-    public static function from(ApprovedFilter $approvedFilter): static
-    {
-        return new static(
-            $approvedFilter->target(),
-            $approvedFilter->data_get('value')
-        );
     }
 }

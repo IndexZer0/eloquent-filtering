@@ -37,16 +37,16 @@ class NullFilter extends AbstractFieldFilter
         ];
     }
 
-    public function apply(Builder $query): Builder
-    {
-        return $query->whereNull($this->target->getReal(), not: !$this->value);
-    }
-
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
             $approvedFilter->target(),
             $approvedFilter->data_get('value'),
         );
+    }
+
+    public function apply(Builder $query): Builder
+    {
+        return $query->whereNull($this->target->getReal(), not: !$this->value);
     }
 }

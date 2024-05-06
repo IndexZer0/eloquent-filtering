@@ -40,21 +40,21 @@ class JsonLengthFilter extends AbstractJsonFieldFilter
         ];
     }
 
-    public function apply(Builder $query): Builder
-    {
-        return $query->whereJsonLength(
-            $this->target->getReal(),
-            $this->operator,
-            $this->value,
-        );
-    }
-
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
             $approvedFilter->target(),
             $approvedFilter->data_get('operator'),
             $approvedFilter->data_get('value'),
+        );
+    }
+
+    public function apply(Builder $query): Builder
+    {
+        return $query->whereJsonLength(
+            $this->target->getReal(),
+            $this->operator,
+            $this->value,
         );
     }
 }

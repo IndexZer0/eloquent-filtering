@@ -21,7 +21,7 @@ interface FilterMethod
 
     public static function format(): array;
 
-    public function apply(Builder $query): Builder;
-
     public static function from(ApprovedFilter $approvedFilter): static;
+
+    public function apply(Builder $query): Builder;
 }

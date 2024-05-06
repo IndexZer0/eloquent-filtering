@@ -37,17 +37,17 @@ class InFilter extends AbstractFieldFilter
         ];
     }
 
-    public function apply(Builder $query): Builder
-    {
-        return $query->whereIn($this->target->getReal(), $this->value, not: $this->not());
-    }
-
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
             $approvedFilter->target(),
             $approvedFilter->data_get('value'),
         );
+    }
+
+    public function apply(Builder $query): Builder
+    {
+        return $query->whereIn($this->target->getReal(), $this->value, not: $this->not());
     }
 
     /*
