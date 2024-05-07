@@ -37,6 +37,13 @@ class OrFilter extends AbstractConditionFilter implements HasChildFilters
         ];
     }
 
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->childFilters()
+        );
+    }
+
     public function apply(Builder $query): Builder
     {
         return $query->where(function (Builder $query): void {
@@ -47,13 +54,6 @@ class OrFilter extends AbstractConditionFilter implements HasChildFilters
                 });
             }
         });
-    }
-
-    public static function from(ApprovedFilter $approvedFilter): static
-    {
-        return new static(
-            $approvedFilter->childFilters()
-        );
     }
 
     public static function childFiltersKey(): string
