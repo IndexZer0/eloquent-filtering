@@ -250,9 +250,10 @@ This package provides core filters that give you the ability to perform the vast
 
 #### Condition Filters
 
-| Filter                                                | Code             | Query                                                                 |
-|-------------------------------------------------------|------------------|-----------------------------------------------------------------------|
-| [OrFilter](#OrFilter)                                 | `$or`            | `or`                                                                  |
+| Filter                  | Code   | Query |
+|-------------------------|--------|-------|
+| [OrFilter](#OrFilter)   | `$or`  | `or`  |
+| [AndFilter](#AndFilter) | `$and` | `and` |
 
 #### Json Field Filters
 
@@ -508,6 +509,34 @@ $sql = Comment::filter([
 
 ```sql
 select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
+```
+
+#### AndFilter
+
+- `value` = `array` of filters.
+
+```php
+$sql = Comment::filter([
+    [
+        'type'  => '$and',
+        'value' => [
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'is awesome',
+            ],
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'is not boring',
+            ]
+        ]
+    ]
+])->toRawSql();
+```
+
+```sql
+select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
 ```
 
 #### NullFilter

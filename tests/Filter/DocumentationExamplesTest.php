@@ -264,6 +264,35 @@ it('OrFilter | $or', function (): void {
 
 });
 
+it('AndFilter | $and', function (): void {
+    $sql = Comment::filter([
+        [
+            'type'  => '$and',
+            'value' => [
+                [
+                    'type'   => '$like',
+                    'target' => 'content',
+                    'value'  => 'is awesome',
+                ],
+                [
+                    'type'   => '$like',
+                    'target' => 'content',
+                    'value'  => 'is not boring',
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::field('content', ['$like'])
+    ))->toRawSql();
+
+    $expectedSql = <<< SQL
+        select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
+        SQL;
+
+    expect($sql)->toBe($expectedSql);
+
+});
+
 it('NullFilter | $null', function (): void {
     $sql = Person::filter([
         [
