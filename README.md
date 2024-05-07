@@ -169,12 +169,12 @@ class Product extends Model
 Product::filter(
     $filters,
     Filter::allowOnly(
-        Filter::column('name', ['$eq']),
+        Filter::field('name', ['$eq']),
         Filter::relation(
             'manufacturer', 
             ['$has', '$doesntHas'],
             Filter::allowOnly(
-                Filter::column('name', ['$like'])
+                Filter::field('name', ['$like'])
             )
         )
     )
