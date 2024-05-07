@@ -398,8 +398,8 @@ it('NotBetweenFilter | $notBetween', function (): void {
 it('BetweenColumnsFilter | $betweenColumns', function (): void {
     $sql = Product::filter([
         [
-            'target' => 'price',
             'type'   => '$betweenColumns',
+            'target' => 'price',
             'value'  => [
                 'min_allowed_price',
                 'max_allowed_price',
@@ -420,8 +420,8 @@ it('BetweenColumnsFilter | $betweenColumns', function (): void {
 it('NotBetweenColumnsFilter | $notBetweenColumns', function (): void {
     $sql = Product::filter([
         [
-            'target' => 'price',
             'type'   => '$notBetweenColumns',
+            'target' => 'price',
             'value'  => [
                 'min_allowed_price',
                 'max_allowed_price',

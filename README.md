@@ -45,12 +45,12 @@ $filters = [
         'value'  => 'TV',
     ],
     [
-        'target' => 'manufacturer',
         'type'   => '$has',
+        'target' => 'manufacturer',
         'value'  => [
             [
-                'target' => 'name',
                 'type'   => '$eq',
+                'target' => 'name',
                 'value'  => 'Sony',
             ]                
         ]        
@@ -643,8 +643,8 @@ select * from "people" where "age" not between 18 and 65
 ```php
 $sql = Product::filter([
     [
-        'target' => 'price',
         'type'   => '$betweenColumns',
+        'target' => 'price',
         'value'  => [
             'min_allowed_price',
             'max_allowed_price',
@@ -664,8 +664,8 @@ select * from "products" where "price" between "min_allowed_price" and "max_allo
 ```php
 $sql = Product::filter([
     [
-        'target' => 'price',
         'type'   => '$notBetweenColumns',
+        'target' => 'price',
         'value'  => [
             'min_allowed_price',
             'max_allowed_price',
