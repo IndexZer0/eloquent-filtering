@@ -68,6 +68,7 @@ WHERE "name" = 'TV'
     - [Allowing Filters](#allowing-filters)
       - [Define On Model](#define-on-model)
       - [Define In Filter](#define-in-filter)
+    - [Filter Structure](#filter-structure)
     - [Available Filters](#available-filters)
       - [EqualFilter](#EqualFilter)
       - [NotEqualFilter](#NotEqualFilter)
@@ -198,41 +199,65 @@ Product::filter(
 
 ---
 
+### Filter Structure
+
+- Filters **ALWAYS** have a `type`.
+- All filters apart from `$or` and `$and` have a `target`.
+- Filter `value` is different depending on the filter.
+
+---
+
 ### Available Filters
 
 This package provides core filters that give you the ability to perform the vast majority of the filtering you'd need.
 
-| Usage        | Filter                                                | Code             | Query                                                                 |
-|--------------|-------------------------------------------------------|------------------|-----------------------------------------------------------------------|
-| Column       | [EqualFilter](#EqualFilter)                           | `$eq`            | `{$target} = {$value}`                                                |
-| Column       | [NotEqualFilter](#NotEqualFilter)                     | `$notEq`         | `{$target} != {$value}`                                               |
-| Column       | [GreaterThanFilter](#GreaterThanFilter)               | `$gt`            | `{$target} > {$value}`                                                |
-| Column       | [GreaterThanEqualToFilter](#GreaterThanEqualToFilter) | `$gte`           | `{$target} >= {$value}`                                               |
-| Column       | [LessThanFilter](#LessThanFilter)                     | `$lt`            | `{$target} < {$value}`                                                |
-| Column       | [LessThanEqualToFilter](#LessThanEqualToFilter)       | `$lte`           | `{$target} <= {$value}`                                               |
-| Column       | [LikeFilter](#LikeFilter)                             | `$like`          | `{$target} LIKE '%{$value}%'`                                         |
-| Column       | [LikeStartFilter](#LikeStartFilter)                   | `$like:start`    | `{$target} LIKE '{$value}%'`                                          |
-| Column       | [LikeEndFilter](#LikeEndFilter)                       | `$like:end`      | `{$target} LIKE '%{$value}'`                                          |
-| Column       | [NotLikeFilter](#NotLikeFilter)                       | `$notLike`       | `{$target} NOT LIKE '%{$value}%'`                                     |
-| Column       | [NotLikeStartFilter](#NotLikeStartFilter)             | `$notLike:start` | `{$target} NOT LIKE '{$value}%'`                                      |
-| Column       | [NotLikeEndFilter](#NotLikeEndFilter)                 | `$notLike:end`   | `{$target} NOT LIKE '%{$value}'`                                      |
-| Column       | [NullFilter](#NullFilter)                             | `$null`          | `{$target} is null` <code>&#124;&#124;</code> `{$target} is not null` |
-| Column       | [InFilter](#InFilter)                                 | `$in`            | `{$target} in ($value)`                                               |
-| Column       | [NotInFilter](#NotInFilter)                           | `$notIn`         | `{$target} not in ($value)`                                           |
-| Column       | [BetweenFilter](#BetweenFilter)                       | `$between`       | `{$target} between $value[0] and $value[1]`                           |
-| Column       | [NotBetweenFilter](#NotBetweenFilter)                 | `$notBetween`    | `{$target} not between $value[0] and $value[1]`                       |
-| JsonColumn   | [JsonContainsFilter](#JsonContainsFilter)             | `$jsonContains`  | `{$target} not between $value[0] and $value[1]`                       |
-| Condition    | [OrFilter](#OrFilter)                                 | `$or`            | `or`                                                                  |
-| Relationship | [HasFilter](#HasFilter)                               | `$has`           | `where exists (select * from {$target})`                              |
-| Relationship | [DoesntHasFilter](#DoesntHasFilter)                   | `$doesntHas`     | `where not exists (select * from {$target})`                          |
+#### Field Filters
+
+| Filter                                                | Code             | Query                                                                 |
+|-------------------------------------------------------|------------------|-----------------------------------------------------------------------|
+| [EqualFilter](#EqualFilter)                           | `$eq`            | `{$target} = {$value}`                                                |
+| [NotEqualFilter](#NotEqualFilter)                     | `$notEq`         | `{$target} != {$value}`                                               |
+| [GreaterThanFilter](#GreaterThanFilter)               | `$gt`            | `{$target} > {$value}`                                                |
+| [GreaterThanEqualToFilter](#GreaterThanEqualToFilter) | `$gte`           | `{$target} >= {$value}`                                               |
+| [LessThanFilter](#LessThanFilter)                     | `$lt`            | `{$target} < {$value}`                                                |
+| [LessThanEqualToFilter](#LessThanEqualToFilter)       | `$lte`           | `{$target} <= {$value}`                                               |
+| [LikeFilter](#LikeFilter)                             | `$like`          | `{$target} LIKE '%{$value}%'`                                         |
+| [LikeStartFilter](#LikeStartFilter)                   | `$like:start`    | `{$target} LIKE '{$value}%'`                                          |
+| [LikeEndFilter](#LikeEndFilter)                       | `$like:end`      | `{$target} LIKE '%{$value}'`                                          |
+| [NotLikeFilter](#NotLikeFilter)                       | `$notLike`       | `{$target} NOT LIKE '%{$value}%'`                                     |
+| [NotLikeStartFilter](#NotLikeStartFilter)             | `$notLike:start` | `{$target} NOT LIKE '{$value}%'`                                      |
+| [NotLikeEndFilter](#NotLikeEndFilter)                 | `$notLike:end`   | `{$target} NOT LIKE '%{$value}'`                                      |
+| [NullFilter](#NullFilter)                             | `$null`          | `{$target} is null` <code>&#124;&#124;</code> `{$target} is not null` |
+| [InFilter](#InFilter)                                 | `$in`            | `{$target} in ($value)`                                               |
+| [NotInFilter](#NotInFilter)                           | `$notIn`         | `{$target} not in ($value)`                                           |
+| [BetweenFilter](#BetweenFilter)                       | `$between`       | `{$target} between $value[0] and $value[1]`                           |
+| [NotBetweenFilter](#NotBetweenFilter)                 | `$notBetween`    | `{$target} not between $value[0] and $value[1]`                       |
+
+#### Relationship Filters
+
+| Filter                                                | Code             | Query                                                                 |
+|-------------------------------------------------------|------------------|-----------------------------------------------------------------------|
+| [HasFilter](#HasFilter)                               | `$has`           | `where exists (select * from {$target})`                              |
+| [DoesntHasFilter](#DoesntHasFilter)                   | `$doesntHas`     | `where not exists (select * from {$target})`                          |
+
+
+#### Condition Filters
+
+| Filter                                                | Code             | Query                                                                 |
+|-------------------------------------------------------|------------------|-----------------------------------------------------------------------|
+| [OrFilter](#OrFilter)                                 | `$or`            | `or`                                                                  |
+
+#### Json Field Filters
+
+| Filter                                                | Code             | Query                                                                 |
+|-------------------------------------------------------|------------------|-----------------------------------------------------------------------|
+| [JsonContainsFilter](#JsonContainsFilter)             | `$jsonContains`  | `{$target} not between $value[0] and $value[1]`                       |
 
 - Accepting pull requests for more common filters.
 
-### Filter Structure
+---
 
-- Filters **ALWAYS** have a `type`.
-- All filters apart from `$or` have a `target`.
-- Filter `value` is different depending on the filter.
+#### Filter Examples
 
 #### EqualFilter
 
