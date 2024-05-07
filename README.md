@@ -139,6 +139,17 @@ class Product extends Model
 
 By default, all filters are disallowed.
 
+You can change the default within the config file `eloquent-filtering`.
+
+```php
+'default_allowed_filter_list' => 'all',
+```
+
+> [!CAUTION]
+> Allowing all filters by default and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
+
+It is strongly suggested that you keep `default_allowed_filter_list` to `none` in your config and explicitly allow only specific filters.
+
 You can specify specific filters in two ways:
 
 #### Define on model.
