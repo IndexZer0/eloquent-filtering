@@ -20,6 +20,18 @@ class Product extends Model
 {
     use Filterable;
     
+    protected function allowedFilters(): FilterableList
+    {
+        return Filter::only(
+            Filter::field('name', ['$eq']),
+            Filter::relation('manufacturer', ['$has'],
+                Filter::only(
+                    Filter::field('name', ['$eq'])
+                )
+            )
+        );
+    }
+    
     public function manufacturer(): HasOne
     {
         return $this->hasOne(Manufacturer::class);
