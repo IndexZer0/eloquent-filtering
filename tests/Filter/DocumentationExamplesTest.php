@@ -5,6 +5,7 @@ declare(strict_types=1);
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Person;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Project;
 
 it('EqualFilter | $eq', function (): void {
@@ -388,6 +389,50 @@ it('NotBetweenFilter | $notBetween', function (): void {
 
     $expectedSql = <<< SQL
         select * from "people" where "age" not between 18 and 65
+        SQL;
+
+    expect($sql)->toBe($expectedSql);
+
+});
+
+it('BetweenColumnsFilter | $betweenColumns', function (): void {
+    $sql = Product::filter([
+        [
+            'target' => 'price',
+            'type'   => '$betweenColumns',
+            'value'  => [
+                'min_allowed_price',
+                'max_allowed_price',
+            ],
+        ],
+    ], Filter::only(
+        Filter::field('price', ['$betweenColumns']),
+    ))->toRawSql();
+
+    $expectedSql = <<< SQL
+        select * from "products" where "price" between "min_allowed_price" and "max_allowed_price"
+        SQL;
+
+    expect($sql)->toBe($expectedSql);
+
+});
+
+it('NotBetweenColumnsFilter | $notBetweenColumns', function (): void {
+    $sql = Product::filter([
+        [
+            'target' => 'price',
+            'type'   => '$notBetweenColumns',
+            'value'  => [
+                'min_allowed_price',
+                'max_allowed_price',
+            ],
+        ],
+    ], Filter::only(
+        Filter::field('price', ['$notBetweenColumns']),
+    ))->toRawSql();
+
+    $expectedSql = <<< SQL
+        select * from "products" where "price" not between "min_allowed_price" and "max_allowed_price"
         SQL;
 
     expect($sql)->toBe($expectedSql);

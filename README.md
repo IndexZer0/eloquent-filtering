@@ -220,25 +220,27 @@ This package provides core filters that give you the ability to perform the vast
 
 #### Field Filters
 
-| Filter                                                | Code             | Query                                                                 |
-|-------------------------------------------------------|------------------|-----------------------------------------------------------------------|
-| [EqualFilter](#EqualFilter)                           | `$eq`            | `{$target} = {$value}`                                                |
-| [NotEqualFilter](#NotEqualFilter)                     | `$notEq`         | `{$target} != {$value}`                                               |
-| [GreaterThanFilter](#GreaterThanFilter)               | `$gt`            | `{$target} > {$value}`                                                |
-| [GreaterThanEqualToFilter](#GreaterThanEqualToFilter) | `$gte`           | `{$target} >= {$value}`                                               |
-| [LessThanFilter](#LessThanFilter)                     | `$lt`            | `{$target} < {$value}`                                                |
-| [LessThanEqualToFilter](#LessThanEqualToFilter)       | `$lte`           | `{$target} <= {$value}`                                               |
-| [LikeFilter](#LikeFilter)                             | `$like`          | `{$target} LIKE '%{$value}%'`                                         |
-| [LikeStartFilter](#LikeStartFilter)                   | `$like:start`    | `{$target} LIKE '{$value}%'`                                          |
-| [LikeEndFilter](#LikeEndFilter)                       | `$like:end`      | `{$target} LIKE '%{$value}'`                                          |
-| [NotLikeFilter](#NotLikeFilter)                       | `$notLike`       | `{$target} NOT LIKE '%{$value}%'`                                     |
-| [NotLikeStartFilter](#NotLikeStartFilter)             | `$notLike:start` | `{$target} NOT LIKE '{$value}%'`                                      |
-| [NotLikeEndFilter](#NotLikeEndFilter)                 | `$notLike:end`   | `{$target} NOT LIKE '%{$value}'`                                      |
-| [NullFilter](#NullFilter)                             | `$null`          | `{$target} is null` <code>&#124;&#124;</code> `{$target} is not null` |
-| [InFilter](#InFilter)                                 | `$in`            | `{$target} in ($value)`                                               |
-| [NotInFilter](#NotInFilter)                           | `$notIn`         | `{$target} not in ($value)`                                           |
-| [BetweenFilter](#BetweenFilter)                       | `$between`       | `{$target} between $value[0] and $value[1]`                           |
-| [NotBetweenFilter](#NotBetweenFilter)                 | `$notBetween`    | `{$target} not between $value[0] and $value[1]`                       |
+| Filter                                                | Code                 | Query                                                                 |
+|-------------------------------------------------------|----------------------|-----------------------------------------------------------------------|
+| [EqualFilter](#EqualFilter)                           | `$eq`                | `{$target} = {$value}`                                                |
+| [NotEqualFilter](#NotEqualFilter)                     | `$notEq`             | `{$target} != {$value}`                                               |
+| [GreaterThanFilter](#GreaterThanFilter)               | `$gt`                | `{$target} > {$value}`                                                |
+| [GreaterThanEqualToFilter](#GreaterThanEqualToFilter) | `$gte`               | `{$target} >= {$value}`                                               |
+| [LessThanFilter](#LessThanFilter)                     | `$lt`                | `{$target} < {$value}`                                                |
+| [LessThanEqualToFilter](#LessThanEqualToFilter)       | `$lte`               | `{$target} <= {$value}`                                               |
+| [LikeFilter](#LikeFilter)                             | `$like`              | `{$target} LIKE '%{$value}%'`                                         |
+| [LikeStartFilter](#LikeStartFilter)                   | `$like:start`        | `{$target} LIKE '{$value}%'`                                          |
+| [LikeEndFilter](#LikeEndFilter)                       | `$like:end`          | `{$target} LIKE '%{$value}'`                                          |
+| [NotLikeFilter](#NotLikeFilter)                       | `$notLike`           | `{$target} NOT LIKE '%{$value}%'`                                     |
+| [NotLikeStartFilter](#NotLikeStartFilter)             | `$notLike:start`     | `{$target} NOT LIKE '{$value}%'`                                      |
+| [NotLikeEndFilter](#NotLikeEndFilter)                 | `$notLike:end`       | `{$target} NOT LIKE '%{$value}'`                                      |
+| [NullFilter](#NullFilter)                             | `$null`              | `{$target} is null` <code>&#124;&#124;</code> `{$target} is not null` |
+| [InFilter](#InFilter)                                 | `$in`                | `{$target} in ($value)`                                               |
+| [NotInFilter](#NotInFilter)                           | `$notIn`             | `{$target} not in ($value)`                                           |
+| [BetweenFilter](#BetweenFilter)                       | `$between`           | `{$target} between $value[0] and $value[1]`                           |
+| [NotBetweenFilter](#NotBetweenFilter)                 | `$notBetween`        | `{$target} not between $value[0] and $value[1]`                       |
+| [BetweenColumnsFilter](#BetweenColumnsFilter)         | `$betweenColumns`    | `{$target} between $value[0] and $value[1]`                           |
+| [NotBetweenColumnsFilter](#NotBetweenColumnsFilter)   | `$notBetweenColumns` | `{$target} not between $value[0] and $value[1]`                       |
 
 #### Relationship Filters
 
@@ -632,6 +634,48 @@ $sql = Person::filter([
 
 ```sql
 select * from "people" where "age" not between 18 and 65
+```
+
+#### BetweenColumnsFilter
+
+- `value` = `array` of strings.
+
+```php
+$sql = Product::filter([
+    [
+        'target' => 'price',
+        'type'   => '$betweenColumns',
+        'value'  => [
+            'min_allowed_price',
+            'max_allowed_price',
+        ],
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "products" where "price" between "min_allowed_price" and "max_allowed_price"
+```
+
+#### NotBetweenColumnsFilter
+
+- `value` = `array` of strings.
+
+```php
+$sql = Product::filter([
+    [
+        'target' => 'price',
+        'type'   => '$notBetweenColumns',
+        'value'  => [
+            'min_allowed_price',
+            'max_allowed_price',
+        ],
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "products" where "price" between "min_allowed_price" and "max_allowed_price"
 ```
 
 #### HasFilter
