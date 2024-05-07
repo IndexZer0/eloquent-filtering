@@ -155,24 +155,24 @@ You can specify specific filters in two ways:
 #### Define on model.
 
 ```php
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterableList;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable
+use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 
 class Product extends Model
 {
     use Filterable;
     
-    protected function allowedFilters(): FilterableList
+    protected function allowedFilters(): SomeFiltersAllowed
     {
-        return Filter::allowOnly(
-            Filter::column('name', ['$eq']),
+        return Filter::only(
+            Filter::field('name', ['$eq', '$like']),
             Filter::relation(
                 'manufacturer', 
                 ['$has', '$doesntHas'],
-                Filter::column('name', ['$like'])
+                Filter::only(
+                    Filter::field('name', ['$like'])
+                )
             )
         );
     }
