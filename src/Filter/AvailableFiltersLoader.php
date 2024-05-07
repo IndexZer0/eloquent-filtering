@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter;
 use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DuplicateFiltersException;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\ConditionFilters\AndFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\BetweenColumnsFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\BetweenFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\EqualFilter;
@@ -74,8 +75,9 @@ class AvailableFiltersLoader
             NotLikeStartFilter::class,
             NotLikeEndFilter::class,
 
-            // Or
+            // Conditional
             OrFilter::class,
+            AndFilter::class,
 
             // Null
             NullFilter::class,
