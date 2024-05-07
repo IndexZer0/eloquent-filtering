@@ -7,6 +7,10 @@
 
 ---
 
+- **Avoid** writing custom query logic for filtering your models.
+
+---
+
 ## Simple example with relationship filter.
 
 ```php
