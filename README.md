@@ -91,6 +91,7 @@ WHERE "name" = 'TV'
       - [DoesntHasFilter](#DoesntHasFilter)
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
+        - [Aliasing Targets](#aliasing-targets)
         - [Custom Filters](#custom-filters)
     - [Error Handling](#error-handling)
 - [Changelog](#changelog)
@@ -650,6 +651,32 @@ return [
 
 - The package throws various exception which can be suppressed.
 - Custom filters should be registered in the config.
+
+#### Aliasing Targets
+
+You can alias your target fields and relations if you don't wish to expose database field names to your frontend.
+
+The below example:
+ - Allows `name` and uses `first_name` in the database query.
+ - Allows `documents` and uses `files` as the relationship name.
+
+```php
+$sql = Person::filter([
+    [
+        'type'   => '$eq',
+        'target' => 'name',
+        'value'  => 'Taylor',
+    ],
+    [
+        'type'   => '$has',
+        'target' => 'documents',
+        'value'  => [],
+    ],
+], Filter::only(
+    Filter::field(Target::alias('name', 'first_name'), ['$eq']),
+    Filter::relation(Target::alias('documents', 'files'), ['$has'])
+))->toRawSql();
+```
 
 #### Custom Filters
 
