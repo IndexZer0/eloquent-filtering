@@ -9,7 +9,7 @@ beforeEach(function (): void {
     $this->createAuthors();
 });
 
-it('can perform $or and $and filter on base model', function (): void {
+it('can perform $or and $and filter', function (): void {
     $query = Author::filter(
         [
             [
