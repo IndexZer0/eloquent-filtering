@@ -191,12 +191,12 @@ class Product extends Model
 ```php
 Product::filter(
     $filters,
-    Filter::allowOnly(
+    Filter::only(
         Filter::field('name', ['$eq']),
         Filter::relation(
             'manufacturer', 
             ['$has', '$doesntHas'],
-            Filter::allowOnly(
+            Filter::only(
                 Filter::field('name', ['$like'])
             )
         )
