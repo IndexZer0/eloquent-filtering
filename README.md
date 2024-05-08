@@ -15,12 +15,13 @@
 
 ```php
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
+use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 
 class Product extends Model
 {
     use Filterable;
     
-    protected function allowedFilters(): FilterableList
+    protected function allowedFilters(): SomeFiltersAllowed
     {
         return Filter::only(
             Filter::field('name', ['$eq']),
