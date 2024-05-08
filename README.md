@@ -90,6 +90,7 @@ WHERE "name" = 'TV'
         - [Config](#config)
         - [Aliasing Targets](#aliasing-targets)
         - [Specifying Types](#specifying-types)
+        - [Suppressing Exceptions](#suppressing-exceptions)
         - [Custom Filters](#custom-filters)
     - [Error Handling](#error-handling)
 - [Changelog](#changelog)
@@ -803,6 +804,39 @@ Filter::field('name', Types::all()),
 // All except `$eq` allowed
 Filter::field('name', Types::except(['$eq'])),
 ```
+
+#### Suppressing Exceptions
+
+Various exceptions are thrown by this package. Most can be suppressed globally in the config file.
+
+When suppressing an exception, filters that caused the exception will be ignored.
+
+- Suppressible
+
+```php
+class InvalidFilterException
+config("eloquent-filtering.suppress.filter.invalid");
+// Filter does not have `type` key.
+
+class MissingFilterException
+config("eloquent-filtering.suppress.filter.missing");
+// Can't find filter of `type` specified.
+
+class MalformedFilterFormatException
+config("eloquent-filtering.suppress.filter.malformed_format");
+// The filter was found, but the rest of the data does not match required format of the filter.
+
+class DeniedFilterException
+config("eloquent-filtering.suppress.filter.denied");
+// Filter is not allowed
+``` 
+
+- Not Suppressible
+
+```php
+class DuplicateFiltersException
+// When you have registered a custom filter that has a duplicate type as another filter.
+``` 
 
 #### Custom Filters
 
