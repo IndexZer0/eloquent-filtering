@@ -9,6 +9,17 @@
 
 - **Avoid** writing custom query logic for filtering your models.
 
+Features:
+
+- Various filter methods.
+- Filter by relationship existence.
+  - No duplicated unnecessary exist clauses in queries.
+- Alias fields and relationships.
+- Specify filter types per field/relationship.
+- Based on laravel eloquent query builder.
+- Json column filters.
+- Custom filters.
+
 ---
 
 ## Simple example with relationship filter.
@@ -842,14 +853,14 @@ config("eloquent-filtering.suppress.filter.malformed_format");
 
 class DeniedFilterException
 config("eloquent-filtering.suppress.filter.denied");
-// Filter is not allowed
+// Filter is not allowed.
 ``` 
 
 - Not Suppressible
 
 ```php
 class DuplicateFiltersException
-// When you have registered a custom filter that has a duplicate type as another filter.
+// When you have registered a custom filter that has the same type as another filter.
 ``` 
 
 #### Custom Filters
