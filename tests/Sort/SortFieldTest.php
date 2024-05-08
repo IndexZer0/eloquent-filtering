@@ -62,7 +62,7 @@ it('can sort by field when allowed', function (): void {
 
 });
 
-it('can sort by field when no sort list supplied', function (): void {
+it('can not sort by field when no sort list supplied', function (): void {
     Author::sort(
         [
             [
@@ -112,7 +112,7 @@ it('can not sort by field when not explicitly allowed | not suppressed', functio
 
 })->throws(DeniedSortException::class, '"name" sort is not allowed');
 
-it('can not filter by field when not explicitly allowed | suppressed', function (): void {
+it('can not sort by field when not explicitly allowed | suppressed', function (): void {
 
     $this->setSuppression("sort.denied", true);
 

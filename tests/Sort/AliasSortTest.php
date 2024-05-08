@@ -36,7 +36,7 @@ beforeEach(function (): void {
     ]);
 });
 
-it('can alias field | Sort::field', function (): void {
+it('can alias field | Sort::field()', function (): void {
 
     $query = Author::sort(
         [
