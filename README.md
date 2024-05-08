@@ -89,6 +89,7 @@ WHERE "name" = 'TV'
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
         - [Aliasing Targets](#aliasing-targets)
+        - [Specifying Types](#specifying-types)
         - [Custom Filters](#custom-filters)
     - [Error Handling](#error-handling)
 - [Changelog](#changelog)
@@ -785,6 +786,22 @@ $sql = Person::filter([
     Filter::field(Target::alias('name', 'first_name'), ['$eq']),
     Filter::relation(Target::alias('documents', 'files'), ['$has'])
 ))->toRawSql();
+```
+
+#### Specifying Types
+
+```php
+use IndexZer0\EloquentFiltering\Filter\Types\Types;
+
+// Only `$eq` allowed
+Filter::field('name', ['$eq'])
+Filter::field('name', Types::only(['$eq']))
+
+// All types allowed
+Filter::field('name', Types::all()),
+
+// All except `$eq` allowed
+Filter::field('name', Types::except(['$eq'])),
 ```
 
 #### Custom Filters
