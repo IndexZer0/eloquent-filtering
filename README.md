@@ -90,7 +90,7 @@ WHERE "name" = 'TV'
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
         - [Aliasing Targets](#aliasing-targets)
-        - [Specifying Types](#specifying-types)
+        - [Specifying Allowed Types](#specifying-allowed-types)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Custom Filters](#custom-filters)
     - [Error Handling](#error-handling)
@@ -790,7 +790,20 @@ $sql = Person::filter([
 ))->toRawSql();
 ```
 
-#### Specifying Types
+You can also alias targets when allowing all filters.
+
+```php
+Filter::all(
+    Target::alias('name', 'first_name'),
+    Target::relationAlias(
+        'documents',
+        'files',
+        Target::alias('file_extension', 'mime_type')
+    ),
+)
+```
+
+#### Specifying Allowed Types
 
 ```php
 use IndexZer0\EloquentFiltering\Filter\Types\Types;
