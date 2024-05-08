@@ -892,10 +892,7 @@ class DuplicateFiltersException
 
 ### Error Handling
 
-If you choose to not suppress exceptions in the config file and handle errors yourself:
-
-All exceptions thrown by the package
-implement `\IndexZer0\EloquentFiltering\Contracts\EloquentFilteringException`.
+All exceptions thrown by the package implement `\IndexZer0\EloquentFiltering\Contracts\EloquentFilteringException`.
 
 How-ever it doesn't harm to also catch `\Throwable`.
 
