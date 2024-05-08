@@ -736,6 +736,9 @@ select * from "projects" where not exists (select * from "comments" where "proje
 
 ```php
 return [
+    'default_allowed_filter_list' => 'none',
+    'default_allowed_sort_list'   => 'none',
+
     'suppress' => [
         'filter' => [
             'denied'           => false,
@@ -744,7 +747,8 @@ return [
             'malformed_format' => false,
         ],
         'sort' => [
-            'denied' => false,
+            'denied'           => false,
+            'malformed_format' => false,
         ],
     ],
 
