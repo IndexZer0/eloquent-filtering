@@ -112,6 +112,7 @@ WHERE "name" = 'TV'
         - [Specifying Allowed Types](#specifying-allowed-types)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Custom Filters](#custom-filters)
+        - [Condition Filters Note](#condition-filters-note)
     - [Error Handling](#error-handling)
 - [Changelog](#changelog)
 
@@ -280,6 +281,8 @@ This package provides core filters that give you the ability to perform the vast
 |-------------------------------|--------|-------|
 | [OrFilter](#OrFilter---or)    | `$or`  | `or`  |
 | [AndFilter](#AndFilter---and) | `$and` | `and` |
+
+See [Conditional Filters Note](#conditional-filters-note)
 
 #### Json Field Filters
 
@@ -887,6 +890,14 @@ class DuplicateFiltersException
 ``` 
 
 #### Custom Filters
+
+- TODO
+
+#### Condition Filters Note
+
+The condition filters `$or`, and `$and` are not required to be specified when allowing filters.
+
+These filters are always allowed, due to these filters essentially being wrappers around other filters.
 
 ---
 
