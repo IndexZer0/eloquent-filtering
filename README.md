@@ -98,6 +98,7 @@ WHERE "name" = 'TV'
     - [Allowing Filters](#allowing-filters)
       - [Define On Model](#define-on-model)
       - [Define In Filter](#define-in-filter)
+      - [Allowing All Filters](#allowing-all-filters)
     - [Filter Structure](#filter-structure)
     - [Available Filters](#available-filters)
       - [Field Filters](#field-filters)
@@ -106,6 +107,7 @@ WHERE "name" = 'TV'
       - [Json Field Filters](#json-field-filters)
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
+        - [Default Allowed Filters](#default-allowed-filters)
         - [Aliasing Targets](#aliasing-targets)
         - [Specifying Allowed Types](#specifying-allowed-types)
         - [Suppressing Exceptions](#suppressing-exceptions)
@@ -159,18 +161,7 @@ class Product extends Model
 
 By default, all filters are disallowed.
 
-You can change the default within the config file `eloquent-filtering`.
-
-```php
-'default_allowed_filter_list' => 'all',
-```
-
-> [!CAUTION]
-> Allowing all filters by default and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
-
-It is strongly suggested that you keep `default_allowed_filter_list` to `none` in your config and explicitly allow only specific filters.
-
-You can specify specific filters in two ways:
+You can specify allowed filters in two ways:
 
 #### Define on model.
 
@@ -222,6 +213,19 @@ Product::filter(
         )
     )
 )->get();
+```
+
+#### Allowing All Filters
+
+You can allow all filters using `Filter::all()`.
+
+See Caution in [Default Allowed Filters](#default-allowed-filters) section for security concerns when using this feature.
+
+```php
+protected function allowedFilters(): AllFiltersAllowed
+{
+    return Filter::all();
+}
 ```
 
 ---
@@ -780,6 +784,19 @@ return [
 
 - The package throws various exception which can be suppressed.
 - Custom filters should be registered in the config.
+
+#### Default Allowed Filters
+
+You can change the default allowed filters within the config file `eloquent-filtering`.
+
+```php
+'default_allowed_filter_list' => 'all',
+```
+
+> [!CAUTION]
+> Allowing all filters by default and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
+
+It is strongly suggested that you keep `default_allowed_filter_list` as `none` in your config and explicitly allow only specific filters with `Filter::only()`.
 
 #### Aliasing Targets
 
