@@ -8,14 +8,14 @@ return [
 
     'suppress' => [
         'filter' => [
-            'denied'           => false,
-            'missing'          => false,
             'invalid'          => false,
+            'missing'          => false,
             'malformed_format' => false,
+            'denied'           => false,
         ],
         'sort' => [
-            'denied'           => false,
             'malformed_format' => false,
+            'denied'           => false,
         ],
     ],
 
