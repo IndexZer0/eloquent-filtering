@@ -282,7 +282,7 @@ This package provides core filters that give you the ability to perform the vast
 | [OrFilter](#OrFilter---or)    | `$or`  | `or`  |
 | [AndFilter](#AndFilter---and) | `$and` | `and` |
 
-See [Conditional Filters Note](#conditional-filters-note)
+See [Conditional Filters Note](#condition-filters-note)
 
 #### Json Field Filters
 
