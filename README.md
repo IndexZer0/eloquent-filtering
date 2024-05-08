@@ -11,14 +11,20 @@
 
 Features:
 
-- Various filter methods.
-- Filter by relationship existence.
-  - No duplicated unnecessary exist clauses in queries.
-- Alias fields and relationships.
-- Specify filter types per field/relationship.
-- Based on laravel eloquent query builder.
-- Json column filters.
-- Custom filters.
+- Filter 
+  - Many filter methods.
+  - Filter by fields.
+  - Filter by relationship existence.
+    - Filter by fields on relationships.
+      - No duplicated unnecessary exist clauses in queries.
+  - Alias fields and relationships.
+  - Specify filter types per field/relationship.
+  - Json column filters.
+  - Custom filters.
+- Sort
+  - Sort by fields.
+  - Alias fields.
+- Terminology based on laravel eloquent query builder.
 
 ---
 
