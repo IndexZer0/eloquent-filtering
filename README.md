@@ -14,7 +14,7 @@
 ## Simple example with relationship filter.
 
 ```php
-use IndexZer0\EloquentFiltering\Filter\Traits\Filterable
+use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 
 class Product extends Model
 {
@@ -127,7 +127,7 @@ php artisan eloquent-filtering:install
 Add `Filterable` trait to the model you want to filter.
 
 ```php
-use IndexZer0\EloquentFiltering\Filter\Traits\Filterable
+use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 
 class Product extends Model
 {
@@ -158,7 +158,7 @@ You can specify specific filters in two ways:
 
 ```php
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
-use IndexZer0\EloquentFiltering\Filter\Traits\Filterable
+use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 
 class Product extends Model
