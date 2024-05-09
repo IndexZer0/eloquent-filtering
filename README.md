@@ -801,6 +801,8 @@ You can change the default allowed filters within the config file `eloquent-filt
 
 It is strongly suggested that you keep `default_allowed_filter_list` as `none` in your config and explicitly allow only specific filters with `Filter::only()`.
 
+This feature is intended for use when you're not using any user supplied information and have complete developer control over the filters being applied.
+
 #### Aliasing Targets
 
 You can alias your target fields and relations if you don't wish to expose database field names to your frontend.
