@@ -8,16 +8,19 @@ use Exception;
 use IndexZer0\EloquentFiltering\Contracts\SuppressibleException;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
+use IndexZer0\EloquentFiltering\Suppression\Traits\CanBeSuppressed;
 
 class DeniedFilterException extends Exception implements FilterException, SuppressibleException
 {
+    use CanBeSuppressed;
+
     public function __construct(PendingFilter $pendingFilter)
     {
         parent::__construct($pendingFilter->getDeniedMessage());
     }
 
-    public function shouldSuppress(): bool
+    public function suppressionKey(): string
     {
-        return config('eloquent-filtering.suppress.filter.denied', false);
+        return 'suppress.filter.denied';
     }
 }

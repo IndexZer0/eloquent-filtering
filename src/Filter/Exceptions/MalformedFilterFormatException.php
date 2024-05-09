@@ -8,9 +8,12 @@ use Exception;
 use Illuminate\Validation\ValidationException;
 use IndexZer0\EloquentFiltering\Contracts\SuppressibleException;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterException;
+use IndexZer0\EloquentFiltering\Suppression\Traits\CanBeSuppressed;
 
 class MalformedFilterFormatException extends Exception implements FilterException, SuppressibleException
 {
+    use CanBeSuppressed;
+
     public function __construct(
         string              $type,
         ValidationException $validationException
@@ -21,8 +24,8 @@ class MalformedFilterFormatException extends Exception implements FilterExceptio
         );
     }
 
-    public function shouldSuppress(): bool
+    public function suppressionKey(): string
     {
-        return config('eloquent-filtering.suppress.filter.malformed_format', false);
+        return 'suppress.filter.malformed_format';
     }
 }

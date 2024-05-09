@@ -7,16 +7,19 @@ namespace IndexZer0\EloquentFiltering\Filter\Exceptions;
 use Exception;
 use IndexZer0\EloquentFiltering\Contracts\SuppressibleException;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterException;
+use IndexZer0\EloquentFiltering\Suppression\Traits\CanBeSuppressed;
 
 class MissingFilterException extends Exception implements FilterException, SuppressibleException
 {
+    use CanBeSuppressed;
+
     public static function throw(string $type): void
     {
         throw new self("Can not find filter for \"{$type}\"");
     }
 
-    public function shouldSuppress(): bool
+    public function suppressionKey(): string
     {
-        return config('eloquent-filtering.suppress.filter.missing', false);
+        return 'suppress.filter.missing';
     }
 }

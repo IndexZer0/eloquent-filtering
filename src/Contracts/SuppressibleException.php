@@ -6,5 +6,6 @@ namespace IndexZer0\EloquentFiltering\Contracts;
 
 interface SuppressibleException
 {
-    public function shouldSuppress(): bool;
+    public function suppressionKey(): string;
+    public function isSuppressed(): bool;
 }

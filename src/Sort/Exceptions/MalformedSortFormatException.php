@@ -8,9 +8,12 @@ use Exception;
 use Illuminate\Validation\ValidationException;
 use IndexZer0\EloquentFiltering\Contracts\SuppressibleException;
 use IndexZer0\EloquentFiltering\Sort\Contracts\SortException;
+use IndexZer0\EloquentFiltering\Suppression\Traits\CanBeSuppressed;
 
 class MalformedSortFormatException extends Exception implements SortException, SuppressibleException
 {
+    use CanBeSuppressed;
+
     public function __construct(ValidationException $validationException)
     {
         parent::__construct(
@@ -19,8 +22,8 @@ class MalformedSortFormatException extends Exception implements SortException, S
         );
     }
 
-    public function shouldSuppress(): bool
+    public function suppressionKey(): string
     {
-        return config('eloquent-filtering.suppress.sort.malformed_format', false);
+        return 'suppress.sort.malformed_format';
     }
 }

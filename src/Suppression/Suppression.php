@@ -9,32 +9,130 @@ use IndexZer0\EloquentFiltering\Contracts\SuppressibleException;
 
 class Suppression
 {
-    public static ?Closure $suppressionHandler = null;
+    protected static array $suppressionHandlers = [];
 
     public static function honour(Closure $callback): void
     {
         try {
             $callback();
         } catch (SuppressibleException $se) {
-            if ($se->shouldSuppress()) {
+            self::executeCustomHandler($se);
+
+            if ($se->isSuppressed()) {
                 return;
             }
 
-            if (self::$suppressionHandler === null) {
-                throw $se;
-            }
-
-            call_user_func(self::$suppressionHandler, $se);
+            throw $se;
         }
     }
 
-    public static function handleUsing(?Closure $callback = null): void
+    private static function executeCustomHandler(SuppressibleException $se): void
     {
-        self::$suppressionHandler = $callback;
+        $keepChecking = true;
+        $suppressionKey = $se->suppressionKey();
+
+        while ($keepChecking) {
+            $keepChecking = self::shouldKeepChecking($suppressionKey);
+
+            $handler = self::getHandler($suppressionKey);
+
+            $suppressionKey = self::removeLastPart($suppressionKey);
+
+            if (is_callable($handler)) {
+                $handler($se);
+                return;
+            }
+        };
     }
 
-    public static function clearSuppressionHandler(): void
+    private static function shouldKeepChecking(string $suppressionKey): bool
     {
-        self::handleUsing();
+        return str_contains($suppressionKey, '.');
+    }
+
+    private static function getHandler(string $suppressionKey): ?callable
+    {
+        if (array_key_exists($suppressionKey, self::$suppressionHandlers)) {
+            return self::$suppressionHandlers[$suppressionKey];
+        }
+        return null;
+    }
+
+    private static function removeLastPart(string $suppressionKey): string
+    {
+        return implode(
+            '.',
+            array_slice(
+                $parts = explode('.', $suppressionKey),
+                0,
+                count($parts) - 1
+            )
+        );
+    }
+
+    /*
+     * All
+     */
+
+    public static function handleAllUsing(callable $callback = null): void
+    {
+        self::$suppressionHandlers['suppress'] = $callback;
+    }
+
+    /*
+     * Filter
+     */
+
+    public static function handleFilterUsing(callable $callback = null): void
+    {
+        self::$suppressionHandlers['suppress.filter'] = $callback;
+    }
+
+    public static function handleInvalidFilterUsing(callable $callback = null): void
+    {
+        self::$suppressionHandlers['suppress.filter.invalid'] = $callback;
+    }
+
+    public static function handleMissingFilterUsing(callable $callback = null): void
+    {
+        self::$suppressionHandlers['suppress.filter.missing'] = $callback;
+    }
+
+    public static function handleMalformedFilterUsing(callable $callback = null): void
+    {
+        self::$suppressionHandlers['suppress.filter.malformed_format'] = $callback;
+    }
+
+    public static function handleDeniedFilterUsing(callable $callback = null): void
+    {
+        self::$suppressionHandlers['suppress.filter.denied'] = $callback;
+    }
+
+    /*
+     * Sort
+     */
+
+    public static function handleSortUsing(callable $callback = null): void
+    {
+        self::$suppressionHandlers['suppress.sort'] = $callback;
+    }
+
+    public static function handleMalformedSortUsing(callable $callback = null): void
+    {
+        self::$suppressionHandlers['suppress.sort.malformed_format'] = $callback;
+    }
+
+    public static function handleDeniedSortUsing(callable $callback = null): void
+    {
+        self::$suppressionHandlers['suppress.sort.denied'] = $callback;
+    }
+
+    /*
+     * Clear
+     */
+
+    public static function clearSuppressionHandlers(): void
+    {
+        self::$suppressionHandlers = [];
     }
 }
