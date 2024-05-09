@@ -111,6 +111,7 @@ WHERE "name" = 'TV'
         - [Aliasing Targets](#aliasing-targets)
         - [Specifying Allowed Types](#specifying-allowed-types)
         - [Suppressing Exceptions](#suppressing-exceptions)
+        - [Suppression Hooks](#suppression-hooks)
         - [Custom Filters](#custom-filters)
         - [Condition Filters Note](#condition-filters-note)
     - [Error Handling](#error-handling)
@@ -890,6 +891,36 @@ config("eloquent-filtering.suppress.filter.denied");
 class DuplicateFiltersException
 // When you have registered a custom filter that has the same type as another filter.
 ``` 
+
+#### Suppression Hooks
+
+You can hook into the suppression system if you want to perform some custom actions.
+
+```php
+use IndexZer0\EloquentFiltering\Suppression\Suppression;
+
+Suppression::handleDeniedFilterUsing(function (SuppressibleException $se): void {
+    Log::channel('slack')->info('Bug in frontend client, trying to use filter type that is not allowed: ' . $se->getMessage());
+    throw new FrontendBugException($se->getMessage());
+});
+```
+
+Available suppression hooks.
+
+```php
+// All
+Suppression::handleAllUsing();
+// Filter
+Suppression::handleFilterUsing();
+Suppression::handleInvalidFilterUsing();
+Suppression::handleMissingFilterUsing();
+Suppression::handleMalformedFilterUsing();
+Suppression::handleDeniedFilterUsing();
+// Sort
+Suppression::handleSortUsing();
+Suppression::handleMalformedSortUsing();
+Suppression::handleDeniedSortUsing();
+```
 
 #### Custom Filters
 
