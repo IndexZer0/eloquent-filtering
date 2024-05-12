@@ -33,28 +33,37 @@ Features:
 ## Simple example with relationship filter.
 
 ```php
+use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 
-class Product extends Model
+class Product extends Model implements IsFilterable
 {
     use Filterable;
     
-    protected function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): SomeFiltersAllowed
     {
         return Filter::only(
             Filter::field('name', ['$eq']),
-            Filter::relation('manufacturer', ['$has'],
-                Filter::only(
-                    Filter::field('name', ['$eq'])
-                )
-            )
+            Filter::relation('manufacturer', ['$has'])->includeRelationFields()
         );
     }
     
     public function manufacturer(): HasOne
     {
         return $this->hasOne(Manufacturer::class);
+    }
+}
+
+class Manufacturer extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): SomeFiltersAllowed
+    {
+        return Filter::only(
+            Filter::field('name', ['$eq'])
+        );
     }
 }
 
@@ -96,7 +105,7 @@ WHERE "name" = 'TV'
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
-    - [Model Trait](#model-trait)
+    - [Making Model Filterable](#making-model-filterable)
     - [Allowing Filters](#allowing-filters)
       - [Define On Model](#define-on-model)
       - [Define In Filter](#define-in-filter)
@@ -146,14 +155,15 @@ php artisan eloquent-filtering:install
 
 ## Usage
 
-### Model Trait
+### Making Model Filterable
 
-Add `Filterable` trait to the model you want to filter.
+Add `IsFilterable` interface and `Filterable` trait.
 
 ```php
+use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 
-class Product extends Model
+class Product extends Model implements IsFilterable
 {
     use Filterable;
 }
@@ -170,15 +180,16 @@ You can specify allowed filters in two ways:
 #### Define on model.
 
 ```php
+use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 
-class Product extends Model
+class Product extends Model implements IsFilterable
 {
     use Filterable;
     
-    protected function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): SomeFiltersAllowed
     {
         return Filter::only(
             Filter::field('name', ['$eq', '$like']),
@@ -226,7 +237,7 @@ You can allow all filters using `Filter::all()`.
 See Caution in [Default Allowed Filters](#default-allowed-filters) section for security concerns when using this feature.
 
 ```php
-protected function allowedFilters(): AllFiltersAllowed
+public function allowedFilters(): AllFiltersAllowed
 {
     return Filter::all();
 }
