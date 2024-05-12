@@ -292,7 +292,7 @@ public function allowedFilters(): SomeFiltersAllowed
 ```
 
 > [!IMPORTANT]
-> The relationship method **MUST** have return type specified, and the related model **MUST** also implement `isFilterable`. 
+> The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`. 
 
 ---
 
