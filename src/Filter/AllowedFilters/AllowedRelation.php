@@ -12,11 +12,12 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
+use IndexZer0\EloquentFiltering\FilterSetAllowedFilterResolver;
 use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class AllowedRelation implements AllowedFilter
 {
-    protected bool $includeRelationFields = false;
+    protected false|string $includeRelationFields = false;
 
     public function __construct(
         protected Target            $target,
@@ -57,7 +58,7 @@ class AllowedRelation implements AllowedFilter
      * -----------------------------
      */
 
-    public function includeRelationFields(bool $include = true): self
+    public function includeRelationFields(false|string $include = 'default'): self
     {
         $this->includeRelationFields = $include;
         return $this;
@@ -71,7 +72,7 @@ class AllowedRelation implements AllowedFilter
 
     public function resolveAllowedFilters(string $modelFqcn): void
     {
-        if (!$this->includeRelationFields) {
+        if ($this->includeRelationFields === false) {
             return;
         }
 
@@ -114,7 +115,7 @@ class AllowedRelation implements AllowedFilter
         }
 
         /** @var IsFilterable $model */
-        return $model->allowedFilters();
+        return (new FilterSetAllowedFilterResolver($this->includeRelationFields, $model))->resolve();
     }
 
     private function modelIsFilterable(Model $model): bool
