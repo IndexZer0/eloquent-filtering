@@ -5,19 +5,26 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Tests\TestingResources\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
 
-class Manufacturer extends Model
+class Manufacturer extends Model implements IsFilterable
 {
     use Filterable;
     use Sortable;
 
     protected $guarded = [];
 
-    protected function allowedFilters(): AllowedFilterList
+    /*
+     * ----------------------------------
+     * IsFilterable interface methods
+     * ----------------------------------
+     */
+
+    public function allowedFilters(): SomeFiltersAllowed
     {
         return Filter::only(
             Filter::field('name', ['$eq'])

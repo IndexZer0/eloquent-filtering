@@ -6,23 +6,25 @@ namespace IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelat
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
 use IndexZer0\EloquentFiltering\Target\Target;
 
-class Show extends Model
+class Show extends Model implements IsFilterable
 {
     use Filterable;
     use Sortable;
 
     protected $guarded = [];
 
-    public function events(): HasMany
-    {
-        return $this->hasMany(Event::class);
-    }
+    /*
+     * ----------------------------------
+     * IsFilterable interface methods
+     * ----------------------------------
+     */
 
     public function allowedFilters(): SomeFiltersAllowed
     {
@@ -35,5 +37,16 @@ class Show extends Model
                     Filter::relation('tickets', ['$has'])->includeRelationFields()
                 ),
         );
+    }
+
+    /*
+     * ----------------------------------
+     * Relations
+     * ----------------------------------
+     */
+
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
     }
 }
