@@ -37,7 +37,7 @@ trait Filterable
         );
     }
 
-    protected function allowedFilters(): AllowedFilterList
+    public function allowedFilters(): AllowedFilterList
     {
         $defaultAllowedList = config('eloquent-filtering.default_allowed_filter_list', 'none');
 
