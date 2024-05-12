@@ -12,6 +12,10 @@ use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterSet as FilterSetContract;
+use IndexZer0\EloquentFiltering\Filter\FilterSets\ClassFilterSetInstantiator;
+use IndexZer0\EloquentFiltering\Filter\FilterSets\FilterSet;
+use IndexZer0\EloquentFiltering\Filter\FilterSets\FilterSets;
 use IndexZer0\EloquentFiltering\Filter\Types\Types;
 use IndexZer0\EloquentFiltering\Target\AliasedTarget;
 use IndexZer0\EloquentFiltering\Target\JsonPathTarget;
@@ -107,5 +111,27 @@ class Filter
         }
 
         return $types;
+    }
+
+    /*
+     * -------------------------
+     * FilterSet
+     * -------------------------
+     */
+
+    public static function sets(FilterSetContract ...$filterSets): FilterSets
+    {
+        return new FilterSets(...$filterSets);
+    }
+
+    public static function classSet(string|FilterSetContract $filterSet): FilterSetContract
+    {
+        $instantiator = new ClassFilterSetInstantiator();
+        return $instantiator($filterSet);
+    }
+
+    public static function set(string $name, AllowedFilterList $allowedFilters = new NoFiltersAllowed()): FilterSet
+    {
+        return new FilterSet($name, $allowedFilters);
     }
 }
