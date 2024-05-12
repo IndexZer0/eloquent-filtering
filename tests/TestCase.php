@@ -135,6 +135,23 @@ class TestCase extends Orchestra
             $table->integer('price')->nullable();
             $table->timestamps();
         });
+
+        // Environment
+        $schema->create('environments', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->string('iam_user')->nullable();
+            $table->timestamps();
+        });
+
+        // Secret
+        $schema->create('secrets', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('environment_id')->constrained();
+            $table->string('name')->nullable();
+            $table->string('value')->nullable();
+            $table->timestamps();
+        });
     }
 
     public function createAuthors(): void
