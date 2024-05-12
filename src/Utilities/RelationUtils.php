@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionNamedType;
 
 class RelationUtils
 {
@@ -24,10 +25,13 @@ class RelationUtils
 
         return collect($methods)
             ->filter(function (ReflectionMethod $method) {
-                if (($returnType = $method->getReturnType()) === null) {
+                $returnType = $method->getReturnType();
+
+                if (!($returnType instanceof ReflectionNamedType)) {
                     return false;
                 }
-                return str_contains($returnType->__toString(), 'Illuminate\Database\Eloquent\Relations');
+
+                return str_contains($returnType->getName(), 'Illuminate\Database\Eloquent\Relations');
             })
             ->map(fn (ReflectionMethod $method) => $method->name)
             ->values();
@@ -40,6 +44,6 @@ class RelationUtils
         /** @var Relation $query */
         $query = $model->$relationName();
 
-        return $query->getModel();
+        return $query->getRelated();
     }
 }
