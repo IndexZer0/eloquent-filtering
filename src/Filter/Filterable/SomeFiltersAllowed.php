@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
 use Illuminate\Support\Collection;
+use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
+use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
@@ -46,5 +48,38 @@ class SomeFiltersAllowed implements AllowedFilterList
         }
 
         throw new DeniedFilterException($pendingFilter);
+    }
+
+    public function resolveRelationsAllowedFilters(string $modelFqcn): self
+    {
+        /** @var AllowedRelation $allowedRelation */
+        foreach ($this->getAllowedRelations() as $allowedRelation) {
+            $allowedRelation->resolveAllowedFilters($modelFqcn);
+        }
+        return $this;
+    }
+
+    public function add(AllowedFilter ...$allowedFilters): AllowedFilterList
+    {
+        $this->allowedFilters->push(...$allowedFilters);
+        return $this;
+    }
+
+    public function getAllowedFields(): array
+    {
+        return $this->allowedFilters
+            ->filter(
+                fn (AllowedFilter $allowedFilter) => $allowedFilter instanceof AllowedField
+            )
+            ->toArray();
+    }
+
+    public function getAllowedRelations(): array
+    {
+        return $this->allowedFilters
+            ->filter(
+                fn (AllowedFilter $allowedFilter) => $allowedFilter instanceof AllowedRelation
+            )
+            ->toArray();
     }
 }

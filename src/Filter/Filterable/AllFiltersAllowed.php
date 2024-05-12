@@ -6,6 +6,7 @@ namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
 use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Contracts\Target as TargetContract;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Traits\EnsuresChildFiltersAllowed;
@@ -53,5 +54,25 @@ class AllFiltersAllowed implements AllowedFilterList
             $target,
             $childFilters
         );
+    }
+
+    public function resolveRelationsAllowedFilters(string $modelFqcn): self
+    {
+        return $this;
+    }
+
+    public function add(AllowedFilter ...$allowedFilters): AllowedFilterList
+    {
+        return $this;
+    }
+
+    public function getAllowedFields(): array
+    {
+        return [];
+    }
+
+    public function getAllowedRelations(): array
+    {
+        return [];
     }
 }

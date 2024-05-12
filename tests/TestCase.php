@@ -107,6 +107,34 @@ class TestCase extends Orchestra
             $table->json('data')->nullable();
             $table->timestamps();
         });
+
+        // Show
+        $schema->create('shows', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
+            $table->text('organizer_name')->nullable();
+            $table->timestamps();
+        });
+
+        // Event
+        $schema->create('events', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('show_id')->constrained();
+            $table->dateTime('starting_at')->nullable();
+            $table->dateTime('finishing_at')->nullable();
+            $table->smallInteger('audience_limit');
+            $table->timestamps();
+        });
+
+        // Ticket
+        $schema->create('tickets', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('event_id')->constrained();
+            $table->string('type')->nullable(); // Standard, Premium
+            $table->integer('price')->nullable();
+            $table->timestamps();
+        });
     }
 
     public function createAuthors(): void
