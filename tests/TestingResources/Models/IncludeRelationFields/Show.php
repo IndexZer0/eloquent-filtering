@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Tests\TestingResources\Models;
+namespace IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
+use IndexZer0\EloquentFiltering\Target\Target;
 
-class Product extends Model implements IsFilterable
+class Show extends Model implements IsFilterable
 {
     use Filterable;
     use Sortable;
@@ -28,7 +29,13 @@ class Product extends Model implements IsFilterable
     public function allowedFilters(): SomeFiltersAllowed
     {
         return Filter::only(
-            Filter::field('name', ['$eq'])
+            Filter::field('name', ['$eq']),
+            Filter::field('description', ['$eq']),
+            Filter::field(Target::alias('organizer', 'organizer_name'), ['$eq']),
+            Filter::relation(Target::alias('e', 'events'), ['$has'])->includeRelationFields()
+                ->andNestedRelation(
+                    Filter::relation('tickets', ['$has'])->includeRelationFields()
+                ),
         );
     }
 
@@ -38,8 +45,8 @@ class Product extends Model implements IsFilterable
      * ----------------------------------
      */
 
-    public function manufacturer(): BelongsTo
+    public function events(): HasMany
     {
-        return $this->belongsTo(Manufacturer::class);
+        return $this->hasMany(Event::class);
     }
 }

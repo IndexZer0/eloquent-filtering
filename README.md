@@ -33,28 +33,38 @@ Features:
 ## Simple example with relationship filter.
 
 ```php
+use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
+use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 
-class Product extends Model
+class Product extends Model implements IsFilterable
 {
     use Filterable;
     
-    protected function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): SomeFiltersAllowed
     {
         return Filter::only(
             Filter::field('name', ['$eq']),
-            Filter::relation('manufacturer', ['$has'],
-                Filter::only(
-                    Filter::field('name', ['$eq'])
-                )
-            )
+            Filter::relation('manufacturer', ['$has'])->includeRelationFields()
         );
     }
     
     public function manufacturer(): HasOne
     {
         return $this->hasOne(Manufacturer::class);
+    }
+}
+
+class Manufacturer extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): SomeFiltersAllowed
+    {
+        return Filter::only(
+            Filter::field('name', ['$eq'])
+        );
     }
 }
 
@@ -96,17 +106,18 @@ WHERE "name" = 'TV'
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
-    - [Model Trait](#model-trait)
+    - [Making Model Filterable](#making-model-filterable)
     - [Allowing Filters](#allowing-filters)
-      - [Define On Model](#define-on-model)
-      - [Define In Filter](#define-in-filter)
-      - [Allowing All Filters](#allowing-all-filters)
+        - [Define On Model](#define-on-model)
+        - [Define In Filter](#define-in-filter)
+        - [Allowing All Filters](#allowing-all-filters)
+        - [Including Relationship Model Filters](#including-relationship-model-filters)
     - [Filter Structure](#filter-structure)
     - [Available Filters](#available-filters)
-      - [Field Filters](#field-filters)
-      - [Relationship Filters](#relationship-filters)
-      - [Condition Filters](#condition-filters)
-      - [Json Field Filters](#json-field-filters)
+        - [Field Filters](#field-filters)
+        - [Relationship Filters](#relationship-filters)
+        - [Condition Filters](#condition-filters)
+        - [Json Field Filters](#json-field-filters)
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
         - [Default Allowed Filters](#default-allowed-filters)
@@ -146,16 +157,28 @@ php artisan eloquent-filtering:install
 
 ## Usage
 
-### Model Trait
+### Making Model Filterable
 
-Add `Filterable` trait to the model you want to filter.
+- Implement `IsFilterable` interface
+- Use `Filterable` trait.
+- Define `allowedFilters()` method.
 
 ```php
+use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 
-class Product extends Model
+class Product extends Model implements IsFilterable
 {
     use Filterable;
+    
+    public function allowedFilters(): AllowedFilterList 
+    {
+        return Filter::only(
+            Filter::field('name', ['$eq']),
+        );
+    }
 }
 ```
 
@@ -170,15 +193,16 @@ You can specify allowed filters in two ways:
 #### Define on model.
 
 ```php
+use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 
-class Product extends Model
+class Product extends Model implements IsFilterable
 {
     use Filterable;
     
-    protected function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): SomeFiltersAllowed
     {
         return Filter::only(
             Filter::field('name', ['$eq', '$like']),
@@ -226,11 +250,49 @@ You can allow all filters using `Filter::all()`.
 See Caution in [Default Allowed Filters](#default-allowed-filters) section for security concerns when using this feature.
 
 ```php
-protected function allowedFilters(): AllFiltersAllowed
+public function allowedFilters(): AllFiltersAllowed
 {
     return Filter::all();
 }
 ```
+
+#### Including Relationship Model Filters
+
+By default, when specifying an allowed relation filter, fields within that relationship are not included in the allowed filter list.
+
+You can specify allowed filters inside a relation in two ways.
+
+1. Define them within `Filter::relation()` as 3rd parameter.
+
+```php
+public function allowedFilters(): SomeFiltersAllowed
+{
+    return Filter::only(
+        Filter::relation(
+            'manufacturer', ['$has', '$doesntHas'],
+            Filter::only(
+                Filter::field('name', ['$like'])
+            )
+        )
+    );
+}
+```
+
+2. Use `->includeRelationFields()` on `Filter::relation()`.
+
+This method instructs the package to look for `AllowedField` filters within the `allowedFilters()` method of the relation model.
+
+```php
+public function allowedFilters(): SomeFiltersAllowed
+{
+    return Filter::only(
+        Filter::relation('manufacturer', ['$has', '$doesntHas'])->includeRelationFields()
+    );
+}
+```
+
+> [!IMPORTANT]
+> The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`. 
 
 ---
 
@@ -808,7 +870,7 @@ This feature is intended for use when you're not using any user supplied informa
 
 #### Aliasing Targets
 
-You can alias your target fields and relations if you don't wish to expose database field names to your frontend.
+You can alias your target fields and relations if you don't wish to expose database field names and relationship method names to your frontend.
 
 The below example:
  - Allows `name` and uses `first_name` in the database query.

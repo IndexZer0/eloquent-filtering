@@ -10,4 +10,12 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 interface AllowedFilterList
 {
     public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter;
+
+    public function resolveRelationsAllowedFilters(string $modelFqcn): AllowedFilterList;
+
+    public function add(AllowedFilter ...$allowedFilters): AllowedFilterList;
+
+    public function getAllowedFields(): array;
+
+    public function getAllowedRelations(): array;
 }
