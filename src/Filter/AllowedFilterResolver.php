@@ -37,36 +37,4 @@ class AllowedFilterResolver
 
         return (new FilterSetAllowedFilterResolver($this->allowedFilters, $this->model))->resolve();
     }
-
-    private function resolveFilterSet(FilterSet|string $filterSet): FilterSet
-    {
-        if ($filterSet instanceof FilterSet) {
-            return $filterSet;
-        }
-
-        $filterSets = $this->model->getFilterSets();
-
-        $filterSet = $filterSets->find($filterSet);
-
-        if ($filterSet === null) {
-            throw new \Exception('TODO'); // TODO
-        }
-
-        return $filterSet;
-    }
-
-    private function resolveFilterSetExtends(FilterSet $filterSet): AllowedFilterList
-    {
-        $allowedFilters = $filterSet->allowedFilters();
-
-        foreach ($filterSet->getExtends() as $extend) {
-            $allowedFilters = $allowedFilters->add(
-                ...$this->resolveFilterSetExtends(
-                    $this->resolveFilterSet($extend)
-                )->getAllowedFilters()
-            );
-        }
-
-        return $allowedFilters;
-    }
 }
