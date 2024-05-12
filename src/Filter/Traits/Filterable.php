@@ -18,18 +18,18 @@ trait Filterable
     public function scopeFilter(
         Builder $query,
         array $filters,
-        ?AllowedFilterList $allowedFilterList = null
+        FilterSet|AllowedFilterList|string|null $allowedFilters = null
     ): Builder {
 
         $allowedFilterResolver = new AllowedFilterResolver(
-            $allowedFilterList ?? $this->allowedFilters(),
-            self::class
+            $allowedFilters,
+            $this
         );
-        $allowedFilterList = $allowedFilterResolver->resolve();
+        $allowedFilters = $allowedFilterResolver->resolve();
 
         /** @var FilterParser $filterParser */
         $filterParser = resolve(FilterParser::class);
-        $filters = $filterParser->parse($filters, $allowedFilterList);
+        $filters = $filterParser->parse($filters, $allowedFilters);
 
         /** @var FilterApplier $filterApplier */
         $filterApplier = resolve(FilterApplier::class);
