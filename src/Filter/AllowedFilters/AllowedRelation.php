@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
 use Illuminate\Database\Eloquent\Model;
+use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
-use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class AllowedRelation implements AllowedFilter
@@ -109,11 +109,16 @@ class AllowedRelation implements AllowedFilter
 
     private function getModelsAllowedFilters(Model $model): ?AllowedFilterList
     {
-        if (!method_exists($model, 'allowedFilters')) {
+        if (!$this->modelIsFilterable($model)) {
             return null;
         }
 
-        /** @var Filterable $model */
+        /** @var IsFilterable $model */
         return $model->allowedFilters();
+    }
+
+    private function modelIsFilterable(Model $model): bool
+    {
+        return is_a($model, IsFilterable::class);
     }
 }
