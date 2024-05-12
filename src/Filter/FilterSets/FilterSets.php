@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IndexZer0\EloquentFiltering\Filter\FilterSets;
 
 use Illuminate\Support\Collection;

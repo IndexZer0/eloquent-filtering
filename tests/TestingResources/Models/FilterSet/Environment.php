@@ -34,7 +34,6 @@ class Environment extends Model implements IsFilterable
             Filter::classSet(EnvironmentBasicFieldFilters::class),
             Filter::classSet(EnvironmentAdminFieldFilters::class)->extends(EnvironmentBasicFieldFilters::class),
             Filter::classSet(EnvironmentRelationFilters::class),
-
             Filter::set('admin')->extends([
                 EnvironmentAdminFieldFilters::class,
                 EnvironmentRelationFilters::class,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IndexZer0\EloquentFiltering\Filter\FilterSets;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
@@ -12,7 +14,8 @@ class FilterSet implements FilterSetContract
     public function __construct(
         protected string $name,
         protected AllowedFilterList $allowedFilters
-    ) { }
+    ) {
+    }
 
     public function name(): string
     {

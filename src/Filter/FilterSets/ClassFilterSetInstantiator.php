@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace IndexZer0\EloquentFiltering\Filter\FilterSets;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterSet as FilterSetContract;
@@ -16,6 +18,6 @@ class ClassFilterSetInstantiator
             throw new \Exception('TODO'); // TODO
         }
 
-        return new $filterSet;
+        return new $filterSet();
     }
 }
