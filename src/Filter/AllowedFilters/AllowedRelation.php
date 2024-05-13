@@ -58,6 +58,7 @@ class AllowedRelation implements AllowedFilter
      * -----------------------------
      */
 
+    // TODO make this array for multiple filter sets?
     public function includeRelationFields(false|string $include = 'default'): self
     {
         $this->includeRelationFields = $include;
