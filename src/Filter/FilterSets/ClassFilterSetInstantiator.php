@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterSets;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterSet as FilterSetContract;
+use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidArgumentException;
 
 class ClassFilterSetInstantiator
 {
@@ -15,7 +16,7 @@ class ClassFilterSetInstantiator
         }
 
         if (!is_a($filterSet, FilterSetContract::class, true)) {
-            throw new \Exception('TODO'); // TODO
+            throw new InvalidArgumentException('Class must be a FilterSet');
         }
 
         return new $filterSet();

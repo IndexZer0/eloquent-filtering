@@ -126,8 +126,7 @@ class Filter
 
     public static function classSet(string|FilterSetContract $filterSet): FilterSetContract
     {
-        $instantiator = new ClassFilterSetInstantiator();
-        return $instantiator($filterSet);
+        return (new ClassFilterSetInstantiator())($filterSet);
     }
 
     public static function set(string $name, AllowedFilterList $allowedFilters = new NoFiltersAllowed()): FilterSet
