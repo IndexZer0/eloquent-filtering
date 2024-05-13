@@ -18,13 +18,10 @@ trait Filterable
     public function scopeFilter(
         Builder $query,
         array $filters,
-        FilterSet|AllowedFilterList|string|null $allowedFilters = null
+        FilterSet|string|AllowedFilterList|null $allowedFilters = null
     ): Builder {
 
-        $allowedFilterResolver = new AllowedFilterResolver(
-            $allowedFilters,
-            $this
-        );
+        $allowedFilterResolver = new AllowedFilterResolver($allowedFilters, $this);
         $allowedFilters = $allowedFilterResolver->resolve();
 
         /** @var FilterParser $filterParser */

@@ -12,7 +12,7 @@ use IndexZer0\EloquentFiltering\FilterSetAllowedFilterResolver;
 class AllowedFilterResolver
 {
     public function __construct(
-        protected FilterSet|AllowedFilterList|string|null $allowedFilters,
+        protected FilterSet|string|AllowedFilterList|null $allowedFilters,
         protected IsFilterable $model
     ) {
 

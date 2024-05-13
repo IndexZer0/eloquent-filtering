@@ -6,6 +6,7 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterSets;
 
 use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterSet as FilterSetContract;
+use IndexZer0\EloquentFiltering\Filter\Exceptions\MissingFilterSetException;
 
 class FilterSets
 {
@@ -19,8 +20,12 @@ class FilterSets
             );
     }
 
-    public function find(string $name): ?FilterSetContract
+    public function find(string $name): FilterSetContract
     {
+        if (!$this->filterSets->has($name)) {
+            MissingFilterSetException::throw($name);
+        }
+
         return $this->filterSets->get($name);
     }
 

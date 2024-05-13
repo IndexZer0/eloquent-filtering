@@ -7,50 +7,43 @@ namespace IndexZer0\EloquentFiltering;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterSet;
-use IndexZer0\EloquentFiltering\Filter\Exceptions\MissingFilterSetException;
+use IndexZer0\EloquentFiltering\Filter\FilterSets\FilterSets;
 
 class FilterSetAllowedFilterResolver
 {
+    protected FilterSets $modelFilterSets;
+
     public function __construct(
         protected FilterSet|string $filterSet,
         protected IsFilterable $model
     ) {
-
+        $this->modelFilterSets = $this->model->getFilterSets();
     }
 
     public function resolve(): AllowedFilterList
     {
-        $filterSet = $this->resolveFilterSet($this->filterSet);
+        $filterSet = $this->filterSet instanceof FilterSet ?: $this->getFilterSet($this->filterSet);
 
-        return $this->resolveFilterSetExtends($filterSet);
+        return $this->resolveToAllowedFilterList($filterSet);
     }
 
-    private function resolveFilterSet(FilterSet|string $filterSet): FilterSet
+    private function getFilterSet(FilterSet|string $filterSet): FilterSet
     {
         if ($filterSet instanceof FilterSet) {
             return $filterSet;
         }
 
-        $filterSets = $this->model->getFilterSets();
-
-        $filterSetObj = $filterSets->find($filterSet);
-
-        if ($filterSetObj === null) {
-            MissingFilterSetException::throw($filterSet);
-        }
-
-        return $filterSetObj;
+        return $this->modelFilterSets->find($filterSet);
     }
 
-    private function resolveFilterSetExtends(FilterSet $filterSet): AllowedFilterList
+    private function resolveToAllowedFilterList(FilterSet $filterSet): AllowedFilterList
     {
         $allowedFilters = $filterSet->allowedFilters();
 
         foreach ($filterSet->getExtends() as $extend) {
             $allowedFilters = $allowedFilters->add(
-                ...$this->resolveFilterSetExtends(
-                    $this->resolveFilterSet($extend)
-                )->getAllowedFilters()
+                ...$this->resolveToAllowedFilterList($this->getFilterSet($extend))
+                    ->getAllowedFilters()
             );
         }
 
