@@ -31,7 +31,7 @@ class FilterSets
 
     public function add(FilterSetContract $filterSet): self
     {
-        $this->filterSets->put('default', $filterSet);
+        $this->filterSets->put($filterSet->name(), $filterSet);
         return $this;
     }
 }
