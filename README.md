@@ -247,7 +247,11 @@ Product::filter(
 
 You can allow all filters using `Filter::all()`.
 
-See Caution in [Default Allowed Filters](#default-allowed-filters) section for security concerns when using this feature.
+> [!NOTE]
+> This feature is intended for use when you're not using any user supplied column names and have complete developer control over the filters being applied.
+
+> [!CAUTION]
+> Allowing all filters and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
 
 ```php
 public function allowedFilters(): AllFiltersAllowed
