@@ -118,7 +118,6 @@ WHERE "name" = 'TV'
         - [Field Filters](#field-filters)
         - [Relationship Filters](#relationship-filters)
         - [Condition Filters](#condition-filters)
-        - [Json Field Filters](#json-field-filters)
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
         - [Default Allowed Filters](#default-allowed-filters)
