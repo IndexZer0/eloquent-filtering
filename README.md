@@ -634,7 +634,7 @@ select * from "people" where "name" not in ('Nuno', 'Maduro')
 
 #### BetweenFilter - `$between`
 
-- `value` = `string` | `int` | `float`.
+- `value` = array of `string` | `int` | `float`.
 
 ```php
 $sql = Person::filter([
@@ -652,7 +652,7 @@ select * from "people" where "age" between 18 and 65
 
 #### NotBetweenFilter - `$notBetween`
 
-- `value` = `string` | `int` | `float`.
+- `value` = array of `string` | `int` | `float`.
 
 ```php
 $sql = Person::filter([
