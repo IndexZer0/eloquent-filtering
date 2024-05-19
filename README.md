@@ -21,7 +21,8 @@ Features:
       - No duplicated unnecessary exist clauses in queries.
   - Alias fields and relationships.
   - Specify filter types per field/relationship.
-  - Json column filters.
+  - Filter json columns.
+    - Json path wildcard support.
   - Custom filters.
 - Sort
   - Sort by fields.
