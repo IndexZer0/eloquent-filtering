@@ -236,64 +236,6 @@ it('NotLikeEndFilter | $notLike:end', function (): void {
 
 });
 
-it('OrFilter | $or', function (): void {
-    $sql = Comment::filter([
-        [
-            'type'  => '$or',
-            'value' => [
-                [
-                    'type'   => '$like',
-                    'target' => 'content',
-                    'value'  => 'awesome',
-                ],
-                [
-                    'type'   => '$like',
-                    'target' => 'content',
-                    'value'  => 'boring',
-                ],
-            ],
-        ],
-    ], Filter::only(
-        Filter::field('content', ['$like'])
-    ))->toRawSql();
-
-    $expectedSql = <<< SQL
-        select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
-        SQL;
-
-    expect($sql)->toBe($expectedSql);
-
-});
-
-it('AndFilter | $and', function (): void {
-    $sql = Comment::filter([
-        [
-            'type'  => '$and',
-            'value' => [
-                [
-                    'type'   => '$like',
-                    'target' => 'content',
-                    'value'  => 'is awesome',
-                ],
-                [
-                    'type'   => '$like',
-                    'target' => 'content',
-                    'value'  => 'is not boring',
-                ],
-            ],
-        ],
-    ], Filter::only(
-        Filter::field('content', ['$like'])
-    ))->toRawSql();
-
-    $expectedSql = <<< SQL
-        select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
-        SQL;
-
-    expect($sql)->toBe($expectedSql);
-
-});
-
 it('NullFilter | $null', function (): void {
     $sql = Person::filter([
         [
@@ -495,6 +437,64 @@ it('DoesntHasFilter | $doesntHas', function (): void {
 
     $expectedSql = <<< SQL
         select * from "projects" where not exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "content" LIKE '%boring%')
+        SQL;
+
+    expect($sql)->toBe($expectedSql);
+
+});
+
+it('OrFilter | $or', function (): void {
+    $sql = Comment::filter([
+        [
+            'type'  => '$or',
+            'value' => [
+                [
+                    'type'   => '$like',
+                    'target' => 'content',
+                    'value'  => 'awesome',
+                ],
+                [
+                    'type'   => '$like',
+                    'target' => 'content',
+                    'value'  => 'boring',
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::field('content', ['$like'])
+    ))->toRawSql();
+
+    $expectedSql = <<< SQL
+        select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
+        SQL;
+
+    expect($sql)->toBe($expectedSql);
+
+});
+
+it('AndFilter | $and', function (): void {
+    $sql = Comment::filter([
+        [
+            'type'  => '$and',
+            'value' => [
+                [
+                    'type'   => '$like',
+                    'target' => 'content',
+                    'value'  => 'is awesome',
+                ],
+                [
+                    'type'   => '$like',
+                    'target' => 'content',
+                    'value'  => 'is not boring',
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::field('content', ['$like'])
+    ))->toRawSql();
+
+    $expectedSql = <<< SQL
+        select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
         SQL;
 
     expect($sql)->toBe($expectedSql);
