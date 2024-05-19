@@ -710,6 +710,63 @@ $sql = Product::filter([
 select * from "products" where "price" between "min_allowed_price" and "max_allowed_price"
 ```
 
+#### JsonContainsFilter - `$jsonContains`
+
+- `value` = `string` | `int` | `float`.
+
+```php
+$sql = User::filter([
+    [
+        'type'   => '$jsonContains',
+        'target' => 'options->languages',
+        'value'  => 'en',
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "users" where exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+```
+
+#### JsonNotContainsFilter - `$jsonNotContains`
+
+- `value` = `string` | `int` | `float`.
+
+```php
+$sql = User::filter([
+    [
+        'type'   => '$jsonNotContains',
+        'target' => 'options->languages',
+        'value'  => 'en',
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "users" where not exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+```
+
+#### JsonLengthFilter - `$jsonLength`
+
+- `value` = `int`
+
+```php
+$sql = User::filter([
+    [
+        'type'     => '$jsonLength',
+        'target'   => 'options->languages',
+        'operator' => '>=',
+        'value'    => 2,
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "users" where json_array_length("options", '$."languages"') >= 2
+```
+
+---
+
 #### HasFilter - `$has`
 
 - `value` = `array` of filters.
