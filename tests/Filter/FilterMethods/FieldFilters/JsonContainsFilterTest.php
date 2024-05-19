@@ -20,7 +20,7 @@ it('can perform $jsonContains filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::jsonField('data->array', ['$jsonContains']),
+            Filter::field('data->array', ['$jsonContains']),
         )
     );
 
@@ -36,14 +36,6 @@ it('can perform $jsonContains filter', function (): void {
         ->and($models->pluck('name')->toArray())->toBe(['Api 1']);
 
 });
-
-// TODO think about a Filter for a standard where() to be applied to json field.
-/*it('sd', function (): void {
-    $query = ApiResponse::query()->where('data->dude', 'something');;
-
-    expect($query->toRawSql())->toBe('');
-
-});*/
 
 it('supports various wildcard and non wildcard targets', function (
     string  $allowed_target,
@@ -66,7 +58,7 @@ it('supports various wildcard and non wildcard targets', function (
             ],
         ],
         Filter::only(
-            Filter::jsonField($allowed_target, ['$jsonContains']),
+            Filter::field($allowed_target, ['$jsonContains']),
         )
     );
 
@@ -140,9 +132,15 @@ it('supports various wildcard and non wildcard targets', function (
         'expected_exception_message' => null,
     ],
     'cant have "->" as wildcard' => [
-        'allowed_target'             => 'data->->response->*->values',
+        'allowed_target'             => 'data->*->response->*->values',
         'requested_target'           => 'data->->->response->->->values',
         'expected_sql'               => null,
         'expected_exception_message' => '"$jsonContains" filter for "data->->->response->->->values" is not allowed',
+    ],
+    'cant have non alphanumeric characters and underscores as wildcard' => [
+        'allowed_target'             => 'data->*->response',
+        'requested_target'           => 'data->$->response',
+        'expected_sql'               => null,
+        'expected_exception_message' => '$jsonContains" filter for "data->$->response" is not allowed',
     ],
 ]);

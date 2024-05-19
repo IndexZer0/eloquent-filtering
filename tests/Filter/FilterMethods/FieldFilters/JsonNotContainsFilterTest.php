@@ -19,7 +19,7 @@ it('can perform $jsonContains filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::jsonField('data->array', ['$jsonNotContains']),
+            Filter::field('data->array', ['$jsonNotContains']),
         )
     );
 

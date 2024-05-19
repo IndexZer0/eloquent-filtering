@@ -36,15 +36,6 @@ it('does not allow filters that are not for same usage', function (
         'allowed_filter'             => Filter::relation('name', ['$eq']),
         'expected_exception_message' => '"$eq" filter for "name" is not allowed',
     ],
-    'field filter | jsonField allowed filter' => [
-        'filter' => [
-            'type'   => '$eq',
-            'target' => 'name',
-            'value'  => 'George Raymond Richard Martin',
-        ],
-        'allowed_filter'             => Filter::jsonField('name', ['$eq']),
-        'expected_exception_message' => '"$eq" filter for "name" is not allowed',
-    ],
     'field filter | custom allowed filter' => [
         'filter' => [
             'type'   => '$eq',
@@ -65,15 +56,6 @@ it('does not allow filters that are not for same usage', function (
         'allowed_filter'             => Filter::field('books', ['$has']),
         'expected_exception_message' => '"$has" filter for "books" is not allowed',
     ],
-    'relation filter | jsonField allowed filter' => [
-        'filter' => [
-            'type'   => '$has',
-            'target' => 'books',
-            'value'  => [],
-        ],
-        'allowed_filter'             => Filter::jsonField('books', ['$has']),
-        'expected_exception_message' => '"$has" filter for "books" is not allowed',
-    ],
     'relation filter | custom allowed filter' => [
         'filter' => [
             'type'   => '$has',
@@ -82,34 +64,5 @@ it('does not allow filters that are not for same usage', function (
         ],
         'allowed_filter'             => Filter::custom(['$has']),
         'expected_exception_message' => '"$has" filter for "books" is not allowed',
-    ],
-
-    // jsonField filter
-    'jsonField filter | field allowed filter' => [
-        'filter' => [
-            'type'   => '$jsonContains',
-            'target' => 'data->books',
-            'value'  => 'A Game of Thrones',
-        ],
-        'allowed_filter'             => Filter::field('data->books', ['$jsonContains']),
-        'expected_exception_message' => '"$jsonContains" filter for "data->books" is not allowed',
-    ],
-    'jsonField filter | relation allowed filter' => [
-        'filter' => [
-            'type'   => '$jsonContains',
-            'target' => 'data->books',
-            'value'  => 'A Game of Thrones',
-        ],
-        'allowed_filter'             => Filter::relation('data->books', ['$jsonContains']),
-        'expected_exception_message' => '"$jsonContains" filter for "data->books" is not allowed',
-    ],
-    'jsonField filter | custom allowed filter' => [
-        'filter' => [
-            'type'   => '$jsonContains',
-            'target' => 'data->books',
-            'value'  => 'A Game of Thrones',
-        ],
-        'allowed_filter'             => Filter::custom(['$jsonContains']),
-        'expected_exception_message' => '"$jsonContains" filter for "data->books" is not allowed',
     ],
 ]);

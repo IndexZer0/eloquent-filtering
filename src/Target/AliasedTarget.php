@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Target;
 
 use IndexZer0\EloquentFiltering\Contracts\Target as TargetContract;
+use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 
 readonly class AliasedTarget implements TargetContract
 {
@@ -33,5 +34,10 @@ readonly class AliasedTarget implements TargetContract
     public function target(): string
     {
         return $this->target;
+    }
+
+    public function getForApprovedFilter(PendingFilter $pendingFilter): self
+    {
+        return $this;
     }
 }
