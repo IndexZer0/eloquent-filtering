@@ -331,6 +331,9 @@ This package provides core filters that give you the ability to perform the vast
 | [NotBetweenFilter](#NotBetweenFilter---notbetween)                      | `$notBetween`        | `{$target} not between $value[0] and $value[1]`                       |
 | [BetweenColumnsFilter](#BetweenColumnsFilter---betweencolumns)          | `$betweenColumns`    | `{$target} between $value[0] and $value[1]`                           |
 | [NotBetweenColumnsFilter](#NotBetweenColumnsFilter---notbetweencolumns) | `$notBetweenColumns` | `{$target} not between $value[0] and $value[1]`                       |
+| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      | ``                                                                    |
+| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonContains`      | ``                                                                    |
+| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonContains`      | ``                                                                    |
 
 #### Relationship Filters
 
@@ -348,12 +351,6 @@ This package provides core filters that give you the ability to perform the vast
 | [AndFilter](#AndFilter---and) | `$and` | `and` |
 
 See [Conditional Filters Note](#condition-filters-note)
-
-#### Json Field Filters
-
-| Filter                                                   | Code             | Query                                                                 |
-|----------------------------------------------------------|------------------|-----------------------------------------------------------------------|
-| [JsonContainsFilter](#JsonContainsFilter---jsoncontains) | `$jsonContains`  | `{$target} not between $value[0] and $value[1]`                       |
 
 - Accepting pull requests for more common filters.
 
