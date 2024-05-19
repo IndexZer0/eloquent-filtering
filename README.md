@@ -573,62 +573,6 @@ $sql = Project::filter([
 select * from "projects" where "description" NOT LIKE '%Laravel'
 ```
 
-#### OrFilter - `$or`
-
-- `value` = `array` of filters.
-
-```php
-$sql = Comment::filter([
-    [
-        'type'  => '$or',
-        'value' => [
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'awesome',
-            ],
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'boring',
-            ]
-        ]
-    ]
-])->toRawSql();
-```
-
-```sql
-select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
-```
-
-#### AndFilter - `$and`
-
-- `value` = `array` of filters.
-
-```php
-$sql = Comment::filter([
-    [
-        'type'  => '$and',
-        'value' => [
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'is awesome',
-            ],
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'is not boring',
-            ]
-        ]
-    ]
-])->toRawSql();
-```
-
-```sql
-select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
-```
-
 #### NullFilter - `$null`
 
 - `value` = `boolean` for `is null` or `is not null`.
@@ -812,6 +756,64 @@ $sql = Project::filter([
 
 ```sql
 select * from "projects" where not exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "content" LIKE '%boring%')
+```
+
+---
+
+#### OrFilter - `$or`
+
+- `value` = `array` of filters.
+
+```php
+$sql = Comment::filter([
+    [
+        'type'  => '$or',
+        'value' => [
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'awesome',
+            ],
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'boring',
+            ]
+        ]
+    ]
+])->toRawSql();
+```
+
+```sql
+select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
+```
+
+#### AndFilter - `$and`
+
+- `value` = `array` of filters.
+
+```php
+$sql = Comment::filter([
+    [
+        'type'  => '$and',
+        'value' => [
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'is awesome',
+            ],
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'is not boring',
+            ]
+        ]
+    ]
+])->toRawSql();
+```
+
+```sql
+select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
 ```
 
 ---
