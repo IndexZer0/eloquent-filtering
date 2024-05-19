@@ -159,7 +159,7 @@ php artisan eloquent-filtering:install
 
 ### Making Model Filterable
 
-- Implement `IsFilterable` interface
+- Implement `IsFilterable` interface.
 - Use `Filterable` trait.
 - Define `allowedFilters()` method.
 
@@ -910,6 +910,9 @@ return [
 
 #### Default Allowed Filters
 
+> [!NOTE]
+> This feature is intended for use when you're not using any user supplied column names and have complete developer control over the filters being applied.
+
 You can change the default allowed filters within the config file `eloquent-filtering`.
 
 ```php
@@ -920,8 +923,6 @@ You can change the default allowed filters within the config file `eloquent-filt
 > Allowing all filters by default and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
 
 It is strongly suggested that you keep `default_allowed_filter_list` as `none` in your config and explicitly allow only specific filters with `Filter::only()`.
-
-This feature is intended for use when you're not using any user supplied information and have complete developer control over the filters being applied.
 
 #### Aliasing Targets
 
