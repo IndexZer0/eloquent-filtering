@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ApiResponse;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
     $this->createAuthors();
+    $this->createApiResponses();
 });
 
 it('can perform $eq filter', function (): void {
@@ -117,3 +119,30 @@ it('only accepts string, int, float for value', function (
         'expect_exception' => false,
     ],
 ]);
+
+it('can perform $eq filter on json field', function (): void {
+    $query = ApiResponse::filter(
+        [
+            [
+                'target' => 'data->own-key-1',
+                'type'   => '$eq',
+                'value'  => 'own-value-1',
+            ],
+        ],
+        Filter::only(
+            Filter::field('data->own-key-1', ['$eq']),
+        )
+    );
+
+    $expectedSql = <<< SQL
+        select * from "api_responses" where json_extract("data", '$."own-key-1"') = 'own-value-1'
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(1)
+        ->and($models->pluck('name')->toArray())->toBe(['Api 1']);
+
+});

@@ -43,6 +43,6 @@ class AllowedField implements AllowedFilter
 
     public function getTarget(PendingFilter $pendingFilter): Target
     {
-        return $this->target;
+        return $this->target->getForApprovedFilter($pendingFilter);
     }
 }

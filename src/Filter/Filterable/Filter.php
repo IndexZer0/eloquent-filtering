@@ -7,7 +7,6 @@ namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 use IndexZer0\EloquentFiltering\Contracts\Target as TargetContract;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedCustomFilter;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
-use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedJsonField;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
@@ -54,18 +53,10 @@ class Filter
         );
     }
 
-    public static function jsonField(string $target, array|AllowedTypes $types): AllowedJsonField
-    {
-        return new AllowedJsonField(
-            new JsonPathTarget($target),
-            self::createTypes($types)
-        );
-    }
-
     public static function relation(
         string|AliasedTarget $target,
-        array                $types,
-        AllowedFilterList    $allowedFilters = new NoFiltersAllowed(),
+        array|AllowedTypes $types,
+        AllowedFilterList $allowedFilters = new NoFiltersAllowed(),
     ): AllowedRelation {
         return new AllowedRelation(
             self::createAlias($target),
@@ -87,11 +78,15 @@ class Filter
 
     private static function createAlias(string|AliasedTarget $target): TargetContract
     {
-        if (is_string($target)) {
-            return Target::alias($target);
+        if (!is_string($target)) {
+            return $target;
         }
 
-        return $target;
+        if (str_contains($target, '->')) {
+            return new JsonPathTarget($target);
+        }
+
+        return Target::alias($target);
     }
 
     /*

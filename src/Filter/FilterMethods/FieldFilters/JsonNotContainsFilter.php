@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\JsonFieldFilters;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
 class JsonNotContainsFilter extends JsonContainsFilter
 {

@@ -21,7 +21,8 @@ Features:
       - No duplicated unnecessary exist clauses in queries.
   - Alias fields and relationships.
   - Specify filter types per field/relationship.
-  - Json column filters.
+  - Filter json columns.
+    - Json path wildcard support.
   - Custom filters.
 - Sort
   - Sort by fields.
@@ -117,7 +118,6 @@ WHERE "name" = 'TV'
         - [Field Filters](#field-filters)
         - [Relationship Filters](#relationship-filters)
         - [Condition Filters](#condition-filters)
-        - [Json Field Filters](#json-field-filters)
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
         - [Default Allowed Filters](#default-allowed-filters)
@@ -331,6 +331,9 @@ This package provides core filters that give you the ability to perform the vast
 | [NotBetweenFilter](#NotBetweenFilter---notbetween)                      | `$notBetween`        | `{$target} not between $value[0] and $value[1]`                       |
 | [BetweenColumnsFilter](#BetweenColumnsFilter---betweencolumns)          | `$betweenColumns`    | `{$target} between $value[0] and $value[1]`                           |
 | [NotBetweenColumnsFilter](#NotBetweenColumnsFilter---notbetweencolumns) | `$notBetweenColumns` | `{$target} not between $value[0] and $value[1]`                       |
+| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      | ``                                                                    |
+| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonContains`      | ``                                                                    |
+| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonContains`      | ``                                                                    |
 
 #### Relationship Filters
 
@@ -338,7 +341,6 @@ This package provides core filters that give you the ability to perform the vast
 |-------------------------------------------------|------------------|-----------------------------------------------------------------------|
 | [HasFilter](#HasFilter---has)                   | `$has`           | `where exists (select * from {$target})`                              |
 | [DoesntHasFilter](#DoesntHasFilter---doesnthas) | `$doesntHas`     | `where not exists (select * from {$target})`                          |
-
 
 #### Condition Filters
 
@@ -348,12 +350,6 @@ This package provides core filters that give you the ability to perform the vast
 | [AndFilter](#AndFilter---and) | `$and` | `and` |
 
 See [Conditional Filters Note](#condition-filters-note)
-
-#### Json Field Filters
-
-| Filter                                                   | Code             | Query                                                                 |
-|----------------------------------------------------------|------------------|-----------------------------------------------------------------------|
-| [JsonContainsFilter](#JsonContainsFilter---jsoncontains) | `$jsonContains`  | `{$target} not between $value[0] and $value[1]`                       |
 
 - Accepting pull requests for more common filters.
 
@@ -577,62 +573,6 @@ $sql = Project::filter([
 select * from "projects" where "description" NOT LIKE '%Laravel'
 ```
 
-#### OrFilter - `$or`
-
-- `value` = `array` of filters.
-
-```php
-$sql = Comment::filter([
-    [
-        'type'  => '$or',
-        'value' => [
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'awesome',
-            ],
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'boring',
-            ]
-        ]
-    ]
-])->toRawSql();
-```
-
-```sql
-select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
-```
-
-#### AndFilter - `$and`
-
-- `value` = `array` of filters.
-
-```php
-$sql = Comment::filter([
-    [
-        'type'  => '$and',
-        'value' => [
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'is awesome',
-            ],
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'is not boring',
-            ]
-        ]
-    ]
-])->toRawSql();
-```
-
-```sql
-select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
-```
-
 #### NullFilter - `$null`
 
 - `value` = `boolean` for `is null` or `is not null`.
@@ -694,7 +634,7 @@ select * from "people" where "name" not in ('Nuno', 'Maduro')
 
 #### BetweenFilter - `$between`
 
-- `value` = `string` | `int` | `float`.
+- `value` = array of `string` | `int` | `float`.
 
 ```php
 $sql = Person::filter([
@@ -712,7 +652,7 @@ select * from "people" where "age" between 18 and 65
 
 #### NotBetweenFilter - `$notBetween`
 
-- `value` = `string` | `int` | `float`.
+- `value` = array of `string` | `int` | `float`.
 
 ```php
 $sql = Person::filter([
@@ -770,6 +710,63 @@ $sql = Product::filter([
 select * from "products" where "price" between "min_allowed_price" and "max_allowed_price"
 ```
 
+#### JsonContainsFilter - `$jsonContains`
+
+- `value` = `string` | `int` | `float`.
+
+```php
+$sql = User::filter([
+    [
+        'type'   => '$jsonContains',
+        'target' => 'options->languages',
+        'value'  => 'en',
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "users" where exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+```
+
+#### JsonNotContainsFilter - `$jsonNotContains`
+
+- `value` = `string` | `int` | `float`.
+
+```php
+$sql = User::filter([
+    [
+        'type'   => '$jsonNotContains',
+        'target' => 'options->languages',
+        'value'  => 'en',
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "users" where not exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+```
+
+#### JsonLengthFilter - `$jsonLength`
+
+- `value` = `int`
+
+```php
+$sql = User::filter([
+    [
+        'type'     => '$jsonLength',
+        'target'   => 'options->languages',
+        'operator' => '>=',
+        'value'    => 2,
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "users" where json_array_length("options", '$."languages"') >= 2
+```
+
+---
+
 #### HasFilter - `$has`
 
 - `value` = `array` of filters.
@@ -816,6 +813,64 @@ $sql = Project::filter([
 
 ```sql
 select * from "projects" where not exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "content" LIKE '%boring%')
+```
+
+---
+
+#### OrFilter - `$or`
+
+- `value` = `array` of filters.
+
+```php
+$sql = Comment::filter([
+    [
+        'type'  => '$or',
+        'value' => [
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'awesome',
+            ],
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'boring',
+            ]
+        ]
+    ]
+])->toRawSql();
+```
+
+```sql
+select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
+```
+
+#### AndFilter - `$and`
+
+- `value` = `array` of filters.
+
+```php
+$sql = Comment::filter([
+    [
+        'type'  => '$and',
+        'value' => [
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'is awesome',
+            ],
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'is not boring',
+            ]
+        ]
+    ]
+])->toRawSql();
+```
+
+```sql
+select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
 ```
 
 ---

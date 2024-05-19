@@ -8,7 +8,6 @@ class JsonPath
 {
     public function __construct(private string $path)
     {
-
     }
 
     public static function of(string $path): self
@@ -33,6 +32,12 @@ class JsonPath
 
         if ($this->amountOfSegmentsDiffer($allowedSegments, $requestedSegments)) {
             return false;
+        }
+
+        foreach ($requestedSegments as $requestedSegment) {
+            if (!preg_match('/^[a-zA-Z0-9_]+$/', $requestedSegment)) {
+                return false;
+            }
         }
 
         // Check each segment in the requested path
