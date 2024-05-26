@@ -2,9 +2,18 @@
 
 namespace {{ namespace }};
 
+use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractCustomFilter;
 
 class {{ class }} extends AbstractCustomFilter
 {
+    public static function type(): string
+    {
+        return '$yourCustomFilterType';
+    }
 
+    public function apply(Builder $query): Builder
+    {
+        return $query->where('some_field', 'some_value');
+    }
 }
