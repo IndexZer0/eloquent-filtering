@@ -38,6 +38,6 @@ class {{ class }} extends AbstractFieldFilter
 
     public function apply(Builder $query): Builder
     {
-        return $query->where($this->target()->getReal(), $this->value);
+        return $query->where($this->target->getReal(), $this->value);
     }
 }
