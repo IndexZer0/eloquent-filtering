@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+
+class {{ class }} extends AbstractFieldFilter
+{
+
+}
