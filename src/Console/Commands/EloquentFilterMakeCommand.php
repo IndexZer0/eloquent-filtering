@@ -11,6 +11,8 @@ use Symfony\Component\Console\Input\InputOption;
 #[AsCommand(name: 'make:eloquent-filter')]
 class EloquentFilterMakeCommand extends GeneratorCommand
 {
+    protected $description = 'Create a new eloquent filter class';
+
     protected function getArguments(): array
     {
         return [
