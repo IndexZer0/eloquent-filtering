@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Suppression;
 
 use Closure;
+use Illuminate\Support\Str;
 use IndexZer0\EloquentFiltering\Contracts\SuppressibleException;
 
 class Suppression
@@ -60,14 +61,7 @@ class Suppression
 
     private static function removeLastPart(string $suppressionKey): string
     {
-        return implode(
-            '.',
-            array_slice(
-                $parts = explode('.', $suppressionKey),
-                0,
-                count($parts) - 1
-            )
-        );
+        return Str::of($suppressionKey)->beforeLast('.')->toString();
     }
 
     /*

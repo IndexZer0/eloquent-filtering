@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Contracts\SuppressibleException;
+use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Sort\Sortable\Sort;
 use IndexZer0\EloquentFiltering\Suppression\Suppression;
@@ -441,3 +442,20 @@ it('prioritises a more specific handler', function (): void {
     }
 
 });
+
+it('throws package exception if no custom exception thrown in handler', function (): void {
+
+    Suppression::handleInvalidFilterUsing(function (SuppressibleException $se): void {
+        //
+    });
+
+    Author::filter(
+        [
+            [
+
+            ],
+        ],
+        Filter::all()
+    );
+
+})->throws(InvalidFilterException::class);

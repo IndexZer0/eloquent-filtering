@@ -21,7 +21,8 @@ Features:
       - No duplicated unnecessary exist clauses in queries.
   - Alias fields and relationships.
   - Specify filter types per field/relationship.
-  - Json column filters.
+  - Filter json columns.
+    - Json path wildcard support.
   - Custom filters.
 - Sort
   - Sort by fields.
@@ -117,7 +118,9 @@ WHERE "name" = 'TV'
         - [Field Filters](#field-filters)
         - [Relationship Filters](#relationship-filters)
         - [Condition Filters](#condition-filters)
-        - [Json Field Filters](#json-field-filters)
+    - [Custom Filters](#custom-filters)
+        - [Custom Field Filter](#custom-field-filter)
+        - [Fully Custom Filter](#fully-custom-filter)
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
         - [Default Allowed Filters](#default-allowed-filters)
@@ -125,7 +128,6 @@ WHERE "name" = 'TV'
         - [Specifying Allowed Types](#specifying-allowed-types)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Suppression Hooks](#suppression-hooks)
-        - [Custom Filters](#custom-filters)
         - [Condition Filters Note](#condition-filters-note)
     - [Error Handling](#error-handling)
 - [Changelog](#changelog)
@@ -159,7 +161,7 @@ php artisan eloquent-filtering:install
 
 ### Making Model Filterable
 
-- Implement `IsFilterable` interface
+- Implement `IsFilterable` interface.
 - Use `Filterable` trait.
 - Define `allowedFilters()` method.
 
@@ -247,7 +249,11 @@ Product::filter(
 
 You can allow all filters using `Filter::all()`.
 
-See Caution in [Default Allowed Filters](#default-allowed-filters) section for security concerns when using this feature.
+> [!NOTE]
+> This feature is intended for use when you're not using any user supplied column names and have complete developer control over the filters being applied.
+
+> [!CAUTION]
+> Allowing all filters and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
 
 ```php
 public function allowedFilters(): AllFiltersAllowed
@@ -331,6 +337,9 @@ This package provides core filters that give you the ability to perform the vast
 | [NotBetweenFilter](#NotBetweenFilter---notbetween)                      | `$notBetween`        | `{$target} not between $value[0] and $value[1]`                       |
 | [BetweenColumnsFilter](#BetweenColumnsFilter---betweencolumns)          | `$betweenColumns`    | `{$target} between $value[0] and $value[1]`                           |
 | [NotBetweenColumnsFilter](#NotBetweenColumnsFilter---notbetweencolumns) | `$notBetweenColumns` | `{$target} not between $value[0] and $value[1]`                       |
+| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      | ``                                                                    |
+| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonContains`      | ``                                                                    |
+| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonContains`      | ``                                                                    |
 
 #### Relationship Filters
 
@@ -338,7 +347,6 @@ This package provides core filters that give you the ability to perform the vast
 |-------------------------------------------------|------------------|-----------------------------------------------------------------------|
 | [HasFilter](#HasFilter---has)                   | `$has`           | `where exists (select * from {$target})`                              |
 | [DoesntHasFilter](#DoesntHasFilter---doesnthas) | `$doesntHas`     | `where not exists (select * from {$target})`                          |
-
 
 #### Condition Filters
 
@@ -348,12 +356,6 @@ This package provides core filters that give you the ability to perform the vast
 | [AndFilter](#AndFilter---and) | `$and` | `and` |
 
 See [Conditional Filters Note](#condition-filters-note)
-
-#### Json Field Filters
-
-| Filter                                                   | Code             | Query                                                                 |
-|----------------------------------------------------------|------------------|-----------------------------------------------------------------------|
-| [JsonContainsFilter](#JsonContainsFilter---jsoncontains) | `$jsonContains`  | `{$target} not between $value[0] and $value[1]`                       |
 
 - Accepting pull requests for more common filters.
 
@@ -577,62 +579,6 @@ $sql = Project::filter([
 select * from "projects" where "description" NOT LIKE '%Laravel'
 ```
 
-#### OrFilter - `$or`
-
-- `value` = `array` of filters.
-
-```php
-$sql = Comment::filter([
-    [
-        'type'  => '$or',
-        'value' => [
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'awesome',
-            ],
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'boring',
-            ]
-        ]
-    ]
-])->toRawSql();
-```
-
-```sql
-select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
-```
-
-#### AndFilter - `$and`
-
-- `value` = `array` of filters.
-
-```php
-$sql = Comment::filter([
-    [
-        'type'  => '$and',
-        'value' => [
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'is awesome',
-            ],
-            [
-                'type'   => '$like',
-                'target' => 'content',
-                'value'  => 'is not boring',
-            ]
-        ]
-    ]
-])->toRawSql();
-```
-
-```sql
-select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
-```
-
 #### NullFilter - `$null`
 
 - `value` = `boolean` for `is null` or `is not null`.
@@ -694,7 +640,7 @@ select * from "people" where "name" not in ('Nuno', 'Maduro')
 
 #### BetweenFilter - `$between`
 
-- `value` = `string` | `int` | `float`.
+- `value` = array of `string` | `int` | `float`.
 
 ```php
 $sql = Person::filter([
@@ -712,7 +658,7 @@ select * from "people" where "age" between 18 and 65
 
 #### NotBetweenFilter - `$notBetween`
 
-- `value` = `string` | `int` | `float`.
+- `value` = array of `string` | `int` | `float`.
 
 ```php
 $sql = Person::filter([
@@ -770,6 +716,63 @@ $sql = Product::filter([
 select * from "products" where "price" between "min_allowed_price" and "max_allowed_price"
 ```
 
+#### JsonContainsFilter - `$jsonContains`
+
+- `value` = `string` | `int` | `float`.
+
+```php
+$sql = User::filter([
+    [
+        'type'   => '$jsonContains',
+        'target' => 'options->languages',
+        'value'  => 'en',
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "users" where exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+```
+
+#### JsonNotContainsFilter - `$jsonNotContains`
+
+- `value` = `string` | `int` | `float`.
+
+```php
+$sql = User::filter([
+    [
+        'type'   => '$jsonNotContains',
+        'target' => 'options->languages',
+        'value'  => 'en',
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "users" where not exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+```
+
+#### JsonLengthFilter - `$jsonLength`
+
+- `value` = `int`
+
+```php
+$sql = User::filter([
+    [
+        'type'     => '$jsonLength',
+        'target'   => 'options->languages',
+        'operator' => '>=',
+        'value'    => 2,
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "users" where json_array_length("options", '$."languages"') >= 2
+```
+
+---
+
 #### HasFilter - `$has`
 
 - `value` = `array` of filters.
@@ -820,6 +823,173 @@ select * from "projects" where not exists (select * from "comments" where "proje
 
 ---
 
+#### OrFilter - `$or`
+
+- `value` = `array` of filters.
+
+```php
+$sql = Comment::filter([
+    [
+        'type'  => '$or',
+        'value' => [
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'awesome',
+            ],
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'boring',
+            ]
+        ]
+    ]
+])->toRawSql();
+```
+
+```sql
+select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
+```
+
+#### AndFilter - `$and`
+
+- `value` = `array` of filters.
+
+```php
+$sql = Comment::filter([
+    [
+        'type'  => '$and',
+        'value' => [
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'is awesome',
+            ],
+            [
+                'type'   => '$like',
+                'target' => 'content',
+                'value'  => 'is not boring',
+            ]
+        ]
+    ]
+])->toRawSql();
+```
+
+```sql
+select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
+```
+
+---
+
+### Custom Filters
+
+- You can create two different types of custom filters.
+    - Custom Field Filter
+    - Fully Custom Filter
+
+> [!IMPORTANT]
+> You must register your custom filter classes in the config file `eloquent-filtering.php`
+
+```php
+'custom_filters' => [
+    YourCustomFilter::class,
+],
+```
+
+#### Custom Field Filter
+
+- Usage: `Filter::field('name', ['$lowercase'])`.
+
+```bash
+php artisan make:eloquent-filter LowerCaseFilter --type=field
+```
+
+```php
+class LowerCaseFilter extends AbstractFieldFilter
+{
+    final public function __construct(
+        protected Target $target,
+        protected string $value,
+    ) {
+
+    }
+
+    public static function type(): string
+    {
+        return '$lowercase';
+    }
+
+    public static function format(): array
+    {
+        return [
+            'target' => ['required', 'string'],
+            'value'  => ['required', 'string'],
+        ];
+    }
+
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->target(),
+            $approvedFilter->data_get('value'),
+        );
+    }
+
+    public function apply(Builder $query): Builder
+    {
+        return $query->where(
+            DB::raw("LOWER({$this->target->getReal()})"),
+            strtolower($this->value)
+        );
+    }
+}
+
+/*
+ * Usage:
+ */
+
+public function allowedFilters(): SomeFiltersAllowed
+{
+    return Filter::only(
+        Filter::field('name', ['$lowercase']),
+    );
+}
+```
+
+#### Fully Custom Filter
+
+- Generally for use when there is no user specified target field.
+
+```bash
+php artisan make:eloquent-filter AdminFilter --type=custom
+```
+
+```php
+class AdminFilter extends AbstractCustomFilter
+{
+    public static function type(): string
+    {
+        return '$admin';
+    }
+
+    public function apply(Builder $query): Builder
+    {
+        return $query->where('admin', true);
+    }
+}
+
+/*
+ * Usage:
+ */
+
+public function allowedFilters(): SomeFiltersAllowed
+{
+    return Filter::only(
+        Filter::custom(['$admin']),
+    );
+}
+```
+
 ### Digging Deeper
 
 #### Config
@@ -855,7 +1025,10 @@ return [
 
 #### Default Allowed Filters
 
-You can change the default allowed filters within the config file `eloquent-filtering`.
+> [!NOTE]
+> This feature is intended for use when you're not using any user supplied column names and have complete developer control over the filters being applied.
+
+You can change the default allowed filters within the config file `eloquent-filtering.php`.
 
 ```php
 'default_allowed_filter_list' => 'all',
@@ -865,8 +1038,6 @@ You can change the default allowed filters within the config file `eloquent-filt
 > Allowing all filters by default and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
 
 It is strongly suggested that you keep `default_allowed_filter_list` as `none` in your config and explicitly allow only specific filters with `Filter::only()`.
-
-This feature is intended for use when you're not using any user supplied information and have complete developer control over the filters being applied.
 
 #### Aliasing Targets
 
@@ -985,10 +1156,6 @@ Suppression::handleSortUsing();
 Suppression::handleMalformedSortUsing();
 Suppression::handleDeniedSortUsing();
 ```
-
-#### Custom Filters
-
-- TODO
 
 #### Condition Filters Note
 

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\JsonFieldFilters;
+namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\Rule;
 use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractJsonFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 use IndexZer0\EloquentFiltering\Rules\StrictInteger;
 
-class JsonLengthFilter extends AbstractJsonFieldFilter
+class JsonLengthFilter extends AbstractFieldFilter
 {
     final public function __construct(
         protected Target $target,

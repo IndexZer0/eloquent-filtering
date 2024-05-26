@@ -14,10 +14,18 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Manufacturer;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
+use Orchestra\Testbench\Concerns\InteractsWithPublishedFiles;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
+    use InteractsWithPublishedFiles;
+
+    protected $files = [
+        'app/FilterMethods/WhereFilter.php',
+        'app/FilterMethods/SpecialCustomFilter.php',
+    ];
+
     protected function setUp(): void
     {
         parent::setUp();

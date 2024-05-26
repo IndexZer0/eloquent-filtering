@@ -28,9 +28,9 @@ use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotLikeFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotLikeStartFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NullFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ConditionFilters\OrFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\JsonFieldFilters\JsonContainsFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\JsonFieldFilters\JsonLengthFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\JsonFieldFilters\JsonNotContainsFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonContainsFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonLengthFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonNotContainsFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters\DoesntHasFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters\HasFilter;
 

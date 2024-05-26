@@ -11,7 +11,6 @@ interface FilterMethod
 {
     public const USAGE_FIELD = 'usage_field';
     public const USAGE_RELATION = 'usage_relation';
-    public const USAGE_JSON_FIELD = 'usage_json_field';
     public const USAGE_CUSTOM = 'usage_custom';
     public const USAGE_CONDITION = 'usage_condition';
 
