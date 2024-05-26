@@ -42,8 +42,8 @@ it('doesnt includeRelationFields when relation model is not filterable', functio
                     [
                         'target' => 'name',
                         'type'   => '$eq',
-                        'value' => 'name',
-                    ]
+                        'value'  => 'name',
+                    ],
                 ],
             ],
         ],
