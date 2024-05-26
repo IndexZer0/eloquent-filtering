@@ -118,6 +118,9 @@ WHERE "name" = 'TV'
         - [Field Filters](#field-filters)
         - [Relationship Filters](#relationship-filters)
         - [Condition Filters](#condition-filters)
+    - [Custom Filters](#custom-filters)
+        - [Custom Field Filter](#custom-field-filter)
+        - [Fully Custom Filter](#fully-custom-filter)
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
         - [Default Allowed Filters](#default-allowed-filters)
@@ -125,7 +128,6 @@ WHERE "name" = 'TV'
         - [Specifying Allowed Types](#specifying-allowed-types)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Suppression Hooks](#suppression-hooks)
-        - [Custom Filters](#custom-filters)
         - [Condition Filters Note](#condition-filters-note)
     - [Error Handling](#error-handling)
 - [Changelog](#changelog)
@@ -879,6 +881,115 @@ select * from "comments" where (("content" LIKE '%is awesome%') and ("content" L
 
 ---
 
+### Custom Filters
+
+- You can create two different types of custom filters.
+    - Custom Field Filter
+    - Fully Custom Filter
+
+> [!IMPORTANT]
+> You must register your custom filter classes in the config file `eloquent-filtering.php`
+
+```php
+'custom_filters' => [
+    YourCustomFilter::class,
+],
+```
+
+#### Custom Field Filter
+
+- Usage: `Filter::field('name', ['$lowercase'])`.
+
+```bash
+php artisan make:eloquent-filter LowerCaseFilter --type=field
+```
+
+```php
+class LowerCaseFilter extends AbstractFieldFilter
+{
+    final public function __construct(
+        protected Target $target,
+        protected string $value,
+    ) {
+
+    }
+
+    public static function type(): string
+    {
+        return '$lowercase';
+    }
+
+    public static function format(): array
+    {
+        return [
+            'target' => ['required', 'string'],
+            'value'  => ['required', 'string'],
+        ];
+    }
+
+    public static function from(ApprovedFilter $approvedFilter): static
+    {
+        return new static(
+            $approvedFilter->target(),
+            $approvedFilter->data_get('value'),
+        );
+    }
+
+    public function apply(Builder $query): Builder
+    {
+        return $query->where(
+            DB::raw("LOWER({$this->target->getReal()})"),
+            strtolower($this->value)
+        );
+    }
+}
+
+/*
+ * Usage:
+ */
+
+public function allowedFilters(): SomeFiltersAllowed
+{
+    return Filter::only(
+        Filter::field('name', ['$lowercase']),
+    );
+}
+```
+
+#### Fully Custom Filter
+
+- Generally for use when there is no user specified target field.
+
+```bash
+php artisan make:eloquent-filter AdminFilter --type=custom
+```
+
+```php
+class AdminFilter extends AbstractCustomFilter
+{
+    public static function type(): string
+    {
+        return '$admin';
+    }
+
+    public function apply(Builder $query): Builder
+    {
+        return $query->where('admin', true);
+    }
+}
+
+/*
+ * Usage:
+ */
+
+public function allowedFilters(): SomeFiltersAllowed
+{
+    return Filter::only(
+        Filter::custom(['$admin']),
+    );
+}
+```
+
 ### Digging Deeper
 
 #### Config
@@ -917,7 +1028,7 @@ return [
 > [!NOTE]
 > This feature is intended for use when you're not using any user supplied column names and have complete developer control over the filters being applied.
 
-You can change the default allowed filters within the config file `eloquent-filtering`.
+You can change the default allowed filters within the config file `eloquent-filtering.php`.
 
 ```php
 'default_allowed_filter_list' => 'all',
@@ -1045,10 +1156,6 @@ Suppression::handleSortUsing();
 Suppression::handleMalformedSortUsing();
 Suppression::handleDeniedSortUsing();
 ```
-
-#### Custom Filters
-
-- TODO
 
 #### Condition Filters Note
 
