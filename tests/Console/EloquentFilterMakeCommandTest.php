@@ -7,7 +7,7 @@ use IndexZer0\EloquentFiltering\Console\Commands\EloquentFilterMakeCommand;
 it('can create "field" filter', function (): void {
 
     $this->artisan(EloquentFilterMakeCommand::class, [
-        'name' => 'WhereFilter',
+        'name'   => 'WhereFilter',
         '--type' => 'field',
     ])->assertSuccessful();
 
@@ -22,7 +22,7 @@ it('can create "field" filter', function (): void {
 it('can create "custom" filter', function (): void {
 
     $this->artisan(EloquentFilterMakeCommand::class, [
-        'name' => 'SpecialCustomFilter',
+        'name'   => 'SpecialCustomFilter',
         '--type' => 'custom',
     ])->assertSuccessful();
 
