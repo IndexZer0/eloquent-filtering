@@ -9,7 +9,7 @@ class {{ class }} extends AbstractCustomFilter
 {
     public static function type(): string
     {
-        return '$yourCustomFilterType';
+        return '${{ type }}';
     }
 
     public function apply(Builder $query): Builder

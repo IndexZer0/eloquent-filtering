@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -25,6 +26,15 @@ class EloquentFilterMakeCommand extends GeneratorCommand
         return [
             ['type', 't', InputOption::VALUE_REQUIRED, 'The type of filter to make'],
         ];
+    }
+
+    protected function replaceClass($stub, $name)
+    {
+        $stub = parent::replaceClass($stub, $name);
+
+        $name = Str::of($this->getNameInput())->beforeLast('Filter')->lcfirst()->toString();
+
+        return str_replace(['{{ type }}'], $name, $stub);
     }
 
     protected function getDefaultNamespace($rootNamespace): string

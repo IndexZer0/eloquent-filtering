@@ -16,7 +16,7 @@ class {{ class }} extends AbstractFieldFilter
 
     public static function type(): string
     {
-        return '$yourFieldFilterType';
+        return '${{ type }}';
     }
 
     public static function format(): array

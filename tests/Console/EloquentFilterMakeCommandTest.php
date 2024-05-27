@@ -15,6 +15,7 @@ it('can create "field" filter', function (): void {
         'namespace App\FilterMethods;',
         'use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;',
         'class WhereFilter extends AbstractFieldFilter',
+        'return \'$where\';',
     ], 'app/FilterMethods/WhereFilter.php');
 
 });
@@ -30,6 +31,7 @@ it('can create "custom" filter', function (): void {
         'namespace App\FilterMethods;',
         'use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractCustomFilter;',
         'class SpecialCustomFilter extends AbstractCustomFilter',
+        'return \'$specialCustom\';',
     ], 'app/FilterMethods/SpecialCustomFilter.php');
 
 });
