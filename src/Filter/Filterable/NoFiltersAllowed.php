@@ -25,6 +25,11 @@ class NoFiltersAllowed implements AllowedFilterList
         return Filter::only(...$allowedFilters);
     }
 
+    public function getAllowedFilters(): array
+    {
+        return [];
+    }
+
     public function getAllowedFields(): array
     {
         return [];

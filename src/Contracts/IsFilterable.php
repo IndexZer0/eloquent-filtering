@@ -6,6 +6,7 @@ namespace IndexZer0\EloquentFiltering\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\FilterSets\FilterSets;
 
 interface IsFilterable
 {
@@ -16,4 +17,8 @@ interface IsFilterable
     ): Builder;
 
     public function allowedFilters(): AllowedFilterList;
+
+    public function filterSets(): FilterSets;
+
+    public function getFilterSets(): FilterSets;
 }

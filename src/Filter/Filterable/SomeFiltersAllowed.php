@@ -65,6 +65,11 @@ class SomeFiltersAllowed implements AllowedFilterList
         return $this;
     }
 
+    public function getAllowedFilters(): array
+    {
+        return $this->allowedFilters->toArray();
+    }
+
     public function getAllowedFields(): array
     {
         return $this->allowedFilters
