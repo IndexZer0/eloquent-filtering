@@ -732,7 +732,7 @@ $sql = User::filter([
 ```
 
 ```sql
-select * from "users" where exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+select * from "users" where json_contains(`options`, '\"en\"', '$."languages"')
 ```
 
 #### JsonNotContainsFilter - `$jsonNotContains`
@@ -750,7 +750,7 @@ $sql = User::filter([
 ```
 
 ```sql
-select * from "users" where not exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+select * from "users" where not json_contains(`options`, '\"en\"', '$."languages"')
 ```
 
 #### JsonLengthFilter - `$jsonLength`
@@ -770,7 +770,7 @@ $sql = User::filter([
 ```
 
 ```sql
-select * from "users" where json_array_length("options", '$."languages"') >= 2
+select * from "users" where json_length(`options`, '$."languages"') >= 2
 ```
 
 ---
