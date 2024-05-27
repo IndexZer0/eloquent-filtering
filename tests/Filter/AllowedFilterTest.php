@@ -7,7 +7,7 @@ use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
-it('does not allow filters that are not for same usage', function (
+it('does not allow filters that are not for same context', function (
     array $filter,
     AllowedFilter $allowed_filter,
     string $expected_exception_message
