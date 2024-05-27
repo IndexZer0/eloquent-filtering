@@ -3,14 +3,13 @@
 namespace {{ namespace }};
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 
 class {{ class }} extends AbstractFieldFilter
 {
     final public function __construct(
-        protected Target $target,
+        protected string $target,
         protected mixed  $value,
     ) {
     }
@@ -31,13 +30,13 @@ class {{ class }} extends AbstractFieldFilter
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
-            $approvedFilter->target(),
+            $approvedFilter->target()->getReal(),
             $approvedFilter->data_get('value')
         );
     }
 
     public function apply(Builder $query): Builder
     {
-        return $query->where($this->target->getReal(), $this->value);
+        return $query->where($this->target, $this->value);
     }
 }
