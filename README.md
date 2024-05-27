@@ -125,6 +125,7 @@ WHERE "name" = 'TV'
         - [Config](#config)
         - [Default Allowed Filters](#default-allowed-filters)
         - [Aliasing Targets](#aliasing-targets)
+        - [Json Path Wildcards](#json-path-wildcards)
         - [Specifying Allowed Types](#specifying-allowed-types)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Suppression Hooks](#suppression-hooks)
@@ -1096,6 +1097,30 @@ Filter::all(
         Target::alias('file_extension', 'mime_type')
     ),
 )
+```
+
+#### Json Path Wildcards
+
+- When specifying the target of a json database field you can specify wildcards in the json path.
+
+```php
+Filter::only(
+    Filter::field('data->*->array', ['$jsonContains']),
+)
+
+/*
+ * Allows:
+ */
+$filters = [
+    [
+        'type'   => '$jsonContains',
+        'target' => 'data->languages->array',
+        'value'  => [
+            'en',
+            'de',
+        ]
+    ]
+];
 ```
 
 #### Specifying Allowed Types
