@@ -3,23 +3,30 @@
 namespace {{ namespace }};
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 
 class {{ class }} extends AbstractFieldFilter
 {
     final public function __construct(
-        protected Target $target,
+        protected string $target,
         protected mixed  $value,
     ) {
     }
 
+    /*
+     * The unique identifier of the filter.
+     */
     public static function type(): string
     {
-        return '$yourFieldFilterType';
+        return '${{ type }}';
     }
 
+    /*
+     * The format that the filter data must adhere to.
+     * Defined as laravel validator rules.
+     * On fail: throws MalformedFilterFormatException.
+     */
     public static function format(): array
     {
         return [
@@ -28,16 +35,22 @@ class {{ class }} extends AbstractFieldFilter
         ];
     }
 
+    /*
+     * Instantiate filter class from ApprovedFilter.
+     */
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
-            $approvedFilter->target(),
+            $approvedFilter->target()->getReal(),
             $approvedFilter->data_get('value')
         );
     }
 
+    /*
+     * Apply the filter logic.
+     */
     public function apply(Builder $query): Builder
     {
-        return $query->where($this->target->getReal(), $this->value);
+        return $query->where($this->target, $this->value);
     }
 }

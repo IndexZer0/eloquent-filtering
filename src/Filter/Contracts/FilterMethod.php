@@ -6,21 +6,34 @@ namespace IndexZer0\EloquentFiltering\Filter\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
+use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 
 interface FilterMethod
 {
-    public const USAGE_FIELD = 'usage_field';
-    public const USAGE_RELATION = 'usage_relation';
-    public const USAGE_CUSTOM = 'usage_custom';
-    public const USAGE_CONDITION = 'usage_condition';
-
+    /*
+     * The unique identifier of the filter.
+     */
     public static function type(): string;
 
-    public static function usage(): string;
+    /*
+     * Whether this filter is applicable for an AllowedFilter definition.
+     */
+    public static function context(): FilterContext;
 
+    /*
+     * The format that the filter data must adhere to.
+     * Defined as laravel validator rules.
+     * On fail: throws MalformedFilterFormatException.
+     */
     public static function format(): array;
 
+    /*
+     * Instantiate filter class from ApprovedFilter.
+     */
     public static function from(ApprovedFilter $approvedFilter): static;
 
+    /*
+     * Apply the filter logic.
+     */
     public function apply(Builder $query): Builder;
 }

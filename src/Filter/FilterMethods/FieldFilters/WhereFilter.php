@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
@@ -13,7 +12,7 @@ use IndexZer0\EloquentFiltering\Rules\WhereValue;
 abstract class WhereFilter extends AbstractFieldFilter
 {
     final public function __construct(
-        protected Target           $target,
+        protected string           $target,
         protected string|float|int $value,
     ) {
     }
@@ -35,18 +34,14 @@ abstract class WhereFilter extends AbstractFieldFilter
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
-            $approvedFilter->target(),
+            $approvedFilter->target()->getReal(),
             $approvedFilter->data_get('value')
         );
     }
 
     public function apply(Builder $query): Builder
     {
-        return $query->where(
-            $this->target(),
-            $this->operator(),
-            $this->value(),
-        );
+        return $query->where($this->target(), $this->operator(), $this->value());
     }
 
     /*
@@ -64,6 +59,6 @@ abstract class WhereFilter extends AbstractFieldFilter
 
     public function target(): string
     {
-        return $this->target->getReal();
+        return $this->target;
     }
 }

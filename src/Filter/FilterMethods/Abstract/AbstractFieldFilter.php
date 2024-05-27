@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract;
 
+use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AppliesToTarget;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 
@@ -15,9 +16,9 @@ abstract class AbstractFieldFilter implements FilterMethod, AppliesToTarget
      * -----------------------------
      */
 
-    public static function usage(): string
+    public static function context(): FilterContext
     {
-        return FilterMethod::USAGE_FIELD;
+        return FilterContext::FIELD;
     }
 
     public static function targetKey(): string

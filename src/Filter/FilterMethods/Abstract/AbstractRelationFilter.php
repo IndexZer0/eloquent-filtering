@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract;
 
-use IndexZer0\EloquentFiltering\Contracts\Target;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\HasChildFilters;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
@@ -13,7 +12,7 @@ use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 abstract class AbstractRelationFilter extends AbstractFieldFilter implements HasChildFilters
 {
     final public function __construct(
-        protected Target           $target,
+        protected string           $target,
         protected FilterCollection $value,
     ) {
     }
@@ -24,9 +23,9 @@ abstract class AbstractRelationFilter extends AbstractFieldFilter implements Has
      * -----------------------------
      */
 
-    public static function usage(): string
+    public static function context(): FilterContext
     {
-        return FilterMethod::USAGE_RELATION;
+        return FilterContext::RELATION;
     }
 
     public static function format(): array
@@ -41,7 +40,7 @@ abstract class AbstractRelationFilter extends AbstractFieldFilter implements Has
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
-            $approvedFilter->target(),
+            $approvedFilter->target()->getReal(),
             $approvedFilter->childFilters(),
         );
     }

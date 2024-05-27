@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract;
 
+use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 
@@ -19,9 +20,9 @@ abstract class AbstractCustomFilter implements FilterMethod
      * -----------------------------
      */
 
-    public static function usage(): string
+    public static function context(): FilterContext
     {
-        return FilterMethod::USAGE_CUSTOM;
+        return FilterContext::CUSTOM;
     }
 
     public static function format(): array

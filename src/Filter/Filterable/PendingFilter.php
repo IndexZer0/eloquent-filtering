@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
 use IndexZer0\EloquentFiltering\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AppliesToTarget;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 
@@ -32,9 +33,9 @@ class PendingFilter
         return $this->filterFqcn;
     }
 
-    public function is(string $usage): bool
+    public function is(FilterContext $context): bool
     {
-        return $this->filterFqcn::usage() === $usage;
+        return $this->filterFqcn::context() === $context;
     }
 
     public function desiredTarget(): ?string

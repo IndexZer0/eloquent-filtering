@@ -125,6 +125,7 @@ WHERE "name" = 'TV'
         - [Config](#config)
         - [Default Allowed Filters](#default-allowed-filters)
         - [Aliasing Targets](#aliasing-targets)
+        - [Json Path Wildcards](#json-path-wildcards)
         - [Specifying Allowed Types](#specifying-allowed-types)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Suppression Hooks](#suppression-hooks)
@@ -337,9 +338,9 @@ This package provides core filters that give you the ability to perform the vast
 | [NotBetweenFilter](#NotBetweenFilter---notbetween)                      | `$notBetween`        | `{$target} not between $value[0] and $value[1]`                       |
 | [BetweenColumnsFilter](#BetweenColumnsFilter---betweencolumns)          | `$betweenColumns`    | `{$target} between $value[0] and $value[1]`                           |
 | [NotBetweenColumnsFilter](#NotBetweenColumnsFilter---notbetweencolumns) | `$notBetweenColumns` | `{$target} not between $value[0] and $value[1]`                       |
-| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      | ``                                                                    |
-| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonContains`      | ``                                                                    |
-| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonContains`      | ``                                                                    |
+| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      | `json_contains({$target}, {$value})`                                  |
+| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonNotContains`   | `not json_contains({$target}, {$value})`                              |
+| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonLength`        | `json_length({$target}}) $operator $value`                            |
 
 #### Relationship Filters
 
@@ -731,7 +732,7 @@ $sql = User::filter([
 ```
 
 ```sql
-select * from "users" where exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+select * from "users" where json_contains(`options`, '\"en\"', '$."languages"')
 ```
 
 #### JsonNotContainsFilter - `$jsonNotContains`
@@ -749,12 +750,13 @@ $sql = User::filter([
 ```
 
 ```sql
-select * from "users" where not exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+select * from "users" where not json_contains(`options`, '\"en\"', '$."languages"')
 ```
 
 #### JsonLengthFilter - `$jsonLength`
 
-- `value` = `int`
+- `operator` = `=` |  `<` | `<=` | `>` | `>=`.
+- `value` = `int`.
 
 ```php
 $sql = User::filter([
@@ -768,7 +770,7 @@ $sql = User::filter([
 ```
 
 ```sql
-select * from "users" where json_array_length("options", '$."languages"') >= 2
+select * from "users" where json_length(`options`, '$."languages"') >= 2
 ```
 
 ---
@@ -908,17 +910,25 @@ php artisan make:eloquent-filter LowerCaseFilter --type=field
 class LowerCaseFilter extends AbstractFieldFilter
 {
     final public function __construct(
-        protected Target $target,
+        protected string $target,
         protected string $value,
     ) {
 
     }
-
+    
+    /*
+     * The unique identifier of the filter.
+     */
     public static function type(): string
     {
         return '$lowercase';
     }
 
+    /*
+     * The format that the filter data must adhere to.
+     * Defined as laravel validator rules.
+     * On fail: throws MalformedFilterFormatException.
+     */
     public static function format(): array
     {
         return [
@@ -927,18 +937,24 @@ class LowerCaseFilter extends AbstractFieldFilter
         ];
     }
 
+    /*
+     * Instantiate filter class from ApprovedFilter.
+     */
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
-            $approvedFilter->target(),
+            $approvedFilter->target()->getReal(),
             $approvedFilter->data_get('value'),
         );
     }
 
+    /*
+     * Apply the filter logic.
+     */
     public function apply(Builder $query): Builder
     {
         return $query->where(
-            DB::raw("LOWER({$this->target->getReal()})"),
+            DB::raw("LOWER({$this->target})"),
             strtolower($this->value)
         );
     }
@@ -967,11 +983,17 @@ php artisan make:eloquent-filter AdminFilter --type=custom
 ```php
 class AdminFilter extends AbstractCustomFilter
 {
+    /*
+     * The unique identifier of the filter.
+     */
     public static function type(): string
     {
         return '$admin';
     }
 
+    /*
+     * Apply the filter logic.
+     */
     public function apply(Builder $query): Builder
     {
         return $query->where('admin', true);
@@ -1076,6 +1098,30 @@ Filter::all(
         Target::alias('file_extension', 'mime_type')
     ),
 )
+```
+
+#### Json Path Wildcards
+
+- When specifying the target of a json database field you can specify wildcards in the json path.
+
+```php
+Filter::only(
+    Filter::field('data->*->array', ['$jsonContains']),
+)
+
+/*
+ * Allows:
+ */
+$filters = [
+    [
+        'type'   => '$jsonContains',
+        'target' => 'data->languages->array',
+        'value'  => [
+            'en',
+            'de',
+        ]
+    ]
+];
 ```
 
 #### Specifying Allowed Types
