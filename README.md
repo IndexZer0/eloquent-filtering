@@ -908,7 +908,7 @@ php artisan make:eloquent-filter LowerCaseFilter --type=field
 class LowerCaseFilter extends AbstractFieldFilter
 {
     final public function __construct(
-        protected Target $target,
+        protected string $target,
         protected string $value,
     ) {
 
@@ -930,7 +930,7 @@ class LowerCaseFilter extends AbstractFieldFilter
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
-            $approvedFilter->target(),
+            $approvedFilter->target()->getReal(),
             $approvedFilter->data_get('value'),
         );
     }
@@ -938,7 +938,7 @@ class LowerCaseFilter extends AbstractFieldFilter
     public function apply(Builder $query): Builder
     {
         return $query->where(
-            DB::raw("LOWER({$this->target->getReal()})"),
+            DB::raw("LOWER({$this->target})"),
             strtolower($this->value)
         );
     }
