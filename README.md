@@ -913,12 +913,20 @@ class LowerCaseFilter extends AbstractFieldFilter
     ) {
 
     }
-
+    
+    /*
+     * The unique identifier of the filter.
+     */
     public static function type(): string
     {
         return '$lowercase';
     }
 
+    /*
+     * The format that the filter data must adhere to.
+     * Defined as laravel validator rules.
+     * On fail: throws MalformedFilterFormatException.
+     */
     public static function format(): array
     {
         return [
@@ -927,6 +935,9 @@ class LowerCaseFilter extends AbstractFieldFilter
         ];
     }
 
+    /*
+     * Instantiate filter class from ApprovedFilter.
+     */
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
@@ -935,6 +946,9 @@ class LowerCaseFilter extends AbstractFieldFilter
         );
     }
 
+    /*
+     * Apply the filter logic.
+     */
     public function apply(Builder $query): Builder
     {
         return $query->where(
@@ -967,11 +981,17 @@ php artisan make:eloquent-filter AdminFilter --type=custom
 ```php
 class AdminFilter extends AbstractCustomFilter
 {
+    /*
+     * The unique identifier of the filter.
+     */
     public static function type(): string
     {
         return '$admin';
     }
 
+    /*
+     * Apply the filter logic.
+     */
     public function apply(Builder $query): Builder
     {
         return $query->where('admin', true);

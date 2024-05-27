@@ -8,7 +8,7 @@ use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractCustomFilt
 class {{ class }} extends AbstractCustomFilter
 {
     /*
-     * The unique identifier of the filter method.
+     * The unique identifier of the filter.
      */
     public static function type(): string
     {

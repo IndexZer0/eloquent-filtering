@@ -15,7 +15,7 @@ class {{ class }} extends AbstractFieldFilter
     }
 
     /*
-     * The unique identifier of the filter method.
+     * The unique identifier of the filter.
      */
     public static function type(): string
     {
@@ -25,7 +25,7 @@ class {{ class }} extends AbstractFieldFilter
     /*
      * The format that the filter data must adhere to.
      * Defined as laravel validator rules.
-     * Otherwise MalformedFilterFormatException will be thrown.
+     * On fail: throws MalformedFilterFormatException.
      */
     public static function format(): array
     {

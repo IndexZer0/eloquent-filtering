@@ -11,7 +11,7 @@ use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 interface FilterMethod
 {
     /*
-     * The unique identifier of the filter method.
+     * The unique identifier of the filter.
      */
     public static function type(): string;
 
@@ -23,7 +23,7 @@ interface FilterMethod
     /*
      * The format that the filter data must adhere to.
      * Defined as laravel validator rules.
-     * Otherwise MalformedFilterFormatException will be thrown.
+     * On fail: throws MalformedFilterFormatException.
      */
     public static function format(): array;
 
