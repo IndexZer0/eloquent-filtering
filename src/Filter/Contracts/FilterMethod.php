@@ -16,7 +16,7 @@ interface FilterMethod
     public static function type(): string;
 
     /*
-     * Weather this filter is applicable for an AllowedFilter definition.
+     * Whether this filter is applicable for an AllowedFilter definition.
      */
     public static function context(): FilterContext;
 

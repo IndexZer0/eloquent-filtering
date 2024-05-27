@@ -7,11 +7,17 @@ use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractCustomFilt
 
 class {{ class }} extends AbstractCustomFilter
 {
+    /*
+     * The unique identifier of the filter method.
+     */
     public static function type(): string
     {
         return '${{ type }}';
     }
 
+    /*
+     * Apply the filter logic.
+     */
     public function apply(Builder $query): Builder
     {
         return $query->where('some_field', 'some_value');

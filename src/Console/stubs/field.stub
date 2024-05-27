@@ -14,11 +14,19 @@ class {{ class }} extends AbstractFieldFilter
     ) {
     }
 
+    /*
+     * The unique identifier of the filter method.
+     */
     public static function type(): string
     {
         return '${{ type }}';
     }
 
+    /*
+     * The format that the filter data must adhere to.
+     * Defined as laravel validator rules.
+     * Otherwise MalformedFilterFormatException will be thrown.
+     */
     public static function format(): array
     {
         return [
@@ -27,6 +35,9 @@ class {{ class }} extends AbstractFieldFilter
         ];
     }
 
+    /*
+     * Instantiate filter class from ApprovedFilter.
+     */
     public static function from(ApprovedFilter $approvedFilter): static
     {
         return new static(
@@ -35,6 +46,9 @@ class {{ class }} extends AbstractFieldFilter
         );
     }
 
+    /*
+     * Apply the filter logic.
+     */
     public function apply(Builder $query): Builder
     {
         return $query->where($this->target, $this->value);
