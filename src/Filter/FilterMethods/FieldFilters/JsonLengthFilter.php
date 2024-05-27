@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;

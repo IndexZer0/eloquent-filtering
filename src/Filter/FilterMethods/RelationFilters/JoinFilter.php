@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters;
 
 use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractRelationFilter;
 
-class HasFilter extends AbstractRelationFilter
+class JoinFilter extends AbstractRelationFilter
 {
     /*
      * -----------------------------
@@ -18,28 +19,19 @@ class HasFilter extends AbstractRelationFilter
 
     public static function type(): string
     {
-        return '$has';
+        return '$join';
     }
 
     public function apply(Builder $query): Builder
     {
-        return $query->whereHas($this->target, function (Builder $query): void {
+        return $query->join($this->target, function (JoinClause $join): void {
+
+            $join->on('authors.id', '=', 'books.author_id');
 
             /** @var FilterApplier $filterApplier */
             $filterApplier = resolve(FilterApplier::class);
-            $filterApplier->apply($query, $this->value);
+            $filterApplier->apply($join, $this->value);
 
-        }, $this->operator());
-    }
-
-    /*
-     * -----------------------------
-     * Filter specific methods
-     * -----------------------------
-     */
-
-    protected function operator(): string
-    {
-        return '>=';
+        });
     }
 }
