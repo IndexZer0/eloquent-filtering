@@ -18,10 +18,10 @@ it('can filter by join when allowed', function (): void {
                 'type'   => '$join',
                 'value'  => [
                     [
-                        'type' => '$like',
+                        'type'   => '$like',
                         'target' => 'title',
-                        'value' => 'Game',
-                    ]
+                        'value'  => 'Game',
+                    ],
                 ],
             ],
         ],
