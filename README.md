@@ -338,9 +338,9 @@ This package provides core filters that give you the ability to perform the vast
 | [NotBetweenFilter](#NotBetweenFilter---notbetween)                      | `$notBetween`        | `{$target} not between $value[0] and $value[1]`                       |
 | [BetweenColumnsFilter](#BetweenColumnsFilter---betweencolumns)          | `$betweenColumns`    | `{$target} between $value[0] and $value[1]`                           |
 | [NotBetweenColumnsFilter](#NotBetweenColumnsFilter---notbetweencolumns) | `$notBetweenColumns` | `{$target} not between $value[0] and $value[1]`                       |
-| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      | ``                                                                    |
-| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonContains`      | ``                                                                    |
-| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonContains`      | ``                                                                    |
+| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      | `json_contains({$target}, {$value})`                                  |
+| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonNotContains`   | `not json_contains({$target}, {$value})`                              |
+| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonLength`        | `json_length({$target}}) $operator $value`                            |
 
 #### Relationship Filters
 
