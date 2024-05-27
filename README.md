@@ -755,7 +755,8 @@ select * from "users" where not exists (select 1 from json_each("options", '$."l
 
 #### JsonLengthFilter - `$jsonLength`
 
-- `value` = `int`
+- `operator` = `=` |  `<` | `<=` | `>` | `>=`.
+- `value` = `int`.
 
 ```php
 $sql = User::filter([
