@@ -7,7 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
@@ -26,7 +26,7 @@ class SomeFiltersAllowed implements AllowedFilterList
 
     public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter
     {
-        if ($pendingFilter->is(FilterMethod::USAGE_CONDITION)) {
+        if ($pendingFilter->is(FilterContext::CONDITION)) {
             // These are filters such as '$or' and '$and'.
             return $pendingFilter->approveWith(
                 childFilters: $this->ensureChildFiltersAllowed($pendingFilter, $this)

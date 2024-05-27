@@ -7,10 +7,10 @@ namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 use Illuminate\Database\Eloquent\Model;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
-use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
@@ -38,7 +38,7 @@ class AllowedRelation implements AllowedFilter
 
     public function matches(PendingFilter $pendingFilter): bool
     {
-        if (!$pendingFilter->is(FilterMethod::USAGE_RELATION)) {
+        if (!$pendingFilter->is(FilterContext::RELATION)) {
             return false;
         }
 
