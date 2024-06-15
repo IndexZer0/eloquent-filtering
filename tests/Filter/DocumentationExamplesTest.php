@@ -576,4 +576,3 @@ it('can filter', function (): void {
 
     expect($package->version)->toBe('1.0.0');
 });
-
