@@ -1251,6 +1251,12 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ---
 
+## Feature Ideas
+
+Please see [Feature ideas](feature-ideas.md) for potential future features.
+
+---
+
 ## Credits
 
 - [IndexZer0](https://github.com/IndexZer0)
