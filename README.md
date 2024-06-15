@@ -1,4 +1,4 @@
-# eloquent-filtering
+# Eloquent Filtering
 
 ![Filter example](/img/header.png)
 
