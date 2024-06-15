@@ -3,11 +3,16 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Documentation\Package;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Person;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Project;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\User;
+
+beforeEach(function (): void {
+    $this->createPackages();
+});
 
 it('EqualFilter | $eq', function (): void {
     $sql = Person::filter([
@@ -559,3 +564,16 @@ it('AndFilter | $and', function (): void {
     expect($sql)->toBe($expectedSql);
 
 });
+
+it('can filter', function (): void {
+    $package = Package::filter([
+        [
+            'target' => 'name',
+            'type'   => '$eq',
+            'value'  => 'eloquent-filtering',
+        ],
+    ])->first();
+
+    expect($package->version)->toBe('1.0.0');
+});
+
