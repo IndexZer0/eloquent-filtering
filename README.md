@@ -11,14 +11,19 @@
 
 ---
 
-- **Avoid** writing custom query logic for filtering your models.
+<h3 align="center">Easily filter eloquent models using arrays</h3>
+
+- **Avoid** writing custom query logic for filtering your models. 
+- **Simply** define allowed filters on your models and pass filters from http request to the model.
+
+---
 
 Features:
 
 - Filter 
   - Many filter methods.
-  - Filter by fields.
-  - Filter by relationship existence.
+  - Filter by **fields**.
+  - Filter by **relationship** existence.
     - Filter by fields on relationships.
       - No duplicated unnecessary exist clauses in queries.
   - Alias fields and relationships.
@@ -29,7 +34,6 @@ Features:
 - Sort
   - Sort by fields.
   - Alias fields.
-- Terminology based on laravel eloquent query builder.
 
 ---
 
