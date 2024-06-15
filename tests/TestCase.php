@@ -149,6 +149,7 @@ class TestCase extends Orchestra
         $schema->create('packages', function (Blueprint $table): void {
             $table->id();
             $table->string('name');
+            $table->text('description');
             $table->string('version');
             $table->timestamps();
         });
@@ -271,9 +272,10 @@ class TestCase extends Orchestra
     public function createPackages(): void
     {
         Package::create([
-            'id'      => 1,
-            'name'    => 'eloquent-filtering',
-            'version' => '1.0.0',
+            'id'          => 1,
+            'name'        => 'eloquent-filtering',
+            'description' => 'Easily filter eloquent models using arrays',
+            'version'     => '1.0.0',
         ]);
     }
 

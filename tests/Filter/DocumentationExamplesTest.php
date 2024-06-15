@@ -572,6 +572,6 @@ it('can filter', function (): void {
         'value'  => 'eloquent-filtering',
     ]])->first();
 
-    expect($package->name)->toBe('eloquent-filtering')
-        ->and($package->version)->toBe('1.0.0');
+    expect($package->description)
+        ->toBe('Easily filter eloquent models using arrays');
 });
