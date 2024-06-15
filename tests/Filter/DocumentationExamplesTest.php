@@ -566,14 +566,13 @@ it('AndFilter | $and', function (): void {
 });
 
 it('can filter', function (): void {
-    $package = Package::filter([
-        [
-            'target' => 'name',
-            'type'   => '$eq',
-            'value'  => 'eloquent-filtering',
-        ],
-    ])->first();
+    $package = Package::filter([[
+        'target' => 'name',
+        'type'   => '$eq',
+        'value'  => 'eloquent-filtering',
+    ]])->first();
 
-    expect($package->version)->toBe('1.0.0');
+    expect($package->name)->toBe('eloquent-filtering')
+        ->and($package->version)->toBe('1.0.0');
 });
 
