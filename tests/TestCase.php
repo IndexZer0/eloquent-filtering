@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Tests;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use IndexZer0\EloquentFiltering\EloquentFilteringServiceProvider;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Documentation\Package;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ApiResponse;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\AuthorProfile;
@@ -143,6 +144,14 @@ class TestCase extends Orchestra
             $table->integer('price')->nullable();
             $table->timestamps();
         });
+
+        // Package
+        $schema->create('packages', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->string('version');
+            $table->timestamps();
+        });
     }
 
     public function createAuthors(): void
@@ -256,6 +265,15 @@ class TestCase extends Orchestra
                 'own-key-5' => 'own-value-5',
                 'own-key-6' => 'own-value-6',
             ],
+        ]);
+    }
+
+    public function createPackages(): void
+    {
+        Package::create([
+            'id'      => 1,
+            'name'    => 'eloquent-filtering',
+            'version' => '1.0.0',
         ]);
     }
 
