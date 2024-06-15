@@ -48,7 +48,6 @@ class InFilter extends AbstractFieldFilter
 
     public function apply(Builder $query): Builder
     {
-        // Maybe be nice to check $this->value for containing null and handle that here
         return $query->whereIn($this->target, $this->value, not: $this->not());
     }
 
