@@ -1,4 +1,4 @@
-# Eloquent Filtering
+<h1 align="center">Eloquent Filtering</h3>
 
 ![Filter example](/img/header.png)
 
