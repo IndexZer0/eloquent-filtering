@@ -582,7 +582,9 @@ select * from "projects" where "description" NOT LIKE '%Laravel'
 
 #### NullFilter - `$null`
 
-- `value` = `boolean` for `is null` or `is not null`.
+- `value` = `boolean` .
+- `true` for `is null`.
+- `false` for `is not null`.
 
 ```php
 $sql = Person::filter([
