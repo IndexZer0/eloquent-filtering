@@ -575,4 +575,3 @@ it('can filter', function (): void {
     expect($package->name)->toBe('eloquent-filtering')
         ->and($package->version)->toBe('1.0.0');
 });
-
