@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 class InFilter extends AbstractFieldFilter
 {
@@ -31,8 +32,9 @@ class InFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            'target' => ['required', 'string'],
-            'value'  => ['required', 'array'],
+            'target'  => ['required', 'string'],
+            'value'   => ['required', 'array'],
+            'value.*' => ['required', new WhereValue()],
         ];
     }
 
@@ -46,6 +48,7 @@ class InFilter extends AbstractFieldFilter
 
     public function apply(Builder $query): Builder
     {
+        // Maybe be nice to check $this->value for containing null and handle that here
         return $query->whereIn($this->target, $this->value, not: $this->not());
     }
 
