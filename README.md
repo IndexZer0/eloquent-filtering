@@ -1,22 +1,29 @@
-# eloquent-filtering
+<h1 align="center">Eloquent Filtering</h3>
 
-# WIP - Public api subject to change.
+![Filter example](/img/header.png)
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/indexzer0/eloquent-filtering.svg?style=flat-square)](https://packagist.org/packages/indexzer0/eloquent-filtering)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/indexzer0/eloquent-filtering/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/indexzer0/eloquent-filtering/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![codecov](https://codecov.io/gh/IndexZer0/eloquent-filtering/graph/badge.svg?token=34B3NIPBRM)](https://codecov.io/gh/IndexZer0/eloquent-filtering)
-[![Total Downloads](https://img.shields.io/packagist/dt/indexzer0/eloquent-filtering.svg?style=flat-square)](https://packagist.org/packages/indexzer0/eloquent-filtering)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/indexzer0/eloquent-filtering.svg?style=for-the-badge)](https://packagist.org/packages/indexzer0/eloquent-filtering)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/indexzer0/eloquent-filtering/run-tests.yml?branch=main&label=tests&style=for-the-badge)](https://github.com/indexzer0/eloquent-filtering/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![Codecov](https://img.shields.io/codecov/c/github/IndexZer0/eloquent-filtering?token=34B3NIPBRM&style=for-the-badge&logo=codecov)](https://codecov.io/gh/IndexZer0/eloquent-filtering)
+[![Total Downloads](https://img.shields.io/packagist/dt/indexzer0/eloquent-filtering.svg?style=for-the-badge)](https://packagist.org/packages/indexzer0/eloquent-filtering)
+[![PHP Version Require](http://poser.pugx.org/indexzer0/eloquent-filtering/require/php?style=for-the-badge)](https://packagist.org/packages/indexzer0/eloquent-filtering)
+[![Laravel Version Require](http://poser.pugx.org/indexzer0/eloquent-filtering/require/illuminate/contracts?style=for-the-badge)](https://packagist.org/packages/indexzer0/eloquent-filtering)
 
 ---
 
-- **Avoid** writing custom query logic for filtering your models.
+<h3 align="center">Easily filter eloquent models using arrays</h3>
+
+- **Avoid** writing custom query logic for filtering your models. 
+- **Simply** define allowed filters on your models and pass filters from http request to the model.
+
+---
 
 Features:
 
 - Filter 
   - Many filter methods.
-  - Filter by fields.
-  - Filter by relationship existence.
+  - Filter by **fields**.
+  - Filter by **relationship** existence.
     - Filter by fields on relationships.
       - No duplicated unnecessary exist clauses in queries.
   - Alias fields and relationships.
@@ -27,7 +34,6 @@ Features:
 - Sort
   - Sort by fields.
   - Alias fields.
-- Terminology based on laravel eloquent query builder.
 
 ---
 
@@ -582,7 +588,9 @@ select * from "projects" where "description" NOT LIKE '%Laravel'
 
 #### NullFilter - `$null`
 
-- `value` = `boolean` for `is null` or `is not null`.
+- `value` = `boolean` .
+- `true` for `is null`.
+- `false` for `is not null`.
 
 ```php
 $sql = Person::filter([
@@ -605,7 +613,7 @@ select * from "people" where "age" is null and "weight" is not null
 
 #### InFilter - `$in`
 
-- `value` = `array` of values.
+- `value` = array of `string` | `int` | `float`.
 
 ```php
 $sql = Person::filter([
@@ -623,7 +631,7 @@ select * from "people" where "name" in ('Taylor', 'Otwell')
 
 #### NotInFilter - `$notIn`
 
-- `value` = `array` of filters.
+- `value` = array of `string` | `int` | `float`.
 
 ```php
 $sql = Person::filter([
@@ -1240,6 +1248,12 @@ composer test
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+---
+
+## Feature Ideas
+
+Please see [Feature ideas](feature-ideas.md) for potential future features.
 
 ---
 

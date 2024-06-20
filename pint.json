@@ -27,6 +27,8 @@
         },
         "unary_operator_spaces": true,
         "logical_operators": true,
-        "array_push": true
+        "array_push": true,
+        "no_useless_else": true,
+        "no_useless_return": true
     }
 }
