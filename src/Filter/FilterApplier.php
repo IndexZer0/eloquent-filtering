@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Database\Query\Builder;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier as FilterApplierContract;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Suppression\Suppression;
