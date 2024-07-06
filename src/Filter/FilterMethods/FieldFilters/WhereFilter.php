@@ -14,6 +14,7 @@ abstract class WhereFilter extends AbstractFieldFilter
     final public function __construct(
         protected string           $target,
         protected string|float|int $value,
+        protected array $modifiers,
     ) {
     }
 
@@ -35,7 +36,8 @@ abstract class WhereFilter extends AbstractFieldFilter
     {
         return new static(
             $approvedFilter->target()->getReal(),
-            $approvedFilter->data_get('value')
+            $approvedFilter->data_get('value'),
+            $approvedFilter->modifiers(),
         );
     }
 
@@ -60,5 +62,10 @@ abstract class WhereFilter extends AbstractFieldFilter
     public function target(): string
     {
         return $this->target;
+    }
+
+    public function hasModifier(string $modifier): bool
+    {
+        return collect($this->modifiers)->contains($modifier);
     }
 }
