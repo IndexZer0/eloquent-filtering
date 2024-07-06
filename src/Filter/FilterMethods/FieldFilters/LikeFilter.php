@@ -25,12 +25,12 @@ class LikeFilter extends WhereFilter
 
     protected function valueBefore(): string
     {
-        return '%';
+        return $this->hasModifier('start') ? '' : '%';
     }
 
     protected function valueAfter(): string
     {
-        return '%';
+        return $this->hasModifier('end') ? '' : '%';
     }
 
     protected function operator(): string
