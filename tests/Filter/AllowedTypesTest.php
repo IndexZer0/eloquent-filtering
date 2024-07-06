@@ -49,7 +49,7 @@ it('can have all types allowed', function (): void {
 
 });
 
-it('can have only some types allowed | only', function (): void {
+it('can have only some types allowed', function (): void {
 
     $this->setSuppression("filter.denied", true);
 
