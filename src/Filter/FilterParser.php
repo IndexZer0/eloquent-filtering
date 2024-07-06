@@ -44,25 +44,25 @@ class FilterParser implements FilterParserContract
 
     private function parseFilter(mixed $filter): FilterMethod
     {
-        $filterType = $this->ensureFilterHasType($filter);
-        $filterFqcn = $this->findFilterMethodFqcn($filterType);
+        $requestedFilter = $this->parseFilterType($filter);
+        $filterFqcn = $this->findFilterMethodFqcn($requestedFilter->type);
 
         $validatedData = $this->validateFilterFormat($filter, $filterFqcn);
 
         $approvedFilter = $this->allowedFilterList->ensureAllowed(
-            new PendingFilter($filterType, $filterFqcn, $validatedData)
+            new PendingFilter($requestedFilter, $filterFqcn, $validatedData)
         );
 
         return $approvedFilter->createFilter();
     }
 
-    private function ensureFilterHasType(mixed $filter): string
+    private function parseFilterType(mixed $filter): RequestedFilter
     {
         if (!is_array($filter) || !array_key_exists('type', $filter) || !is_string($filter['type'])) {
             InvalidFilterException::throw();
         }
 
-        return $filter['type'];
+        return RequestedFilter::fromString($filter['type']);
     }
 
     private function findFilterMethodFqcn(string $type): string
