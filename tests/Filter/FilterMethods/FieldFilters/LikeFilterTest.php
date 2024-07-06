@@ -50,3 +50,57 @@ it('can perform $like filter', function (): void {
     ->and($models->pluck('name')->toArray())->toBe(['__text__', '__text', 'text__']);
 
 });
+
+it('can perform $like filter with :start modifier', function (): void {
+    $query = Author::filter(
+        [
+            [
+                'target' => 'name',
+                'type'   => '$like:start',
+                'value'  => 'text',
+            ],
+        ],
+        Filter::only(
+            Filter::field('name', ['$like']),
+        )
+    );
+
+    $expectedSql = <<< SQL
+        select * from "authors" where "name" LIKE 'text%'
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(1)
+        ->and($models->pluck('name')->toArray())->toBe(['text__']);
+
+});
+
+it('can perform $like filter with :end modifier', function (): void {
+    $query = Author::filter(
+        [
+            [
+                'target' => 'name',
+                'type'   => '$like:end',
+                'value'  => 'text',
+            ],
+        ],
+        Filter::only(
+            Filter::field('name', ['$like']),
+        )
+    );
+
+    $expectedSql = <<< SQL
+        select * from "authors" where "name" LIKE '%text'
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(1)
+        ->and($models->pluck('name')->toArray())->toBe(['__text']);
+
+});
