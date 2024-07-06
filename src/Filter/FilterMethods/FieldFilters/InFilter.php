@@ -15,8 +15,8 @@ class InFilter extends AbstractFieldFilter
     final public function __construct(
         protected string $target,
         protected array $value,
+        protected array $modifiers
     ) {
-
     }
 
     /*
@@ -44,12 +44,20 @@ class InFilter extends AbstractFieldFilter
         return new static(
             $approvedFilter->target()->getReal(),
             $approvedFilter->data_get('value'),
+            $approvedFilter->modifiers(),
         );
     }
 
     public function apply(Builder $query): Builder
     {
-        return $query->whereIn($this->target, $this->value, not: $this->not());
+        $value = collect($this->value);
+        $valueContainNull = $value->containsStrict(null);
+        $nullModifier = collect($this->modifiers)->contains('null');
+
+        return $query->whereIn($this->target, $value->filter(fn ($item) => $item !== null), not: $this->not())
+            ->when($valueContainNull && $nullModifier, function (Builder $query): void {
+                $query->whereNull($this->target, $this->not() ? 'and' : 'or', $this->not());
+            });
     }
 
     /*
