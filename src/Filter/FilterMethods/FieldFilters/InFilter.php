@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
-use IndexZer0\EloquentFiltering\Rules\WhereValue;
+use IndexZer0\EloquentFiltering\Rules\NullableWhereValue;
 
 class InFilter extends AbstractFieldFilter
 {
@@ -34,8 +34,8 @@ class InFilter extends AbstractFieldFilter
     {
         return [
             'target'  => ['required', 'string'],
-            'value'   => ['required', 'array'],
-            'value.*' => ['required', new WhereValue()],
+            'value'   => ['required', 'array', 'min:1'],
+            'value.*' => [new NullableWhereValue()],
         ];
     }
 
