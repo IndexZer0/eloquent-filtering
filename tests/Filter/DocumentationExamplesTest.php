@@ -155,7 +155,7 @@ it('LikeStartFilter | $like:start', function (): void {
             'value'  => 'Laravel',
         ],
     ], Filter::only(
-        Filter::field('description', ['$like:start'])
+        Filter::field('description', ['$like'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -174,7 +174,7 @@ it('LikeEndFilter | $like:end', function (): void {
             'value'  => 'Laravel',
         ],
     ], Filter::only(
-        Filter::field('description', ['$like:end'])
+        Filter::field('description', ['$like'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -212,7 +212,7 @@ it('NotLikeStartFilter | $notLike:start', function (): void {
             'value'  => 'Symfony',
         ],
     ], Filter::only(
-        Filter::field('description', ['$notLike:start'])
+        Filter::field('description', ['$notLike'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
@@ -231,7 +231,7 @@ it('NotLikeEndFilter | $notLike:end', function (): void {
             'value'  => 'Symfony',
         ],
     ], Filter::only(
-        Filter::field('description', ['$notLike:end'])
+        Filter::field('description', ['$notLike'])
     ))->toRawSql();
 
     $expectedSql = <<< SQL
