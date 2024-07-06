@@ -8,19 +8,25 @@ use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AppliesToTarget;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
+use IndexZer0\EloquentFiltering\Filter\RequestedFilter;
 
 class PendingFilter
 {
     public function __construct(
-        protected string $type,
+        protected RequestedFilter $requestedFilter,
         protected string $filterFqcn,
         protected array  $data,
     ) {
     }
 
+    public function requestedFilter(): RequestedFilter
+    {
+        return $this->requestedFilter;
+    }
+
     public function type(): string
     {
-        return $this->type;
+        return $this->requestedFilter->type;
     }
 
     public function data(): array
@@ -49,7 +55,7 @@ class PendingFilter
 
     public function getDeniedMessage(): string
     {
-        $message = "\"{$this->type}\" filter%s is not allowed";
+        $message = "\"{$this->requestedFilter->fullTypeString()}\" filter%s is not allowed";
 
         $target = is_a($this->filterFqcn, AppliesToTarget::class, true) ? $this->desiredTarget() : null;
 
@@ -63,6 +69,7 @@ class PendingFilter
         return new ApprovedFilter(
             $this->filterFqcn,
             $this->data,
+            $this->requestedFilter->modifiers,
             $target,
             $childFilters
         );
