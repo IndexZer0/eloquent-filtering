@@ -1142,10 +1142,7 @@ Filter::field('name', ['$eq'])
 Filter::field('name', Types::only(['$eq']))
 
 // All types allowed
-Filter::field('name', Types::all()),
-
-// All except `$eq` allowed
-Filter::field('name', Types::except(['$eq'])),
+Filter::field('name', Types::all())
 ```
 
 #### Suppressing Exceptions
