@@ -5,19 +5,25 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\AllowedTypes;
 
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
+use IndexZer0\EloquentFiltering\Filter\RequestedFilter;
 
 class SomeTypesAllowed implements AllowedTypes
 {
+    protected array $allowedTypes = [];
+
     public function __construct(
-        protected array $types = [],
-        protected bool $except = false,
+        AllowedType ...$allowedTypes,
     ) {
+        $this->allowedTypes = $allowedTypes;
     }
 
-    public function contains(string $type): bool
+    public function contains(RequestedFilter $requestedFilter): bool
     {
-        $inTypes = in_array($type, $this->types, true);
-
-        return $this->except ? !$inTypes : $inTypes;
+        foreach ($this->allowedTypes as $allowedType) {
+            if ($allowedType->matches($requestedFilter)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
