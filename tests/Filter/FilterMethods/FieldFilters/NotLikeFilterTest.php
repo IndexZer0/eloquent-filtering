@@ -50,3 +50,57 @@ it('can perform $notLike filter', function (): void {
     ->and($models->pluck('name')->toArray())->toBe(['other']);
 
 });
+
+it('can perform $notLike filter with :end modifier', function (): void {
+    $query = Author::filter(
+        [
+            [
+                'target' => 'name',
+                'type'   => '$notLike:end',
+                'value'  => 'text',
+            ],
+        ],
+        Filter::only(
+            Filter::field('name', ['$notLike']),
+        )
+    );
+
+    $expectedSql = <<< SQL
+        select * from "authors" where "name" NOT LIKE '%text'
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(3)
+        ->and($models->pluck('name')->toArray())->toBe(['__text__', 'text__', 'other']);
+
+});
+
+it('can perform $notLike filter with :start modifier', function (): void {
+    $query = Author::filter(
+        [
+            [
+                'target' => 'name',
+                'type'   => '$notLike:start',
+                'value'  => 'text',
+            ],
+        ],
+        Filter::only(
+            Filter::field('name', ['$notLike']),
+        )
+    );
+
+    $expectedSql = <<< SQL
+        select * from "authors" where "name" NOT LIKE 'text%'
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(3)
+        ->and($models->pluck('name')->toArray())->toBe(['__text__', '__text', 'other']);
+
+});
