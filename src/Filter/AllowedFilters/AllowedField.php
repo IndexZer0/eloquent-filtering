@@ -37,7 +37,7 @@ class AllowedField implements AllowedFilter
             return false;
         }
 
-        return $this->types->contains($pendingFilter->type()) &&
+        return $this->types->contains($pendingFilter->requestedFilter()) &&
             $this->target->isFor($pendingFilter->desiredTarget());
     }
 

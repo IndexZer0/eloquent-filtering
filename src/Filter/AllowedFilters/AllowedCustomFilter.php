@@ -35,7 +35,7 @@ class AllowedCustomFilter implements AllowedFilter
             return false;
         }
 
-        return $this->types->contains($pendingFilter->type());
+        return $this->types->contains($pendingFilter->requestedFilter());
     }
 
     public function getTarget(PendingFilter $pendingFilter): ?Target
