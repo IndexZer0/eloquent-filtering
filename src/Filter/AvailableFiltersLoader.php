@@ -16,16 +16,12 @@ use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\GreaterThanFil
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\InFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\LessThanEqualToFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\LessThanFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\LikeEndFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\LikeFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\LikeStartFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotBetweenColumnsFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotBetweenFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotEqualFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotInFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotLikeEndFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotLikeFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotLikeStartFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NullFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ConditionFilters\OrFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonContainsFilter;
@@ -67,13 +63,7 @@ class AvailableFiltersLoader
 
             // Like
             LikeFilter::class,
-            LikeStartFilter::class,
-            LikeEndFilter::class,
-
-            // Not Like
             NotLikeFilter::class,
-            NotLikeStartFilter::class,
-            NotLikeEndFilter::class,
 
             // Conditional
             OrFilter::class,
