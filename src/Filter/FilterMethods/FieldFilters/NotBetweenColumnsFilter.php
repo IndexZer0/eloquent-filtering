@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+
 class NotBetweenColumnsFilter extends BetweenColumnsFilter
 {
     /*
@@ -14,7 +16,7 @@ class NotBetweenColumnsFilter extends BetweenColumnsFilter
 
     public static function type(): string
     {
-        return '$notBetweenColumns';
+        return FilterType::NOT_BETWEEN_COLUMNS->value;
     }
 
     public static function format(): array

@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 class JsonContainsFilter extends AbstractFieldFilter
@@ -25,7 +26,7 @@ class JsonContainsFilter extends AbstractFieldFilter
 
     public static function type(): string
     {
-        return '$jsonContains';
+        return FilterType::JSON_CONTAINS->value;
     }
 
     public static function format(): array

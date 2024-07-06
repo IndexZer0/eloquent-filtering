@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\Rule;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Rules\StrictInteger;
 
 class JsonLengthFilter extends AbstractFieldFilter
@@ -27,7 +28,7 @@ class JsonLengthFilter extends AbstractFieldFilter
 
     public static function type(): string
     {
-        return '$jsonLength';
+        return FilterType::JSON_LENGTH->value;
     }
 
     public static function format(): array

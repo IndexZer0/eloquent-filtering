@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 
 class NullFilter extends AbstractFieldFilter
 {
@@ -25,7 +26,7 @@ class NullFilter extends AbstractFieldFilter
 
     public static function type(): string
     {
-        return '$null';
+        return FilterType::NULL->value;
     }
 
     public static function format(): array

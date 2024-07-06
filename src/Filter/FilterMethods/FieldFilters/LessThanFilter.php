@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+
 class LessThanFilter extends WhereFilter
 {
     /*
@@ -14,7 +16,7 @@ class LessThanFilter extends WhereFilter
 
     public static function type(): string
     {
-        return '$lt';
+        return FilterType::LESS_THAN->value;
     }
 
     /*

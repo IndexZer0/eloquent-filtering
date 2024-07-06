@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 class InFilter extends AbstractFieldFilter
@@ -26,7 +27,7 @@ class InFilter extends AbstractFieldFilter
 
     public static function type(): string
     {
-        return '$in';
+        return FilterType::IN->value;
     }
 
     public static function format(): array

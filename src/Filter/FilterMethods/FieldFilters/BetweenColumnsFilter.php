@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 
 class BetweenColumnsFilter extends AbstractFieldFilter
 {
@@ -24,7 +25,7 @@ class BetweenColumnsFilter extends AbstractFieldFilter
 
     public static function type(): string
     {
-        return '$betweenColumns';
+        return FilterType::BETWEEN_COLUMNS->value;
     }
 
     public static function format(): array
