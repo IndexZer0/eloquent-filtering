@@ -9,8 +9,8 @@ use IndexZer0\EloquentFiltering\Filter\RequestedFilter;
 
 class AllTypesAllowed implements AllowedTypes
 {
-    public function contains(RequestedFilter $requestedFilter): bool
+    public function get(RequestedFilter $requestedFilter): ?AllowedType
     {
-        return true;
+        return new AllowedType($requestedFilter->type);
     }
 }
