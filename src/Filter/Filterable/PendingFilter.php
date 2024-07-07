@@ -75,7 +75,10 @@ class PendingFilter
                 array_merge_recursive($this->filterFqcn::format(), $rules),
             );
         } catch (ValidationException $ve) {
-            throw new MalformedFilterFormatException($this->requestedFilter->fullTypeString(), $ve);
+            throw MalformedFilterFormatException::withMessages([
+                'filter' => ["\"{$this->requestedFilter->fullTypeString()}\" filter does not match required format."],
+                ...$ve->errors(),
+            ]);
         }
     }
 
