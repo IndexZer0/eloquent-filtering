@@ -62,6 +62,11 @@ enum FilterType: string
         return $this->toAllowedType()->withModifiers();
     }
 
+    public function withRules(array $rules): AllowedType
+    {
+        return $this->toAllowedType()->withRules($rules);
+    }
+
     public function toAllowedType(): AllowedType
     {
         return new AllowedType($this->value);
