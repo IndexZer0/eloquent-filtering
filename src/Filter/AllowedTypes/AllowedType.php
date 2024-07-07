@@ -11,6 +11,8 @@ use IndexZer0\EloquentFiltering\Filter\RequestedFilter;
 
 class AllowedType
 {
+    public array $rules = [];
+
     public function __construct(
         public string $type,
         public AllowedModifiers $allowedModifiers = new AllModifiersAllowed(),
@@ -20,6 +22,12 @@ class AllowedType
     public function withModifiers(string ...$modifiers): AllowedType
     {
         $this->allowedModifiers = new SomeModifiersAllowed(...$modifiers);
+        return $this;
+    }
+
+    public function withRules(array $rules): self
+    {
+        $this->rules = $rules;
         return $this;
     }
 
