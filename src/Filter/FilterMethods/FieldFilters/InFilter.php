@@ -9,6 +9,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Rules\NullableWhereValue;
+use IndexZer0\EloquentFiltering\Rules\TargetRules;
 
 class InFilter extends AbstractFieldFilter
 {
@@ -33,7 +34,7 @@ class InFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            'target'  => ['required', 'string'],
+            ...TargetRules::get(),
             'value'   => ['required', 'array', 'min:1'],
             'value.*' => [new NullableWhereValue()],
         ];

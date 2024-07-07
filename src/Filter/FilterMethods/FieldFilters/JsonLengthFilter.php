@@ -10,6 +10,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Rules\StrictInteger;
+use IndexZer0\EloquentFiltering\Rules\TargetRules;
 
 class JsonLengthFilter extends AbstractFieldFilter
 {
@@ -34,7 +35,7 @@ class JsonLengthFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            'target'   => ['required', 'string'],
+            ...TargetRules::get(),
             'operator' => ['required', Rule::in(['=', '<', '<=', '>', '>='])],
             'value'    => ['required', new StrictInteger(), ],
         ];

@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Rules\TargetRules;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 abstract class WhereFilter extends AbstractFieldFilter
@@ -27,7 +28,7 @@ abstract class WhereFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            'target' => ['required', 'string'],
+            ...TargetRules::get(),
             'value'  => ['required', new WhereValue()],
         ];
     }

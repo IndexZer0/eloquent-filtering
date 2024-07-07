@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Rules\TargetRules;
 
 class BetweenColumnsFilter extends AbstractFieldFilter
 {
@@ -31,7 +32,7 @@ class BetweenColumnsFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            'target'  => ['required', 'string'],
+            ...TargetRules::get(),
             'value'   => ['required', 'array', 'size:2'],
             'value.*' => ['required', 'string'],
         ];
