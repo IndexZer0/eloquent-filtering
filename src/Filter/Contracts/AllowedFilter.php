@@ -15,4 +15,20 @@ interface AllowedFilter
     public function getAllowedType(PendingFilter $pendingFilter): ?AllowedType;
 
     public function getTarget(PendingFilter $pendingFilter): ?Target;
+
+    public function getDescription(): string;
+
+    /*
+     * -----------------------------
+     * Required support
+     * -----------------------------
+     */
+
+    public function required(bool $required): self;
+
+    public function isRequired(): bool;
+
+    public function markMatched(): void;
+
+    public function hasBeenMatched(): bool;
 }

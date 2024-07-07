@@ -12,9 +12,12 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Filterable\AllFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
+use IndexZer0\EloquentFiltering\Filter\Traits\CanBeRequired;
 
 class AllowedCustomFilter implements AllowedFilter
 {
+    use CanBeRequired;
+
     public function __construct(protected AllowedTypes $types)
     {
     }
@@ -42,5 +45,10 @@ class AllowedCustomFilter implements AllowedFilter
     public function getTarget(PendingFilter $pendingFilter): ?Target
     {
         return null;
+    }
+
+    public function getDescription(): string
+    {
+        return 'custom: TODO'; // TODO
     }
 }

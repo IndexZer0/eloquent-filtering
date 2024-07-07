@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Contracts;
 
+use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 
@@ -18,4 +19,6 @@ interface AllowedFilterList
     public function getAllowedFields(): array;
 
     public function getAllowedRelations(): array;
+
+    public function getUnmatchedRequiredFilters(): Collection;
 }

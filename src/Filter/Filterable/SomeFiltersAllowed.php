@@ -42,6 +42,8 @@ class SomeFiltersAllowed implements AllowedFilterList
 
                 $pendingFilter->validateWith($allowedType->rules);
 
+                $allowedFilter->markMatched();
+
                 $allowedChildFilters = $allowedFilter->allowedFilters();
 
                 $childFilters = $this->ensureChildFiltersAllowed($pendingFilter, $allowedChildFilters);
@@ -87,5 +89,22 @@ class SomeFiltersAllowed implements AllowedFilterList
                 fn (AllowedFilter $allowedFilter) => $allowedFilter instanceof AllowedRelation
             )
             ->toArray();
+    }
+
+    public function getUnmatchedRequiredFilters(): Collection
+    {
+        $unmatchedRequiredFilters = collect();
+
+        foreach ($this->allowedFilters as $allowedFilter) {
+            if ($allowedFilter->isRequired() && !$allowedFilter->hasBeenMatched()) {
+                $unmatchedRequiredFilters->push($allowedFilter);
+            }
+
+            $unmatchedRequiredFilters = $unmatchedRequiredFilters->merge(
+                $allowedFilter->allowedFilters()->getUnmatchedRequiredFilters()
+            );
+        }
+
+        return $unmatchedRequiredFilters;
     }
 }
