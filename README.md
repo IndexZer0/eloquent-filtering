@@ -1163,6 +1163,9 @@ class Order extends Model implements IsFilterable
             Filter::field('status', [
                 FilterType::EQUAL->withRules([
                     'value' => [Rule::enum(OrderStatus::class)]
+                ]),
+                FilterType::IN->withRules([
+                    'value.*' => [Rule::enum(OrderStatus::class)]
                 ])
             ]),
             Filter::field('paid_date', [
