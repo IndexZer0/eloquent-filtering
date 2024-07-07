@@ -40,11 +40,6 @@ Features:
 ## Simple example with relationship filter.
 
 ```php
-use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
-use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
-use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
-use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
-
 class Product extends Model implements IsFilterable
 {
     use Filterable;
