@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Rules\TargetRules;
 
 class KebabCaseFilter extends AbstractFieldFilter
 {
@@ -32,8 +33,8 @@ class KebabCaseFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            'target' => ['required', 'string'],
-            'value'  => ['required', 'string'],
+            ...TargetRules::get(),
+            'value' => ['required', 'string'],
         ];
     }
 
