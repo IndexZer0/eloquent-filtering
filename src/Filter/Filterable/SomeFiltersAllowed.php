@@ -34,7 +34,11 @@ class SomeFiltersAllowed implements AllowedFilterList
         }
 
         foreach ($this->allowedFilters as $allowedFilter) {
-            if ($allowedFilter->matches($pendingFilter)) {
+            $allowedType = $allowedFilter->getAllowedType($pendingFilter);
+
+            if ($allowedType) {
+
+
 
                 $allowedChildFilters = $allowedFilter->allowedFilters();
 

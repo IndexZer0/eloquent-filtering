@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 use Illuminate\Database\Eloquent\Model;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
@@ -36,14 +37,17 @@ class AllowedRelation implements AllowedFilter
         return $this->allowedFilters;
     }
 
-    public function matches(PendingFilter $pendingFilter): bool
+    public function getAllowedType(PendingFilter $pendingFilter): ?AllowedType
     {
         if (!$pendingFilter->is(FilterContext::RELATION)) {
-            return false;
+            return null;
         }
 
-        return $this->types->contains($pendingFilter->requestedFilter()) &&
-            $this->target->isFor($pendingFilter->desiredTarget());
+        if (!$this->target->isFor($pendingFilter->desiredTarget())) {
+            return null;
+        }
+
+        return $this->types->get($pendingFilter->requestedFilter());
     }
 
     public function getTarget(PendingFilter $pendingFilter): ?Target
