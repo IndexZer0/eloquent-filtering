@@ -13,9 +13,7 @@ class RequiredFilterException extends ValidationException implements FilterExcep
     public static function fromRequiredFilters(AllowedFilter ...$allowedFilters): self
     {
         return self::withMessages(
-            collect($allowedFilters)->mapWithKeys(function(AllowedFilter $allowedFilter) {
-                return [$allowedFilter->getDescription() => $allowedFilter->getDescription() . ' is required.'];
-            })->toArray()
+            collect($allowedFilters)->mapWithKeys(fn (AllowedFilter $allowedFilter) => [$allowedFilter->getDescription() => $allowedFilter->getDescription() . ' is required.'])->toArray()
         );
     }
 }

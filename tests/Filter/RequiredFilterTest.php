@@ -30,7 +30,7 @@ it('throws RequiredFilterException when required filters have not been matched',
     } catch (RequiredFilterException $rfe) {
         expect($rfe->getMessage())->toBe('"name" filter is required. (and 3 more errors)')
             ->and($rfe->errors())->toBe([
-                '"name" filter'  => [
+                '"name" filter' => [
                     '"name" filter is required.',
                 ],
                 '"books" filter' => [
@@ -39,9 +39,9 @@ it('throws RequiredFilterException when required filters have not been matched',
                 '"title" filter' => [
                     '"title" filter is required.',
                 ],
-                'custom: TODO'   => [
+                'custom: TODO' => [
                     'custom: TODO is required.',
-                ]
+                ],
             ]);
     }
 
@@ -52,27 +52,28 @@ it('does not throw RequiredFilterException when required filters have been match
     config()->set('eloquent-filtering.custom_filters', [LatestFilter::class]);
 
     try {
-        Author::filter([
+        Author::filter(
             [
-                'target' => 'name',
-                'type'   => '$like',
-                'value'  => 'George',
+                [
+                    'target' => 'name',
+                    'type'   => '$like',
+                    'value'  => 'George',
+                ],
+                [
+                    'target' => 'books',
+                    'type'   => '$has',
+                    'value'  => [
+                        [
+                            'target' => 'title',
+                            'type'   => '$like',
+                            'value'  => 'Thrones',
+                        ],
+                    ],
+                ],
+                [
+                    'type' => '$latest',
+                ],
             ],
-            [
-                'target' => 'books',
-                'type'   => '$has',
-                'value'  => [
-                    [
-                        'target' => 'title',
-                        'type'   => '$like',
-                        'value'  => 'Thrones',
-                    ]
-                ]
-            ],
-            [
-                'type' => '$latest'
-            ],
-        ],
             Filter::only(
                 Filter::field('name', ['$like'])->required(),
                 Filter::relation(
