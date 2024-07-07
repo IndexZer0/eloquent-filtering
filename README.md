@@ -1074,7 +1074,7 @@ You can alias your target fields and relations if you don't wish to expose datab
 
 The below example:
  - Allows `name` and uses `first_name` in the database query.
- - Allows `documents` and uses `files` as the relationship name.
+ - Allows `documents` and uses `files` as the relationship method name.
 
 ```php
 $sql = Person::filter([
