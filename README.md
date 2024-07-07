@@ -1123,7 +1123,7 @@ You can specify that `Filter::field()`, `Filter::relation()` and `Filter::custom
 - When a required filter is not used, a `RequiredFilterException` is thrown.
 - `RequiredFilterException` extends laravels `ValidationException`.
   - You can let this bubble up to your controller for the default laravel 422 response.
-- This exception can not be [suppressed](#suppressing-exceptions).
+- This exception **CAN NOT** be [suppressed](#suppressing-exceptions).
 
 ```php
 public function allowedFilters(): AllowedFilterList
@@ -1145,6 +1145,11 @@ public function allowedFilters(): AllowedFilterList
 #### Defining Validation Rules
 
 You can define your own validation rules for any `AllowedType`.
+
+- When a filter does not pass validation rules, a `MalformedFilterFormatException` is thrown.
+- `MalformedFilterFormatException` extends Laravels `ValidationException`.
+    - You can let this bubble up to your controller for the default laravel 422 response.
+- This exception **CAN** not be [suppressed](#suppressing-exceptions).
 
 ```php
 class Order extends Model implements IsFilterable
