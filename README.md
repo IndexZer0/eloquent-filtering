@@ -612,7 +612,7 @@ select * from "people" where "age" is null and "weight" is not null
 
 #### InFilter - `$in`
 
-- `value` = array of `string` | `int` | `float`.
+- `value` = array of `string` | `int` | `float` (minimum 1).
 
 ```php
 $sql = Person::filter([
@@ -630,7 +630,7 @@ select * from "people" where "name" in ('Taylor', 'Otwell')
 
 #### NotInFilter - `$notIn`
 
-- `value` = array of `string` | `int` | `float`.
+- `value` = array of `string` | `int` | `float` (minimum 1).
 
 ```php
 $sql = Person::filter([
