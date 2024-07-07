@@ -111,7 +111,7 @@ WHERE "name" = 'TV'
     - [Making Model Filterable](#making-model-filterable)
     - [Allowing Filters](#allowing-filters)
         - [Define On Model](#define-on-model)
-        - [Define In Filter](#define-in-filter)
+        - [Pass To Filter](#pass-to-filter)
         - [Allowing All Filters](#allowing-all-filters)
         - [Including Relationship Model Filters](#including-relationship-model-filters)
     - [Filter Structure](#filter-structure)
@@ -229,9 +229,9 @@ class Product extends Model implements IsFilterable
 }
 ```
 
-#### Define in `::filter()`
+#### Pass to `::filter()`
 
-- Defining in `::filter()` method takes priority over `allowedFilters()` on the model.
+- Passing in an `AllowedFilterList` to `::filter()` method takes priority over `allowedFilters()` on the model.
 
 ```php
 Product::filter(
