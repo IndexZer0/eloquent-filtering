@@ -1150,7 +1150,7 @@ You can define your own validation rules for any `AllowedType`.
 - When a filter does not pass validation rules, a `MalformedFilterFormatException` is thrown.
 - `MalformedFilterFormatException` extends Laravels `ValidationException`.
     - You can let this bubble up to your controller for the default laravel 422 response.
-- This exception **CAN** not be [suppressed](#suppressing-exceptions).
+- This exception **CAN** be [suppressed](#suppressing-exceptions).
 
 ```php
 class Order extends Model implements IsFilterable
