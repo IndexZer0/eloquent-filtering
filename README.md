@@ -130,6 +130,7 @@ WHERE "name" = 'TV'
         - [Specifying Allowed Types](#specifying-allowed-types)
         - [Required Filters](#required-filters)
         - [Defining Validation Rules](#defining-validation-rules)
+        - [Filter Modifiers](#filter-modifiers)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Suppression Hooks](#suppression-hooks)
         - [Condition Filters Note](#condition-filters-note)
@@ -1177,6 +1178,44 @@ class Order extends Model implements IsFilterable
             ]),
         );
     }
+}
+```
+
+#### Filter Modifiers
+
+- Modifiers are ways to slightly alter the way that a filter works.
+- Multiple modifiers can be applied. i.e. `$like:start:end`.
+- Some of the [core filters](#available-filters) have modifiers.
+  - `$like`:
+    - `:start` - matches only the start of field `LIKE 'Laravel%'`.
+    - `:end`  - matches only the end of field `LIKE '%Laravel'`.
+  - `$notLike`:
+    - `:start` - matches only the start of field `NOT LIKE 'Laravel%'`.
+    - `:end` - matches only the end of field `NOT LIKE '%Laravel'`.
+  - `$in`:
+    - `:null` - also does a `or "{$target}" is null` if `null` is sent in the `values` array.
+  - `$notIn`:
+    - `:null`- also does a `and "{$target}" is not null` if `null` is sent in the `values` array.
+
+You can specify just specific modifiers to enable.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('name', [FilterType::LIKE->withModifiers('end')])
+    );
+}
+```
+
+You can disable all modifiers.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('name', [FilterType::LIKE->withoutModifiers()])
+    );
 }
 ```
 
