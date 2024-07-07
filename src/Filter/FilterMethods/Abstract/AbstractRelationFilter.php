@@ -8,6 +8,7 @@ use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\HasChildFilters;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
+use IndexZer0\EloquentFiltering\Rules\TargetRules;
 
 abstract class AbstractRelationFilter extends AbstractFieldFilter implements HasChildFilters
 {
@@ -31,7 +32,7 @@ abstract class AbstractRelationFilter extends AbstractFieldFilter implements Has
     public static function format(): array
     {
         return [
-            'target'  => ['required', 'string'],
+            ...TargetRules::get(),
             'value'   => ['array'],
             'value.*' => ['array'],
         ];
