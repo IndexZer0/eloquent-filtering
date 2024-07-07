@@ -128,6 +128,7 @@ WHERE "name" = 'TV'
         - [Aliasing Targets](#aliasing-targets)
         - [Json Path Wildcards](#json-path-wildcards)
         - [Specifying Allowed Types](#specifying-allowed-types)
+        - [Required Filters](#required-filters)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Suppression Hooks](#suppression-hooks)
         - [Condition Filters Note](#condition-filters-note)
@@ -1106,6 +1107,32 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Types\Types;
 
 Filter::field('name', Types::all())
+```
+
+#### Required Filters
+
+You can specify that `Filter::field()`, `Filter::relation()` and `Filer::custom()` filters must be required.
+
+- When a required filter is not used, a `RequiredFilterException` is thrown.
+- `RequiredFilterException` extends laravels `ValidationException`.
+  - You can let this bubble up to your controller for the default laravel 422 response.
+- This exception can not be [suppressed](#suppressing-exceptions).
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    Filter::only(
+        Filter::field('name', [FilterType::LIKE])->required(),
+        Filter::relation(
+            'books',
+            [FilterType::HAS],
+            Filter::only(
+                Filter::field('title', [FilterType::LIKE])->required()
+            )
+        )->required(),
+        Filter::custom('$latest')->required()
+    )
+}
 ```
 
 #### Suppressing Exceptions
