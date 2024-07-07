@@ -1094,7 +1094,7 @@ $sql = Person::filter([
 ))->toRawSql();
 ```
 
-You can also alias targets when allowing all filters.
+You can alias targets when allowing all filters.
 
 ```php
 Filter::all(
