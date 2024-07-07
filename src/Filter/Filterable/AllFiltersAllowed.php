@@ -75,4 +75,9 @@ class AllFiltersAllowed implements AllowedFilterList
     {
         return [];
     }
+
+    public function getUnmatchedRequiredFilters(): Collection
+    {
+        return collect();
+    }
 }

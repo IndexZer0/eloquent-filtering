@@ -82,4 +82,21 @@ class SomeFiltersAllowed implements AllowedFilterList
             )
             ->toArray();
     }
+
+    public function getUnmatchedRequiredFilters(): Collection
+    {
+        $unmatchedRequiredFilters = collect();
+
+        foreach ($this->allowedFilters as $allowedFilter) {
+            if ($allowedFilter->isRequired() && !$allowedFilter->hasBeenMatched()) {
+                $unmatchedRequiredFilters->push($allowedFilter);
+            }
+
+            $unmatchedRequiredFilters = $unmatchedRequiredFilters->merge(
+                $allowedFilter->allowedFilters()->getUnmatchedRequiredFilters()
+            );
+        }
+
+        return $unmatchedRequiredFilters;
+    }
 }
