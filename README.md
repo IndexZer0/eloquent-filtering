@@ -44,7 +44,7 @@ class Product extends Model implements IsFilterable
 {
     use Filterable;
     
-    public function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
             Filter::field('name', ['$eq']),
@@ -62,7 +62,7 @@ class Manufacturer extends Model implements IsFilterable
 {
     use Filterable;
 
-    public function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
             Filter::field('name', ['$eq'])
@@ -200,13 +200,14 @@ You can specify allowed filters in two ways:
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
-use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 
 class Product extends Model implements IsFilterable
 {
     use Filterable;
     
-    public function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
             Filter::field('name', ['$eq', '$like']),
@@ -258,7 +259,7 @@ You can allow all filters using `Filter::all()`.
 > Allowing all filters and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
 
 ```php
-public function allowedFilters(): AllFiltersAllowed
+public function allowedFilters(): AllowedFilterList
 {
     return Filter::all();
 }
@@ -291,7 +292,7 @@ public function allowedFilters(): SomeFiltersAllowed
 This method instructs the package to look for `AllowedField` filters within the `allowedFilters()` method of the relation model.
 
 ```php
-public function allowedFilters(): SomeFiltersAllowed
+public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
         Filter::relation('manufacturer', ['$has', '$doesntHas'])->includeRelationFields()
@@ -967,7 +968,7 @@ class LowerCaseFilter extends AbstractFieldFilter
  * Usage:
  */
 
-public function allowedFilters(): SomeFiltersAllowed
+public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
         Filter::field('name', ['$lowercase']),
@@ -1007,7 +1008,7 @@ class AdminFilter extends AbstractCustomFilter
  * Usage:
  */
 
-public function allowedFilters(): SomeFiltersAllowed
+public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
         Filter::custom(['$admin']),
