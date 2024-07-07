@@ -27,6 +27,8 @@ class SomeFiltersAllowed implements AllowedFilterList
     public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter
     {
         if ($pendingFilter->is(FilterContext::CONDITION)) {
+            $pendingFilter->validateWith([]);
+
             // These are filters such as '$or' and '$and'.
             return $pendingFilter->approveWith(
                 childFilters: $this->ensureChildFiltersAllowed($pendingFilter, $this)
@@ -38,7 +40,7 @@ class SomeFiltersAllowed implements AllowedFilterList
 
             if ($allowedType) {
 
-
+                $pendingFilter->validateWith($allowedType->rules);
 
                 $allowedChildFilters = $allowedFilter->allowedFilters();
 
