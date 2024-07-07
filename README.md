@@ -350,14 +350,14 @@ This package provides core filters that give you the ability to perform the vast
 
 #### Relationship Filters
 
-| Filter                                          | Code             | Query                                                                 |
-|-------------------------------------------------|------------------|-----------------------------------------------------------------------|
-| [HasFilter](#HasFilter---has)                   | `$has`           | `where exists (select * from {$target})`                              |
-| [DoesntHasFilter](#DoesntHasFilter---doesnthas) | `$doesntHas`     | `where not exists (select * from {$target})`                          |
+| Filter                                          | Type         | Query                                        |
+|-------------------------------------------------|--------------|----------------------------------------------|
+| [HasFilter](#HasFilter---has)                   | `$has`       | `where exists (select * from {$target})`     |
+| [DoesntHasFilter](#DoesntHasFilter---doesnthas) | `$doesntHas` | `where not exists (select * from {$target})` |
 
 #### Condition Filters
 
-| Filter                        | Code   | Query |
+| Filter                        | Type   | Query |
 |-------------------------------|--------|-------|
 | [OrFilter](#OrFilter---or)    | `$or`  | `or`  |
 | [AndFilter](#AndFilter---and) | `$and` | `and` |
