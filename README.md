@@ -129,6 +129,7 @@ WHERE "name" = 'TV'
         - [Json Path Wildcards](#json-path-wildcards)
         - [Specifying Allowed Types](#specifying-allowed-types)
         - [Required Filters](#required-filters)
+        - [Defining Validation Rules](#defining-validation-rules)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Suppression Hooks](#suppression-hooks)
         - [Condition Filters Note](#condition-filters-note)
@@ -1138,6 +1139,39 @@ public function allowedFilters(): AllowedFilterList
         )->required(),
         Filter::custom('$latest')->required()
     );
+}
+```
+
+#### Defining Validation Rules
+
+You can define your own validation rules for any `AllowedType`.
+
+```php
+class Order extends Model implements IsFilterable
+{
+    use Filterable;
+    
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('status', [
+                FilterType::EQUAL->withRules([
+                    'value' => [Rule::enum(OrderStatus::class)]
+                ])
+            ]),
+            Filter::field('paid_date', [
+                FilterType::BETWEEN->withRules([
+                    'value.0' => ['date', 'before:value.1'],
+                    'value.1' => ['date', 'after:value.0'],
+                ])
+            ]),
+            Filter::field('created_at', [
+                new AllowedType('$yourCustomFilterType')->withRules([
+                    'value' => [new YourCustomRule()],
+                ])
+            ]),
+        );
+    }
 }
 ```
 
