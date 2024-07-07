@@ -323,30 +323,26 @@ This package provides core filters that give you the ability to perform the vast
 
 #### Field Filters
 
-| Filter                                                                  | Code                 | Query                                                                 |
-|-------------------------------------------------------------------------|----------------------|-----------------------------------------------------------------------|
-| [EqualFilter](#EqualFilter---eq)                                        | `$eq`                | `{$target} = {$value}`                                                |
-| [NotEqualFilter](#NotEqualFilter---noteq)                               | `$notEq`             | `{$target} != {$value}`                                               |
-| [GreaterThanFilter](#GreaterThanFilter---gt)                            | `$gt`                | `{$target} > {$value}`                                                |
-| [GreaterThanEqualToFilter](#GreaterThanEqualToFilter---gte)             | `$gte`               | `{$target} >= {$value}`                                               |
-| [LessThanFilter](#LessThanFilter---lt)                                  | `$lt`                | `{$target} < {$value}`                                                |
-| [LessThanEqualToFilter](#LessThanEqualToFilter---lte)                   | `$lte`               | `{$target} <= {$value}`                                               |
-| [LikeFilter](#LikeFilter---like)                                        | `$like`              | `{$target} LIKE '%{$value}%'`                                         |
-| [LikeStartFilter](#LikeStartFilter---likestart)                         | `$like:start`        | `{$target} LIKE '{$value}%'`                                          |
-| [LikeEndFilter](#LikeEndFilter---likeend)                               | `$like:end`          | `{$target} LIKE '%{$value}'`                                          |
-| [NotLikeFilter](#NotLikeFilter---notlike)                               | `$notLike`           | `{$target} NOT LIKE '%{$value}%'`                                     |
-| [NotLikeStartFilter](#NotLikeStartFilter---notlikestart)                | `$notLike:start`     | `{$target} NOT LIKE '{$value}%'`                                      |
-| [NotLikeEndFilter](#NotLikeEndFilter---notlikeend)                      | `$notLike:end`       | `{$target} NOT LIKE '%{$value}'`                                      |
-| [NullFilter](#NullFilter---null)                                        | `$null`              | `{$target} is null` <code>&#124;&#124;</code> `{$target} is not null` |
-| [InFilter](#InFilter---in)                                              | `$in`                | `{$target} in ($value)`                                               |
-| [NotInFilter](#NotInFilter---notin)                                     | `$notIn`             | `{$target} not in ($value)`                                           |
-| [BetweenFilter](#BetweenFilter---between)                               | `$between`           | `{$target} between $value[0] and $value[1]`                           |
-| [NotBetweenFilter](#NotBetweenFilter---notbetween)                      | `$notBetween`        | `{$target} not between $value[0] and $value[1]`                       |
-| [BetweenColumnsFilter](#BetweenColumnsFilter---betweencolumns)          | `$betweenColumns`    | `{$target} between $value[0] and $value[1]`                           |
-| [NotBetweenColumnsFilter](#NotBetweenColumnsFilter---notbetweencolumns) | `$notBetweenColumns` | `{$target} not between $value[0] and $value[1]`                       |
-| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      | `json_contains({$target}, {$value})`                                  |
-| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonNotContains`   | `not json_contains({$target}, {$value})`                              |
-| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonLength`        | `json_length({$target}}) $operator $value`                            |
+| Filter                                                                  | Type                 | Modifiers                       | Query                                                                 |
+|-------------------------------------------------------------------------|----------------------|---------------------------------|-----------------------------------------------------------------------|
+| [EqualFilter](#EqualFilter---eq)                                        | `$eq`                |                                 | `{$target} = {$value}`                                                |
+| [NotEqualFilter](#NotEqualFilter---noteq)                               | `$notEq`             |                                 | `{$target} != {$value}`                                               |
+| [GreaterThanFilter](#GreaterThanFilter---gt)                            | `$gt`                |                                 | `{$target} > {$value}`                                                |
+| [GreaterThanEqualToFilter](#GreaterThanEqualToFilter---gte)             | `$gte`               |                                 | `{$target} >= {$value}`                                               |
+| [LessThanFilter](#LessThanFilter---lt)                                  | `$lt`                |                                 | `{$target} < {$value}`                                                |
+| [LessThanEqualToFilter](#LessThanEqualToFilter---lte)                   | `$lte`               |                                 | `{$target} <= {$value}`                                               |
+| [LikeFilter](#LikeFilter---like)                                        | `$like`              | `$like:start` `$like:end`       | `{$target} LIKE '%{$value}%'`                                         |
+| [NotLikeFilter](#NotLikeFilter---notlike)                               | `$notLike`           | `$notLike:start` `$notLike:end` | `{$target} NOT LIKE '%{$value}%'`                                     |
+| [NullFilter](#NullFilter---null)                                        | `$null`              |                                 | `{$target} is null` <code>&#124;&#124;</code> `{$target} is not null` |
+| [InFilter](#InFilter---in)                                              | `$in`                | `$in:null`                      | `{$target} in ($value)`                                               |
+| [NotInFilter](#NotInFilter---notin)                                     | `$notIn`             | `$notIn:null`                   | `{$target} not in ($value)`                                           |
+| [BetweenFilter](#BetweenFilter---between)                               | `$between`           |                                 | `{$target} between $value[0] and $value[1]`                           |
+| [NotBetweenFilter](#NotBetweenFilter---notbetween)                      | `$notBetween`        |                                 | `{$target} not between $value[0] and $value[1]`                       |
+| [BetweenColumnsFilter](#BetweenColumnsFilter---betweencolumns)          | `$betweenColumns`    |                                 | `{$target} between $value[0] and $value[1]`                           |
+| [NotBetweenColumnsFilter](#NotBetweenColumnsFilter---notbetweencolumns) | `$notBetweenColumns` |                                 | `{$target} not between $value[0] and $value[1]`                       |
+| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      |                                 | `json_contains({$target}, {$value})`                                  |
+| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonNotContains`   |                                 | `not json_contains({$target}, {$value})`                              |
+| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonLength`        |                                 | `json_length({$target}}) $operator $value`                            |
 
 #### Relationship Filters
 
@@ -496,38 +492,13 @@ $sql = Project::filter([
 select * from "projects" where "description" LIKE '%Laravel%'
 ```
 
-#### LikeStartFilter - `$like:start`
+- Modifiers
 
-- `value` = `string` | `int` | `float`.
-
-```php
-$sql = Project::filter([
-    [
-        'type'   => '$like:start',
-        'target' => 'description',
-        'value'  => 'Laravel',
-    ]
-])->toRawSql();
-```
-
+`$like:start`
 ```sql
 select * from "projects" where "description" LIKE 'Laravel%'
 ```
-
-#### LikeEndFilter - `$like:end`
-
-- `value` = `string` | `int` | `float`.
-
-```php
-$sql = Project::filter([
-    [
-        'type'   => '$like:end',
-        'target' => 'description',
-        'value'  => 'Laravel',
-    ]
-])->toRawSql();
-```
-
+`$like:end`
 ```sql
 select * from "projects" where "description" LIKE '%Laravel'
 ```
@@ -550,38 +521,13 @@ $sql = Project::filter([
 select * from "projects" where "description" NOT LIKE '%Laravel%'
 ```
 
-#### NotLikeStartFilter - `$notLike:start`
+- Modifiers
 
-- `value` = `string` | `int` | `float`.
-
-```php
-$sql = Project::filter([
-    [
-        'type'   => '$notLike:start',
-        'target' => 'description',
-        'value'  => 'Laravel',
-    ]
-])->toRawSql();
-```
-
+`$notLike:start`
 ```sql
 select * from "projects" where "description" NOT LIKE 'Laravel%'
 ```
-
-#### NotLikeEndFilter - `$notLike:end`
-
-- `value` = `string` | `int` | `float`.
-
-```php
-$sql = Project::filter([
-    [
-        'type'   => '$notLike:end',
-        'target' => 'description',
-        'value'  => 'Laravel',
-    ]
-])->toRawSql();
-```
-
+`$notLike:end`
 ```sql
 select * from "projects" where "description" NOT LIKE '%Laravel'
 ```
