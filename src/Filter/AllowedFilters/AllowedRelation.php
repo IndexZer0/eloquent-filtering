@@ -12,10 +12,13 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
+use IndexZer0\EloquentFiltering\Filter\Traits\CanBeRequired;
 use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class AllowedRelation implements AllowedFilter
 {
+    use CanBeRequired;
+
     protected bool $includeRelationFields = false;
 
     public function __construct(
