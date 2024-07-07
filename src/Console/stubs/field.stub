@@ -5,12 +5,17 @@ namespace {{ namespace }};
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\Traits\HasModifiers;
+use IndexZer0\EloquentFiltering\Rules\TargetRules;
 
 class {{ class }} extends AbstractFieldFilter
 {
+    use HasModifiers;
+
     final public function __construct(
         protected string $target,
         protected mixed  $value,
+        protected array  $modifiers
     ) {
     }
 
@@ -30,7 +35,7 @@ class {{ class }} extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            'target' => ['required', 'string'],
+            ...TargetRules::get(),
             'value'  => ['required'],
         ];
     }
@@ -42,7 +47,8 @@ class {{ class }} extends AbstractFieldFilter
     {
         return new static(
             $approvedFilter->target()->getReal(),
-            $approvedFilter->data_get('value')
+            $approvedFilter->data_get('value'),
+            $approvedFilter->modifiers(),
         );
     }
 
