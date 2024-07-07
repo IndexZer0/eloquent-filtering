@@ -8,6 +8,7 @@ use IndexZer0\EloquentFiltering\Contracts\Target as TargetContract;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedCustomFilter;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
+use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
@@ -65,9 +66,9 @@ class Filter
         );
     }
 
-    public static function custom(array|AllowedTypes $types): AllowedCustomFilter
+    public static function custom(string|AllowedType $type): AllowedCustomFilter
     {
-        return new AllowedCustomFilter(self::createTypes($types));
+        return new AllowedCustomFilter(self::createType($type));
     }
 
     /*
@@ -102,5 +103,14 @@ class Filter
         }
 
         return $types;
+    }
+
+    private static function createType(string|AllowedType $type): AllowedType
+    {
+        if (is_string($type)) {
+            return new AllowedType($type);
+        }
+
+        return $type;
     }
 }

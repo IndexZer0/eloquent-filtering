@@ -21,7 +21,7 @@ it('throws RequiredFilterException when required filters have not been matched',
                         Filter::field('title', ['$like'])->required()
                     )
                 )->required(),
-                Filter::custom(['$latest'])->required()
+                Filter::custom('$latest')->required()
             )
         );
 
@@ -39,8 +39,8 @@ it('throws RequiredFilterException when required filters have not been matched',
                 '"title" filter' => [
                     '"title" filter is required.',
                 ],
-                'custom: TODO' => [
-                    'custom: TODO is required.',
+                '"$latest" filter' => [
+                    '"$latest" filter is required.',
                 ],
             ]);
     }
@@ -83,7 +83,7 @@ it('does not throw RequiredFilterException when required filters have been match
                         Filter::field('title', ['$like'])->required()
                     )
                 )->required(),
-                Filter::custom(['$latest'])->required()
+                Filter::custom('$latest')->required()
             )
         );
 

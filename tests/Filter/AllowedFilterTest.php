@@ -42,7 +42,7 @@ it('does not allow filters that are not for same context', function (
             'target' => 'name',
             'value'  => 'George Raymond Richard Martin',
         ],
-        'allowed_filter'             => Filter::custom(['$eq']),
+        'allowed_filter'             => Filter::custom('$eq'),
         'expected_exception_message' => '"$eq" filter for "name" is not allowed',
     ],
 
@@ -62,7 +62,7 @@ it('does not allow filters that are not for same context', function (
             'target' => 'books',
             'value'  => [],
         ],
-        'allowed_filter'             => Filter::custom(['$has']),
+        'allowed_filter'             => Filter::custom('$has'),
         'expected_exception_message' => '"$has" filter for "books" is not allowed',
     ],
 ]);

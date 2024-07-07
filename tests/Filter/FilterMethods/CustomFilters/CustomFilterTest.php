@@ -31,7 +31,7 @@ it('can perform a custom "custom" filter | $latest', function (): void {
             ],
         ],
         Filter::only(
-            Filter::custom(['$latest']),
+            Filter::custom('$latest'),
         )
     );
 

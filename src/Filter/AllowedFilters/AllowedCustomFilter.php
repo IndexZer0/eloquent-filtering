@@ -9,7 +9,6 @@ use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Filterable\AllFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Filter\Traits\CanBeRequired;
@@ -18,7 +17,7 @@ class AllowedCustomFilter implements AllowedFilter
 {
     use CanBeRequired;
 
-    public function __construct(protected AllowedTypes $types)
+    public function __construct(protected AllowedType $type)
     {
     }
 
@@ -39,7 +38,11 @@ class AllowedCustomFilter implements AllowedFilter
             return null;
         }
 
-        return $this->types->get($pendingFilter->requestedFilter());
+        if ($this->type->matches($pendingFilter->requestedFilter())) {
+            return $this->type;
+        }
+
+        return null;
     }
 
     public function getTarget(PendingFilter $pendingFilter): ?Target
@@ -49,6 +52,6 @@ class AllowedCustomFilter implements AllowedFilter
 
     public function getDescription(): string
     {
-        return 'custom: TODO'; // TODO
+        return sprintf('"%s" filter', $this->type->type);
     }
 }
