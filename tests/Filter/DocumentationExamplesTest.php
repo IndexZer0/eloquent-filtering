@@ -148,7 +148,7 @@ it('LikeFilter | $like', function (): void {
 
 });
 
-it('LikeStartFilter | $like:start', function (): void {
+it('LikeFilter | $like:start', function (): void {
     $sql = Project::filter([
         [
             'type'   => '$like:start',
@@ -167,7 +167,7 @@ it('LikeStartFilter | $like:start', function (): void {
 
 });
 
-it('LikeEndFilter | $like:end', function (): void {
+it('LikeFilter | $like:end', function (): void {
     $sql = Project::filter([
         [
             'type'   => '$like:end',
@@ -205,7 +205,7 @@ it('NotLikeFilter | $notLike', function (): void {
 
 });
 
-it('NotLikeStartFilter | $notLike:start', function (): void {
+it('NotLikeFilter | $notLike:start', function (): void {
     $sql = Project::filter([
         [
             'type'   => '$notLike:start',
@@ -224,7 +224,7 @@ it('NotLikeStartFilter | $notLike:start', function (): void {
 
 });
 
-it('NotLikeEndFilter | $notLike:end', function (): void {
+it('NotLikeFilter | $notLike:end', function (): void {
     $sql = Project::filter([
         [
             'type'   => '$notLike:end',
