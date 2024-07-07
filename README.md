@@ -863,9 +863,12 @@ php artisan make:eloquent-filter LowerCaseFilter --type=field
 ```php
 class LowerCaseFilter extends AbstractFieldFilter
 {
+    use HasModifiers;
+
     final public function __construct(
         protected string $target,
         protected string $value,
+        protected array  $modifiers
     ) {
 
     }
@@ -886,7 +889,7 @@ class LowerCaseFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            'target' => ['required', 'string'],
+            ...TargetRules::get(),
             'value'  => ['required', 'string'],
         ];
     }
@@ -899,6 +902,7 @@ class LowerCaseFilter extends AbstractFieldFilter
         return new static(
             $approvedFilter->target()->getReal(),
             $approvedFilter->data_get('value'),
+            $approvedFilter->modifiers(),
         );
     }
 
