@@ -1133,14 +1133,27 @@ $filters = [
 
 #### Specifying Allowed Types
 
-```php
-use IndexZer0\EloquentFiltering\Filter\Types\Types;
+- Only `$eq` allowed
 
-// Only `$eq` allowed
+```php
+use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\Types\Types;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+
+// By enum
+Filter::field('name', [FilterType::EQUAL])
+Filter::field('name', Types::only([FilterType::EQUAL]))
+// By string
 Filter::field('name', ['$eq'])
 Filter::field('name', Types::only(['$eq']))
+```
 
-// All types allowed
+- All types allowed
+
+```php
+use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\Types\Types;
+
 Filter::field('name', Types::all())
 ```
 
