@@ -36,6 +36,8 @@ class SomeFiltersAllowed implements AllowedFilterList
         foreach ($this->allowedFilters as $allowedFilter) {
             if ($allowedFilter->matches($pendingFilter)) {
 
+                $allowedFilter->markMatched();
+
                 $allowedChildFilters = $allowedFilter->allowedFilters();
 
                 $childFilters = $this->ensureChildFiltersAllowed($pendingFilter, $allowedChildFilters);
