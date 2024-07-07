@@ -1161,7 +1161,7 @@ class MissingFilterException
 config("eloquent-filtering.suppress.filter.missing");
 // Can't find filter of `type` specified.
 
-class MalformedFilterFormatException
+class MalformedFilterFormatException extends ValidationException
 config("eloquent-filtering.suppress.filter.malformed_format");
 // The filter was found, but the rest of the data does not match required format of the filter.
 
