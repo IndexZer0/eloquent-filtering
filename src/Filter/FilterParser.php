@@ -47,10 +47,8 @@ class FilterParser implements FilterParserContract
         $requestedFilter = $this->parseFilterType($filter);
         $filterFqcn = $this->findFilterMethodFqcn($requestedFilter->type);
 
-        $validatedData = $this->validateFilterFormat($filter, $filterFqcn);
-
         $approvedFilter = $this->allowedFilterList->ensureAllowed(
-            new PendingFilter($requestedFilter, $filterFqcn, $validatedData)
+            new PendingFilter($requestedFilter, $filterFqcn, $filter)
         );
 
         return $approvedFilter->createFilter();
@@ -68,15 +66,5 @@ class FilterParser implements FilterParserContract
     private function findFilterMethodFqcn(string $type): string
     {
         return $this->availableFilters->find($type);
-    }
-
-    private function validateFilterFormat(array $filter, string $filterFqcn): array
-    {
-        try {
-            /** @var FilterMethod $filterFqcn */
-            return Validator::validate($filter, $filterFqcn::format());
-        } catch (ValidationException $ve) {
-            throw new MalformedFilterFormatException($filterFqcn::type(), $ve);
-        }
     }
 }
