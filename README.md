@@ -1117,7 +1117,7 @@ Filter::field('name', Types::all())
 
 #### Required Filters
 
-You can specify that `Filter::field()`, `Filter::relation()` and `Filer::custom()` filters must be required.
+You can specify that `Filter::field()`, `Filter::relation()` and `Filter::custom()` filters must be required.
 
 - When a required filter is not used, a `RequiredFilterException` is thrown.
 - `RequiredFilterException` extends laravels `ValidationException`.
