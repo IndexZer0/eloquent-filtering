@@ -272,23 +272,7 @@ By default, when specifying an allowed relation filter, fields within that relat
 
 You can specify allowed filters inside a relation in two ways.
 
-1. Define them within `Filter::relation()` as 3rd parameter.
-
-```php
-public function allowedFilters(): SomeFiltersAllowed
-{
-    return Filter::only(
-        Filter::relation(
-            'manufacturer', ['$has', '$doesntHas'],
-            Filter::only(
-                Filter::field('name', ['$like'])
-            )
-        )
-    );
-}
-```
-
-2. Use `->includeRelationFields()` on `Filter::relation()`.
+1. Use `->includeRelationFields()` on `Filter::relation()`.
 
 This method instructs the package to look for `AllowedField` filters within the `allowedFilters()` method of the relation model.
 
@@ -304,7 +288,23 @@ public function allowedFilters(): AllowedFilterList
 ```
 
 > [!IMPORTANT]
-> The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`. 
+> The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`.
+
+2. Define them within `Filter::relation()` as 3rd parameter.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation(
+            'manufacturer', [FilterType::HAS, FilterType::DOESNT_HAS],
+            Filter::only(
+                Filter::field('name', [FilterType::LIKE])
+            )
+        )
+    );
+}
+```
 
 ---
 
