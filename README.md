@@ -1049,14 +1049,17 @@ $sql = Person::filter([
 You can alias targets when allowing all filters.
 
 ```php
-Filter::all(
-    Target::alias('name', 'first_name'),
-    Target::relationAlias(
-        'documents',
-        'files',
-        Target::alias('file_extension', 'mime_type')
-    ),
-)
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::all(
+        Target::alias('name', 'first_name'),
+        Target::relationAlias(
+            'documents',
+            'files',
+            Target::alias('file_extension', 'mime_type')
+        ),
+    );
+}
 ```
 
 #### Json Path Wildcards
@@ -1064,9 +1067,12 @@ Filter::all(
 - When specifying the target of a json database field you can specify wildcards in the json path.
 
 ```php
-Filter::only(
-    Filter::field('data->*->array', [FilterType::JSON_CONTAINS]),
-)
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('data->*->array', [FilterType::JSON_CONTAINS]),
+    );
+}
 
 /*
  * Allows:
@@ -1121,7 +1127,7 @@ You can specify that `Filter::field()`, `Filter::relation()` and `Filer::custom(
 ```php
 public function allowedFilters(): AllowedFilterList
 {
-    Filter::only(
+    return Filter::only(
         Filter::field('name', [FilterType::LIKE])->required(),
         Filter::relation(
             'books',
@@ -1131,7 +1137,7 @@ public function allowedFilters(): AllowedFilterList
             )
         )->required(),
         Filter::custom('$latest')->required()
-    )
+    );
 }
 ```
 
