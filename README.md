@@ -1014,7 +1014,7 @@ class AdminFilter extends AbstractCustomFilter
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
-        Filter::custom(['$admin']),
+        Filter::custom('$admin'),
     );
 }
 ```
