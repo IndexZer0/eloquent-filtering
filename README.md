@@ -47,8 +47,8 @@ class Product extends Model implements IsFilterable
     public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('name', ['$eq']),
-            Filter::relation('manufacturer', ['$has'])->includeRelationFields()
+            Filter::field('name', [FilterType::EQUAL]),
+            Filter::relation('manufacturer', [FilterType::HAS])->includeRelationFields()
         );
     }
     
@@ -65,7 +65,7 @@ class Manufacturer extends Model implements IsFilterable
     public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('name', ['$eq'])
+            Filter::field('name', [FilterType::EQUAL])
         );
     }
 }
@@ -172,6 +172,7 @@ use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 
 class Product extends Model implements IsFilterable
 {
@@ -180,7 +181,7 @@ class Product extends Model implements IsFilterable
     public function allowedFilters(): AllowedFilterList 
     {
         return Filter::only(
-            Filter::field('name', ['$eq']),
+            Filter::field('name', [FilterType::EQUAL]),
         );
     }
 }
@@ -210,12 +211,12 @@ class Product extends Model implements IsFilterable
     public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('name', ['$eq', '$like']),
+            Filter::field('name', [FilterType::EQUAL, FilterType::LIKE]),
             Filter::relation(
                 'manufacturer', 
-                ['$has', '$doesntHas'],
+                [FilterType::HAS, FilterType::DOESNT_HAS],
                 Filter::only(
-                    Filter::field('name', ['$like'])
+                    Filter::field('name', [FilterType::LIKE])
                 )
             )
         );
@@ -236,12 +237,12 @@ class Product extends Model implements IsFilterable
 Product::filter(
     $filters,
     Filter::only(
-        Filter::field('name', ['$eq']),
+        Filter::field('name', [FilterType::EQUAL, FilterType::LIKE]),
         Filter::relation(
             'manufacturer', 
-            ['$has', '$doesntHas'],
+            [FilterType::HAS, FilterType::DOESNT_HAS],
             Filter::only(
-                Filter::field('name', ['$like'])
+                Filter::field('name', [FilterType::LIKE])
             )
         )
     )
@@ -295,7 +296,9 @@ This method instructs the package to look for `AllowedField` filters within the 
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
-        Filter::relation('manufacturer', ['$has', '$doesntHas'])->includeRelationFields()
+        Filter::relation('manufacturer', [
+            FilterType::HAS, FilterType::DOESNT_HAS
+        ])->includeRelationFields()
     );
 }
 ```
@@ -1086,8 +1089,8 @@ $sql = Person::filter([
         'value'  => [],
     ],
 ], Filter::only(
-    Filter::field(Target::alias('name', 'first_name'), ['$eq']),
-    Filter::relation(Target::alias('documents', 'files'), ['$has'])
+    Filter::field(Target::alias('name', 'first_name'), [FilterType::EQUAL]),
+    Filter::relation(Target::alias('documents', 'files'), [FilterType::HAS])
 ))->toRawSql();
 ```
 
@@ -1110,7 +1113,7 @@ Filter::all(
 
 ```php
 Filter::only(
-    Filter::field('data->*->array', ['$jsonContains']),
+    Filter::field('data->*->array', [FilterType::JSON_CONTAINS]),
 )
 
 /*
