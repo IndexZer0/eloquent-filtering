@@ -48,4 +48,9 @@ class AllowedField implements AllowedFilter
     {
         return $this->target->getForApprovedFilter($pendingFilter);
     }
+
+    public function getDescription(): string
+    {
+        return sprintf('"%s" filter', $this->target->target());
+    }
 }

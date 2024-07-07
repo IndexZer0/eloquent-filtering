@@ -45,4 +45,9 @@ class AllowedCustomFilter implements AllowedFilter
     {
         return null;
     }
+
+    public function getDescription(): string
+    {
+        return 'custom: TODO'; // TODO
+    }
 }

@@ -15,6 +15,8 @@ interface AllowedFilter
 
     public function getTarget(PendingFilter $pendingFilter): ?Target;
 
+    public function getDescription(): string;
+
     /*
      * -----------------------------
      * Required support

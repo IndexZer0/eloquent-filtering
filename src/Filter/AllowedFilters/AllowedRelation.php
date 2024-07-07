@@ -54,6 +54,11 @@ class AllowedRelation implements AllowedFilter
         return $this->target;
     }
 
+    public function getDescription(): string
+    {
+        return sprintf('"%s" filter', $this->target->target());
+    }
+
     /*
      * -----------------------------
      * Specific methods
