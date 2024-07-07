@@ -1175,6 +1175,9 @@ config("eloquent-filtering.suppress.filter.denied");
 ```php
 class DuplicateFiltersException
 // When you have registered a custom filter that has the same type as another filter.
+
+class RequiredFilterException extends ValidationException
+// When required filter(s) were not applied.
 ``` 
 
 #### Suppression Hooks
