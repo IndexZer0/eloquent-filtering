@@ -16,13 +16,13 @@ it('can have validation rules', function (): void {
                 'type'   => '$between',
                 'value'  => [
                     '2024-01-05', '2024-01-01',
-                ]
+                ],
             ],
         ],
         Filter::only(
             Filter::field('starting_at', [FilterType::BETWEEN->withRules([
                 'value.0' => ['date', 'before:value.1'],
-                'value.1' => ['date', 'after:value.0']
+                'value.1' => ['date', 'after:value.0'],
             ])]),
         )
     );

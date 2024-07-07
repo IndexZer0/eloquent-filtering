@@ -34,7 +34,7 @@ class NullFilter extends AbstractFieldFilter
     {
         return [
             ...TargetRules::get(),
-            'value'  => ['required', 'boolean'],
+            'value' => ['required', 'boolean'],
         ];
     }
 

@@ -29,7 +29,7 @@ abstract class WhereFilter extends AbstractFieldFilter
     {
         return [
             ...TargetRules::get(),
-            'value'  => ['required', new WhereValue()],
+            'value' => ['required', new WhereValue()],
         ];
     }
 
