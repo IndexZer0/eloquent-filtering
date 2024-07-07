@@ -311,6 +311,7 @@ public function allowedFilters(): AllowedFilterList
 ### Filter Structure
 
 - Filters **ALWAYS** have a `type`.
+- Some types can have modifiers appended. i.e. `$like:start`.
 - All filters apart from `$or` and `$and` have a `target`.
 - Filter `value` is different depending on the filter.
 
