@@ -781,7 +781,7 @@ select * from "projects" where not exists (select * from "comments" where "proje
 
 #### OrFilter - `$or`
 
-- `value` = `array` of filters.
+- `value` = `array` of filters (minimum 2).
 
 ```php
 $sql = Comment::filter([
@@ -809,7 +809,7 @@ select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE 
 
 #### AndFilter - `$and`
 
-- `value` = `array` of filters.
+- `value` = `array` of filters (minimum 2).
 
 ```php
 $sql = Comment::filter([
