@@ -7,11 +7,14 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\Traits\HasModifiers;
 use IndexZer0\EloquentFiltering\Rules\TargetRules;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 abstract class WhereFilter extends AbstractFieldFilter
 {
+    use HasModifiers;
+
     final public function __construct(
         protected string           $target,
         protected string|float|int $value,
@@ -63,10 +66,5 @@ abstract class WhereFilter extends AbstractFieldFilter
     public function target(): string
     {
         return $this->target;
-    }
-
-    public function hasModifier(string $modifier): bool
-    {
-        return collect($this->modifiers)->contains($modifier);
     }
 }

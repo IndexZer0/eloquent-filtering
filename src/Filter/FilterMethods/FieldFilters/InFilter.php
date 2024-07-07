@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Filter\Traits\HasModifiers;
 use IndexZer0\EloquentFiltering\Rules\NullableWhereValue;
 use IndexZer0\EloquentFiltering\Rules\TargetRules;
 
 class InFilter extends AbstractFieldFilter
 {
+    use HasModifiers;
+
     final public function __construct(
         protected string $target,
         protected array $value,
@@ -53,10 +56,10 @@ class InFilter extends AbstractFieldFilter
     {
         $value = collect($this->value);
         $valueContainNull = $value->containsStrict(null);
-        $nullModifier = collect($this->modifiers)->contains('null');
+        $hasNullModifier = $this->hasModifier('null');
 
         return $query->whereIn($this->target, $value->filter(fn ($item) => $item !== null), not: $this->not())
-            ->when($valueContainNull && $nullModifier, function (Builder $query): void {
+            ->when($valueContainNull && $hasNullModifier, function (Builder $query): void {
                 $query->whereNull($this->target, $this->not() ? 'and' : 'or', $this->not());
             });
     }
