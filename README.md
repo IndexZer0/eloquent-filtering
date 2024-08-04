@@ -293,15 +293,16 @@ public function allowedFilters(): AllowedFilterList
 > [!IMPORTANT]
 > The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`.
 
-2. Define them within `Filter::relation()` as 3rd parameter.
+2. Define `allowedFilters` as 3rd parameter of `Filter::relation()` .
 
 ```php
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
         Filter::relation(
-            'manufacturer', [FilterType::HAS, FilterType::DOESNT_HAS],
-            Filter::only(
+            target: 'manufacturer',
+            types: [FilterType::HAS],
+            allowedFilters: Filter::only(
                 Filter::field('name', [FilterType::LIKE])
             )
         )
