@@ -9,6 +9,7 @@ use IndexZer0\EloquentFiltering\Filter\AllowedFilterResolver;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\Exceptions\RequiredFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 
 trait Filterable
@@ -28,6 +29,11 @@ trait Filterable
         /** @var FilterParser $filterParser */
         $filterParser = resolve(FilterParser::class);
         $filters = $filterParser->parse($filters, $allowedFilterList);
+
+        $unmatchedRequiredFilters = $allowedFilterList->getUnmatchedRequiredFilters();
+        if ($unmatchedRequiredFilters->isNotEmpty()) {
+            throw RequiredFilterException::fromRequiredFilters(...$unmatchedRequiredFilters->toArray());
+        }
 
         /** @var FilterApplier $filterApplier */
         $filterApplier = resolve(FilterApplier::class);
