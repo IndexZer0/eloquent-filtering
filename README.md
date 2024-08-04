@@ -93,12 +93,14 @@ $sql = Product::filter($filters)->toRawSql();
 
 ```sql
 SELECT *
-FROM "products"
-WHERE "name" = 'TV'
-  AND EXISTS (SELECT *
-              FROM "manufacturers"
-              WHERE "products"."manufacturer_id" = "manufacturers"."id"
-                AND "name" = 'Sony')
+FROM "products" 
+WHERE "name" = 'TV' 
+  AND EXISTS (
+    SELECT *
+    FROM "manufacturers" 
+    WHERE "products"."manufacturer_id" = "manufacturers"."id" 
+      AND "name" = 'Sony'
+  )
 ```
 
 ---
