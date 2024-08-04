@@ -278,8 +278,6 @@ You can specify allowed filters inside a relation in two ways.
 
 1. Use `->includeRelationFields()` on `Filter::relation()`.
 
-This method instructs the package to look for `AllowedField` filters within the `allowedFilters()` method of the relation model.
-
 ```php
 public function allowedFilters(): AllowedFilterList
 {
@@ -290,6 +288,9 @@ public function allowedFilters(): AllowedFilterList
     );
 }
 ```
+
+> [!NOTE]
+> This method instructs the package to look for `AllowedField` filters within the `allowedFilters()` method of the relation model.
 
 > [!IMPORTANT]
 > The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`.
