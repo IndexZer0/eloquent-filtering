@@ -32,18 +32,26 @@ class SortValidator implements SortValidatorContract
         return $this->pendingSorts;
     }
 
-    private function ensureSortIsValid(array $sort): void
+    private function ensureSortIsValid(mixed $sort): void
     {
+        if (!is_array($sort)) {
+            throw MalformedSortFormatException::withMessages([
+                'sort' => ["Sort must be an array."],
+            ]);
+        }
+
         try {
             Validator::validate($sort, [
                 'target' => ['required', 'string'],
                 'value'  => ['required', Rule::in(['asc', 'desc'])],
-            ]);
+            ], ['value.in' => 'The :attribute must be one of the following types: :values']);
             $this->pendingSorts->push(
                 new PendingSort($sort['target'], $sort['value'])
             );
         } catch (ValidationException $ve) {
-            throw new MalformedSortFormatException($ve);
+            throw MalformedSortFormatException::withMessages([
+                ...$ve->errors(),
+            ]);
         }
     }
 }
