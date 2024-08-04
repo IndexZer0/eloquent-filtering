@@ -282,9 +282,7 @@ You can specify allowed filters inside a relation in two ways.
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
-        Filter::relation('manufacturer', [
-            FilterType::HAS, FilterType::DOESNT_HAS
-        ])->includeRelationFields()
+        Filter::relation('manufacturer', [FilterType::HAS])->includeRelationFields()
     );
 }
 ```
