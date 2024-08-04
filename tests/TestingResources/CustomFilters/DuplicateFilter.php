@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 
 class DuplicateFilter extends AbstractFieldFilter
 {
@@ -18,7 +19,7 @@ class DuplicateFilter extends AbstractFieldFilter
 
     public static function type(): string
     {
-        return '$eq';
+        return FilterType::EQUAL->value;
     }
 
     public static function format(): array

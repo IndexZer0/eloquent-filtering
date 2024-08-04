@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractRelationFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 
 class HasFilter extends AbstractRelationFilter
 {
@@ -18,7 +19,7 @@ class HasFilter extends AbstractRelationFilter
 
     public static function type(): string
     {
-        return '$has';
+        return FilterType::HAS->value;
     }
 
     public function apply(Builder $query): Builder

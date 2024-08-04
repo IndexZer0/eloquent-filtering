@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter;
 
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser as FilterParserContract;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidFilterException;
-use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Suppression\Suppression;
 
@@ -44,39 +41,27 @@ class FilterParser implements FilterParserContract
 
     private function parseFilter(mixed $filter): FilterMethod
     {
-        $filterType = $this->ensureFilterHasType($filter);
-        $filterFqcn = $this->findFilterMethodFqcn($filterType);
-
-        $validatedData = $this->validateFilterFormat($filter, $filterFqcn);
+        $requestedFilter = $this->parseFilterType($filter);
+        $filterFqcn = $this->findFilterMethodFqcn($requestedFilter->type);
 
         $approvedFilter = $this->allowedFilterList->ensureAllowed(
-            new PendingFilter($filterType, $filterFqcn, $validatedData)
+            new PendingFilter($requestedFilter, $filterFqcn, $filter)
         );
 
         return $approvedFilter->createFilter();
     }
 
-    private function ensureFilterHasType(mixed $filter): string
+    private function parseFilterType(mixed $filter): RequestedFilter
     {
         if (!is_array($filter) || !array_key_exists('type', $filter) || !is_string($filter['type'])) {
             InvalidFilterException::throw();
         }
 
-        return $filter['type'];
+        return RequestedFilter::fromString($filter['type']);
     }
 
     private function findFilterMethodFqcn(string $type): string
     {
         return $this->availableFilters->find($type);
-    }
-
-    private function validateFilterFormat(array $filter, string $filterFqcn): array
-    {
-        try {
-            /** @var FilterMethod $filterFqcn */
-            return Validator::validate($filter, $filterFqcn::format());
-        } catch (ValidationException $ve) {
-            throw new MalformedFilterFormatException($filterFqcn::type(), $ve);
-        }
     }
 }

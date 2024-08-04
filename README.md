@@ -25,7 +25,6 @@ Features:
   - Filter by **fields**.
   - Filter by **relationship** existence.
     - Filter by fields on relationships.
-      - No duplicated unnecessary exist clauses in queries.
   - Alias fields and relationships.
   - Specify filter types per field/relationship.
   - Filter json columns.
@@ -40,20 +39,15 @@ Features:
 ## Simple example with relationship filter.
 
 ```php
-use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
-use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
-use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
-use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
-
 class Product extends Model implements IsFilterable
 {
     use Filterable;
     
-    public function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('name', ['$eq']),
-            Filter::relation('manufacturer', ['$has'])->includeRelationFields()
+            Filter::field('name', [FilterType::EQUAL]),
+            Filter::relation('manufacturer', [FilterType::HAS])->includeRelationFields()
         );
     }
     
@@ -67,10 +61,10 @@ class Manufacturer extends Model implements IsFilterable
 {
     use Filterable;
 
-    public function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('name', ['$eq'])
+            Filter::field('name', [FilterType::EQUAL])
         );
     }
 }
@@ -99,12 +93,14 @@ $sql = Product::filter($filters)->toRawSql();
 
 ```sql
 SELECT *
-FROM "products"
-WHERE "name" = 'TV'
-  AND EXISTS (SELECT *
-              FROM "manufacturers"
-              WHERE "products"."manufacturer_id" = "manufacturers"."id"
-                AND "name" = 'Sony')
+FROM "products" 
+WHERE "name" = 'TV' 
+  AND EXISTS (
+    SELECT *
+    FROM "manufacturers" 
+    WHERE "products"."manufacturer_id" = "manufacturers"."id" 
+      AND "name" = 'Sony'
+  )
 ```
 
 ---
@@ -116,7 +112,7 @@ WHERE "name" = 'TV'
     - [Making Model Filterable](#making-model-filterable)
     - [Allowing Filters](#allowing-filters)
         - [Define On Model](#define-on-model)
-        - [Define In Filter](#define-in-filter)
+        - [Pass To Filter](#pass-to-filter)
         - [Allowing All Filters](#allowing-all-filters)
         - [Including Relationship Model Filters](#including-relationship-model-filters)
     - [Filter Structure](#filter-structure)
@@ -133,6 +129,9 @@ WHERE "name" = 'TV'
         - [Aliasing Targets](#aliasing-targets)
         - [Json Path Wildcards](#json-path-wildcards)
         - [Specifying Allowed Types](#specifying-allowed-types)
+        - [Required Filters](#required-filters)
+        - [Defining Validation Rules](#defining-validation-rules)
+        - [Filter Modifiers](#filter-modifiers)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Suppression Hooks](#suppression-hooks)
         - [Condition Filters Note](#condition-filters-note)
@@ -177,6 +176,7 @@ use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 
 class Product extends Model implements IsFilterable
 {
@@ -185,7 +185,7 @@ class Product extends Model implements IsFilterable
     public function allowedFilters(): AllowedFilterList 
     {
         return Filter::only(
-            Filter::field('name', ['$eq']),
+            Filter::field('name', [FilterType::EQUAL]),
         );
     }
 }
@@ -205,21 +205,22 @@ You can specify allowed filters in two ways:
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
-use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 
 class Product extends Model implements IsFilterable
 {
     use Filterable;
     
-    public function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('name', ['$eq', '$like']),
+            Filter::field('name', [FilterType::EQUAL, FilterType::LIKE]),
             Filter::relation(
                 'manufacturer', 
-                ['$has', '$doesntHas'],
+                [FilterType::HAS, FilterType::DOESNT_HAS],
                 Filter::only(
-                    Filter::field('name', ['$like'])
+                    Filter::field('name', [FilterType::LIKE])
                 )
             )
         );
@@ -232,20 +233,20 @@ class Product extends Model implements IsFilterable
 }
 ```
 
-#### Define in `::filter()`
+#### Pass to `::filter()`
 
-- Defining in `::filter()` method takes priority over `allowedFilters()` on the model.
+- Passing in an `AllowedFilterList` to `::filter()` method takes priority over `allowedFilters()` on the model.
 
 ```php
 Product::filter(
     $filters,
     Filter::only(
-        Filter::field('name', ['$eq']),
+        Filter::field('name', [FilterType::EQUAL, FilterType::LIKE]),
         Filter::relation(
             'manufacturer', 
-            ['$has', '$doesntHas'],
+            [FilterType::HAS, FilterType::DOESNT_HAS],
             Filter::only(
-                Filter::field('name', ['$like'])
+                Filter::field('name', [FilterType::LIKE])
             )
         )
     )
@@ -263,7 +264,7 @@ You can allow all filters using `Filter::all()`.
 > Allowing all filters and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
 
 ```php
-public function allowedFilters(): AllFiltersAllowed
+public function allowedFilters(): AllowedFilterList
 {
     return Filter::all();
 }
@@ -275,43 +276,46 @@ By default, when specifying an allowed relation filter, fields within that relat
 
 You can specify allowed filters inside a relation in two ways.
 
-1. Define them within `Filter::relation()` as 3rd parameter.
+1. Use `->includeRelationFields()` on `Filter::relation()`.
 
 ```php
-public function allowedFilters(): SomeFiltersAllowed
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation('manufacturer', [FilterType::HAS])->includeRelationFields()
+    );
+}
+```
+
+> [!NOTE]
+> This method instructs the package to look for `AllowedField` filters within the `allowedFilters()` method of the relation model.
+
+> [!IMPORTANT]
+> The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`.
+
+2. Define `allowedFilters` as 3rd parameter of `Filter::relation()` .
+
+```php
+public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
         Filter::relation(
-            'manufacturer', ['$has', '$doesntHas'],
-            Filter::only(
-                Filter::field('name', ['$like'])
+            target: 'manufacturer',
+            types: [FilterType::HAS],
+            allowedFilters: Filter::only(
+                Filter::field('name', [FilterType::LIKE])
             )
         )
     );
 }
 ```
 
-2. Use `->includeRelationFields()` on `Filter::relation()`.
-
-This method instructs the package to look for `AllowedField` filters within the `allowedFilters()` method of the relation model.
-
-```php
-public function allowedFilters(): SomeFiltersAllowed
-{
-    return Filter::only(
-        Filter::relation('manufacturer', ['$has', '$doesntHas'])->includeRelationFields()
-    );
-}
-```
-
-> [!IMPORTANT]
-> The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`. 
-
 ---
 
 ### Filter Structure
 
 - Filters **ALWAYS** have a `type`.
+- Some types can have modifiers appended. i.e. `$like:start`.
 - All filters apart from `$or` and `$and` have a `target`.
 - Filter `value` is different depending on the filter.
 
@@ -323,41 +327,37 @@ This package provides core filters that give you the ability to perform the vast
 
 #### Field Filters
 
-| Filter                                                                  | Code                 | Query                                                                 |
-|-------------------------------------------------------------------------|----------------------|-----------------------------------------------------------------------|
-| [EqualFilter](#EqualFilter---eq)                                        | `$eq`                | `{$target} = {$value}`                                                |
-| [NotEqualFilter](#NotEqualFilter---noteq)                               | `$notEq`             | `{$target} != {$value}`                                               |
-| [GreaterThanFilter](#GreaterThanFilter---gt)                            | `$gt`                | `{$target} > {$value}`                                                |
-| [GreaterThanEqualToFilter](#GreaterThanEqualToFilter---gte)             | `$gte`               | `{$target} >= {$value}`                                               |
-| [LessThanFilter](#LessThanFilter---lt)                                  | `$lt`                | `{$target} < {$value}`                                                |
-| [LessThanEqualToFilter](#LessThanEqualToFilter---lte)                   | `$lte`               | `{$target} <= {$value}`                                               |
-| [LikeFilter](#LikeFilter---like)                                        | `$like`              | `{$target} LIKE '%{$value}%'`                                         |
-| [LikeStartFilter](#LikeStartFilter---likestart)                         | `$like:start`        | `{$target} LIKE '{$value}%'`                                          |
-| [LikeEndFilter](#LikeEndFilter---likeend)                               | `$like:end`          | `{$target} LIKE '%{$value}'`                                          |
-| [NotLikeFilter](#NotLikeFilter---notlike)                               | `$notLike`           | `{$target} NOT LIKE '%{$value}%'`                                     |
-| [NotLikeStartFilter](#NotLikeStartFilter---notlikestart)                | `$notLike:start`     | `{$target} NOT LIKE '{$value}%'`                                      |
-| [NotLikeEndFilter](#NotLikeEndFilter---notlikeend)                      | `$notLike:end`       | `{$target} NOT LIKE '%{$value}'`                                      |
-| [NullFilter](#NullFilter---null)                                        | `$null`              | `{$target} is null` <code>&#124;&#124;</code> `{$target} is not null` |
-| [InFilter](#InFilter---in)                                              | `$in`                | `{$target} in ($value)`                                               |
-| [NotInFilter](#NotInFilter---notin)                                     | `$notIn`             | `{$target} not in ($value)`                                           |
-| [BetweenFilter](#BetweenFilter---between)                               | `$between`           | `{$target} between $value[0] and $value[1]`                           |
-| [NotBetweenFilter](#NotBetweenFilter---notbetween)                      | `$notBetween`        | `{$target} not between $value[0] and $value[1]`                       |
-| [BetweenColumnsFilter](#BetweenColumnsFilter---betweencolumns)          | `$betweenColumns`    | `{$target} between $value[0] and $value[1]`                           |
-| [NotBetweenColumnsFilter](#NotBetweenColumnsFilter---notbetweencolumns) | `$notBetweenColumns` | `{$target} not between $value[0] and $value[1]`                       |
-| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      | `json_contains({$target}, {$value})`                                  |
-| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonNotContains`   | `not json_contains({$target}, {$value})`                              |
-| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonLength`        | `json_length({$target}}) $operator $value`                            |
+| Filter                                                                  | Type                 | Modifiers                       | Query                                                                 |
+|-------------------------------------------------------------------------|----------------------|---------------------------------|-----------------------------------------------------------------------|
+| [EqualFilter](#EqualFilter---eq)                                        | `$eq`                |                                 | `{$target} = {$value}`                                                |
+| [NotEqualFilter](#NotEqualFilter---noteq)                               | `$notEq`             |                                 | `{$target} != {$value}`                                               |
+| [GreaterThanFilter](#GreaterThanFilter---gt)                            | `$gt`                |                                 | `{$target} > {$value}`                                                |
+| [GreaterThanEqualToFilter](#GreaterThanEqualToFilter---gte)             | `$gte`               |                                 | `{$target} >= {$value}`                                               |
+| [LessThanFilter](#LessThanFilter---lt)                                  | `$lt`                |                                 | `{$target} < {$value}`                                                |
+| [LessThanEqualToFilter](#LessThanEqualToFilter---lte)                   | `$lte`               |                                 | `{$target} <= {$value}`                                               |
+| [LikeFilter](#LikeFilter---like)                                        | `$like`              | `$like:start` `$like:end`       | `{$target} LIKE '%{$value}%'`                                         |
+| [NotLikeFilter](#NotLikeFilter---notlike)                               | `$notLike`           | `$notLike:start` `$notLike:end` | `{$target} NOT LIKE '%{$value}%'`                                     |
+| [NullFilter](#NullFilter---null)                                        | `$null`              |                                 | `{$target} is null` <code>&#124;&#124;</code> `{$target} is not null` |
+| [InFilter](#InFilter---in)                                              | `$in`                | `$in:null`                      | `{$target} in ($value)`                                               |
+| [NotInFilter](#NotInFilter---notin)                                     | `$notIn`             | `$notIn:null`                   | `{$target} not in ($value)`                                           |
+| [BetweenFilter](#BetweenFilter---between)                               | `$between`           |                                 | `{$target} between $value[0] and $value[1]`                           |
+| [NotBetweenFilter](#NotBetweenFilter---notbetween)                      | `$notBetween`        |                                 | `{$target} not between $value[0] and $value[1]`                       |
+| [BetweenColumnsFilter](#BetweenColumnsFilter---betweencolumns)          | `$betweenColumns`    |                                 | `{$target} between $value[0] and $value[1]`                           |
+| [NotBetweenColumnsFilter](#NotBetweenColumnsFilter---notbetweencolumns) | `$notBetweenColumns` |                                 | `{$target} not between $value[0] and $value[1]`                       |
+| [JsonContainsFilter](#JsonContainsFilter---jsoncontains)                | `$jsonContains`      |                                 | `json_contains({$target}, {$value})`                                  |
+| [JsonNotContainsFilter](#JsonNotContainsFilter---jsonnotcontains)       | `$jsonNotContains`   |                                 | `not json_contains({$target}, {$value})`                              |
+| [JsonLengthFilter](#JsonLengthFilter---jsonlength)                      | `$jsonLength`        |                                 | `json_length({$target}}) $operator $value`                            |
 
 #### Relationship Filters
 
-| Filter                                          | Code             | Query                                                                 |
-|-------------------------------------------------|------------------|-----------------------------------------------------------------------|
-| [HasFilter](#HasFilter---has)                   | `$has`           | `where exists (select * from {$target})`                              |
-| [DoesntHasFilter](#DoesntHasFilter---doesnthas) | `$doesntHas`     | `where not exists (select * from {$target})`                          |
+| Filter                                          | Type         | Query                                        |
+|-------------------------------------------------|--------------|----------------------------------------------|
+| [HasFilter](#HasFilter---has)                   | `$has`       | `where exists (select * from {$target})`     |
+| [DoesntHasFilter](#DoesntHasFilter---doesnthas) | `$doesntHas` | `where not exists (select * from {$target})` |
 
 #### Condition Filters
 
-| Filter                        | Code   | Query |
+| Filter                        | Type   | Query |
 |-------------------------------|--------|-------|
 | [OrFilter](#OrFilter---or)    | `$or`  | `or`  |
 | [AndFilter](#AndFilter---and) | `$and` | `and` |
@@ -496,38 +496,13 @@ $sql = Project::filter([
 select * from "projects" where "description" LIKE '%Laravel%'
 ```
 
-#### LikeStartFilter - `$like:start`
+- Modifiers
 
-- `value` = `string` | `int` | `float`.
-
-```php
-$sql = Project::filter([
-    [
-        'type'   => '$like:start',
-        'target' => 'description',
-        'value'  => 'Laravel',
-    ]
-])->toRawSql();
-```
-
+`$like:start`
 ```sql
 select * from "projects" where "description" LIKE 'Laravel%'
 ```
-
-#### LikeEndFilter - `$like:end`
-
-- `value` = `string` | `int` | `float`.
-
-```php
-$sql = Project::filter([
-    [
-        'type'   => '$like:end',
-        'target' => 'description',
-        'value'  => 'Laravel',
-    ]
-])->toRawSql();
-```
-
+`$like:end`
 ```sql
 select * from "projects" where "description" LIKE '%Laravel'
 ```
@@ -550,38 +525,13 @@ $sql = Project::filter([
 select * from "projects" where "description" NOT LIKE '%Laravel%'
 ```
 
-#### NotLikeStartFilter - `$notLike:start`
+- Modifiers
 
-- `value` = `string` | `int` | `float`.
-
-```php
-$sql = Project::filter([
-    [
-        'type'   => '$notLike:start',
-        'target' => 'description',
-        'value'  => 'Laravel',
-    ]
-])->toRawSql();
-```
-
+`$notLike:start`
 ```sql
 select * from "projects" where "description" NOT LIKE 'Laravel%'
 ```
-
-#### NotLikeEndFilter - `$notLike:end`
-
-- `value` = `string` | `int` | `float`.
-
-```php
-$sql = Project::filter([
-    [
-        'type'   => '$notLike:end',
-        'target' => 'description',
-        'value'  => 'Laravel',
-    ]
-])->toRawSql();
-```
-
+`$notLike:end`
 ```sql
 select * from "projects" where "description" NOT LIKE '%Laravel'
 ```
@@ -613,7 +563,7 @@ select * from "people" where "age" is null and "weight" is not null
 
 #### InFilter - `$in`
 
-- `value` = array of `string` | `int` | `float`.
+- `value` = array of `string` | `int` | `float` (minimum 1).
 
 ```php
 $sql = Person::filter([
@@ -631,7 +581,7 @@ select * from "people" where "name" in ('Taylor', 'Otwell')
 
 #### NotInFilter - `$notIn`
 
-- `value` = array of `string` | `int` | `float`.
+- `value` = array of `string` | `int` | `float` (minimum 1).
 
 ```php
 $sql = Person::filter([
@@ -835,7 +785,7 @@ select * from "projects" where not exists (select * from "comments" where "proje
 
 #### OrFilter - `$or`
 
-- `value` = `array` of filters.
+- `value` = `array` of filters (minimum 2).
 
 ```php
 $sql = Comment::filter([
@@ -863,7 +813,7 @@ select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE 
 
 #### AndFilter - `$and`
 
-- `value` = `array` of filters.
+- `value` = `array` of filters (minimum 2).
 
 ```php
 $sql = Comment::filter([
@@ -917,9 +867,12 @@ php artisan make:eloquent-filter LowerCaseFilter --type=field
 ```php
 class LowerCaseFilter extends AbstractFieldFilter
 {
+    use HasModifiers;
+
     final public function __construct(
         protected string $target,
         protected string $value,
+        protected array  $modifiers
     ) {
 
     }
@@ -940,7 +893,7 @@ class LowerCaseFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            'target' => ['required', 'string'],
+            ...TargetRules::get(),
             'value'  => ['required', 'string'],
         ];
     }
@@ -953,6 +906,7 @@ class LowerCaseFilter extends AbstractFieldFilter
         return new static(
             $approvedFilter->target()->getReal(),
             $approvedFilter->data_get('value'),
+            $approvedFilter->modifiers(),
         );
     }
 
@@ -972,7 +926,7 @@ class LowerCaseFilter extends AbstractFieldFilter
  * Usage:
  */
 
-public function allowedFilters(): SomeFiltersAllowed
+public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
         Filter::field('name', ['$lowercase']),
@@ -1012,10 +966,10 @@ class AdminFilter extends AbstractCustomFilter
  * Usage:
  */
 
-public function allowedFilters(): SomeFiltersAllowed
+public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
-        Filter::custom(['$admin']),
+        Filter::custom('$admin'),
     );
 }
 ```
@@ -1075,7 +1029,7 @@ You can alias your target fields and relations if you don't wish to expose datab
 
 The below example:
  - Allows `name` and uses `first_name` in the database query.
- - Allows `documents` and uses `files` as the relationship name.
+ - Allows `documents` and uses `files` as the relationship method name.
 
 ```php
 $sql = Person::filter([
@@ -1090,22 +1044,25 @@ $sql = Person::filter([
         'value'  => [],
     ],
 ], Filter::only(
-    Filter::field(Target::alias('name', 'first_name'), ['$eq']),
-    Filter::relation(Target::alias('documents', 'files'), ['$has'])
+    Filter::field(Target::alias('name', 'first_name'), [FilterType::EQUAL]),
+    Filter::relation(Target::alias('documents', 'files'), [FilterType::HAS])
 ))->toRawSql();
 ```
 
-You can also alias targets when allowing all filters.
+You can alias targets when allowing all filters.
 
 ```php
-Filter::all(
-    Target::alias('name', 'first_name'),
-    Target::relationAlias(
-        'documents',
-        'files',
-        Target::alias('file_extension', 'mime_type')
-    ),
-)
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::all(
+        Target::alias('name', 'first_name'),
+        Target::relationAlias(
+            'documents',
+            'files',
+            Target::alias('file_extension', 'mime_type')
+        ),
+    );
+}
 ```
 
 #### Json Path Wildcards
@@ -1113,9 +1070,12 @@ Filter::all(
 - When specifying the target of a json database field you can specify wildcards in the json path.
 
 ```php
-Filter::only(
-    Filter::field('data->*->array', ['$jsonContains']),
-)
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('data->*->array', [FilterType::JSON_CONTAINS]),
+    );
+}
 
 /*
  * Allows:
@@ -1134,18 +1094,133 @@ $filters = [
 
 #### Specifying Allowed Types
 
-```php
-use IndexZer0\EloquentFiltering\Filter\Types\Types;
+- Only `$eq` allowed
 
-// Only `$eq` allowed
+```php
+use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\Types\Types;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+
+// By enum
+Filter::field('name', [FilterType::EQUAL])
+Filter::field('name', Types::only([FilterType::EQUAL]))
+// By string
 Filter::field('name', ['$eq'])
 Filter::field('name', Types::only(['$eq']))
+```
 
-// All types allowed
-Filter::field('name', Types::all()),
+- All types allowed
 
-// All except `$eq` allowed
-Filter::field('name', Types::except(['$eq'])),
+```php
+use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\Types\Types;
+
+Filter::field('name', Types::all())
+```
+
+#### Required Filters
+
+You can specify that `Filter::field()`, `Filter::relation()` and `Filter::custom()` filters must be required.
+
+- When a required filter is not used, a `RequiredFilterException` is thrown.
+- `RequiredFilterException` extends Laravels `ValidationException`.
+  - You can let this bubble up to your controller for the default laravel 422 response.
+- This exception **CAN NOT** be [suppressed](#suppressing-exceptions).
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('name', [FilterType::LIKE])->required(),
+        Filter::relation(
+            'books',
+            [FilterType::HAS],
+            Filter::only(
+                Filter::field('title', [FilterType::LIKE])->required()
+            )
+        )->required(),
+        Filter::custom('$latest')->required()
+    );
+}
+```
+
+#### Defining Validation Rules
+
+You can define your own validation rules for any `AllowedType`.
+
+- When a filter does not pass validation rules, a `MalformedFilterFormatException` is thrown.
+- `MalformedFilterFormatException` extends Laravels `ValidationException`.
+    - You can let this bubble up to your controller for the default laravel 422 response.
+- This exception **CAN** be [suppressed](#suppressing-exceptions).
+
+```php
+class Order extends Model implements IsFilterable
+{
+    use Filterable;
+    
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('status', [
+                FilterType::EQUAL->withRules([
+                    'value' => [Rule::enum(OrderStatus::class)]
+                ]),
+                FilterType::IN->withRules([
+                    'value.*' => [Rule::enum(OrderStatus::class)]
+                ])
+            ]),
+            Filter::field('paid_date', [
+                FilterType::BETWEEN->withRules([
+                    'value.0' => ['date', 'before:value.1'],
+                    'value.1' => ['date', 'after:value.0'],
+                ])
+            ]),
+            Filter::field('created_at', [
+                new AllowedType('$yourCustomFilterType')->withRules([
+                    'value' => [new YourCustomRule()],
+                ])
+            ]),
+        );
+    }
+}
+```
+
+#### Filter Modifiers
+
+- Modifiers are ways to slightly alter the way that a filter works.
+- Multiple modifiers can be applied. i.e. `$like:start:end`.
+- Some of the [core filters](#available-filters) have modifiers.
+  - `$like`:
+    - `:start` - matches only the start of field `LIKE 'Laravel%'`.
+    - `:end`  - matches only the end of field `LIKE '%Laravel'`.
+  - `$notLike`:
+    - `:start` - matches only the start of field `NOT LIKE 'Laravel%'`.
+    - `:end` - matches only the end of field `NOT LIKE '%Laravel'`.
+  - `$in`:
+    - `:null` - also does a `or "{$target}" is null` if `null` is sent in the `values` array.
+  - `$notIn`:
+    - `:null`- also does a `and "{$target}" is not null` if `null` is sent in the `values` array.
+
+You can specify just specific modifiers to enable.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('name', [FilterType::LIKE->withModifiers('end')])
+    );
+}
+```
+
+You can disable all modifiers.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('name', [FilterType::LIKE->withoutModifiers()])
+    );
+}
 ```
 
 #### Suppressing Exceptions
@@ -1165,7 +1240,7 @@ class MissingFilterException
 config("eloquent-filtering.suppress.filter.missing");
 // Can't find filter of `type` specified.
 
-class MalformedFilterFormatException
+class MalformedFilterFormatException extends ValidationException
 config("eloquent-filtering.suppress.filter.malformed_format");
 // The filter was found, but the rest of the data does not match required format of the filter.
 
@@ -1179,6 +1254,9 @@ config("eloquent-filtering.suppress.filter.denied");
 ```php
 class DuplicateFiltersException
 // When you have registered a custom filter that has the same type as another filter.
+
+class RequiredFilterException extends ValidationException
+// When required filter(s) were not applied.
 ``` 
 
 #### Suppression Hooks

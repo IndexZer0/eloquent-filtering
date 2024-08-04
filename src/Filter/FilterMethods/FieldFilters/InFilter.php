@@ -7,15 +7,20 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
-use IndexZer0\EloquentFiltering\Rules\WhereValue;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Filter\Traits\HasModifiers;
+use IndexZer0\EloquentFiltering\Rules\NullableWhereValue;
+use IndexZer0\EloquentFiltering\Rules\TargetRules;
 
 class InFilter extends AbstractFieldFilter
 {
+    use HasModifiers;
+
     final public function __construct(
         protected string $target,
         protected array $value,
+        protected array $modifiers
     ) {
-
     }
 
     /*
@@ -26,15 +31,15 @@ class InFilter extends AbstractFieldFilter
 
     public static function type(): string
     {
-        return '$in';
+        return FilterType::IN->value;
     }
 
     public static function format(): array
     {
         return [
-            'target'  => ['required', 'string'],
-            'value'   => ['required', 'array'],
-            'value.*' => ['required', new WhereValue()],
+            ...TargetRules::get(),
+            'value'   => ['required', 'array', 'min:1'],
+            'value.*' => [new NullableWhereValue()],
         ];
     }
 
@@ -43,12 +48,20 @@ class InFilter extends AbstractFieldFilter
         return new static(
             $approvedFilter->target()->getReal(),
             $approvedFilter->data_get('value'),
+            $approvedFilter->modifiers(),
         );
     }
 
     public function apply(Builder $query): Builder
     {
-        return $query->whereIn($this->target, $this->value, not: $this->not());
+        $value = collect($this->value);
+        $valueContainNull = $value->containsStrict(null);
+        $hasNullModifier = $this->hasModifier('null');
+
+        return $query->whereIn($this->target, $value->filter(fn ($item) => $item !== null), not: $this->not())
+            ->when($valueContainNull && $hasNullModifier, function (Builder $query): void {
+                $query->whereNull($this->target, $this->not() ? 'and' : 'or', $this->not());
+            });
     }
 
     /*

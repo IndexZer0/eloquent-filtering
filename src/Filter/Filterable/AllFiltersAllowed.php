@@ -28,6 +28,8 @@ class AllFiltersAllowed implements AllowedFilterList
 
     public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter
     {
+        $pendingFilter->validateWith([]);
+
         if ($pendingFilter->is(FilterContext::CONDITION)) {
             // These are filters such as '$or' and '$and'.
             return $pendingFilter->approveWith(
@@ -74,5 +76,10 @@ class AllFiltersAllowed implements AllowedFilterList
     public function getAllowedRelations(): array
     {
         return [];
+    }
+
+    public function getUnmatchedRequiredFilters(): Collection
+    {
+        return collect();
     }
 }

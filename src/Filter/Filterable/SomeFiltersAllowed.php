@@ -27,6 +27,8 @@ class SomeFiltersAllowed implements AllowedFilterList
     public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter
     {
         if ($pendingFilter->is(FilterContext::CONDITION)) {
+            $pendingFilter->validateWith([]);
+
             // These are filters such as '$or' and '$and'.
             return $pendingFilter->approveWith(
                 childFilters: $this->ensureChildFiltersAllowed($pendingFilter, $this)
@@ -34,7 +36,13 @@ class SomeFiltersAllowed implements AllowedFilterList
         }
 
         foreach ($this->allowedFilters as $allowedFilter) {
-            if ($allowedFilter->matches($pendingFilter)) {
+            $allowedType = $allowedFilter->getAllowedType($pendingFilter);
+
+            if ($allowedType) {
+
+                $pendingFilter->validateWith($allowedType->rules);
+
+                $allowedFilter->markMatched();
 
                 $allowedChildFilters = $allowedFilter->allowedFilters();
 
@@ -81,5 +89,22 @@ class SomeFiltersAllowed implements AllowedFilterList
                 fn (AllowedFilter $allowedFilter) => $allowedFilter instanceof AllowedRelation
             )
             ->toArray();
+    }
+
+    public function getUnmatchedRequiredFilters(): Collection
+    {
+        $unmatchedRequiredFilters = collect();
+
+        foreach ($this->allowedFilters as $allowedFilter) {
+            if ($allowedFilter->isRequired() && !$allowedFilter->hasBeenMatched()) {
+                $unmatchedRequiredFilters->push($allowedFilter);
+            }
+
+            $unmatchedRequiredFilters = $unmatchedRequiredFilters->merge(
+                $allowedFilter->allowedFilters()->getUnmatchedRequiredFilters()
+            );
+        }
+
+        return $unmatchedRequiredFilters;
     }
 }

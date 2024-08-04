@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+
 class JsonNotContainsFilter extends JsonContainsFilter
 {
     /*
@@ -14,7 +16,7 @@ class JsonNotContainsFilter extends JsonContainsFilter
 
     public static function type(): string
     {
-        return '$jsonNotContains';
+        return FilterType::JSON_NOT_CONTAINS->value;
     }
 
     /*

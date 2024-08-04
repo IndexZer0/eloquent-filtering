@@ -4,20 +4,28 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\AllowedTypes;
 
+use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
+use IndexZer0\EloquentFiltering\Filter\RequestedFilter;
 
 class SomeTypesAllowed implements AllowedTypes
 {
+    protected Collection $allowedTypes;
+
     public function __construct(
-        protected array $types = [],
-        protected bool $except = false,
+        AllowedType ...$allowedTypes,
     ) {
+        $this->allowedTypes = collect($allowedTypes)->keyBy('type');
     }
 
-    public function contains(string $type): bool
+    public function get(RequestedFilter $requestedFilter): ?AllowedType
     {
-        $inTypes = in_array($type, $this->types, true);
+        $allowedType = $this->allowedTypes->get($requestedFilter->type);
 
-        return $this->except ? !$inTypes : $inTypes;
+        if ($allowedType !== null && $allowedType->matches($requestedFilter)) {
+            return $allowedType;
+        }
+
+        return null;
     }
 }

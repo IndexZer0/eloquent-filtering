@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
+use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
@@ -33,5 +34,10 @@ class NoFiltersAllowed implements AllowedFilterList
     public function getAllowedRelations(): array
     {
         return [];
+    }
+
+    public function getUnmatchedRequiredFilters(): Collection
+    {
+        return collect();
     }
 }

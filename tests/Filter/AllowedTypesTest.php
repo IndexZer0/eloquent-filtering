@@ -49,7 +49,7 @@ it('can have all types allowed', function (): void {
 
 });
 
-it('can have only some types allowed | only', function (): void {
+it('can have only some types allowed', function (): void {
 
     $this->setSuppression("filter.denied", true);
 
@@ -75,48 +75,6 @@ it('can have only some types allowed | only', function (): void {
         ],
         Filter::only(
             Filter::field('name', Types::only(['$eq', '$like'])),
-        )
-    );
-
-    $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'George Raymond Richard Martin' and "name" LIKE '%George Raymond Richard Martin%'
-        SQL;
-
-    expect($query->toRawSql())->toBe($expectedSql);
-
-    $models = $query->get();
-
-    expect($models->count())->toBe(1)
-        ->and($models->pluck('name')->toArray())->toBe(['George Raymond Richard Martin']);
-
-});
-
-it('can have only some types allowed | except', function (): void {
-
-    $this->setSuppression("filter.denied", true);
-
-    $query = Author::filter(
-        [
-            [
-                'target' => 'name',
-                'type'   => '$eq',
-                'value'  => 'George Raymond Richard Martin',
-            ],
-            [
-                'target' => 'name',
-                'type'   => '$like',
-                'value'  => 'George Raymond Richard Martin',
-            ],
-            [
-                'target' => 'name',
-                'type'   => '$in',
-                'value'  => [
-                    'George Raymond Richard Martin',
-                ],
-            ],
-        ],
-        Filter::only(
-            Filter::field('name', Types::except(['$in'])),
         )
     );
 

@@ -7,10 +7,13 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
+use IndexZer0\EloquentFiltering\Filter\Traits\HasModifiers;
 
 abstract class AbstractCustomFilter implements FilterMethod
 {
-    final public function __construct()
+    use HasModifiers;
+
+    final public function __construct(protected array  $modifiers)
     {
     }
 
@@ -32,6 +35,6 @@ abstract class AbstractCustomFilter implements FilterMethod
 
     public static function from(ApprovedFilter $approvedFilter): static
     {
-        return new static();
+        return new static($approvedFilter->modifiers());
     }
 }

@@ -13,8 +13,9 @@ class ApprovedFilter
 {
     public function __construct(
         protected string $filterFqcn,
-        protected array  $data,
-        protected ?Target           $target = null,
+        protected array $data,
+        protected array $modifiers,
+        protected ?Target $target = null,
         protected ?FilterCollection $childFilters = null,
     ) {
     }
@@ -49,5 +50,10 @@ class ApprovedFilter
     public function data_get(string $key): mixed
     {
         return data_get($this->data, $key);
+    }
+
+    public function modifiers(): array
+    {
+        return $this->modifiers;
     }
 }

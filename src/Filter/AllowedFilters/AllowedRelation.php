@@ -7,15 +7,19 @@ namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 use Illuminate\Database\Eloquent\Model;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
+use IndexZer0\EloquentFiltering\Filter\Traits\CanBeRequired;
 use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class AllowedRelation implements AllowedFilter
 {
+    use CanBeRequired;
+
     protected bool $includeRelationFields = false;
 
     public function __construct(
@@ -36,19 +40,27 @@ class AllowedRelation implements AllowedFilter
         return $this->allowedFilters;
     }
 
-    public function matches(PendingFilter $pendingFilter): bool
+    public function getAllowedType(PendingFilter $pendingFilter): ?AllowedType
     {
         if (!$pendingFilter->is(FilterContext::RELATION)) {
-            return false;
+            return null;
         }
 
-        return $this->types->contains($pendingFilter->type()) &&
-            $this->target->isFor($pendingFilter->desiredTarget());
+        if (!$this->target->isFor($pendingFilter->desiredTarget())) {
+            return null;
+        }
+
+        return $this->types->get($pendingFilter->requestedFilter());
     }
 
     public function getTarget(PendingFilter $pendingFilter): ?Target
     {
         return $this->target;
+    }
+
+    public function getDescription(): string
+    {
+        return sprintf('"%s" filter', $this->target->target());
     }
 
     /*
