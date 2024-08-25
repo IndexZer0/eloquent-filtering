@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MissingFilterException;
-use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
@@ -20,7 +19,6 @@ it('ignores missing filter when suppressed', function (): void {
                 'type' => '$this-filter-does-not-exist',
             ],
         ],
-        Filter::all()
     );
 
     $expectedSql = <<< SQL
@@ -43,7 +41,6 @@ it('errors when provided missing filter when not suppressed', function (): void 
                 'type' => '$this-filter-does-not-exist',
             ],
         ],
-        Filter::all()
     );
 
 })->throws(MissingFilterException::class, 'Can not find filter for "$this-filter-does-not-exist"');
