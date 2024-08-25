@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ApiResponse;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
@@ -22,7 +23,7 @@ it('can perform $eq filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$eq']),
+            Filter::field('name', [FilterType::EQUAL]),
         )
     );
 
@@ -58,7 +59,7 @@ it('only accepts string, int, float for value', function (
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$eq']),
+            Filter::field('name', [FilterType::EQUAL]),
         )
     );
 
@@ -130,7 +131,7 @@ it('can perform $eq filter on json field', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('data->own-key-1', ['$eq']),
+            Filter::field('data->own-key-1', [FilterType::EQUAL]),
         )
     );
 
