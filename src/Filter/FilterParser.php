@@ -56,11 +56,11 @@ class FilterParser implements FilterParserContract
         $requestedFilter = $this->parseFilterType($filter);
         $filterFqcn = $this->findFilterMethodFqcn($requestedFilter->type);
 
-        $approvedFilter = $this->allowedFilterList->ensureAllowed(
-            new PendingFilter($requestedFilter, $filterFqcn, $filter)
-        );
+        $pendingFilter = new PendingFilter($requestedFilter, $filterFqcn, $filter, $this->model, $this->relation);
 
-        return $approvedFilter->createFilter();
+        $pendingFilter->validate();
+
+        return $this->allowedFilterList->ensureAllowed($pendingFilter);
     }
 
     private function parseFilterType(mixed $filter): RequestedFilter
