@@ -41,4 +41,9 @@ interface FilterMethod
      * Get the EloquentContext for the filter method.
      */
     public function eloquentContext(): EloquentContext;
+
+    /*
+     * Get the filter parser for the filter method.
+     */
+    public static function customFilterParser(): CustomFilterParser;
 }
