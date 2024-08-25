@@ -8,15 +8,14 @@ use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
-use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\DefinesAllowedChildFilters;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
-use IndexZer0\EloquentFiltering\Filter\Traits\EnsuresChildFiltersAllowed;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 
 class SomeFiltersAllowed implements AllowedFilterList
 {
-    use EnsuresChildFiltersAllowed;
-
     protected Collection $allowedFilters;
 
     public function __construct(AllowedFilter ...$allowedFilters)
@@ -24,34 +23,25 @@ class SomeFiltersAllowed implements AllowedFilterList
         $this->allowedFilters = collect($allowedFilters);
     }
 
-    public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter
+    public function ensureAllowed(PendingFilter $pendingFilter): FilterMethod
     {
+        // These are filters such as '$or' and '$and'.
         if ($pendingFilter->is(FilterContext::CONDITION)) {
-            $pendingFilter->validateWith([]);
-
-            // These are filters such as '$or' and '$and'.
-            return $pendingFilter->approveWith(
-                childFilters: $this->ensureChildFiltersAllowed($pendingFilter, $this)
-            );
+            return $pendingFilter
+                ->getCustomFilterParser()
+                ->parse($pendingFilter, allowedFilterList: $this);
         }
 
         foreach ($this->allowedFilters as $allowedFilter) {
             $allowedType = $allowedFilter->getAllowedType($pendingFilter);
 
             if ($allowedType) {
-
-                $pendingFilter->validateWith($allowedType->rules);
-
+                $pendingFilter->validate($allowedType->rules);
                 $allowedFilter->markMatched();
 
-                $allowedChildFilters = $allowedFilter->allowedFilters();
-
-                $childFilters = $this->ensureChildFiltersAllowed($pendingFilter, $allowedChildFilters);
-
-                return $pendingFilter->approveWith(
-                    $allowedFilter->getTarget($pendingFilter),
-                    $childFilters
-                );
+                return $pendingFilter
+                    ->getCustomFilterParser()
+                    ->parse($pendingFilter, $allowedFilter);
             }
         }
 
@@ -71,6 +61,11 @@ class SomeFiltersAllowed implements AllowedFilterList
     {
         $this->allowedFilters->push(...$allowedFilters);
         return $this;
+    }
+
+    public function getAll(): array
+    {
+        return $this->allowedFilters->toArray();
     }
 
     public function getAllowedFields(): array
@@ -100,9 +95,11 @@ class SomeFiltersAllowed implements AllowedFilterList
                 $unmatchedRequiredFilters->push($allowedFilter);
             }
 
-            $unmatchedRequiredFilters = $unmatchedRequiredFilters->merge(
-                $allowedFilter->allowedFilters()->getUnmatchedRequiredFilters()
-            );
+            if ($allowedFilter instanceof DefinesAllowedChildFilters) {
+                $unmatchedRequiredFilters = $unmatchedRequiredFilters->merge(
+                    $allowedFilter->allowedFilters()->getUnmatchedRequiredFilters()
+                );
+            }
         }
 
         return $unmatchedRequiredFilters;
