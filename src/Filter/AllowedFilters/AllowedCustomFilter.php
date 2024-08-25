@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
-use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
-use IndexZer0\EloquentFiltering\Filter\Filterable\AllFiltersAllowed;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\RequireableFilter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
-use IndexZer0\EloquentFiltering\Filter\Traits\CanBeRequired;
+use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBeRequired;
 
-class AllowedCustomFilter implements AllowedFilter
+class AllowedCustomFilter implements AllowedFilter, RequireableFilter
 {
     use CanBeRequired;
 
@@ -27,11 +25,6 @@ class AllowedCustomFilter implements AllowedFilter
      * -----------------------------
      */
 
-    public function allowedFilters(): AllowedFilterList
-    {
-        return new AllFiltersAllowed();
-    }
-
     public function getAllowedType(PendingFilter $pendingFilter): ?AllowedType
     {
         if (!$pendingFilter->is(FilterContext::CUSTOM)) {
@@ -42,11 +35,6 @@ class AllowedCustomFilter implements AllowedFilter
             return $this->type;
         }
 
-        return null;
-    }
-
-    public function getTarget(PendingFilter $pendingFilter): ?Target
-    {
         return null;
     }
 
