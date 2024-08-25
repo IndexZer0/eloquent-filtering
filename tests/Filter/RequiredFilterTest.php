@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Exceptions\RequiredFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters\LatestFilter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
@@ -13,12 +14,12 @@ it('throws RequiredFilterException when required filters have not been matched',
         Author::filter(
             [], // Filters intentionally empty.
             Filter::only(
-                Filter::field('name', ['$like'])->required(),
+                Filter::field('name', [FilterType::LIKE])->required(),
                 Filter::relation(
                     'books',
-                    ['$has'],
+                    [FilterType::HAS],
                     Filter::only(
-                        Filter::field('title', ['$like'])->required()
+                        Filter::field('title', [FilterType::LIKE])->required()
                     )
                 )->required(),
                 Filter::custom('$latest')->required()
@@ -75,12 +76,12 @@ it('does not throw RequiredFilterException when required filters have been match
                 ],
             ],
             Filter::only(
-                Filter::field('name', ['$like'])->required(),
+                Filter::field('name', [FilterType::LIKE])->required(),
                 Filter::relation(
                     'books',
-                    ['$has'],
+                    [FilterType::HAS],
                     Filter::only(
-                        Filter::field('title', ['$like'])->required()
+                        Filter::field('title', [FilterType::LIKE])->required()
                     )
                 )->required(),
                 Filter::custom('$latest')->required()
