@@ -28,7 +28,7 @@ it('can perform $null filter | null', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" is null
+        select * from "authors" where "authors"."name" is null
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -55,7 +55,7 @@ it('can perform $null filter | not null', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" is not null
+        select * from "authors" where "authors"."name" is not null
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

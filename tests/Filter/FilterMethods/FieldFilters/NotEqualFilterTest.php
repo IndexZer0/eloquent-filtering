@@ -24,7 +24,7 @@ it('can perform $notEq filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" != 'J. R. R. Tolkien'
+        select * from "authors" where "authors"."name" != 'J. R. R. Tolkien'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

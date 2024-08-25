@@ -27,7 +27,7 @@ it('can perform $notBetween filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "author_profiles" where "age" not between 19 and 21
+        select * from "author_profiles" where "author_profiles"."age" not between 19 and 21
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

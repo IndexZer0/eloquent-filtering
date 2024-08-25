@@ -24,7 +24,7 @@ it('can perform $gt filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "author_profiles" where "age" > 20
+        select * from "author_profiles" where "author_profiles"."age" > 20
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

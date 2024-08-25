@@ -25,7 +25,7 @@ it('can perform $jsonContains filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "api_responses" where exists (select 1 from json_each("data", '$."array"') where "json_each"."value" is 'own-array-value-1')
+        select * from "api_responses" where exists (select 1 from json_each("api_responses"."data", '$."array"') where "json_each"."value" is 'own-array-value-1')
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -68,7 +68,7 @@ it('supports various wildcard and non wildcard targets', function (
     'target is database field' => [
         'allowed_target'             => 'data',
         'requested_target'           => 'data',
-        'expected_sql'               => 'select * from "api_responses" where exists (select 1 from json_each("data") where "json_each"."value" is \'own-array-value-1\')',
+        'expected_sql'               => 'select * from "api_responses" where exists (select 1 from json_each("api_responses"."data") where "json_each"."value" is \'own-array-value-1\')',
         'expected_exception_message' => null,
     ],
     'invalid json path (ends with "->")' => [
@@ -80,7 +80,7 @@ it('supports various wildcard and non wildcard targets', function (
     'single wildcard | does match' => [
         'allowed_target'             => 'data->*->array',
         'requested_target'           => 'data->something->array',
-        'expected_sql'               => 'select * from "api_responses" where exists (select 1 from json_each("data", \'$."something"."array"\') where "json_each"."value" is \'own-array-value-1\')',
+        'expected_sql'               => 'select * from "api_responses" where exists (select 1 from json_each("api_responses"."data", \'$."something"."array"\') where "json_each"."value" is \'own-array-value-1\')',
         'expected_exception_message' => null,
     ],
     'single wildcard | does not match' => [
@@ -92,7 +92,7 @@ it('supports various wildcard and non wildcard targets', function (
     'no wildcard | matches' => [
         'allowed_target'             => 'data->something->array',
         'requested_target'           => 'data->something->array',
-        'expected_sql'               => 'select * from "api_responses" where exists (select 1 from json_each("data", \'$."something"."array"\') where "json_each"."value" is \'own-array-value-1\')',
+        'expected_sql'               => 'select * from "api_responses" where exists (select 1 from json_each("api_responses"."data", \'$."something"."array"\') where "json_each"."value" is \'own-array-value-1\')',
         'expected_exception_message' => null,
     ],
     'no wildcard | does not match' => [
@@ -104,7 +104,7 @@ it('supports various wildcard and non wildcard targets', function (
     'multiple wildcards | does match' => [
         'allowed_target'             => 'data->*->*->array',
         'requested_target'           => 'data->something->sub->array',
-        'expected_sql'               => 'select * from "api_responses" where exists (select 1 from json_each("data", \'$."something"."sub"."array"\') where "json_each"."value" is \'own-array-value-1\')',
+        'expected_sql'               => 'select * from "api_responses" where exists (select 1 from json_each("api_responses"."data", \'$."something"."sub"."array"\') where "json_each"."value" is \'own-array-value-1\')',
         'expected_exception_message' => null,
     ],
     'multiple wildcards | does not match' => [
@@ -128,7 +128,7 @@ it('supports various wildcard and non wildcard targets', function (
     'can have int where wildcard is' => [
         'allowed_target'             => 'data->*->response->*->values',
         'requested_target'           => 'data->0->response->5->values',
-        'expected_sql'               => 'select * from "api_responses" where exists (select 1 from json_each("data", \'$."0"."response"."5"."values"\') where "json_each"."value" is \'own-array-value-1\')',
+        'expected_sql'               => 'select * from "api_responses" where exists (select 1 from json_each("api_responses"."data", \'$."0"."response"."5"."values"\') where "json_each"."value" is \'own-array-value-1\')',
         'expected_exception_message' => null,
     ],
     'cant have "->" as wildcard' => [

@@ -24,7 +24,7 @@ it('can perform $jsonContains filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "api_responses" where not exists (select 1 from json_each("data", '$."array"') where "json_each"."value" is 'own-array-value-1')
+        select * from "api_responses" where not exists (select 1 from json_each("api_responses"."data", '$."array"') where "json_each"."value" is 'own-array-value-1')
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

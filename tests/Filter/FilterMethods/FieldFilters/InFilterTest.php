@@ -28,7 +28,7 @@ it('can perform $in filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" in ('George Raymond Richard Martin', 'J. R. R. Tolkien')
+        select * from "authors" where "authors"."name" in ('George Raymond Richard Martin', 'J. R. R. Tolkien')
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -60,7 +60,7 @@ it('can perform $in filter with :null modifier', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where ("name" in ('George Raymond Richard Martin') or "name" is null)
+        select * from "authors" where ("authors"."name" in ('George Raymond Richard Martin') or "authors"."name" is null)
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

@@ -24,7 +24,7 @@ it('can perform $lte filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "author_profiles" where "age" <= 30
+        select * from "author_profiles" where "author_profiles"."age" <= 30
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

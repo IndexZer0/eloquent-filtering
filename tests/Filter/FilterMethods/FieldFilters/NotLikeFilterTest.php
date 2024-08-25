@@ -39,7 +39,7 @@ it('can perform $notLike filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" NOT LIKE '%text%'
+        select * from "authors" where "authors"."name" NOT LIKE '%text%'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -66,7 +66,7 @@ it('can perform $notLike filter with :end modifier', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" NOT LIKE '%text'
+        select * from "authors" where "authors"."name" NOT LIKE '%text'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -93,7 +93,7 @@ it('can perform $notLike filter with :start modifier', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" NOT LIKE 'text%'
+        select * from "authors" where "authors"."name" NOT LIKE 'text%'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

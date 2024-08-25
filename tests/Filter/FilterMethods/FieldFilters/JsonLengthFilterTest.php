@@ -26,7 +26,7 @@ it('can perform $jsonLength filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "api_responses" where json_array_length("data", '$."array"') = 4
+        select * from "api_responses" where json_array_length("api_responses"."data", '$."array"') = 4
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -116,7 +116,7 @@ it('only accepts int for value', function (
     // Success Cases
     'int' => [
         'value_container'  => ['value' => 420, ],
-        'expected_sql'     => 'select * from "api_responses" where json_array_length("data", \'$."array"\') = 420',
+        'expected_sql'     => 'select * from "api_responses" where json_array_length("api_responses"."data", \'$."array"\') = 420',
         'expect_exception' => false,
     ],
 ]);
