@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ApiResponse;
 
 beforeEach(function (): void {
@@ -19,7 +20,7 @@ it('can perform $jsonContains filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('data->array', ['$jsonNotContains']),
+            Filter::field('data->array', [FilterType::JSON_NOT_CONTAINS]),
         )
     );
 

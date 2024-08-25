@@ -23,7 +23,7 @@ it('can perform $in filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$in']),
+            Filter::field('name', [FilterType::IN]),
         )
     );
 

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\AuthorProfile;
 
 beforeEach(function (): void {
@@ -19,7 +20,7 @@ it('can perform $lte filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('age', ['$lte']),
+            Filter::field('age', [FilterType::LESS_THAN_EQUAL_TO]),
         )
     );
 

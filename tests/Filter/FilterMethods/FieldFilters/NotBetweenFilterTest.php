@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\AuthorProfile;
 
 beforeEach(function (): void {
@@ -22,7 +23,7 @@ it('can perform $notBetween filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('age', ['$notBetween']),
+            Filter::field('age', [FilterType::NOT_BETWEEN]),
         )
     );
 

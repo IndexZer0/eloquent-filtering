@@ -23,7 +23,7 @@ it('can perform $notIn filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$notIn']),
+            Filter::field('name', [FilterType::NOT_IN]),
         )
     );
 

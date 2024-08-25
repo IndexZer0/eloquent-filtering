@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
@@ -34,7 +35,7 @@ it('can perform $notLike filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$notLike']),
+            Filter::field('name', [FilterType::NOT_LIKE]),
         )
     );
 
@@ -61,7 +62,7 @@ it('can perform $notLike filter with :end modifier', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$notLike']),
+            Filter::field('name', [FilterType::NOT_LIKE]),
         )
     );
 
@@ -88,7 +89,7 @@ it('can perform $notLike filter with :start modifier', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$notLike']),
+            Filter::field('name', [FilterType::NOT_LIKE]),
         )
     );
 

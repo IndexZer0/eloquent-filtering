@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
@@ -34,7 +35,7 @@ it('can perform $like filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$like']),
+            Filter::field('name', [FilterType::LIKE]),
         )
     );
 
@@ -61,7 +62,7 @@ it('can perform $like filter with :start modifier', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$like']),
+            Filter::field('name', [FilterType::LIKE]),
         )
     );
 
@@ -88,7 +89,7 @@ it('can perform $like filter with :end modifier', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$like']),
+            Filter::field('name', [FilterType::LIKE]),
         )
     );
 

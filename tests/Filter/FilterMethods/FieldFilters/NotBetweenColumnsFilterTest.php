@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
 
 beforeEach(function (): void {
@@ -22,7 +23,7 @@ it('can perform $notBetweenColumns filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('price', ['$notBetweenColumns']),
+            Filter::field('price', [FilterType::NOT_BETWEEN_COLUMNS]),
         )
     );
 

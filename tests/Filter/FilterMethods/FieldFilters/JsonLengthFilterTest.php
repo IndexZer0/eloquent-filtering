@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ApiResponse;
 
 beforeEach(function (): void {
@@ -21,7 +22,7 @@ it('can perform $jsonLength filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('data->array', ['$jsonLength']),
+            Filter::field('data->array', [FilterType::JSON_LENGTH]),
         )
     );
 
@@ -59,7 +60,7 @@ it('only accepts int for value', function (
             ],
         ],
         Filter::only(
-            Filter::field('data->array', ['$jsonLength']),
+            Filter::field('data->array', [FilterType::JSON_LENGTH]),
         )
     );
 
