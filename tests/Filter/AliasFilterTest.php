@@ -96,23 +96,71 @@ it('can alias relations field', function (): void {
 
 });
 
-it('can alias relation | Filter::all()', function (): void {
+it('can alias morph relation | morphRelation filter', function (): void {
 
-    $query = Author::filter(
+    $query = Image::filter(
         [
             [
-                'type'   => '$has',
-                'target' => 'documents',
-                'value'  => [],
+                'target' => 'image',
+                'type'   => '$hasMorph',
+                'types'  => [
+                    [
+                        'type' => 'articles',
+                    ],
+                ],
             ],
         ],
-        Filter::all(
-            Target::alias('documents', 'books')
+        Filter::only(
+            Filter::morphRelation(
+                Target::alias('image', 'imageable'),
+                [FilterType::HAS_MORPH],
+                Filter::morphType('articles')
+            )
         )
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where exists (select * from "books" where "authors"."id" = "books"."author_id")
+        select * from "images" where (("images"."imageable_type" = 'articles' and exists (select * from "articles" where "images"."imageable_id" = "articles"."id")))
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+});
+
+it('can alias morph relation field | morphRelation filter', function (): void {
+
+    $query = Image::filter(
+        [
+            [
+                'target' => 'image',
+                'type'   => '$hasMorph',
+                'types'  => [
+                    [
+                        'type'  => 'articles',
+                        'value' => [
+                            [
+                                'type'   => '$eq',
+                                'target' => 'article_title',
+                                'value'  => 'article-1',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        Filter::only(
+            Filter::morphRelation(
+                Target::alias('image', 'imageable'),
+                [FilterType::HAS_MORPH],
+                Filter::morphType('articles', Filter::only(
+                    Filter::field(Target::alias('article_title', 'title'), [FilterType::EQUAL])
+                ))
+            )
+        )
+    );
+
+    $expectedSql = <<< SQL
+        select * from "images" where (("images"."imageable_type" = 'articles' and exists (select * from "articles" where "images"."imageable_id" = "articles"."id" and "articles"."title" = 'article-1')))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
