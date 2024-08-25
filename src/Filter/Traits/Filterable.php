@@ -28,7 +28,11 @@ trait Filterable
 
         /** @var FilterParser $filterParser */
         $filterParser = resolve(FilterParser::class);
-        $filters = $filterParser->parse($filters, $allowedFilterList);
+        $filters = $filterParser->parse(
+            model: $this,
+            filters: $filters,
+            allowedFilterList: $allowedFilterList
+        );
 
         $unmatchedRequiredFilters = $allowedFilterList->getUnmatchedRequiredFilters();
         if ($unmatchedRequiredFilters->isNotEmpty()) {
