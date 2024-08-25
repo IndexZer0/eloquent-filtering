@@ -96,3 +96,34 @@ it('can not filter by relationship when not explicitly allowed | suppressed', fu
     expect($models->count())->toBe(2);
 
 });
+
+it('can filter by relationship with no child filters', function (): void {
+
+    $query = Author::filter(
+        [
+            [
+                'target' => 'books',
+                'type'   => '$has',
+                // intentionally commented out value below.
+                // 'value' => [],
+            ],
+        ],
+        Filter::only(
+            Filter::relation(
+                'books',
+                [FilterType::HAS],
+            )
+        )
+    );
+
+    $expectedSql = <<< SQL
+        select * from "authors" where exists (select * from "books" where "authors"."id" = "books"."author_id")
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(2)
+        ->and($models->first()->id)->toBe(1);
+});
