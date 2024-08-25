@@ -25,7 +25,7 @@ it('can filter by field when allowed', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'George Raymond Richard Martin'
+        select * from "authors" where "authors"."name" = 'George Raymond Richard Martin'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
