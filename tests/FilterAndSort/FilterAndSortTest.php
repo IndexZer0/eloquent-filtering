@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Sort\Sortable\Sort;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
@@ -20,7 +21,7 @@ it('can filter and sort together', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$like']),
+            Filter::field('name', [FilterType::LIKE]),
         ),
     )->sort(
         [
