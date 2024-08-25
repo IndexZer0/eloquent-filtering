@@ -14,6 +14,9 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\AuthorProfile;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Manufacturer;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Article;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Image;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\UserProfile;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Post;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Tag;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
@@ -37,6 +40,10 @@ class TestCase extends Orchestra
             fn (string $modelName) => 'IndexZer0\\EloquentFiltering\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
 
+        Relation::enforceMorphMap([
+            Article::class,
+            UserProfile::class,
+        ]);
         $this->setUpDatabase($this->app);
     }
 
