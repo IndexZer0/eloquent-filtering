@@ -28,7 +28,7 @@ it('uses allowed filters from model as default', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "products" where "name" = 'Product 1'
+        select * from "products" where "products"."name" = 'Product 1'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
