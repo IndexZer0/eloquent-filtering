@@ -5,6 +5,7 @@ declare(strict_types=1);
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
@@ -125,7 +126,9 @@ it('must have at least two child filters', function (
                 ...$value_container,
             ],
         ],
-        Filter::all()
+        Filter::only(
+            Filter::field('name', [FilterType::EQUAL]),
+        )
     );
 
     expect($query->toRawSql())->toBe($expected_sql);
