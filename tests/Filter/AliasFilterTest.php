@@ -30,7 +30,7 @@ it('can alias field', function (): void {
 
 });
 
-it('can alias relation | relation filter', function (): void {
+it('can alias relation', function (): void {
 
     $query = Author::filter(
         [
