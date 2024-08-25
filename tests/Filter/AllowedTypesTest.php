@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Types\Types;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
@@ -74,7 +75,7 @@ it('can have only some types allowed', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', Types::only(['$eq', '$like'])),
+            Filter::field('name', Types::only([FilterType::EQUAL, FilterType::LIKE])),
         )
     );
 

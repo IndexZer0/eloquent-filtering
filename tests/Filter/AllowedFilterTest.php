@@ -5,6 +5,7 @@ declare(strict_types=1);
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 it('does not allow filters that are not for same context', function (
@@ -33,7 +34,7 @@ it('does not allow filters that are not for same context', function (
             'target' => 'name',
             'value'  => 'George Raymond Richard Martin',
         ],
-        'allowed_filter'             => Filter::relation('name', ['$eq']),
+        'allowed_filter'             => fn () => Filter::relation('name', [FilterType::EQUAL]),
         'expected_exception_message' => '"$eq" filter for "name" is not allowed',
     ],
     'field filter | custom allowed filter' => [
@@ -53,7 +54,7 @@ it('does not allow filters that are not for same context', function (
             'target' => 'books',
             'value'  => [],
         ],
-        'allowed_filter'             => Filter::field('books', ['$has']),
+        'allowed_filter'             => fn () => Filter::field('books', [FilterType::HAS]),
         'expected_exception_message' => '"$has" filter for "books" is not allowed',
     ],
     'relation filter | custom allowed filter' => [

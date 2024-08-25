@@ -21,7 +21,7 @@ it('can have all modifiers allowed', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$like']),
+            Filter::field('name', [FilterType::LIKE]),
         )
     );
 

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Target\Target;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
@@ -17,7 +18,7 @@ it('can alias field | field filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field(Target::alias('name', 'name_alias'), ['$eq'])
+            Filter::field(Target::alias('name', 'name_alias'), [FilterType::EQUAL])
         )
     );
 
@@ -40,7 +41,7 @@ it('can alias relation | relation filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::relation(Target::alias('documents', 'books'), ['$has'])
+            Filter::relation(Target::alias('documents', 'books'), [FilterType::HAS])
         )
     );
 
