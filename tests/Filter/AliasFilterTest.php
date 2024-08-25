@@ -22,7 +22,7 @@ it('can alias field | field filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name_alias" = 'George Raymond Richard Martin'
+        select * from "authors" where "authors"."name_alias" = 'George Raymond Richard Martin'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
