@@ -51,6 +51,8 @@ enum FilterType: string
     // Relationship
     case HAS = '$has';
     case DOESNT_HAS = '$doesntHas';
+    case HAS_MORPH = '$hasMorph';
+    case DOESNT_HAS_MORPH = '$doesntHasMorph';
 
     public function withModifiers(string ...$modifiers): AllowedType
     {
