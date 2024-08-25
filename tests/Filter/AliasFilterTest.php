@@ -55,23 +55,41 @@ it('can alias relation', function (): void {
 
 });
 
-it('can alias field | Filter::all()', function (): void {
+it('can alias relations field', function (): void {
 
     $query = Author::filter(
         [
             [
                 'type'   => '$eq',
-                'target' => 'name',
+                'target' => 'target_from_request_1',
                 'value'  => 'George Raymond Richard Martin',
             ],
+            [
+                'type'   => '$has',
+                'target' => 'target_from_request_2',
+                'value'  => [
+                    [
+                        'type'   => '$eq',
+                        'target' => 'target_from_request_1',
+                        'value'  => 'Game Of Thrones',
+                    ],
+                ],
+            ],
         ],
-        Filter::all(
-            Target::alias('name', 'name_alias')
+        Filter::only(
+            Filter::field(Target::alias('target_from_request_1', 'name'), [FilterType::EQUAL]),
+            Filter::relation(
+                Target::alias('target_from_request_2', 'books'),
+                [FilterType::HAS],
+                allowedFilters: Filter::only(
+                    Filter::field(Target::alias('target_from_request_1', 'title'), [FilterType::EQUAL]),
+                )
+            ),
         )
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name_alias" = 'George Raymond Richard Martin'
+        select * from "authors" where "authors"."name" = 'George Raymond Richard Martin' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "books"."title" = 'Game Of Thrones')
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
