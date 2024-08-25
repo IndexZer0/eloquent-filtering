@@ -195,6 +195,23 @@ class TestCase extends Orchestra
             $table->timestamps();
         });
 
+        $schema->create('article_twos', function (Blueprint $table): void {
+            $table->id();
+            $table->string('title');
+            $table->timestamps();
+        });
+        $schema->create('user_profile_twos', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('image_twos', function (Blueprint $table): void {
+            $table->id();
+            $table->string('url');
+            $table->foreignId('imageable_id');
+            $table->foreignId('imageable_type');
+            $table->timestamps();
+        });
 
         // Package
         $schema->create('packages', function (Blueprint $table): void {
@@ -334,6 +351,66 @@ class TestCase extends Orchestra
         $t2->save();
         $p2->tags()->save($t2, ['tagged_by' => 'tagged-by-user-2']);
     }
+
+    public function createMorphRecords(): void
+    {
+        $article1 = Article::create([
+            'title' => 'article-1',
+        ]);
+        $article1->images()->save(
+            $image1 = new Image([
+                'url' => 'image-1',
+            ])
+        );
+        $article1->images()->save(
+            $image2 = new Image([
+                'url' => 'image-2',
+            ])
+        );
+
+        $article2 = Article::create([
+            'title' => 'article-2',
+        ]);
+        $article2->images()->save(
+            $image3 = new Image([
+                'url' => 'image-3',
+            ])
+        );
+        $article2->images()->save(
+            $image4 = new Image([
+                'url' => 'image-4',
+            ])
+        );
+
+        $userProfile1 = UserProfile::create([
+            'name' => 'user-profile-1',
+        ]);
+        $userProfile1->images()->save(
+            $image5 = new Image([
+                'url' => 'image-5',
+            ])
+        );
+        $userProfile1->images()->save(
+            $image6 = new Image([
+                'url' => 'image-6',
+            ])
+        );
+
+        $userProfile2 = UserProfile::create([
+            'name' => 'user-profile-2',
+        ]);
+        $userProfile2->images()->save(
+            $image7 = new Image([
+                'url' => 'image-7',
+            ])
+        );
+        $userProfile2->images()->save(
+            $image8 = new Image([
+                'url' => 'image-8',
+            ])
+        );
+    }
+
     public function createPackages(): void
     {
         Package::create([
