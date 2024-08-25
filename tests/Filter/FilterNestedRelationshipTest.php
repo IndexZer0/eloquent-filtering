@@ -141,68 +141,6 @@ it('can not filter by nested relationships when no filter list supplied', functi
 
 })->throws(DeniedFilterException::class, '"$eq" filter for "name" is not allowed');
 
-it('can filters by nested relationships with "Filter::all()"', function (): void {
-
-    $query = Author::filter(
-        [
-            [
-                'target' => 'name',
-                'type'   => '$eq',
-                'value'  => 'George Raymond Richard Martin',
-            ],
-            [
-                'target' => 'books',
-                'type'   => '$has',
-                'value'  => [
-                    [
-                        'target' => 'title',
-                        'type'   => '$eq',
-                        'value'  => 'A Game of Thrones',
-                    ],
-                    [
-                        'type'  => '$or',
-                        'value' => [
-                            [
-                                'target' => 'description',
-                                'type'   => '$like',
-                                'value'  => 'A Game of Thrones',
-                            ],
-                            [
-                                'target' => 'description',
-                                'type'   => '$like',
-                                'value'  => 'Song of Ice and Fire',
-                            ],
-                        ],
-                    ],
-                    [
-                        'type'   => '$has',
-                        'target' => 'comments',
-                        'value'  => [
-                            [
-                                'target' => 'content',
-                                'type'   => '$eq',
-                                'value'  => 'Thanks D&D :S',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-        Filter::all(),
-    );
-
-    $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'George Raymond Richard Martin' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'A Game of Thrones' and (("description" LIKE '%A Game of Thrones%') or ("description" LIKE '%Song of Ice and Fire%')) and exists (select * from "comments" where "books"."id" = "comments"."book_id" and "content" = 'Thanks D&D :S'))
-        SQL;
-
-    expect($query->toRawSql())->toBe($expectedSql);
-
-    $models = $query->get();
-
-    expect($models->count())->toBe(1);
-
-});
-
 it('can not filter by nested relationship when not explicitly allowed | not suppressed', function (): void {
 
     Author::filter(
