@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 $dataSets = [
@@ -28,7 +29,9 @@ it('throws exception when filter is invalid | not suppressed', function (mixed $
         [
             $filter,
         ],
-        Filter::all()
+        Filter::only(
+            Filter::field('name', [FilterType::EQUAL])
+        )
     );
 
 })
@@ -43,7 +46,9 @@ it('does not throw exception when filter is invalid | suppressed', function (mix
         [
             $filter,
         ],
-        Filter::all()
+        Filter::only(
+            Filter::field('name', [FilterType::EQUAL])
+        )
     );
 
     $expectedSql = <<< SQL
