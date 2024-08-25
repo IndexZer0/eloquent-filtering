@@ -55,7 +55,7 @@ it('can perform a custom "field" filter | $kebabCase', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where LOWER(REPLACE(name, ' ', '-')) = 'this-is-a-name'
+        select * from "authors" where LOWER(REPLACE(authors.name, ' ', '-')) = 'this-is-a-name'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
