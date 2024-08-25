@@ -11,6 +11,8 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\HasChildFilters;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\HasMorphFilters;
+use IndexZer0\EloquentFiltering\Filter\Morph\MorphTypes;
 
 class FilterBuilder
 {
@@ -41,6 +43,16 @@ class FilterBuilder
         $this->addBuildStep(function (FilterMethod $filterMethod) use ($filters): void {
             if (is_a($filterMethod, HasChildFilters::class)) {
                 $filterMethod->setChildFilters($filters);
+            }
+        });
+        return $this;
+    }
+
+    public function morphTypes(MorphTypes $morphTypes): self
+    {
+        $this->addBuildStep(function (FilterMethod $filterMethod) use ($morphTypes): void {
+            if (is_a($filterMethod, HasMorphFilters::class)) {
+                $filterMethod->setMorphTypes($morphTypes);
             }
         });
         return $this;
