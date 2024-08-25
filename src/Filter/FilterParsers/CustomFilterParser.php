@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterParsers;
 
-use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
 use IndexZer0\EloquentFiltering\Filter\Builder\FilterBuilder;
 use IndexZer0\EloquentFiltering\Filter\Context\EloquentContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
