@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterParsers;
 
-use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
 use IndexZer0\EloquentFiltering\Filter\Builder\FilterBuilder;
 use IndexZer0\EloquentFiltering\Filter\Context\EloquentContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\PivotableFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\TargetedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\CustomFilterParser;
@@ -30,7 +30,7 @@ class FieldFilterParser implements CustomFilterParser
                 new EloquentContext(
                     $pendingFilter->model(),
                     $pendingFilter->relation(),
-                    $allowedFilter instanceof AllowedField && $allowedFilter->isPivot()
+                    is_a($allowedFilter, PivotableFilter::class) && $allowedFilter->isPivot()
                 )
             );
     }
