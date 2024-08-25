@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace IndexZer0\EloquentFiltering\Filter\Traits;
+namespace IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter;
 
 trait CanBeRequired
 {
