@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
+use IndexZer0\EloquentFiltering\Filter\Context\EloquentContext;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 
 interface FilterMethod
@@ -31,4 +31,14 @@ interface FilterMethod
      * Apply the filter logic.
      */
     public function apply(Builder $query): Builder;
+
+    /*
+     * Set the EloquentContext for the filter method.
+     */
+    public function setEloquentContext(EloquentContext $eloquentContext): void;
+
+    /*
+     * Get the EloquentContext for the filter method.
+     */
+    public function eloquentContext(): EloquentContext;
 }
