@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ModelIsFilterable;
 
@@ -24,7 +25,7 @@ it('doesnt resolveRelationsAllowedFields when relation method does not exist', f
         Filter::only(
             Filter::relation(
                 'nonExistingRelationship',
-                ['$has'],
+                [FilterType::HAS],
             )->includeRelationFields()
         )
     );
@@ -50,7 +51,7 @@ it('doesnt includeRelationFields when relation model is not filterable', functio
         Filter::only(
             Filter::relation(
                 'notFilterable',
-                ['$has'],
+                [FilterType::HAS],
             )->includeRelationFields()
         )
     );
