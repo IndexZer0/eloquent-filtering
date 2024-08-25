@@ -38,7 +38,7 @@ it('can perform $and filter on base model', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "books" where (("title" = 'A Game of Thrones') and ("description" LIKE '%A Game of Thrones%'))
+        select * from "books" where (("books"."title" = 'A Game of Thrones') and ("books"."description" LIKE '%A Game of Thrones%'))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -172,7 +172,7 @@ it('must have at least two child filters', function (
                 'value'  => 'J. R. R. Tolkien',
             ],
         ]],
-        'expected_sql'     => 'select * from "authors" where (("name" = \'George Raymond Richard Martin\') and ("name" = \'J. R. R. Tolkien\'))',
+        'expected_sql'     => 'select * from "authors" where (("authors"."name" = \'George Raymond Richard Martin\') and ("authors"."name" = \'J. R. R. Tolkien\'))',
         'expect_exception' => false,
     ],
     'value three elements' => [
@@ -193,7 +193,7 @@ it('must have at least two child filters', function (
                 'value'  => 'J. K. Rowling',
             ],
         ]],
-        'expected_sql'     => 'select * from "authors" where (("name" = \'George Raymond Richard Martin\') and ("name" = \'J. R. R. Tolkien\') and ("name" = \'J. K. Rowling\'))',
+        'expected_sql'     => 'select * from "authors" where (("authors"."name" = \'George Raymond Richard Martin\') and ("authors"."name" = \'J. R. R. Tolkien\') and ("authors"."name" = \'J. K. Rowling\'))',
         'expect_exception' => false,
     ],
 
