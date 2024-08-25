@@ -37,7 +37,7 @@ it('can have all types allowed', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'George Raymond Richard Martin' and "name" LIKE '%George Raymond Richard Martin%' and "name" in ('George Raymond Richard Martin')
+        select * from "authors" where "authors"."name" = 'George Raymond Richard Martin' and "authors"."name" LIKE '%George Raymond Richard Martin%' and "authors"."name" in ('George Raymond Richard Martin')
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -79,7 +79,7 @@ it('can have only some types allowed', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'George Raymond Richard Martin' and "name" LIKE '%George Raymond Richard Martin%'
+        select * from "authors" where "authors"."name" = 'George Raymond Richard Martin' and "authors"."name" LIKE '%George Raymond Richard Martin%'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
