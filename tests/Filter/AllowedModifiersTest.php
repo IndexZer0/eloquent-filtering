@@ -11,7 +11,7 @@ beforeEach(function (): void {
     $this->createAuthors();
 });
 
-it('can have all modifiers allowed', function (): void {
+it('defaults to have all supported modifiers allowed', function (): void {
     $query = Author::filter(
         [
             [
@@ -38,7 +38,7 @@ it('can have all modifiers allowed', function (): void {
 
 });
 
-it('can have some modifiers allowed', function (): void {
+it('can have only specific modifiers allowed', function (): void {
     $query = Author::filter(
         [
             [
