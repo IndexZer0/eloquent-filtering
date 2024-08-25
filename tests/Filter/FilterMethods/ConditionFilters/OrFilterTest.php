@@ -32,7 +32,7 @@ it('can perform $or filter on base model', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$eq']),
+            Filter::field('name', [FilterType::EQUAL]),
         )
     );
 
@@ -68,7 +68,7 @@ it('can perform $or filter | multiple exists', function (): void {
             ],
         ],
         Filter::only(
-            Filter::relation('books', ['$has', '$doesntHas']),
+            Filter::relation('books', [FilterType::HAS, FilterType::DOESNT_HAS]),
         )
     );
 
