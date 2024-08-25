@@ -46,7 +46,7 @@ it('does not allow filters that are not for same context', function (
         'expected_exception_message' => '"$eq" filter for "name" is not allowed',
     ],
 
-    // relation filter
+    // Relation filter
     'relation filter | field allowed filter' => [
         'filter' => [
             'type'   => '$has',
