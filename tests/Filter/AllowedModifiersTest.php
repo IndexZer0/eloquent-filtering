@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
+use IndexZer0\EloquentFiltering\Filter\Exceptions\UnsupportedModifierException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
@@ -81,3 +82,20 @@ it('can have zero modifiers allowed', function (): void {
     );
 
 })->throws(DeniedFilterException::class, '"$like:end" filter for "name" is not allowed');
+
+it('exceptions when unsupported modifier specified', function (): void {
+
+    Author::filter(
+        [
+            [
+                'target' => 'name',
+                'type'   => '$like:end',
+                'value'  => 'George Raymond Richard Martin',
+            ],
+        ],
+        Filter::only(
+            Filter::field('name', [FilterType::LIKE->withModifiers('unsupported-modifier')]),
+        )
+    );
+
+})->throws(UnsupportedModifierException::class, '"unsupported-modifier" is not a supported modifier');
