@@ -14,6 +14,8 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\AuthorProfile;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Manufacturer;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Post;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Tag;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
 use Orchestra\Testbench\Concerns\InteractsWithPublishedFiles;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -145,6 +147,25 @@ class TestCase extends Orchestra
             $table->timestamps();
         });
 
+        // Pivot
+        $schema->create('posts', function (Blueprint $table): void {
+            $table->id();
+            $table->string('title');
+            $table->timestamps();
+        });
+        $schema->create('tags', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('post_tag', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('post_id')->constrained();
+            $table->foreignId('tag_id')->constrained();
+            $table->string('tagged_by');
+            $table->timestamps();
+        });
+
         // Package
         $schema->create('packages', function (Blueprint $table): void {
             $table->id();
@@ -269,6 +290,20 @@ class TestCase extends Orchestra
         ]);
     }
 
+    public function createPostTagAndPivotRecords(): void
+    {
+        $p1 = new Post(['title' => 'post-title-1']);
+        $p1->save();
+        $t1 = new Tag(['name' => 'tag-name-1']);
+        $t1->save();
+        $p1->tags()->save($t1, ['tagged_by' => 'tagged-by-user-1']);
+
+        $p2 = new Post(['title' => 'post-title-2']);
+        $p2->save();
+        $t2 = new Tag(['name' => 'tag-name-2']);
+        $t2->save();
+        $p2->tags()->save($t2, ['tagged_by' => 'tagged-by-user-2']);
+    }
     public function createPackages(): void
     {
         Package::create([
