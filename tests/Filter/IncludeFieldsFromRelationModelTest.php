@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\ImageTwo;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Show;
 
 beforeEach(function (): void {
