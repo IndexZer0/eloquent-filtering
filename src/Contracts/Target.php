@@ -14,5 +14,5 @@ interface Target
 
     public function target(): string;
 
-    public function getForApprovedFilter(PendingFilter $pendingFilter): self;
+    public function getForFilterMethod(PendingFilter $pendingFilter): self;
 }
