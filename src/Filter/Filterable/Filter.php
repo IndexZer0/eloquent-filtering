@@ -7,9 +7,11 @@ namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 use IndexZer0\EloquentFiltering\Contracts\Target as TargetContract;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedCustomFilter;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
+use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedMorphRelation;
+use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedMorphType;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Types\Types;
@@ -59,6 +61,25 @@ class Filter
             self::createTypes($types),
             $allowedFilters,
         );
+    }
+
+    public static function morphRelation(
+        string|AliasedTarget $target,
+        array|AllowedTypes   $types,
+        AllowedMorphType ...$allowedMorphTypes,
+    ): AllowedMorphRelation {
+        return new AllowedMorphRelation(
+            self::createAlias($target),
+            self::createTypes($types),
+            new SomeFiltersAllowed(...$allowedMorphTypes)
+        );
+    }
+
+    public static function morphType(
+        string $type,
+        AllowedFilterList $allowedFilters = new NoFiltersAllowed(),
+    ): AllowedMorphType {
+        return new AllowedMorphType($type, $allowedFilters);
     }
 
     public static function custom(string|AllowedType $type): AllowedCustomFilter
