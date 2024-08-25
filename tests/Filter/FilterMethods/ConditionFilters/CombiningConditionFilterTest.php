@@ -49,7 +49,7 @@ it('can perform $or and $and filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where (("name" = 'George Raymond Richard Martin') or ((("name" = 'J. R. R. Tolkien') and (exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'The Lord of the Rings')))))
+        select * from "authors" where (("authors"."name" = 'George Raymond Richard Martin') or ((("authors"."name" = 'J. R. R. Tolkien') and (exists (select * from "books" where "authors"."id" = "books"."author_id" and "books"."title" = 'The Lord of the Rings')))))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
