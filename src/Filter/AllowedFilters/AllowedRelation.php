@@ -9,14 +9,22 @@ use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\DefinesAllowedChildFilters;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\RequireableFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\TargetedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
-use IndexZer0\EloquentFiltering\Filter\Traits\CanBeRequired;
+use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBeRequired;
+use IndexZer0\EloquentFiltering\Utilities\ClassUtils;
 use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
-class AllowedRelation implements AllowedFilter
+class AllowedRelation implements
+    AllowedFilter,
+    TargetedFilter,
+    RequireableFilter,
+    DefinesAllowedChildFilters
 {
     use CanBeRequired;
 
@@ -53,7 +61,7 @@ class AllowedRelation implements AllowedFilter
         return $this->types->get($pendingFilter->requestedFilter());
     }
 
-    public function getTarget(PendingFilter $pendingFilter): ?Target
+    public function getTarget(PendingFilter $pendingFilter): Target
     {
         return $this->target;
     }
@@ -98,10 +106,11 @@ class AllowedRelation implements AllowedFilter
 
     protected function resolveRelationsAllowedFields(string $modelFqcn): ?string
     {
-        if (!RelationUtils::relationMethodExists(
-            $relationMethod = $this->target->getReal(),
-            $modelFqcn
-        )
+        if (
+            !RelationUtils::relationMethodExists(
+                $relationMethod = $this->target->getReal(),
+                $modelFqcn
+            )
         ) {
             return null;
         }
@@ -121,16 +130,11 @@ class AllowedRelation implements AllowedFilter
 
     private function getModelsAllowedFilters(Model $model): ?AllowedFilterList
     {
-        if (!$this->modelIsFilterable($model)) {
+        if (!ClassUtils::modelIsFilterable($model)) {
             return null;
         }
 
         /** @var IsFilterable $model */
         return $model->allowedFilters();
-    }
-
-    private function modelIsFilterable(Model $model): bool
-    {
-        return is_a($model, IsFilterable::class);
     }
 }
