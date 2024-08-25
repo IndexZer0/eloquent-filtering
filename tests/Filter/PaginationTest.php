@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
@@ -21,7 +22,7 @@ it('works with pagination', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$eq']),
+            Filter::field('name', [FilterType::EQUAL]),
         )
     );
 
