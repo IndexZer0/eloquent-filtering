@@ -4,34 +4,34 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use IndexZer0\EloquentFiltering\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\Context\EloquentContext;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AppliesToTarget;
+use IndexZer0\EloquentFiltering\Filter\Contracts\CustomFilterParser;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
-use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 use IndexZer0\EloquentFiltering\Filter\RequestedFilter;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\Composables\HasModifiers;
+use IndexZer0\EloquentFiltering\Utilities\ClassUtils;
 
 class PendingFilter
 {
-    protected array $validatedData = [];
-
     public function __construct(
         protected RequestedFilter $requestedFilter,
         protected string $filterFqcn,
         protected array  $data,
+        protected Model $model,
+        protected ?Relation $relation = null,
     ) {
     }
 
     public function requestedFilter(): RequestedFilter
     {
         return $this->requestedFilter;
-    }
-
-    public function type(): string
-    {
-        return $this->requestedFilter->type;
     }
 
     public function data(): array
@@ -51,28 +51,30 @@ class PendingFilter
 
     public function desiredTarget(): ?string
     {
-        if (is_a($this->filterFqcn, AppliesToTarget::class, true)) {
-            return data_get($this->data, $this->filterFqcn::targetKey());
-        }
-
-        return null;
+        return data_get($this->data, 'target');
     }
 
     public function getDeniedMessage(): string
     {
-        $message = "\"{$this->requestedFilter->fullTypeString()}\" filter%s is not allowed";
+        $messageParts = collect([
+            "\"{$this->requestedFilter->fullTypeString()}\" filter",
+        ]);
 
-        $target = is_a($this->filterFqcn, AppliesToTarget::class, true) ? $this->desiredTarget() : null;
+        if (($target = $this->desiredTarget()) !== null) {
+            $messageParts->push("for \"{$target}\"");
+        }
 
-        return sprintf($message, $target ? " for \"{$target}\"" : '');
+        $messageParts->push("is not allowed");
+
+        return $messageParts->join(' ');
     }
 
-    public function validateWith(array $rules): void
+    public function validate(array $rules = []): void
     {
         try {
-            $this->validatedData = Validator::validate(
+            Validator::validate(
                 $this->data,
-                array_merge_recursive($this->filterFqcn::format(), $rules),
+                count($rules) > 0 ? $rules : $this->getFilterMethodRules(),
             );
         } catch (ValidationException $ve) {
             throw MalformedFilterFormatException::withMessages([
@@ -82,16 +84,57 @@ class PendingFilter
         }
     }
 
-    public function approveWith(
-        ?Target           $target = null,
-        ?FilterCollection $childFilters = null
-    ): ApprovedFilter {
-        return new ApprovedFilter(
-            $this->filterFqcn,
-            $this->validatedData,
-            $this->requestedFilter->modifiers,
-            $target,
-            $childFilters
+    protected function getFilterMethodRules(): array
+    {
+        $rules = $this->filterFqcn::format();
+
+        foreach (class_uses_recursive($this->filterFqcn) as $trait) {
+            $rulesMethod = Str::lcfirst(class_basename($trait)) . 'Rules';
+
+            if (method_exists($this->filterFqcn, $rulesMethod)) {
+                $rules = array_merge_recursive($rules, $this->filterFqcn::$rulesMethod());
+            }
+        }
+
+        return $rules;
+    }
+
+    public function getCustomFilterParser(): CustomFilterParser
+    {
+        return $this->filterFqcn::customFilterParser();
+    }
+
+    public function model(): Model
+    {
+        return $this->model;
+    }
+
+    public function relation(): ?Relation
+    {
+        return $this->relation;
+    }
+
+    public function getFilterConstructorParameters(): array
+    {
+        return collect($this->data)->only(
+            ClassUtils::getClassConstructorParameterNames($this->filterFqcn)
+        )->toArray();
+    }
+
+    public function createFilter(EloquentContext $eloquentContext): FilterMethod
+    {
+        $filterFqcn = $this->filterFqcn;
+
+        $filterMethod = new $filterFqcn(
+            ...$this->getFilterConstructorParameters()
         );
+
+        $filterMethod->setEloquentContext($eloquentContext);
+
+        if (ClassUtils::usesTrait($filterMethod::class, HasModifiers::class)) {
+            $filterMethod->setModifiers($this->requestedFilter()->modifiers);
+        }
+
+        return $filterMethod;
     }
 }
