@@ -36,7 +36,7 @@ readonly class AliasedTarget implements TargetContract
         return $this->target;
     }
 
-    public function getForApprovedFilter(PendingFilter $pendingFilter): self
+    public function getForFilterMethod(PendingFilter $pendingFilter): self
     {
         return $this;
     }
