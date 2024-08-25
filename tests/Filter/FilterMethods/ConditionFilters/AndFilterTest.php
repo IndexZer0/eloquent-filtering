@@ -5,6 +5,7 @@ declare(strict_types=1);
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
 
@@ -32,8 +33,8 @@ it('can perform $and filter on base model', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('title', ['$eq']),
-            Filter::field('description', ['$like']),
+            Filter::field('title', [FilterType::EQUAL]),
+            Filter::field('description', [FilterType::LIKE]),
         )
     );
 
@@ -69,7 +70,7 @@ it('can perform $and filter | multiple exists', function (): void {
             ],
         ],
         Filter::only(
-            Filter::relation('books', ['$has', '$doesntHas']),
+            Filter::relation('books', [FilterType::HAS, FilterType::DOESNT_HAS]),
         )
     );
 
@@ -127,7 +128,9 @@ it('must have at least two child filters', function (
                 ...$value_container,
             ],
         ],
-        Filter::all()
+        Filter::only(
+            Filter::field('name', [FilterType::EQUAL])
+        )
     );
 
     expect($query->toRawSql())->toBe($expected_sql);
