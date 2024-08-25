@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
@@ -10,7 +9,7 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 it('does not allow filters that are not for same context', function (
     array $filter,
-    AllowedFilter $allowed_filter,
+    callable $allowed_filter,
     string $expected_exception_message
 ): void {
 
@@ -22,7 +21,7 @@ it('does not allow filters that are not for same context', function (
             $filter,
         ],
         Filter::only(
-            $allowed_filter
+            $allowed_filter()
         )
     );
 
@@ -43,7 +42,7 @@ it('does not allow filters that are not for same context', function (
             'target' => 'name',
             'value'  => 'George Raymond Richard Martin',
         ],
-        'allowed_filter'             => Filter::custom('$eq'),
+        'allowed_filter'             => fn () => Filter::custom('$eq'),
         'expected_exception_message' => '"$eq" filter for "name" is not allowed',
     ],
 
@@ -63,7 +62,7 @@ it('does not allow filters that are not for same context', function (
             'target' => 'books',
             'value'  => [],
         ],
-        'allowed_filter'             => Filter::custom('$has'),
+        'allowed_filter'             => fn () => Filter::custom('$has'),
         'expected_exception_message' => '"$has" filter for "books" is not allowed',
     ],
 ]);
