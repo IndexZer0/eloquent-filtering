@@ -26,7 +26,7 @@ it('can have all modifiers allowed', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" LIKE '%George Raymond Richard Martin'
+        select * from "authors" where "authors"."name" LIKE '%George Raymond Richard Martin'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -53,7 +53,7 @@ it('can have some modifiers allowed', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" LIKE '%George Raymond Richard Martin'
+        select * from "authors" where "authors"."name" LIKE '%George Raymond Richard Martin'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
