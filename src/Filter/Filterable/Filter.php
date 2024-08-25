@@ -57,7 +57,7 @@ class Filter
         return new AllowedRelation(
             self::createAlias($target),
             self::createTypes($types),
-            $allowedFilters
+            $allowedFilters,
         );
     }
 
