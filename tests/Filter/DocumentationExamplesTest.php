@@ -27,7 +27,7 @@ it('EqualFilter | $eq', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "name" = 'Taylor'
+        select * from "people" where "people"."name" = 'Taylor'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -46,7 +46,7 @@ it('NotEqualFilter | $notEq', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "name" != 'Taylor'
+        select * from "people" where "people"."name" != 'Taylor'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -65,7 +65,7 @@ it('GreaterThanFilter | $gt', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "age" > 18
+        select * from "people" where "people"."age" > 18
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -84,7 +84,7 @@ it('GreaterThanEqualToFilter | $gte', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "age" >= 18
+        select * from "people" where "people"."age" >= 18
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -103,7 +103,7 @@ it('LessThanFilter | $lt', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "age" < 18
+        select * from "people" where "people"."age" < 18
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -122,7 +122,7 @@ it('LessThanEqualToFilter | $lte', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "age" <= 18
+        select * from "people" where "people"."age" <= 18
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -141,7 +141,7 @@ it('LikeFilter | $like', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where "description" LIKE '%Laravel%'
+        select * from "projects" where "projects"."description" LIKE '%Laravel%'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -160,7 +160,7 @@ it('LikeFilter | $like:start', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where "description" LIKE 'Laravel%'
+        select * from "projects" where "projects"."description" LIKE 'Laravel%'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -179,7 +179,7 @@ it('LikeFilter | $like:end', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where "description" LIKE '%Laravel'
+        select * from "projects" where "projects"."description" LIKE '%Laravel'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -198,7 +198,7 @@ it('NotLikeFilter | $notLike', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where "description" NOT LIKE '%Symfony%'
+        select * from "projects" where "projects"."description" NOT LIKE '%Symfony%'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -217,7 +217,7 @@ it('NotLikeFilter | $notLike:start', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where "description" NOT LIKE 'Symfony%'
+        select * from "projects" where "projects"."description" NOT LIKE 'Symfony%'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -236,7 +236,7 @@ it('NotLikeFilter | $notLike:end', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where "description" NOT LIKE '%Symfony'
+        select * from "projects" where "projects"."description" NOT LIKE '%Symfony'
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -261,7 +261,7 @@ it('NullFilter | $null', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "age" is null and "weight" is not null
+        select * from "people" where "people"."age" is null and "people"."weight" is not null
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -280,7 +280,7 @@ it('InFilter | $in', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "name" in ('Taylor', 'Otwell')
+        select * from "people" where "people"."name" in ('Taylor', 'Otwell')
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -299,7 +299,7 @@ it('NotInFilter | $notIn', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "name" not in ('Nuno', 'Maduro')
+        select * from "people" where "people"."name" not in ('Nuno', 'Maduro')
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -318,7 +318,7 @@ it('BetweenFilter | $between', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "age" between 18 and 65
+        select * from "people" where "people"."age" between 18 and 65
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -337,7 +337,7 @@ it('NotBetweenFilter | $notBetween', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "age" not between 18 and 65
+        select * from "people" where "people"."age" not between 18 and 65
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -359,7 +359,7 @@ it('BetweenColumnsFilter | $betweenColumns', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "products" where "price" between "min_allowed_price" and "max_allowed_price"
+        select * from "products" where "products"."price" between "min_allowed_price" and "max_allowed_price"
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -381,7 +381,7 @@ it('NotBetweenColumnsFilter | $notBetweenColumns', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "products" where "price" not between "min_allowed_price" and "max_allowed_price"
+        select * from "products" where "products"."price" not between "min_allowed_price" and "max_allowed_price"
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -400,7 +400,7 @@ it('JsonContainsFilter | $jsonContains', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "users" where exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+        select * from "users" where exists (select 1 from json_each("users"."options", '$."languages"') where "json_each"."value" is 'en')
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -419,7 +419,7 @@ it('JsonNotContainsFilter | $jsonNotContains', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "users" where not exists (select 1 from json_each("options", '$."languages"') where "json_each"."value" is 'en')
+        select * from "users" where not exists (select 1 from json_each("users"."options", '$."languages"') where "json_each"."value" is 'en')
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -439,7 +439,7 @@ it('JsonLengthFilter | $jsonLength', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "users" where json_array_length("options", '$."languages"') >= 2
+        select * from "users" where json_array_length("users"."options", '$."languages"') >= 2
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -470,7 +470,7 @@ it('HasFilter | $has', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "content" LIKE '%awesome%')
+        select * from "projects" where exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "comments"."content" LIKE '%awesome%')
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -501,7 +501,7 @@ it('DoesntHasFilter | $doesntHas', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "projects" where not exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "content" LIKE '%boring%')
+        select * from "projects" where not exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "comments"."content" LIKE '%boring%')
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -530,7 +530,7 @@ it('OrFilter | $or', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
+        select * from "comments" where (("comments"."content" LIKE '%awesome%') or ("comments"."content" LIKE '%boring%'))
         SQL;
 
     expect($sql)->toBe($expectedSql);
@@ -559,7 +559,7 @@ it('AndFilter | $and', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
+        select * from "comments" where (("comments"."content" LIKE '%is awesome%') and ("comments"."content" LIKE '%is not boring%'))
         SQL;
 
     expect($sql)->toBe($expectedSql);
