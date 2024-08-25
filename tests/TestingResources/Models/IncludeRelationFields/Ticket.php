@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
 
@@ -28,10 +29,10 @@ class Ticket extends Model implements IsFilterable
     public function allowedFilters(): SomeFiltersAllowed
     {
         return Filter::only(
-            Filter::field('type', ['$eq']),
-            Filter::field('price', ['$between']),
-            Filter::relation('event', ['$has'])->includeRelationFields()
-                ->andNestedRelation(Filter::relation('show', ['$has'])->includeRelationFields()),
+            Filter::field('type', [FilterType::EQUAL]),
+            Filter::field('price', [FilterType::BETWEEN]),
+            Filter::relation('event', [FilterType::HAS])->includeRelationFields()
+                ->andNestedRelation(Filter::relation('show', [FilterType::HAS])->includeRelationFields()),
         );
     }
 
