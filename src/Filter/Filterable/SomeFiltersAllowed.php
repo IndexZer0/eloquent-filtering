@@ -6,6 +6,7 @@ namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
 use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
+use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedMorphRelation;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
@@ -50,7 +51,7 @@ class SomeFiltersAllowed implements AllowedFilterList
 
     public function resolveRelationsAllowedFilters(string $modelFqcn): self
     {
-        /** @var AllowedRelation $allowedRelation */
+        /** @var AllowedRelation|AllowedMorphRelation $allowedRelation */
         foreach ($this->getAllowedRelations() as $allowedRelation) {
             $allowedRelation->resolveAllowedFilters($modelFqcn);
         }
@@ -81,7 +82,8 @@ class SomeFiltersAllowed implements AllowedFilterList
     {
         return $this->allowedFilters
             ->filter(
-                fn (AllowedFilter $allowedFilter) => $allowedFilter instanceof AllowedRelation
+                fn (AllowedFilter $allowedFilter) => $allowedFilter instanceof AllowedRelation ||
+                    $allowedFilter instanceof AllowedMorphRelation
             )
             ->toArray();
     }
