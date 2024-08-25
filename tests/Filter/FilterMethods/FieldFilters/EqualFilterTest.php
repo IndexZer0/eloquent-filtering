@@ -27,7 +27,7 @@ it('can perform $eq filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'George Raymond Richard Martin'
+        select * from "authors" where "authors"."name" = 'George Raymond Richard Martin'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -100,22 +100,22 @@ it('only accepts string, int, float for value', function (
     // Success Cases
     'int' => [
         'value_container'  => ['value' => 420],
-        'expected_sql'     => 'select * from "authors" where "name" = 420',
+        'expected_sql'     => 'select * from "authors" where "authors"."name" = 420',
         'expect_exception' => false,
     ],
     'string' => [
         'value_container'  => ['value' => 'string', ],
-        'expected_sql'     => 'select * from "authors" where "name" = \'string\'',
+        'expected_sql'     => 'select * from "authors" where "authors"."name" = \'string\'',
         'expect_exception' => false,
     ],
     'numeric_string' => [
         'value_container'  => ['value' => '1', ],
-        'expected_sql'     => 'select * from "authors" where "name" = \'1\'',
+        'expected_sql'     => 'select * from "authors" where "authors"."name" = \'1\'',
         'expect_exception' => false,
     ],
     'float' => [
         'value_container'  => ['value' => 420.69, ],
-        'expected_sql'     => 'select * from "authors" where "name" = 420.69',
+        'expected_sql'     => 'select * from "authors" where "authors"."name" = 420.69',
         'expect_exception' => false,
     ],
 ]);
@@ -135,7 +135,7 @@ it('can perform $eq filter on json field', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "api_responses" where json_extract("data", '$."own-key-1"') = 'own-value-1'
+        select * from "api_responses" where json_extract("api_responses"."data", '$."own-key-1"') = 'own-value-1'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
