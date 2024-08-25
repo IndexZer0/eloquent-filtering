@@ -25,7 +25,6 @@ class CustomFilterParser implements CustomFilterParserContract
                 new EloquentContext(
                     $pendingFilter->model(),
                     $pendingFilter->relation(),
-                    $allowedFilter instanceof AllowedField && $allowedFilter->isPivot()
                 )
             );
     }
