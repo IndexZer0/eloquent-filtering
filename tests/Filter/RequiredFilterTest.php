@@ -10,6 +10,8 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 it('throws RequiredFilterException when required filters have not been matched', function (): void {
 
+    config()->set('eloquent-filtering.custom_filters', [LatestFilter::class]);
+
     try {
         Author::filter(
             [], // Filters intentionally empty.
