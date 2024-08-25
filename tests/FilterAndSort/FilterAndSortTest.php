@@ -35,7 +35,7 @@ it('can filter and sort together', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" LIKE '%R%' order by "name" desc
+        select * from "authors" where "authors"."name" LIKE '%R%' order by "name" desc
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
