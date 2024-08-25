@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
 
@@ -27,7 +28,7 @@ class Package extends Model implements IsFilterable
     public function allowedFilters(): SomeFiltersAllowed
     {
         return Filter::only(
-            Filter::field('name', ['$eq']),
+            Filter::field('name', [FilterType::EQUAL]),
         );
     }
 }
