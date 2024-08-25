@@ -6,6 +6,8 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Target\Target;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Image;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Post;
 
 it('can alias field', function (): void {
 
