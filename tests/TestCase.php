@@ -43,7 +43,10 @@ class TestCase extends Orchestra
         Relation::enforceMorphMap([
             Article::class,
             UserProfile::class,
+            ArticleTwo::class,
+            UserProfileTwo::class,
         ]);
+
         $this->setUpDatabase($this->app);
     }
 
@@ -172,6 +175,26 @@ class TestCase extends Orchestra
             $table->string('tagged_by');
             $table->timestamps();
         });
+
+        // Morph
+        $schema->create('articles', function (Blueprint $table): void {
+            $table->id();
+            $table->string('title');
+            $table->timestamps();
+        });
+        $schema->create('user_profiles', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('images', function (Blueprint $table): void {
+            $table->id();
+            $table->string('url');
+            $table->foreignId('imageable_id');
+            $table->foreignId('imageable_type');
+            $table->timestamps();
+        });
+
 
         // Package
         $schema->create('packages', function (Blueprint $table): void {
