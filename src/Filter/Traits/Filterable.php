@@ -49,8 +49,6 @@ trait Filterable
 
     public function allowedFilters(): AllowedFilterList
     {
-        $defaultAllowedList = config('eloquent-filtering.default_allowed_filter_list', 'none');
-
-        return $defaultAllowedList === 'none' ? Filter::none() : Filter::all();
+        return Filter::none();
     }
 }
