@@ -12,11 +12,13 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\RequireableFilter
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\TargetedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
+use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBePivot;
 use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBeRequired;
 
 class AllowedField implements AllowedFilter, TargetedFilter, RequireableFilter
 {
     use CanBeRequired;
+    use CanBePivot;
 
     public function __construct(
         protected Target $target,
