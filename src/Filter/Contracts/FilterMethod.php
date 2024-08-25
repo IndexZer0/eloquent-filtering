@@ -28,11 +28,6 @@ interface FilterMethod
     public static function format(): array;
 
     /*
-     * Instantiate filter class from ApprovedFilter.
-     */
-    public static function from(ApprovedFilter $approvedFilter): static;
-
-    /*
      * Apply the filter logic.
      */
     public function apply(Builder $query): Builder;
