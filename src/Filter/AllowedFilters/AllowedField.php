@@ -8,6 +8,7 @@ use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\PivotableFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\RequireableFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\TargetedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
@@ -15,7 +16,11 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBePivot;
 use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBeRequired;
 
-class AllowedField implements AllowedFilter, TargetedFilter, RequireableFilter
+class AllowedField implements
+    AllowedFilter,
+    TargetedFilter,
+    RequireableFilter,
+    PivotableFilter
 {
     use CanBeRequired;
     use CanBePivot;
