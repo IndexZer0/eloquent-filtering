@@ -36,7 +36,7 @@ it('can perform $or filter on base model', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where (("name" = 'George Raymond Richard Martin') or ("name" = 'J. R. R. Tolkien'))
+        select * from "authors" where (("authors"."name" = 'George Raymond Richard Martin') or ("authors"."name" = 'J. R. R. Tolkien'))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -170,7 +170,7 @@ it('must have at least two child filters', function (
                 'value'  => 'J. R. R. Tolkien',
             ],
         ]],
-        'expected_sql'     => 'select * from "authors" where (("name" = \'George Raymond Richard Martin\') or ("name" = \'J. R. R. Tolkien\'))',
+        'expected_sql'     => 'select * from "authors" where (("authors"."name" = \'George Raymond Richard Martin\') or ("authors"."name" = \'J. R. R. Tolkien\'))',
         'expect_exception' => false,
     ],
     'value three elements' => [
@@ -191,7 +191,7 @@ it('must have at least two child filters', function (
                 'value'  => 'J. K. Rowling',
             ],
         ]],
-        'expected_sql'     => 'select * from "authors" where (("name" = \'George Raymond Richard Martin\') or ("name" = \'J. R. R. Tolkien\') or ("name" = \'J. K. Rowling\'))',
+        'expected_sql'     => 'select * from "authors" where (("authors"."name" = \'George Raymond Richard Martin\') or ("authors"."name" = \'J. R. R. Tolkien\') or ("authors"."name" = \'J. K. Rowling\'))',
         'expect_exception' => false,
     ],
 
