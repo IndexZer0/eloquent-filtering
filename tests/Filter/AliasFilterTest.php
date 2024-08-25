@@ -7,7 +7,7 @@ use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Target\Target;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
-it('can alias field | field filter', function (): void {
+it('can alias field', function (): void {
 
     $query = Author::filter(
         [
