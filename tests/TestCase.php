@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Schema\Blueprint;
 use IndexZer0\EloquentFiltering\EloquentFilteringServiceProvider;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Documentation\Package;
@@ -406,6 +407,65 @@ class TestCase extends Orchestra
         );
         $userProfile2->images()->save(
             $image8 = new Image([
+                'url' => 'image-8',
+            ])
+        );
+    }
+
+    public function createMorphTwoRecords(): void
+    {
+        $article1 = ArticleTwo::create([
+            'title' => 'article-1',
+        ]);
+        $article1->images()->save(
+            $image1 = new ImageTwo([
+                'url' => 'image-1',
+            ])
+        );
+        $article1->images()->save(
+            $image2 = new ImageTwo([
+                'url' => 'image-2',
+            ])
+        );
+
+        $article2 = ArticleTwo::create([
+            'title' => 'article-2',
+        ]);
+        $article2->images()->save(
+            $image3 = new ImageTwo([
+                'url' => 'image-3',
+            ])
+        );
+        $article2->images()->save(
+            $image4 = new ImageTwo([
+                'url' => 'image-4',
+            ])
+        );
+
+        $userProfile1 = UserProfileTwo::create([
+            'name' => 'user-profile-1',
+        ]);
+        $userProfile1->images()->save(
+            $image5 = new ImageTwo([
+                'url' => 'image-5',
+            ])
+        );
+        $userProfile1->images()->save(
+            $image6 = new ImageTwo([
+                'url' => 'image-6',
+            ])
+        );
+
+        $userProfile2 = UserProfileTwo::create([
+            'name' => 'user-profile-2',
+        ]);
+        $userProfile2->images()->save(
+            $image7 = new ImageTwo([
+                'url' => 'image-7',
+            ])
+        );
+        $userProfile2->images()->save(
+            $image8 = new ImageTwo([
                 'url' => 'image-8',
             ])
         );
