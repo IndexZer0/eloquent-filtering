@@ -99,39 +99,38 @@ it('can alias relation | Filter::all()', function (): void {
 
 });
 
-it('can alias relations field | Filter::all()', function (): void {
+it('can alias pivot | Filter::all()', function (): void {
 
-    $query = Author::filter(
+    $query = Post::filter([
         [
-            [
-                'type'   => '$eq',
-                'target' => 'target_from_request_1',
-                'value'  => 'George Raymond Richard Martin',
-            ],
-            [
-                'type'   => '$has',
-                'target' => 'target_from_request_2',
-                'value'  => [
-                    [
-                        'type'   => '$eq',
-                        'target' => 'target_from_request_1',
-                        'value'  => 'Game Of Thrones',
-                    ],
+            'type'   => '$eq',
+            'target' => 'target_from_request_1',
+            'value'  => 'post-title-1',
+        ],
+        [
+            'type'   => '$has',
+            'target' => 'target_from_request_2',
+            'value'  => [
+                [
+                    'type'   => '$eq',
+                    'target' => 'target_from_request_1',
+                    'value'  => 'tagged-by-user-1',
                 ],
             ],
         ],
-        Filter::all(
-            Target::alias('target_from_request_1', 'name'),
-            Target::relationAlias(
-                'target_from_request_2',
-                'books',
-                Target::alias('target_from_request_1', 'title')
+    ], Filter::only(
+        Filter::field(Target::alias('target_from_request_1', 'title'), [FilterType::EQUAL]),
+        Filter::relation(
+            Target::alias('target_from_request_2', 'tags'),
+            [FilterType::HAS],
+            allowedFilters: Filter::only(
+                Filter::field(Target::alias('target_from_request_1', 'tagged_by'), [FilterType::EQUAL])->pivot(),
             ),
         )
-    );
+    ));
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'George Raymond Richard Martin' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'Game Of Thrones')
+        select * from "posts" where "posts"."title" = 'post-title-1' and exists (select * from "tags" inner join "post_tag" on "tags"."id" = "post_tag"."tag_id" where "posts"."id" = "post_tag"."post_id" and "post_tag"."tagged_by" = 'tagged-by-user-1')
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
