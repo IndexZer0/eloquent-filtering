@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
@@ -58,18 +59,18 @@ it('can filter by nested relationships when allowed', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$eq']),
+            Filter::field('name', [FilterType::EQUAL]),
             Filter::relation(
                 'books',
-                ['$has'],
+                [FilterType::HAS],
                 Filter::only(
-                    Filter::field('title', ['$eq']),
-                    Filter::field('description', ['$like']),
+                    Filter::field('title', [FilterType::EQUAL]),
+                    Filter::field('description', [FilterType::LIKE]),
                     Filter::relation(
                         'comments',
-                        ['$has'],
+                        [FilterType::HAS],
                         Filter::only(
-                            Filter::field('content', ['$eq'])
+                            Filter::field('content', [FilterType::EQUAL])
                         )
                     )
                 )
@@ -225,7 +226,7 @@ it('can not filter by nested relationship when not explicitly allowed | not supp
             ],
         ],
         Filter::only(
-            Filter::relation('books', ['$has'])
+            Filter::relation('books', [FilterType::HAS])
         ),
     );
 
@@ -281,7 +282,7 @@ it('can not filter by nested relationship when not explicitly allowed | suppress
             ],
         ],
         Filter::only(
-            Filter::relation('books', ['$has'])
+            Filter::relation('books', [FilterType::HAS])
         ),
     );
 
@@ -349,11 +350,11 @@ it('honours the allowed filter list all the way down the nested relation chain |
         Filter::only(
             Filter::relation(
                 'books',
-                ['$has'],
+                [FilterType::HAS],
                 Filter::only(
                     Filter::relation(
                         'comments',
-                        ['$has'],
+                        [FilterType::HAS],
                     )
                 )
             )
