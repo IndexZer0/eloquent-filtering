@@ -36,7 +36,7 @@ trait Filterable
 
         $unmatchedRequiredFilters = $allowedFilterList->getUnmatchedRequiredFilters();
         if ($unmatchedRequiredFilters->isNotEmpty()) {
-            throw RequiredFilterException::fromRequiredFilters(...$unmatchedRequiredFilters->toArray());
+            throw RequiredFilterException::fromAllowedFilters(...$unmatchedRequiredFilters->toArray());
         }
 
         /** @var FilterApplier $filterApplier */
