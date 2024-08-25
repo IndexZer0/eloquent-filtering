@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser as FilterParserContract;
@@ -15,6 +17,9 @@ class FilterParser implements FilterParserContract
 {
     protected FilterCollection $filterCollection;
 
+    protected Model $model;
+    protected ?Relation $relation;
+
     protected AllowedFilterList $allowedFilterList;
 
     protected AvailableFilters $availableFilters;
@@ -25,14 +30,21 @@ class FilterParser implements FilterParserContract
         $this->availableFilters = resolve(AvailableFilters::class);
     }
 
-    public function parse(array $filters, AllowedFilterList $allowedFilterList): FilterCollection
-    {
+    public function parse(
+        Model $model,
+        array $filters,
+        AllowedFilterList $allowedFilterList,
+        ?Relation $relation = null,
+    ): FilterCollection {
+        $this->model = $model;
+        $this->relation = $relation;
         $this->allowedFilterList = $allowedFilterList;
 
         foreach ($filters as $filter) {
             Suppression::honour(function () use ($filter): void {
-                $filterMethod = $this->parseFilter($filter);
-                $this->filterCollection->push($filterMethod);
+                $this->filterCollection->push(
+                    $this->parseFilter($filter)
+                );
             });
         }
 
