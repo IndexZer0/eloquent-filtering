@@ -26,7 +26,6 @@ it('can specify invalid filter handler', function (): void {
 
             ],
         ],
-        Filter::all()
     );
 
 })->throws(CustomException::class);
@@ -43,7 +42,6 @@ it('can specify missing filter handler', function (): void {
                 'type' => '$this-filter-does-not-exist',
             ],
         ],
-        Filter::all()
     );
 
 })->throws(CustomException::class);
@@ -60,7 +58,6 @@ it('can specify malformed filter handler', function (): void {
                 'type' => '$eq',
             ],
         ],
-        Filter::all()
     );
 
 })->throws(CustomException::class);
@@ -79,7 +76,6 @@ it('can specify denied filter handler', function (): void {
                 'value'  => 'George Raymond Richard Martin',
             ],
         ],
-        Filter::none()
     );
 
 })->throws(CustomException::class);
@@ -98,7 +94,6 @@ it('can specify filter handler', function (): void {
 
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -113,7 +108,6 @@ it('can specify filter handler', function (): void {
                     'type' => '$this-filter-does-not-exist',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -128,7 +122,6 @@ it('can specify filter handler', function (): void {
                     'type' => '$eq',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -145,7 +138,6 @@ it('can specify filter handler', function (): void {
                     'value'  => 'George Raymond Richard Martin',
                 ],
             ],
-            Filter::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -166,7 +158,6 @@ it('can specify malformed sort handler', function (): void {
                 'target' => 'name',
             ],
         ],
-        Sort::all()
     );
 
 })->throws(CustomException::class);
@@ -184,7 +175,6 @@ it('can specify denied sort handler', function (): void {
                 'value'  => 'desc',
             ],
         ],
-        Sort::none()
     );
 
 })->throws(CustomException::class);
@@ -203,7 +193,6 @@ it('can specify sort handler', function (): void {
                     'target' => 'name',
                 ],
             ],
-            Sort::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -219,7 +208,6 @@ it('can specify sort handler', function (): void {
                     'value'  => 'desc',
                 ],
             ],
-            Sort::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -242,7 +230,6 @@ it('can specify all handler', function (): void {
 
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -257,7 +244,6 @@ it('can specify all handler', function (): void {
                     'type' => '$this-filter-does-not-exist',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -272,7 +258,6 @@ it('can specify all handler', function (): void {
                     'type' => '$eq',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -289,7 +274,6 @@ it('can specify all handler', function (): void {
                     'value'  => 'George Raymond Richard Martin',
                 ],
             ],
-            Filter::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -304,7 +288,6 @@ it('can specify all handler', function (): void {
                     'target' => 'name',
                 ],
             ],
-            Sort::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -320,7 +303,6 @@ it('can specify all handler', function (): void {
                     'value'  => 'desc',
                 ],
             ],
-            Sort::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -356,7 +338,6 @@ it('prioritises a more specific handler', function (): void {
 
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -371,7 +352,6 @@ it('prioritises a more specific handler', function (): void {
                     'type' => '$this-filter-does-not-exist',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -386,7 +366,6 @@ it('prioritises a more specific handler', function (): void {
                     'type' => '$eq',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -403,7 +382,6 @@ it('prioritises a more specific handler', function (): void {
                     'value'  => 'George Raymond Richard Martin',
                 ],
             ],
-            Filter::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -418,7 +396,6 @@ it('prioritises a more specific handler', function (): void {
                     'target' => 'name',
                 ],
             ],
-            Sort::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -434,7 +411,6 @@ it('prioritises a more specific handler', function (): void {
                     'value'  => 'desc',
                 ],
             ],
-            Sort::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
@@ -455,7 +431,6 @@ it('throws package exception if no custom exception thrown in handler', function
 
             ],
         ],
-        Filter::all()
     );
 
 })->throws(InvalidFilterException::class);
