@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
 
@@ -28,7 +29,7 @@ class Product extends Model implements IsFilterable
     public function allowedFilters(): SomeFiltersAllowed
     {
         return Filter::only(
-            Filter::field('name', ['$eq'])
+            Filter::field('name', [FilterType::EQUAL])
         );
     }
 
