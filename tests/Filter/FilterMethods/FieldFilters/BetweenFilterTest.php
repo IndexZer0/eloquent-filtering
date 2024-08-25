@@ -27,7 +27,7 @@ it('can perform $between filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "author_profiles" where "age" between 19 and 21
+        select * from "author_profiles" where "author_profiles"."age" between 19 and 21
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
