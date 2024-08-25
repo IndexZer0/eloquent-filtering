@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\Contracts;
 
 use Illuminate\Support\Collection;
-use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 
 interface AllowedFilterList
 {
-    public function ensureAllowed(PendingFilter $pendingFilter): ApprovedFilter;
+    public function ensureAllowed(PendingFilter $pendingFilter): FilterMethod;
 
     public function resolveRelationsAllowedFilters(string $modelFqcn): AllowedFilterList;
 
@@ -19,6 +19,8 @@ interface AllowedFilterList
     public function getAllowedFields(): array;
 
     public function getAllowedRelations(): array;
+
+    public function getAll(): array;
 
     public function getUnmatchedRequiredFilters(): Collection;
 }
