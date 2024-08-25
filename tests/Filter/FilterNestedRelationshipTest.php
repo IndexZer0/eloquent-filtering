@@ -78,7 +78,7 @@ it('can filter by nested relationships when allowed', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" = 'George Raymond Richard Martin' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'A Game of Thrones' and (("description" LIKE '%A Game of Thrones%') or ("description" LIKE '%Song of Ice and Fire%')) and exists (select * from "comments" where "books"."id" = "comments"."book_id" and "content" = 'Thanks D&D :S'))
+        select * from "authors" where "authors"."name" = 'George Raymond Richard Martin' and exists (select * from "books" where "authors"."id" = "books"."author_id" and "books"."title" = 'A Game of Thrones' and (("books"."description" LIKE '%A Game of Thrones%') or ("books"."description" LIKE '%Song of Ice and Fire%')) and exists (select * from "comments" where "books"."id" = "comments"."book_id" and "comments"."content" = 'Thanks D&D :S'))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
