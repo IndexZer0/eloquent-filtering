@@ -128,6 +128,7 @@ WHERE "name" = 'TV'
         - [Json Path Wildcards](#json-path-wildcards)
         - [Specifying Allowed Types](#specifying-allowed-types)
         - [Required Filters](#required-filters)
+        - [Pivot Filters](#pivot-filters)
         - [Defining Validation Rules](#defining-validation-rules)
         - [Filter Modifiers](#filter-modifiers)
         - [Suppressing Exceptions](#suppressing-exceptions)
@@ -1089,6 +1090,26 @@ public function allowedFilters(): AllowedFilterList
         )->required(),
         Filter::custom('$latest')->required()
     );
+}
+```
+
+#### Pivot Filters
+
+- `Filter::field()` filters can be marked as pivot filters if you want the filter to be applied to a column on the join table.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation(
+            'tags',
+            [FilterType::HAS],
+            allowedFilters: Filter::only(
+                Filter::field('name', [FilterType::EQUAL]),
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot(),
+            ),
+        )
+    )
 }
 ```
 
