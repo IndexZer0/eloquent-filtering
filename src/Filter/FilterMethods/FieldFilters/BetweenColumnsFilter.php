@@ -42,7 +42,9 @@ class BetweenColumnsFilter implements FilterMethod, Targetable
     {
         return $query->whereBetweenColumns(
             $this->eloquentContext->qualifyColumn($this->target),
-            $this->value,
+            collect($this->value)->map(
+                fn ($value) => $this->eloquentContext->qualifyColumn($value)
+            )->toArray(),
             not: $this->not()
         );
     }

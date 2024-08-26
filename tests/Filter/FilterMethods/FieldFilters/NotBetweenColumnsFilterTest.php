@@ -28,7 +28,7 @@ it('can perform $notBetweenColumns filter', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "products" where "products"."price" not between "min_allowed_price" and "max_allowed_price"
+        select * from "products" where "products"."price" not between "products"."min_allowed_price" and "products"."max_allowed_price"
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
