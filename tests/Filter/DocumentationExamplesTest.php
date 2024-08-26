@@ -287,6 +287,25 @@ it('InFilter | $in', function (): void {
 
 });
 
+it('InFilter | $in:null', function (): void {
+    $sql = Person::filter([
+        [
+            'type'   => '$in:null',
+            'target' => 'name',
+            'value'  => ['Taylor', 'Otwell', null, ],
+        ],
+    ], Filter::only(
+        Filter::field('name', [FilterType::IN]),
+    ))->toRawSql();
+
+    $expectedSql = <<< SQL
+        select * from "people" where ("people"."name" in ('Taylor', 'Otwell') or "people"."name" is null)
+        SQL;
+
+    expect($sql)->toBe($expectedSql);
+
+});
+
 it('NotInFilter | $notIn', function (): void {
     $sql = Person::filter([
         [
@@ -300,6 +319,25 @@ it('NotInFilter | $notIn', function (): void {
 
     $expectedSql = <<< SQL
         select * from "people" where "people"."name" not in ('Nuno', 'Maduro')
+        SQL;
+
+    expect($sql)->toBe($expectedSql);
+
+});
+
+it('NotInFilter | $notIn:null', function (): void {
+    $sql = Person::filter([
+        [
+            'type'   => '$notIn:null',
+            'target' => 'name',
+            'value'  => ['Nuno', 'Maduro', null],
+        ],
+    ], Filter::only(
+        Filter::field('name', [FilterType::NOT_IN]),
+    ))->toRawSql();
+
+    $expectedSql = <<< SQL
+        select * from "people" where "people"."name" not in ('Nuno', 'Maduro') and "people"."name" is not null
         SQL;
 
     expect($sql)->toBe($expectedSql);
