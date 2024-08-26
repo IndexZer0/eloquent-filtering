@@ -125,7 +125,6 @@ WHERE "name" = 'TV'
         - [Fully Custom Filter](#fully-custom-filter)
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
-        - [Default Allowed Filters](#default-allowed-filters)
         - [Aliasing Targets](#aliasing-targets)
         - [Json Path Wildcards](#json-path-wildcards)
         - [Specifying Allowed Types](#specifying-allowed-types)
@@ -982,7 +981,6 @@ public function allowedFilters(): AllowedFilterList
 
 ```php
 return [
-    'default_allowed_filter_list' => 'none',
     'default_allowed_sort_list'   => 'none',
 
     'suppress' => [
@@ -1006,22 +1004,6 @@ return [
 
 - The package throws various exception which can be suppressed.
 - Custom filters should be registered in the config.
-
-#### Default Allowed Filters
-
-> [!NOTE]
-> This feature is intended for use when you're not using any user supplied column names and have complete developer control over the filters being applied.
-
-You can change the default allowed filters within the config file `eloquent-filtering.php`.
-
-```php
-'default_allowed_filter_list' => 'all',
-```
-
-> [!CAUTION]
-> Allowing all filters by default and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
-
-It is strongly suggested that you keep `default_allowed_filter_list` as `none` in your config and explicitly allow only specific filters with `Filter::only()`.
 
 #### Aliasing Targets
 
