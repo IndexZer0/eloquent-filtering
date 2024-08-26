@@ -113,7 +113,6 @@ WHERE "name" = 'TV'
     - [Allowing Filters](#allowing-filters)
         - [Define On Model](#define-on-model)
         - [Pass To Filter](#pass-to-filter)
-        - [Allowing All Filters](#allowing-all-filters)
         - [Including Relationship Model Filters](#including-relationship-model-filters)
     - [Filter Structure](#filter-structure)
     - [Available Filters](#available-filters)
@@ -250,23 +249,6 @@ Product::filter(
         )
     )
 )->get();
-```
-
-#### Allowing All Filters
-
-You can allow all filters using `Filter::all()`.
-
-> [!NOTE]
-> This feature is intended for use when you're not using any user supplied column names and have complete developer control over the filters being applied.
-
-> [!CAUTION]
-> Allowing all filters and using filters from a HTTP request can put you at risk of sql injection due to PHP PDO can only bind values, not column names.
-
-```php
-public function allowedFilters(): AllowedFilterList
-{
-    return Filter::all();
-}
 ```
 
 #### Including Relationship Model Filters
@@ -1029,22 +1011,6 @@ $sql = Person::filter([
     Filter::field(Target::alias('name', 'first_name'), [FilterType::EQUAL]),
     Filter::relation(Target::alias('documents', 'files'), [FilterType::HAS])
 ))->toRawSql();
-```
-
-You can alias targets when allowing all filters.
-
-```php
-public function allowedFilters(): AllowedFilterList
-{
-    return Filter::all(
-        Target::alias('name', 'first_name'),
-        Target::relationAlias(
-            'documents',
-            'files',
-            Target::alias('file_extension', 'mime_type')
-        ),
-    );
-}
 ```
 
 #### Json Path Wildcards
