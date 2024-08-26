@@ -13,6 +13,7 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\MorphRelationFilter;
+use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class HasMorphFilter implements FilterMethod, Targetable, HasMorphFilters
 {
@@ -66,7 +67,7 @@ class HasMorphFilter implements FilterMethod, Targetable, HasMorphFilters
 
     protected function getChildFilters(string $type): ?FilterCollection
     {
-        $alias = Relation::getMorphAlias($type);
+        $alias = RelationUtils::getMorphAlias($type);
         return $this->getChildFiltersFor($alias);
     }
 

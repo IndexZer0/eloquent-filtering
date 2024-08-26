@@ -46,4 +46,9 @@ class RelationUtils
 
         return $query->getRelated();
     }
+
+    public static function getMorphAlias(string $className)
+    {
+        return array_search($className, Relation::$morphMap, strict: true) ?: $className;
+    }
 }
