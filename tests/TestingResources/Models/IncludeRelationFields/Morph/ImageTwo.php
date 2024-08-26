@@ -13,6 +13,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
+use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class ImageTwo extends Model implements IsFilterable
 {
@@ -33,8 +34,8 @@ class ImageTwo extends Model implements IsFilterable
                 'imageable',
                 [FilterType::HAS_MORPH],
             )->includeRelationFields([
-                Relation::getMorphAlias(ArticleTwo::class),
-                Relation::getMorphAlias(UserProfileTwo::class),
+                RelationUtils::getMorphAlias(ArticleTwo::class),
+                RelationUtils::getMorphAlias(UserProfileTwo::class),
             ])
         );
     }
