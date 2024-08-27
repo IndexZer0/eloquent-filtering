@@ -996,6 +996,24 @@ class YourFilterWithModifiers implements FilterMethod, Targetable, Modifiable
 }
 ```
 
+Qualifying columns
+
+- All `FilterMethod` classes have access to an `EloquentContext` object that allows you to `qualifyColumn` of the target.
+- Use this method to ensure your query is prefixing the column name with the database table.
+- Usage of this method:
+    - Prevents ambiguous columns in queries where you're also joining to another table with the same column.
+    - Handles using the correct table name for `->pivot()` allowed field filters.
+
+```php
+public function apply(Builder $query): Builder
+{
+    return $query->where(
+        $this->eloquentContext()->qualifyColumn($this->target),
+        true
+    );
+}
+```
+
 ### Digging Deeper
 
 #### Config
