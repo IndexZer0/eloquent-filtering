@@ -561,6 +561,13 @@ $sql = Person::filter([
 select * from "people" where "people"."name" in ('Taylor', 'Otwell')
 ```
 
+- Modifiers
+
+`$in:null`
+```sql
+select * from "people" where ("people"."name" in ('Taylor', 'Otwell') or "people"."name" is null)
+```
+
 #### NotInFilter - `$notIn`
 
 - `value` = array of `string` | `int` | `float` (minimum 1).
@@ -577,6 +584,13 @@ $sql = Person::filter([
 
 ```sql
 select * from "people" where "people"."name" not in ('Nuno', 'Maduro')
+```
+
+- Modifiers
+
+`$notIn:null`
+```sql
+select * from "people" where "people"."name" not in ('Nuno', 'Maduro') and "people"."name" is not null
 ```
 
 #### BetweenFilter - `$between`
