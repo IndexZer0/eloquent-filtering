@@ -94,12 +94,12 @@ $sql = Product::filter($filters)->toRawSql();
 ```sql
 SELECT *
 FROM "products" 
-WHERE "name" = 'TV' 
+WHERE "products"."name" = 'TV' 
   AND EXISTS (
     SELECT *
     FROM "manufacturers" 
     WHERE "products"."manufacturer_id" = "manufacturers"."id" 
-      AND "name" = 'Sony'
+      AND "manufacturers"."name" = 'Sony'
   )
 ```
 
@@ -367,7 +367,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "name" = 'Taylor'
+select * from "people" where "people"."name" = 'Taylor'
 ```
 
 #### NotEqualFilter - `$notEq`
@@ -385,7 +385,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "name" != 'Taylor'
+select * from "people" where "people"."name" != 'Taylor'
 ```
 
 #### GreaterThanFilter - `$gt`
@@ -403,7 +403,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "age" > 18
+select * from "people" where "people"."age" > 18
 ```
 
 #### GreaterThanEqualToFilter - `$gte`
@@ -421,7 +421,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "age" >= 18
+select * from "people" where "people"."age" >= 18
 ```
 
 #### LessThanFilter - `$lt`
@@ -439,7 +439,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "age" < 18
+select * from "people" where "people"."age" < 18
 ```
 
 #### LessThanEqualToFilter - `$lte`
@@ -457,7 +457,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "age" <= 18
+select * from "people" where "people"."age" <= 18
 ```
 
 #### LikeFilter - `$like`
@@ -475,18 +475,18 @@ $sql = Project::filter([
 ```
 
 ```sql
-select * from "projects" where "description" LIKE '%Laravel%'
+select * from "projects" where "projects"."description" LIKE '%Laravel%'
 ```
 
 - Modifiers
 
 `$like:start`
 ```sql
-select * from "projects" where "description" LIKE 'Laravel%'
+select * from "projects" where "projects"."description" LIKE 'Laravel%'
 ```
 `$like:end`
 ```sql
-select * from "projects" where "description" LIKE '%Laravel'
+select * from "projects" where "projects"."description" LIKE '%Laravel'
 ```
 
 #### NotLikeFilter - `$notLike`
@@ -498,24 +498,24 @@ $sql = Project::filter([
     [
         'type'   => '$notLike',
         'target' => 'description',
-        'value'  => 'Laravel',
+        'value'  => 'Symfony',
     ]
 ])->toRawSql();
 ```
 
 ```sql
-select * from "projects" where "description" NOT LIKE '%Laravel%'
+select * from "projects" where "projects"."description" NOT LIKE '%Symfony%'
 ```
 
 - Modifiers
 
 `$notLike:start`
 ```sql
-select * from "projects" where "description" NOT LIKE 'Laravel%'
+select * from "projects" where "projects"."description" NOT LIKE 'Symfony%'
 ```
 `$notLike:end`
 ```sql
-select * from "projects" where "description" NOT LIKE '%Laravel'
+select * from "projects" where "projects"."description" NOT LIKE '%Symfony'
 ```
 
 #### NullFilter - `$null`
@@ -540,7 +540,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "age" is null and "weight" is not null
+select * from "people" where "people"."age" is null and "people"."weight" is not null
 ```
 
 #### InFilter - `$in`
@@ -558,7 +558,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "name" in ('Taylor', 'Otwell')
+select * from "people" where "people"."name" in ('Taylor', 'Otwell')
 ```
 
 #### NotInFilter - `$notIn`
@@ -576,7 +576,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "name" not in ('Nuno', 'Maduro')
+select * from "people" where "people"."name" not in ('Nuno', 'Maduro')
 ```
 
 #### BetweenFilter - `$between`
@@ -594,7 +594,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "age" between 18 and 65
+select * from "people" where "people"."age" between 18 and 65
 ```
 
 #### NotBetweenFilter - `$notBetween`
@@ -612,7 +612,7 @@ $sql = Person::filter([
 ```
 
 ```sql
-select * from "people" where "age" not between 18 and 65
+select * from "people" where "people"."age" not between 18 and 65
 ```
 
 #### BetweenColumnsFilter - `$betweenColumns`
@@ -633,7 +633,7 @@ $sql = Product::filter([
 ```
 
 ```sql
-select * from "products" where "price" between "min_allowed_price" and "max_allowed_price"
+select * from "products" where "products"."price" between "products"."min_allowed_price" and "products"."max_allowed_price"
 ```
 
 #### NotBetweenColumnsFilter - `$notBetweenColumns`
@@ -654,7 +654,7 @@ $sql = Product::filter([
 ```
 
 ```sql
-select * from "products" where "price" between "min_allowed_price" and "max_allowed_price"
+select * from "products" where "products"."price" not between "products"."min_allowed_price" and "products"."max_allowed_price"
 ```
 
 #### JsonContainsFilter - `$jsonContains`
@@ -672,7 +672,7 @@ $sql = User::filter([
 ```
 
 ```sql
-select * from "users" where json_contains(`options`, '\"en\"', '$."languages"')
+select * from "users" where json_contains("users"."options", '\"en\"', '$."languages"')
 ```
 
 #### JsonNotContainsFilter - `$jsonNotContains`
@@ -690,7 +690,7 @@ $sql = User::filter([
 ```
 
 ```sql
-select * from "users" where not json_contains(`options`, '\"en\"', '$."languages"')
+select * from "users" where not json_contains("users"."options", '\"en\"', '$."languages"')
 ```
 
 #### JsonLengthFilter - `$jsonLength`
@@ -710,7 +710,7 @@ $sql = User::filter([
 ```
 
 ```sql
-select * from "users" where json_length(`options`, '$."languages"') >= 2
+select * from "users" where json_length("users"."options", '$."languages"') >= 2
 ```
 
 ---
@@ -736,7 +736,7 @@ $sql = Project::filter([
 ```
 
 ```sql
-select * from "projects" where exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "content" LIKE '%awesome%')
+select * from "projects" where exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "comments"."content" LIKE '%awesome%')
 ```
 
 #### DoesntHasFilter - `$doesntHas`
@@ -760,7 +760,7 @@ $sql = Project::filter([
 ```
 
 ```sql
-select * from "projects" where not exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "content" LIKE '%boring%')
+select * from "projects" where not exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "comments"."content" LIKE '%boring%')
 ```
 
 ---
@@ -790,7 +790,7 @@ $sql = Comment::filter([
 ```
 
 ```sql
-select * from "comments" where (("content" LIKE '%awesome%') or ("content" LIKE '%boring%'))
+select * from "comments" where (("comments"."content" LIKE '%awesome%') or ("comments"."content" LIKE '%boring%'))
 ```
 
 #### AndFilter - `$and`
@@ -818,7 +818,7 @@ $sql = Comment::filter([
 ```
 
 ```sql
-select * from "comments" where (("content" LIKE '%is awesome%') and ("content" LIKE '%is not boring%'))
+select * from "comments" where (("comments"."content" LIKE '%is awesome%') and ("comments"."content" LIKE '%is not boring%'))
 ```
 
 ---
