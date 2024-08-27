@@ -4,9 +4,10 @@ namespace {{ namespace }};
 
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
 use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\FieldFilter;
 
-class {{ class }} implements FilterMethod
+class {{ class }} implements FilterMethod, Targetable
 {
     use FieldFilter;
 

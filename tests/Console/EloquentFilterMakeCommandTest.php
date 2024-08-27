@@ -13,7 +13,7 @@ it('can create "field" filter', function (): void {
 
     $this->assertFileContains([
         'namespace App\FilterMethods;',
-        'class WhereFilter implements FilterMethod',
+        'class WhereFilter implements FilterMethod, Targetable',
         'use FieldFilter;',
         'return \'$where\';',
     ], 'app/FilterMethods/WhereFilter.php');
