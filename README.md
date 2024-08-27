@@ -119,9 +119,6 @@ WHERE "products"."name" = 'TV'
         - [Field Filters](#field-filters)
         - [Relationship Filters](#relationship-filters)
         - [Condition Filters](#condition-filters)
-    - [Custom Filters](#custom-filters)
-        - [Custom Field Filter](#custom-field-filter)
-        - [Fully Custom Filter](#fully-custom-filter)
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
         - [Aliasing Targets](#aliasing-targets)
@@ -134,6 +131,10 @@ WHERE "products"."name" = 'TV'
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Suppression Hooks](#suppression-hooks)
         - [Condition Filters Note](#condition-filters-note)
+        - [Custom Filters](#custom-filters)
+            - [Field Filter](#field-filter)
+            - [Custom Filter](#custom-filter)
+            - [Custom Filter Notes](#custom-filter-notes)
     - [Error Handling](#error-handling)
 - [Changelog](#changelog)
 
@@ -837,14 +838,14 @@ select * from "comments" where (("comments"."content" LIKE '%is awesome%') and (
 
 ---
 
-### Custom Filters
+#### Custom Filters
 
 - You can create two different types of custom filters.
-    - Custom Field Filter
-    - Fully Custom Filter
+    - Field Filter.
+    - Custom Filter.
 
 > [!IMPORTANT]
-> You must register your custom filter classes in the config file `eloquent-filtering.php`
+> You must register your filter classes in the config file `eloquent-filtering.php`
 
 ```php
 'custom_filters' => [
@@ -852,7 +853,7 @@ select * from "comments" where (("comments"."content" LIKE '%is awesome%') and (
 ],
 ```
 
-#### Custom Field Filter
+##### Field Filter
 
 - Usage: `Filter::field('name', ['$lowercase'])`.
 
@@ -861,16 +862,13 @@ php artisan make:eloquent-filter LowerCaseFilter --type=field
 ```
 
 ```php
-class LowerCaseFilter extends AbstractFieldFilter
+class LowerCaseFilter implements FilterMethod, Targetable
 {
-    use HasModifiers;
+    use FieldFilter;
 
-    final public function __construct(
-        protected string $target,
+    public function __construct(
         protected string $value,
-        protected array  $modifiers
     ) {
-
     }
     
     /*
@@ -889,21 +887,8 @@ class LowerCaseFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            ...TargetRules::get(),
-            'value'  => ['required', 'string'],
+            'value' => ['required', 'string'],
         ];
-    }
-
-    /*
-     * Instantiate filter class from ApprovedFilter.
-     */
-    public static function from(ApprovedFilter $approvedFilter): static
-    {
-        return new static(
-            $approvedFilter->target()->getReal(),
-            $approvedFilter->data_get('value'),
-            $approvedFilter->modifiers(),
-        );
     }
 
     /*
@@ -911,8 +896,10 @@ class LowerCaseFilter extends AbstractFieldFilter
      */
     public function apply(Builder $query): Builder
     {
+        $target = $this->eloquentContext->qualifyColumn($this->target);
+    
         return $query->where(
-            DB::raw("LOWER({$this->target})"),
+            DB::raw("LOWER({$target})"),
             strtolower($this->value)
         );
     }
@@ -930,17 +917,19 @@ public function allowedFilters(): AllowedFilterList
 }
 ```
 
-#### Fully Custom Filter
+#### Custom Filter
 
-- Generally for use when there is no user specified target field.
+- Generally for use when there is no user specified target.
 
 ```bash
 php artisan make:eloquent-filter AdminFilter --type=custom
 ```
 
 ```php
-class AdminFilter extends AbstractCustomFilter
+class AdminFilter implements FilterMethod
 {
+    use CustomFilter;
+    
     /*
      * The unique identifier of the filter.
      */
@@ -954,7 +943,10 @@ class AdminFilter extends AbstractCustomFilter
      */
     public function apply(Builder $query): Builder
     {
-        return $query->where('admin', true);
+        return $query->where(
+            $this->eloquentContext()->qualifyColumn('admin'),
+            true
+        );
     }
 }
 
@@ -967,6 +959,40 @@ public function allowedFilters(): AllowedFilterList
     return Filter::only(
         Filter::custom('$admin'),
     );
+}
+```
+
+##### Custom filter notes
+
+- Adding modifiers to your custom filters is achieved by:
+    - Implementing `IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Modifiable` interface.
+    - Use `HasModifiers` trait.
+    - Define `supportedModifiers()` method on the filter class.
+    - You can then use `$this->hasModifier('modifier_name')` in the `apply()` implementation.
+
+```php
+class YourFilterWithModifiers implements FilterMethod, Targetable, Modifiable
+{
+    use FieldFilter;
+    use HasModifiers;
+    
+    //...
+    
+    public static function supportedModifiers(): array
+    {
+        return ['special'];
+    }
+    
+    public function apply(Builder $query): Builder
+    {
+        if ($this->hasModifier('special')) {
+            // Perform your special logic
+        } else {
+            // Perform your regular logic.
+        }
+    }
+    
+    //...
 }
 ```
 
