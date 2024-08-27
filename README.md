@@ -1109,7 +1109,7 @@ public function allowedFilters(): AllowedFilterList
 
 #### Pivot Filters
 
-- `Filter::field()` filters can be marked as pivot filters if you want the filter to be applied to a column on the join table.
+- `Filter::field()` filters can be marked as pivot filters if you want the filter to be applied to a column on the intermediate table linking the models.
 
 ```php
 public function allowedFilters(): AllowedFilterList
