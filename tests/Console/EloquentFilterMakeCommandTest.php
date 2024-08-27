@@ -29,8 +29,7 @@ it('can create "custom" filter', function (): void {
 
     $this->assertFileContains([
         'namespace App\FilterMethods;',
-        'use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractCustomFilter;',
-        'class SpecialCustomFilter extends AbstractCustomFilter',
+        'class SpecialCustomFilter implements FilterMethod',
         'return \'$specialCustom\';',
     ], 'app/FilterMethods/SpecialCustomFilter.php');
 
