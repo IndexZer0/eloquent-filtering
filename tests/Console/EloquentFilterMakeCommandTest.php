@@ -13,8 +13,8 @@ it('can create "field" filter', function (): void {
 
     $this->assertFileContains([
         'namespace App\FilterMethods;',
-        'use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;',
-        'class WhereFilter extends AbstractFieldFilter',
+        'class WhereFilter implements FilterMethod',
+        'use FieldFilter;',
         'return \'$where\';',
     ], 'app/FilterMethods/WhereFilter.php');
 
