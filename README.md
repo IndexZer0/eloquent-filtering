@@ -1170,7 +1170,9 @@ class Order extends Model implements IsFilterable
   - `$notIn`:
     - `:null`- also does a `and "{$target}" is not null` if `null` is sent in the `values` array.
 
-You can specify just specific modifiers to enable.
+By default, all filter modifiers are enabled.
+
+Though, you can specify just specific modifiers to enable.
 
 ```php
 public function allowedFilters(): AllowedFilterList
@@ -1181,7 +1183,7 @@ public function allowedFilters(): AllowedFilterList
 }
 ```
 
-You can disable all modifiers.
+You can also disable all modifiers.
 
 ```php
 public function allowedFilters(): AllowedFilterList
