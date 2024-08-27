@@ -40,6 +40,6 @@ class AllowedMorphType implements AllowedFilter, RequireableFilter
 
     public function getDescription(): string
     {
-        throw new Exception('Not implemented');
+        return sprintf('"%s" filter', $this->type);
     }
 }
