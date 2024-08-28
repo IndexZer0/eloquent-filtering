@@ -1014,6 +1014,9 @@ public function apply(Builder $query): Builder
 }
 ```
 
+Targets
+ChildFilters
+
 ### Digging Deeper
 
 #### Config
@@ -1127,7 +1130,7 @@ Filter::field('name', Types::all())
 
 #### Required Filters
 
-You can specify that `Filter::field()`, `Filter::relation()` and `Filter::custom()` filters must be required.
+You can specify that `Filter::field()`, `Filter::relation()`, `Filter::morphRelation()`, `Filter::morphType()` and `Filter::custom()` filters must be required.
 
 - When a required filter is not used, a `RequiredFilterException` is thrown.
 - `RequiredFilterException` extends Laravels `ValidationException`.
@@ -1149,6 +1152,50 @@ public function allowedFilters(): AllowedFilterList
         Filter::custom('$latest')->required()
     );
 }
+
+$query = Model::filter([]);
+// RequiredFilterException errors
+'Missing required filters.' => [
+    '"name" filter is required.',
+    '"books" filter is required.',
+    '"books" -> "title" filter is required.',
+    '"$latest" filter is required.',
+],
+```
+
+You can also set the `scoped` parameter to `true` if you want a required filter to only be required if its parent has been used.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation(
+            'books',
+            [FilterType::HAS],
+            Filter::only(
+                Filter::field('title', [FilterType::LIKE])->required(scoped: true)
+            )
+        ),
+    );
+}
+
+$query = Model::filter([]);
+// RequiredFilterException not thrown.
+
+// --------
+// --------
+// --------
+
+$query = Model::filter([
+    [
+        'target' => 'books',
+        'type' => '$has',    
+    ]
+]);
+// RequiredFilterException errors
+'Missing required filters.' => [
+    '"books" -> "title" filter is required.',
+]
 ```
 
 #### Pivot Filters
