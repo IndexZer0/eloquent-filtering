@@ -141,6 +141,22 @@ it('does not throw RequiredFilterException when required filters have been match
                     ],
                 ],
                 [
+                    'target' => 'imageable',
+                    'type'   => '$hasMorph',
+                    'types'  => [
+                        [
+                            'type'  => 'articles',
+                            'value' => [
+                                [
+                                    'target' => 'title',
+                                    'type'   => '$like',
+                                    'value'  => 'article-1',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
                     'type' => '$latest',
                 ],
             ],
@@ -156,7 +172,12 @@ it('does not throw RequiredFilterException when required filters have been match
                 Filter::morphRelation(
                     'imageable',
                     [FilterType::HAS_MORPH],
-                    Filter::morphType('articles')->required()
+                    Filter::morphType(
+                        'articles',
+                        Filter::only(
+                            Filter::field('title', [FilterType::LIKE])->required()
+                        )
+                    )->required()
                 )->required(),
                 Filter::custom('$latest')->required()
             )

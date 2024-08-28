@@ -48,6 +48,8 @@ class MorphRelationFilterParser implements CustomFilterParser
             if ($allowedMorphType === null) {
                 throw new DeniedFilterException($pendingFilter);
             }
+            /** @var AllowedMorphType $allowedMorphType */
+            $allowedMorphType->markMatched();
 
             if ($type['type'] === '*') {
                 $model = $pendingFilter->model();
