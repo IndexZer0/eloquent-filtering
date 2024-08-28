@@ -55,6 +55,11 @@ class AllowedField implements
         return $this->target->getForFilterMethod($pendingFilter);
     }
 
+    public function getIdentifier(): string
+    {
+        return "\"{$this->target->target()}\"";
+    }
+
     public function getDescription(): string
     {
         return sprintf('"%s" filter', $this->target->target());

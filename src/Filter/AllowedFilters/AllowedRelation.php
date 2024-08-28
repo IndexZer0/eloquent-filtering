@@ -66,6 +66,11 @@ class AllowedRelation implements
         return $this->target;
     }
 
+    public function getIdentifier(): string
+    {
+        return "\"{$this->target->target()}\"";
+    }
+
     public function getDescription(): string
     {
         return sprintf('"%s" filter', $this->target->target());

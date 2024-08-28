@@ -38,6 +38,11 @@ class AllowedCustomFilter implements AllowedFilter, RequireableFilter
         return null;
     }
 
+    public function getIdentifier(): string
+    {
+        return "\"{$this->type->type}\"";
+    }
+
     public function getDescription(): string
     {
         return sprintf('"%s" filter', $this->type->type);

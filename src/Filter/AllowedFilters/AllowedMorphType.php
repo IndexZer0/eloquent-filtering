@@ -38,6 +38,11 @@ class AllowedMorphType implements AllowedFilter, RequireableFilter
         return \IndexZer0\EloquentFiltering\Target\Target::alias($this->type);
     }
 
+    public function getIdentifier(): string
+    {
+        return "\"{$this->type}\"";
+    }
+
     public function getDescription(): string
     {
         return sprintf('"%s" filter', $this->type);
