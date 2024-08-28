@@ -838,185 +838,6 @@ select * from "comments" where (("comments"."content" LIKE '%is awesome%') and (
 
 ---
 
-#### Custom Filters
-
-- You can create two different types of custom filters.
-    - Field Filter.
-    - Custom Filter.
-
-> [!IMPORTANT]
-> You must register your filter classes in the config file `eloquent-filtering.php`
-
-```php
-'custom_filters' => [
-    YourCustomFilter::class,
-],
-```
-
-##### Field Filter
-
-- Usage: `Filter::field('name', ['$lowercase'])`.
-
-```bash
-php artisan make:eloquent-filter LowerCaseFilter --type=field
-```
-
-```php
-class LowerCaseFilter implements FilterMethod, Targetable
-{
-    use FieldFilter;
-
-    public function __construct(
-        protected string $value,
-    ) {
-    }
-    
-    /*
-     * The unique identifier of the filter.
-     */
-    public static function type(): string
-    {
-        return '$lowercase';
-    }
-
-    /*
-     * The format that the filter data must adhere to.
-     * Defined as laravel validator rules.
-     * On fail: throws MalformedFilterFormatException.
-     */
-    public static function format(): array
-    {
-        return [
-            'value' => ['required', 'string'],
-        ];
-    }
-
-    /*
-     * Apply the filter logic.
-     */
-    public function apply(Builder $query): Builder
-    {
-        $target = $this->eloquentContext->qualifyColumn($this->target);
-    
-        return $query->where(
-            DB::raw("LOWER({$target})"),
-            strtolower($this->value)
-        );
-    }
-}
-
-/*
- * Usage:
- */
-
-public function allowedFilters(): AllowedFilterList
-{
-    return Filter::only(
-        Filter::field('name', ['$lowercase']),
-    );
-}
-```
-
-#### Custom Filter
-
-- Generally for use when there is no user specified target.
-
-```bash
-php artisan make:eloquent-filter AdminFilter --type=custom
-```
-
-```php
-class AdminFilter implements FilterMethod
-{
-    use CustomFilter;
-    
-    /*
-     * The unique identifier of the filter.
-     */
-    public static function type(): string
-    {
-        return '$admin';
-    }
-
-    /*
-     * Apply the filter logic.
-     */
-    public function apply(Builder $query): Builder
-    {
-        return $query->where(
-            $this->eloquentContext()->qualifyColumn('admin'),
-            true
-        );
-    }
-}
-
-/*
- * Usage:
- */
-
-public function allowedFilters(): AllowedFilterList
-{
-    return Filter::only(
-        Filter::custom('$admin'),
-    );
-}
-```
-
-##### Custom filter notes
-
-- Adding modifiers to your custom filters is achieved by:
-    - Implementing `IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Modifiable` interface.
-    - Use `HasModifiers` trait.
-    - Define `supportedModifiers()` method on the filter class.
-    - You can then use `$this->hasModifier('modifier_name')` in the `apply()` implementation.
-
-```php
-class YourFilterWithModifiers implements FilterMethod, Targetable, Modifiable
-{
-    use FieldFilter;
-    use HasModifiers;
-    
-    //...
-    
-    public static function supportedModifiers(): array
-    {
-        return ['special'];
-    }
-    
-    public function apply(Builder $query): Builder
-    {
-        if ($this->hasModifier('special')) {
-            // Perform your special logic
-        } else {
-            // Perform your regular logic.
-        }
-    }
-    
-    //...
-}
-```
-
-Qualifying columns
-
-- All `FilterMethod` classes have access to an `EloquentContext` object that allows you to `qualifyColumn` of the target.
-- Use this method to ensure your query is prefixing the column name with the database table.
-- Usage of this method:
-    - Prevents ambiguous columns in queries where you're also joining to another table with the same column.
-    - Handles using the correct table name for `->pivot()` allowed field filters.
-
-```php
-public function apply(Builder $query): Builder
-{
-    return $query->where(
-        $this->eloquentContext()->qualifyColumn($this->target),
-        true
-    );
-}
-```
-
-Targets
-ChildFilters
-
 ### Digging Deeper
 
 #### Config
@@ -1386,6 +1207,185 @@ The condition filters `$or`, and `$and` are not required to be specified when al
 These filters are always allowed, due to these filters essentially being wrappers around other filters.
 
 ---
+
+#### Custom Filters
+
+- You can create two different types of custom filters.
+    - Field Filter.
+    - Custom Filter.
+
+> [!IMPORTANT]
+> You must register your filter classes in the config file `eloquent-filtering.php`
+
+```php
+'custom_filters' => [
+    YourCustomFilter::class,
+],
+```
+
+##### Field Filter
+
+- Usage: `Filter::field('name', ['$lowercase'])`.
+
+```bash
+php artisan make:eloquent-filter LowerCaseFilter --type=field
+```
+
+```php
+class LowerCaseFilter implements FilterMethod, Targetable
+{
+    use FieldFilter;
+
+    public function __construct(
+        protected string $value,
+    ) {
+    }
+    
+    /*
+     * The unique identifier of the filter.
+     */
+    public static function type(): string
+    {
+        return '$lowercase';
+    }
+
+    /*
+     * The format that the filter data must adhere to.
+     * Defined as laravel validator rules.
+     * On fail: throws MalformedFilterFormatException.
+     */
+    public static function format(): array
+    {
+        return [
+            'value' => ['required', 'string'],
+        ];
+    }
+
+    /*
+     * Apply the filter logic.
+     */
+    public function apply(Builder $query): Builder
+    {
+        $target = $this->eloquentContext->qualifyColumn($this->target);
+    
+        return $query->where(
+            DB::raw("LOWER({$target})"),
+            strtolower($this->value)
+        );
+    }
+}
+
+/*
+ * Usage:
+ */
+
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('name', ['$lowercase']),
+    );
+}
+```
+
+##### Custom Filter
+
+- Generally for use when there is no user specified target.
+
+```bash
+php artisan make:eloquent-filter AdminFilter --type=custom
+```
+
+```php
+class AdminFilter implements FilterMethod
+{
+    use CustomFilter;
+    
+    /*
+     * The unique identifier of the filter.
+     */
+    public static function type(): string
+    {
+        return '$admin';
+    }
+
+    /*
+     * Apply the filter logic.
+     */
+    public function apply(Builder $query): Builder
+    {
+        return $query->where(
+            $this->eloquentContext()->qualifyColumn('admin'),
+            true
+        );
+    }
+}
+
+/*
+ * Usage:
+ */
+
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::custom('$admin'),
+    );
+}
+```
+
+##### Custom filter notes
+
+- Adding modifiers to your custom filters is achieved by:
+    - Implementing `IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Modifiable` interface.
+    - Use `HasModifiers` trait.
+    - Define `supportedModifiers()` method on the filter class.
+    - You can then use `$this->hasModifier('modifier_name')` in the `apply()` implementation.
+
+```php
+class YourFilterWithModifiers implements FilterMethod, Targetable, Modifiable
+{
+    use FieldFilter;
+    use HasModifiers;
+    
+    //...
+    
+    public static function supportedModifiers(): array
+    {
+        return ['special'];
+    }
+    
+    public function apply(Builder $query): Builder
+    {
+        if ($this->hasModifier('special')) {
+            // Perform your special logic
+        } else {
+            // Perform your regular logic.
+        }
+    }
+    
+    //...
+}
+```
+
+Qualifying columns
+
+- All `FilterMethod` classes have access to an `EloquentContext` object that allows you to `qualifyColumn` of the target.
+- Use this method to ensure your query is prefixing the column name with the database table.
+- Usage of this method:
+    - Prevents ambiguous columns in queries where you're also joining to another table with the same column.
+    - Handles using the correct table name for `->pivot()` allowed field filters.
+
+```php
+public function apply(Builder $query): Builder
+{
+    return $query->where(
+        $this->eloquentContext()->qualifyColumn($this->target),
+        true
+    );
+}
+```
+
+Targets
+ChildFilters
 
 ### Error Handling
 
