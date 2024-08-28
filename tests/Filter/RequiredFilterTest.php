@@ -28,7 +28,8 @@ it('throws RequiredFilterException when required filters have not been matched',
                 Filter::morphRelation(
                     'imageable',
                     [FilterType::HAS_MORPH],
-                    Filter::morphType('articles',
+                    Filter::morphType(
+                        'articles',
                         Filter::only(
                             Filter::field('title', [FilterType::LIKE])->required()
                         )
@@ -66,8 +67,8 @@ it('only includes required errors when parent has been matched when using scoped
             [
                 [
                     'target' => 'books2',
-                    'type' => '$has',
-                ]
+                    'type'   => '$has',
+                ],
             ],
             Filter::only(
                 Filter::field('name', [FilterType::LIKE])->required(scoped: true),
@@ -88,7 +89,8 @@ it('only includes required errors when parent has been matched when using scoped
                 Filter::morphRelation(
                     'imageable',
                     [FilterType::HAS_MORPH],
-                    Filter::morphType('articles',
+                    Filter::morphType(
+                        'articles',
                         Filter::only(
                             Filter::field('title', [FilterType::LIKE])->required(scoped: true)
                         )
