@@ -1176,7 +1176,8 @@ $query = Model::filter([]);
 ],
 ```
 
-You can also set the `scoped` parameter to `true` if you want a required filter to only be required if its parent has been used.
+- Sometimes you may want a filter to be required **ONLY** if it's parent has been filtered.
+  - You can set the `scoped` parameter to `true` to achieve this.
 
 ```php
 public function allowedFilters(): AllowedFilterList
