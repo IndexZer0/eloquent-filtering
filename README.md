@@ -1149,6 +1149,16 @@ public function allowedFilters(): AllowedFilterList
                 Filter::field('title', [FilterType::LIKE])->required()
             )
         )->required(),
+        Filter::morphRelation(
+            'imageable',
+            [FilterType::HAS_MORPH],
+            Filter::morphType(
+                'articles',
+                Filter::only(
+                    Filter::field('title', [FilterType::LIKE])->required()
+                )
+            )->required()
+        )->required(),
         Filter::custom('$latest')->required()
     );
 }
@@ -1159,6 +1169,9 @@ $query = Model::filter([]);
     '"name" filter is required.',
     '"books" filter is required.',
     '"books" -> "title" filter is required.',
+    '"imageable" filter is required.',
+    '"imageable" -> "articles" filter is required.',
+    '"imageable" -> "articles" -> "title" filter is required.',
     '"$latest" filter is required.',
 ],
 ```
