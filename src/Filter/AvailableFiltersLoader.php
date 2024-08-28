@@ -33,6 +33,7 @@ use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonLengthFilt
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonNotContainsFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters\DoesntHasFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters\HasFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters\JoinFilter;
 
 class AvailableFiltersLoader
 {
@@ -102,6 +103,7 @@ class AvailableFiltersLoader
             // Relationship
             HasFilter::class,
             DoesntHasFilter::class,
+            JoinFilter::class,
         ]);
     }
 
