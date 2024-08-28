@@ -8,12 +8,16 @@ use Exception;
 use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\DefinesAllowedChildFilters;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\RequireableFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBeRequired;
 
-class AllowedMorphType implements AllowedFilter, RequireableFilter
+class AllowedMorphType implements
+    AllowedFilter,
+    RequireableFilter,
+    DefinesAllowedChildFilters
 {
     use CanBeRequired;
 
