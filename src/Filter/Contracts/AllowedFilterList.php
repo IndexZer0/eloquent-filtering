@@ -22,5 +22,5 @@ interface AllowedFilterList
 
     public function getAll(): array;
 
-    public function getUnmatchedRequiredFilters(): Collection;
+    public function getUnmatchedRequiredFiltersIdentifiers(bool $parentWasMatched): Collection;
 }

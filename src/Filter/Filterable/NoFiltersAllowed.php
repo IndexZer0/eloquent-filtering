@@ -42,7 +42,7 @@ class NoFiltersAllowed implements AllowedFilterList
         return [];
     }
 
-    public function getUnmatchedRequiredFilters(): Collection
+    public function getUnmatchedRequiredFiltersIdentifiers(bool $parentWasMatched): Collection
     {
         return collect();
     }

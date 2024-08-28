@@ -34,9 +34,9 @@ trait Filterable
             allowedFilterList: $allowedFilterList
         );
 
-        $unmatchedRequiredFilters = $allowedFilterList->getUnmatchedRequiredFilters();
-        if ($unmatchedRequiredFilters->isNotEmpty()) {
-            throw RequiredFilterException::fromAllowedFilters(...$unmatchedRequiredFilters->toArray());
+        $unmatchedRequiredFiltersIdentifiers = $allowedFilterList->getUnmatchedRequiredFiltersIdentifiers(parentWasMatched: true);
+        if ($unmatchedRequiredFiltersIdentifiers->isNotEmpty()) {
+            throw RequiredFilterException::fromStrings($unmatchedRequiredFiltersIdentifiers);
         }
 
         /** @var FilterApplier $filterApplier */
