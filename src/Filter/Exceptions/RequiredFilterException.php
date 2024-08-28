@@ -15,7 +15,7 @@ class RequiredFilterException extends ValidationException implements FilterExcep
         return self::withMessages([
             'Missing required filters.' => $strings->map(
                 fn ($string) => "{$string} filter is required."
-            )->toArray()
+            )->toArray(),
         ]);
     }
 }

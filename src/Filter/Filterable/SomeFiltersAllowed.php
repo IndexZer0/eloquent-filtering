@@ -113,7 +113,7 @@ class SomeFiltersAllowed implements AllowedFilterList
                     $allowedFilter->allowedFilters()
                         ->getUnmatchedRequiredFiltersIdentifiers($beenMatched)
                         ->map(
-                            fn ($requiredFilterIdentifier) => "{$identifier} -> $requiredFilterIdentifier"
+                            fn ($requiredFilterIdentifier) => "{$identifier} -> {$requiredFilterIdentifier}"
                         )
                 );
             }
