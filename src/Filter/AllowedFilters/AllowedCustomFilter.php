@@ -42,9 +42,4 @@ class AllowedCustomFilter implements AllowedFilter, RequireableFilter
     {
         return "\"{$this->type->type}\"";
     }
-
-    public function getDescription(): string
-    {
-        return sprintf('"%s" filter', $this->type->type);
-    }
 }

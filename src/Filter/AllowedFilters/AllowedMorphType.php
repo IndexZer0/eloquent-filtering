@@ -46,9 +46,4 @@ class AllowedMorphType implements
     {
         return "\"{$this->type}\"";
     }
-
-    public function getDescription(): string
-    {
-        return sprintf('"%s" filter', $this->type);
-    }
 }

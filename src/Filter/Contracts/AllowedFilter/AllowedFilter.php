@@ -12,6 +12,4 @@ interface AllowedFilter
     public function getAllowedType(PendingFilter $pendingFilter): ?AllowedType;
 
     public function getIdentifier(): string;
-
-    public function getDescription(): string;
 }
