@@ -10,8 +10,6 @@ use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedMorphRelation;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\DefinesAllowedChildFilters;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\RequireableFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
@@ -87,38 +85,5 @@ class SomeFiltersAllowed implements AllowedFilterList
                     $allowedFilter instanceof AllowedMorphRelation
             )
             ->toArray();
-    }
-
-    public function getUnmatchedRequiredFiltersIdentifiers(bool $parentWasMatched): Collection
-    {
-        $unmatchedRequiredFiltersIdentifiers = collect();
-
-        foreach ($this->allowedFilters as $allowedFilter) {
-            $identifier = $allowedFilter->getIdentifier();
-
-            if (
-                $allowedFilter instanceof RequireableFilter
-                && $allowedFilter->isRequired()
-                && !$allowedFilter->hasBeenMatched()
-            ) {
-                if (!$allowedFilter->isScoped() || $parentWasMatched) {
-                    $unmatchedRequiredFiltersIdentifiers->push($identifier);
-                }
-            }
-
-            $beenMatched = $allowedFilter->hasBeenMatched();
-
-            if ($allowedFilter instanceof DefinesAllowedChildFilters) {
-                $unmatchedRequiredFiltersIdentifiers = $unmatchedRequiredFiltersIdentifiers->merge(
-                    $allowedFilter->allowedFilters()
-                        ->getUnmatchedRequiredFiltersIdentifiers($beenMatched)
-                        ->map(
-                            fn ($requiredFilterIdentifier) => "{$identifier} -> {$requiredFilterIdentifier}"
-                        )
-                );
-            }
-        }
-
-        return $unmatchedRequiredFiltersIdentifiers;
     }
 }

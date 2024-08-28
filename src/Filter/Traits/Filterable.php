@@ -9,8 +9,8 @@ use IndexZer0\EloquentFiltering\Filter\AllowedFilterResolver;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
-use IndexZer0\EloquentFiltering\Filter\Exceptions\RequiredFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\RequiredFilters\RequiredFiltersChecker;
 
 trait Filterable
 {
@@ -34,10 +34,11 @@ trait Filterable
             allowedFilterList: $allowedFilterList
         );
 
-        $unmatchedRequiredFiltersIdentifiers = $allowedFilterList->getUnmatchedRequiredFiltersIdentifiers(parentWasMatched: true);
-        if ($unmatchedRequiredFiltersIdentifiers->isNotEmpty()) {
-            throw RequiredFilterException::fromStrings($unmatchedRequiredFiltersIdentifiers);
-        }
+        $requiredFiltersChecker = new RequiredFiltersChecker(
+            $allowedFilterList,
+            true
+        );
+        $requiredFiltersChecker->__invoke();
 
         /** @var FilterApplier $filterApplier */
         $filterApplier = resolve(FilterApplier::class);
