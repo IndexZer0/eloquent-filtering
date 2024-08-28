@@ -16,6 +16,8 @@ interface RequireableFilter
 
     public function isRequired(): bool;
 
+    public function isScoped(): bool;
+
     public function markMatched(): void;
 
     public function hasBeenMatched(): bool;
