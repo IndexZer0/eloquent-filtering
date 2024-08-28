@@ -1384,9 +1384,6 @@ public function apply(Builder $query): Builder
 }
 ```
 
-Targets
-ChildFilters
-
 ### Error Handling
 
 All exceptions thrown by the package implement `\IndexZer0\EloquentFiltering\Contracts\EloquentFilteringException`.
