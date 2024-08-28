@@ -1336,7 +1336,7 @@ public function allowedFilters(): AllowedFilterList
 
 - Adding modifiers to your custom filters is achieved by:
     - Implementing `IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Modifiable` interface.
-    - Use `HasModifiers` trait.
+    - Use `IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\Composables\HasModifiers` trait.
     - Define `supportedModifiers()` method on the filter class.
     - You can then use `$this->hasModifier('modifier_name')` in the `apply()` implementation.
 
