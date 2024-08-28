@@ -24,14 +24,17 @@ class FieldFilterParser implements CustomFilterParser
         /** @var TargetedFilter $allowedFilter */
         $target = $allowedFilter->getTarget($pendingFilter);
 
-        return (new FilterBuilder($pendingFilter))
+        $filterBuilder = new FilterBuilder(
+            $pendingFilter,
+            new EloquentContext(
+                $pendingFilter->model(),
+                $pendingFilter->relation(),
+                is_a($allowedFilter, PivotableFilter::class) && $allowedFilter->isPivot()
+            )
+        );
+
+        return $filterBuilder
             ->target($target)
-            ->build(
-                new EloquentContext(
-                    $pendingFilter->model(),
-                    $pendingFilter->relation(),
-                    is_a($allowedFilter, PivotableFilter::class) && $allowedFilter->isPivot()
-                )
-            );
+            ->build();
     }
 }

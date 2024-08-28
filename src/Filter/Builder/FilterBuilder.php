@@ -8,6 +8,7 @@ use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\Context\EloquentContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\HasChildFilters;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Modifiable;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterCollection;
@@ -16,16 +17,32 @@ use IndexZer0\EloquentFiltering\Filter\Morph\MorphTypes;
 
 class FilterBuilder
 {
-    protected array $builderSteps = [];
+    protected array $buildSteps = [];
 
-    public function __construct(protected PendingFilter $pendingFilter)
-    {
+    public function __construct(
+        protected PendingFilter $pendingFilter,
+        protected EloquentContext $eloquentContext,
+    ) {
+        $this->addDefaultBuildSteps();
     }
 
     public function addBuildStep(callable $fn): self
     {
-        $this->builderSteps[] = $fn;
+        $this->buildSteps[] = $fn;
         return $this;
+    }
+
+    protected function addDefaultBuildSteps(): void
+    {
+        $this->addBuildStep(function (FilterMethod $filterMethod): void {
+            $filterMethod->setEloquentContext($this->eloquentContext);
+        });
+
+        $this->addBuildStep(function (FilterMethod $filterMethod): void {
+            if (is_a($filterMethod, Modifiable::class)) {
+                $filterMethod->setModifiers($this->pendingFilter->requestedFilter()->modifiers);
+            }
+        });
     }
 
     public function target(Target $target): self
@@ -58,11 +75,11 @@ class FilterBuilder
         return $this;
     }
 
-    public function build(EloquentContext $eloquentContext): FilterMethod
+    public function build(): FilterMethod
     {
-        $filterMethod = $this->pendingFilter->createFilter($eloquentContext);
+        $filterMethod = $this->pendingFilter->createFilter();
 
-        foreach ($this->builderSteps as $builderStep) {
+        foreach ($this->buildSteps as $builderStep) {
             $builderStep($filterMethod);
         }
 

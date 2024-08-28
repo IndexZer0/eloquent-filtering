@@ -9,13 +9,11 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use IndexZer0\EloquentFiltering\Filter\Context\EloquentContext;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\CustomFilterParser;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\RequestedFilter;
-use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\Composables\HasModifiers;
 use IndexZer0\EloquentFiltering\Utilities\ClassUtils;
 
 class PendingFilter
@@ -114,26 +112,20 @@ class PendingFilter
         return $this->relation;
     }
 
-    public function getFilterConstructorParameters(): array
+    protected function getFilterConstructorParameters(): array
     {
         return collect($this->data)->only(
             ClassUtils::getClassConstructorParameterNames($this->filterFqcn)
         )->toArray();
     }
 
-    public function createFilter(EloquentContext $eloquentContext): FilterMethod
+    public function createFilter(): FilterMethod
     {
         $filterFqcn = $this->filterFqcn;
 
         $filterMethod = new $filterFqcn(
             ...$this->getFilterConstructorParameters()
         );
-
-        $filterMethod->setEloquentContext($eloquentContext);
-
-        if (ClassUtils::usesTrait($filterMethod::class, HasModifiers::class)) {
-            $filterMethod->setModifiers($this->requestedFilter()->modifiers);
-        }
 
         return $filterMethod;
     }

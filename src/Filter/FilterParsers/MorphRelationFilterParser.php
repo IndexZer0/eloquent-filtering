@@ -82,15 +82,18 @@ class MorphRelationFilterParser implements CustomFilterParser
             }
         }
 
-        return (new FilterBuilder($pendingFilter))
+        $filterBuilder = new FilterBuilder(
+            $pendingFilter,
+            new EloquentContext(
+                $pendingFilter->model(),
+                $relation,
+            )
+        );
+
+        return $filterBuilder
             ->target($target)
             ->morphTypes($morphTypes)
-            ->build(
-                new EloquentContext(
-                    $pendingFilter->model(),
-                    $relation,
-                )
-            );
+            ->build();
     }
 
     protected function parseMorphTypesChildFilters(Model $model, array $type, $allowedMorphType): FilterCollection

@@ -30,11 +30,16 @@ class ConditionalFilterParser implements CustomFilterParser
             $pendingFilter->relation(),
         );
 
-        return (new FilterBuilder($pendingFilter))
-            ->childFilters($childFilters)
-            ->build(new EloquentContext(
+        $filterBuilder = new FilterBuilder(
+            $pendingFilter,
+            new EloquentContext(
                 $pendingFilter->model(),
                 $pendingFilter->relation(),
-            ));
+            )
+        );
+
+        return $filterBuilder
+            ->childFilters($childFilters)
+            ->build();
     }
 }

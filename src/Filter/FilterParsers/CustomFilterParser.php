@@ -19,12 +19,14 @@ class CustomFilterParser implements CustomFilterParserContract
         ?AllowedFilter $allowedFilter = null,
         ?AllowedFilterList $allowedFilterList = null,
     ): FilterMethod {
-        return (new FilterBuilder($pendingFilter))
-            ->build(
-                new EloquentContext(
-                    $pendingFilter->model(),
-                    $pendingFilter->relation(),
-                )
-            );
+        $filterBuilder = new FilterBuilder(
+            $pendingFilter,
+            new EloquentContext(
+                $pendingFilter->model(),
+                $pendingFilter->relation(),
+            )
+        );
+
+        return $filterBuilder->build();
     }
 }

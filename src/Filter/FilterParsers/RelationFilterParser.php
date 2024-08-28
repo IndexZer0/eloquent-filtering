@@ -35,14 +35,16 @@ class RelationFilterParser implements CustomFilterParser
             $relation,
         );
 
-        return (new FilterBuilder($pendingFilter))
-            ->target($target)
+        $filterBuilder = new FilterBuilder(
+            $pendingFilter,
+            new EloquentContext(
+                $pendingFilter->model(),
+                $relation,
+            )
+        );
+
+        return $filterBuilder->target($target)
             ->childFilters($childFilters)
-            ->build(
-                new EloquentContext(
-                    $pendingFilter->model(),
-                    $relation,
-                )
-            );
+            ->build();
     }
 }
