@@ -6,16 +6,21 @@ namespace IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter;
 
 trait CanBePivot
 {
-    protected bool $pivot = false;
+    protected ?string $pivotTable = null;
 
-    public function pivot(bool $pivot = true): self
+    public function pivot(string $pivotTable): self
     {
-        $this->pivot = $pivot;
+        $this->pivotTable = $pivotTable;
         return $this;
     }
 
     public function isPivot(): bool
     {
-        return $this->pivot;
+        return $this->pivotTable !== null;
+    }
+
+    public function getPivotTable(): string
+    {
+        return $this->pivotTable;
     }
 }
