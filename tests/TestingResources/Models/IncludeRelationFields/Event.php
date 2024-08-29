@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
@@ -28,7 +29,7 @@ class Event extends Model implements IsFilterable
      * ----------------------------------
      */
 
-    public function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
             Filter::field('starting_at', [FilterType::BETWEEN]),

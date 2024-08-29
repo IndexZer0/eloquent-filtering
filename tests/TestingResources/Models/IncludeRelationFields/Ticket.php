@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelat
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
@@ -26,13 +27,15 @@ class Ticket extends Model implements IsFilterable
      * ----------------------------------
      */
 
-    public function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
             Filter::field('type', [FilterType::EQUAL]),
             Filter::field('price', [FilterType::BETWEEN]),
             Filter::relation('event', [FilterType::HAS])->includeRelationFields()
-                ->andNestedRelation(Filter::relation('show', [FilterType::HAS])->includeRelationFields()),
+                ->andNestedRelation(
+                    Filter::relation('show', [FilterType::HAS])->includeRelationFields()
+                ),
         );
     }
 
