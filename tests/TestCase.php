@@ -499,6 +499,33 @@ class TestCase extends Orchestra
         );
     }
 
+    public function createManyToManyMorphRecords(): void
+    {
+        $epic1 = Epic::create([
+            'name' => 'epic-1',
+        ]);
+        $epic2 = Epic::create([
+            'name' => 'epic-2',
+        ]);
+        $issue1 = Issue::create([
+            'name' => 'issue-1',
+        ]);
+        $issue2 = Issue::create([
+            'name' => 'issue-2',
+        ]);
+        $label1 = Label::create([
+            'name' => 'label-1',
+        ]);
+        $label2 = Label::create([
+            'name' => 'label-2',
+        ]);
+
+        $epic1->labels()->save($label1, ['labeled_by' => 'user-1']);
+        $issue1->labels()->save($label1, ['labeled_by' => 'user-2']);
+        $epic2->labels()->save($label2, ['labeled_by' => 'user-3']);
+        $issue2->labels()->save($label2, ['labeled_by' => 'user-4']);
+    }
+
     public function createPackages(): void
     {
         Package::create([
