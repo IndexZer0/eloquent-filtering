@@ -220,6 +220,28 @@ class TestCase extends Orchestra
             $table->timestamps();
         });
 
+        // Many To Many Morph
+        $schema->create('epics', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('issues', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('labels', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('labelables', function (Blueprint $table): void {
+            $table->foreignId('label_id');
+            $table->morphs('labelable');
+            $table->string('labeled_by');
+        });
+
         // Package
         $schema->create('packages', function (Blueprint $table): void {
             $table->id();
