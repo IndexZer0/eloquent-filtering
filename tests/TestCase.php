@@ -216,8 +216,7 @@ class TestCase extends Orchestra
         $schema->create('image_twos', function (Blueprint $table): void {
             $table->id();
             $table->string('url');
-            $table->foreignId('imageable_id');
-            $table->foreignId('imageable_type');
+            $table->morphs('imageable');
             $table->timestamps();
         });
 
