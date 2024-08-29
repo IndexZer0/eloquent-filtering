@@ -192,7 +192,7 @@ it('can alias pivot | Filter::all()', function (): void {
             Target::alias('target_from_request_2', 'tags'),
             [FilterType::HAS],
             allowedFilters: Filter::only(
-                Filter::field(Target::alias('target_from_request_1', 'tagged_by'), [FilterType::EQUAL])->pivot(),
+                Filter::field(Target::alias('target_from_request_1', 'tagged_by'), [FilterType::EQUAL])->pivot('post_tag'),
             ),
         )
     ));

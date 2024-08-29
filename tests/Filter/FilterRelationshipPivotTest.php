@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
+use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Video;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Post;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Tag;
 
 beforeEach(function (): void {
     $this->createPostTagAndPivotRecords();
@@ -35,7 +38,7 @@ it('can filter by pivot field when allowed', function (): void {
             [FilterType::HAS],
             allowedFilters: Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),
-                Filter::field('tagged_by', [FilterType::EQUAL])->pivot(),
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
             ),
         )
     ));
@@ -50,6 +53,45 @@ it('can filter by pivot field when allowed', function (): void {
 
     expect($models->count())->toBe(1)
         ->and($models->first()->title)->toBe('post-title-1');
+
+    $query = Tag::filter([
+        [
+            'target' => 'name',
+            'type'   => '$eq',
+            'value'  => 'tag-name-1',
+        ],
+        [
+            'target' => 'posts',
+            'type'   => '$has',
+            'value'  => [
+                [
+                    'target' => 'tagged_by',
+                    'type'   => '$eq',
+                    'value'  => 'tagged-by-user-1',
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::field('name', [FilterType::EQUAL]),
+        Filter::relation(
+            'posts',
+            [FilterType::HAS],
+            allowedFilters: Filter::only(
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+            ),
+        )
+    ));
+
+    $expectedSql = <<< SQL
+        select * from "tags" where "tags"."name" = 'tag-name-1' and exists (select * from "posts" inner join "post_tag" on "posts"."id" = "post_tag"."post_id" where "tags"."id" = "post_tag"."tag_id" and "post_tag"."tagged_by" = 'tagged-by-user-1')
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(1)
+        ->and($models->first()->name)->toBe('tag-name-1');
 
 });
 
@@ -88,7 +130,7 @@ it('ors with pivot', function (): void {
             [FilterType::HAS],
             allowedFilters: Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),
-                Filter::field('tagged_by', [FilterType::EQUAL])->pivot(),
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
             ),
         )
     ));
@@ -105,3 +147,55 @@ it('ors with pivot', function (): void {
         ->and($models->first()->title)->toBe('post-title-1');
 
 });
+
+it('can not use pivot filter when not in context of a relationship', function (): void {
+
+    Tag::filter([
+        [
+            'target' => 'name',
+            'type'   => '$eq',
+            'value'  => 'tag-name-1',
+        ],
+        [
+            'target' => 'tagged_by',
+            'type'   => '$eq',
+            'value'  => 'tagged-by-user-1',
+        ],
+    ], Filter::only(
+        Filter::field('name', [FilterType::EQUAL]),
+        Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+    ));
+
+})->throws(DeniedFilterException::class, '"$eq" filter for "tagged_by" is not allowed');
+
+it('can not use pivot filter when in context of different relationship', function (): void {
+
+    Video::filter([
+        [
+            'target' => 'tag',
+            'type'   => '$has',
+            'value'  => [
+                [
+                    'target' => 'name',
+                    'type'   => '$eq',
+                    'value'  => 'tag-name-1',
+                ],
+                [
+                    'target' => 'tagged_by',
+                    'type'   => '$eq',
+                    'value'  => 'tagged-by-user-1',
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::relation(
+            'tag',
+            [FilterType::HAS],
+            allowedFilters: Filter::only(
+                Filter::field('name', [FilterType::EQUAL]),
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+            ),
+        )
+    ));
+
+})->throws(DeniedFilterException::class, '"$eq" filter for "tagged_by" is not allowed');
