@@ -1036,21 +1036,121 @@ $query = Model::filter([
 #### Pivot Filters
 
 - `Filter::field()` filters can be marked as pivot filters if you want the filter to be applied to a column on the intermediate table linking the models.
+- You must specify the intermediate table name.
 
 ```php
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
-        Filter::relation(
-            'tags',
-            [FilterType::HAS],
-            allowedFilters: Filter::only(
-                Filter::field('name', [FilterType::EQUAL]),
-                Filter::field('tagged_by', [FilterType::EQUAL])->pivot(),
-            ),
-        )
-    )
+        Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+    );
 }
+```
+
+- In the below example of `class Post` and `class Tag`. 
+  - Both classes `->includeRelationFields()` on the `Filter::relation()` filter.
+  - This allows the pivot filter to be used when in the context of the `posts` or `tags` relationship.
+    - But disallowed when not in the context of the `posts` or `tags` relationship.
+
+```php
+class Post extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+    
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+            Filter::relation('tags', [FilterType::HAS])->includeRelationFields()
+        );
+    }
+}
+
+class Tag extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class);
+    }
+    
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+            Filter::relation('posts', [FilterType::HAS])->includeRelationFields()
+        );
+    }
+}
+
+// Allowed
+Post::filter([
+    [
+        'type'   => '$has',
+        'target' => 'tags',
+        'value'  => [
+            [
+                'type'   => '$eq',
+                'target' => 'tagged_by',
+                'value'  => 'admin',
+            ]                
+        ]        
+    ]
+]);
+
+// Allowed
+Tag::filter([
+    [
+        'type'   => '$has',
+        'target' => 'posts',
+        'value'  => [
+            [
+                'type'   => '$eq',
+                'target' => 'tagged_by',
+                'value'  => 'admin',
+            ]                
+        ]        
+    ]
+]);
+
+// throws DeniedFilterException.
+Post::filter([
+    [
+        'type'   => '$eq',
+        'target' => 'tagged_by',
+        'value'  => 'admin',
+    ]
+]);
+
+// throws DeniedFilterException.
+Tag::filter([
+    [
+        'type'   => '$eq',
+        'target' => 'tagged_by',
+        'value'  => 'admin',
+    ]
+]);
+
+// throws DeniedFilterException.
+User::filter([
+    [
+        'type'   => '$has',
+        'target' => 'tags',
+        'value'  => [
+            [
+                'type'   => '$eq',
+                'target' => 'tagged_by',
+                'value'  => 'admin',
+            ]                
+        ]        
+    ]
+]);
 ```
 
 #### Defining Validation Rules
