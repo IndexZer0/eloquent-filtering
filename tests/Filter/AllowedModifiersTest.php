@@ -92,7 +92,7 @@ it('can have only specific modifiers allowed | invalid modifier', function (): v
     expect($models->count())->toBe(1)
         ->and($models->pluck('name')->toArray())->toBe(['George Raymond Richard Martin']);
 
-})->throws(DeniedFilterException::class, '"$like:start" filter for "name" is not allowed');;
+})->throws(DeniedFilterException::class, '"$like:start" filter for "name" is not allowed');
 
 it('can have zero modifiers allowed', function (): void {
 
