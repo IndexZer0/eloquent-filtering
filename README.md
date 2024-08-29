@@ -114,6 +114,7 @@ WHERE "products"."name" = 'TV'
         - [Define On Model](#define-on-model)
         - [Pass To Filter](#pass-to-filter)
         - [Including Relationship Model Filters](#including-relationship-model-filters)
+        - [Nested Relationships](#nested-relationships)
     - [Filter Structure](#filter-structure)
     - [Available Filters](#available-filters)
         - [Field Filters](#field-filters)
@@ -289,6 +290,22 @@ public function allowedFilters(): AllowedFilterList
                 Filter::field('name', [FilterType::LIKE])
             )
         )
+    );
+}
+```
+
+#### Nested Relationships
+
+There is an convenience method on `Filter::relation` that allows you to easily define nested relationships. 
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation('posts', [FilterType::HAS])->includeRelationFields()
+            ->andNestedRelation(
+                Filter::relation('comments', [FilterType::HAS])->includeRelationFields()
+            ),
     );
 }
 ```
