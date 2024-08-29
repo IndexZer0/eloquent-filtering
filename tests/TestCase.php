@@ -18,6 +18,9 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFie
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\ImageTwo;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\UserProfileTwo;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Manufacturer;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ManyToManyMorph\Epic;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ManyToManyMorph\Issue;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ManyToManyMorph\Label;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Article;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Image;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\UserProfile;
@@ -49,6 +52,8 @@ class TestCase extends Orchestra
             UserProfile::class,
             ArticleTwo::class,
             UserProfileTwo::class,
+            Epic::class,
+            Issue::class,
         ]);
 
         $this->setUpDatabase($this->app);
