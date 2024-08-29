@@ -129,6 +129,7 @@ WHERE "products"."name" = 'TV'
         - [Pivot Filters](#pivot-filters)
         - [Defining Validation Rules](#defining-validation-rules)
         - [Filter Modifiers](#filter-modifiers)
+        - [Using Dot Notation](#using-dot-notation)
         - [Suppressing Exceptions](#suppressing-exceptions)
         - [Suppression Hooks](#suppression-hooks)
         - [Condition Filters Note](#condition-filters-note)
@@ -1249,6 +1250,31 @@ public function allowedFilters(): AllowedFilterList
         Filter::field('name', [FilterType::LIKE->withoutModifiers()])
     );
 }
+```
+
+#### Using Dot Notation
+
+You can use dot notation for filter targets. This may be useful when wanting to filter by a join column.
+
+```php
+$sql = Author::filter(
+    [
+        [
+            'target' => 'age',
+            'type'   => '$eq',
+            'value'  => 20,
+        ],
+    ],
+    Filter::only(
+        Filter::field(Target::alias('age', 'author_profiles.age'), [FilterType::EQUAL]),
+    )
+)->join('author_profiles', function (JoinClause $join): void {
+    $join->on('authors.id', '=', 'author_profiles.author_id');
+})->toRawSql();
+```
+
+```sql
+select * from "authors" inner join "author_profiles" on "authors"."id" = "author_profiles"."author_id" where "author_profiles"."age" = 20
 ```
 
 #### Suppressing Exceptions
