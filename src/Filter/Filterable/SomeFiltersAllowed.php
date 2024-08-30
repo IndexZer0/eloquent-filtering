@@ -13,6 +13,7 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
+use IndexZer0\EloquentFiltering\Filter\Validation\ValidatorService;
 
 class SomeFiltersAllowed implements AllowedFilterList
 {
@@ -36,7 +37,10 @@ class SomeFiltersAllowed implements AllowedFilterList
             $allowedType = $allowedFilter->getAllowedType($pendingFilter);
 
             if ($allowedType) {
-                $pendingFilter->validate($allowedType->rules);
+
+                $validatorService = new ValidatorService();
+                $validatorService->execute($pendingFilter, $allowedType->getValidatorProvider());
+
                 $allowedFilter->markMatched();
 
                 return $pendingFilter
