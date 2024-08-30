@@ -27,6 +27,4 @@ it('can have validation rules', function (): void {
         )
     );
 
-    // TODO - MalformedFilterFormatException should extend laravel validation and also support supressible.
-
 })->throws(MalformedFilterFormatException::class, '"$between" filter does not match required format.');
