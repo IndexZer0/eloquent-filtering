@@ -6,14 +6,13 @@ namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\CustomFilterParser;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
-use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\RequestedFilter;
+use IndexZer0\EloquentFiltering\Filter\Validation\ValidatorProvider;
+use IndexZer0\EloquentFiltering\Filter\Validation\ValidatorService;
 use IndexZer0\EloquentFiltering\Utilities\ClassUtils;
 
 class PendingFilter
@@ -67,34 +66,25 @@ class PendingFilter
         return $messageParts->join(' ');
     }
 
-    public function validate(array $rules = []): void
+    public function validate(): void
     {
-        try {
-            Validator::validate(
-                $this->data,
-                count($rules) > 0 ? $rules : $this->getFilterMethodRules(),
-            );
-        } catch (ValidationException $ve) {
-            throw MalformedFilterFormatException::withMessages([
-                'filter' => ["\"{$this->requestedFilter->fullTypeString()}\" filter does not match required format."],
-                ...$ve->errors(),
-            ]);
-        }
+        $vs = new ValidatorService();
+        $vs->execute($this, $this->getFilterMethodValidatorProvider());
     }
 
-    protected function getFilterMethodRules(): array
+    protected function getFilterMethodValidatorProvider(): ValidatorProvider
     {
-        $rules = $this->filterFqcn::format();
+        $validatorProvider = ValidatorProvider::normalizeRules($this->filterFqcn::format());
 
         foreach (class_uses_recursive($this->filterFqcn) as $trait) {
             $rulesMethod = Str::lcfirst(class_basename($trait)) . 'Rules';
 
             if (method_exists($this->filterFqcn, $rulesMethod)) {
-                $rules = array_merge_recursive($rules, $this->filterFqcn::$rulesMethod());
+                $validatorProvider = $validatorProvider->merge($this->filterFqcn::$rulesMethod());
             }
         }
 
-        return $rules;
+        return $validatorProvider;
     }
 
     public function getCustomFilterParser(): CustomFilterParser
