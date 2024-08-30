@@ -7,6 +7,7 @@ namespace IndexZer0\EloquentFiltering\Filter\Contracts;
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Context\EloquentContext;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
+use IndexZer0\EloquentFiltering\Filter\Validation\ValidatorProvider;
 
 interface FilterMethod
 {
@@ -25,7 +26,7 @@ interface FilterMethod
      * Defined as laravel validator rules.
      * On fail: throws MalformedFilterFormatException.
      */
-    public static function format(): array;
+    public static function format(): array|ValidatorProvider;
 
     /*
      * Apply the filter logic.
