@@ -1372,8 +1372,6 @@ These filters are always allowed, due to these filters essentially being wrapper
 
 ##### Field Filter
 
-- Usage: `Filter::field('name', ['$lowercase'])`.
-
 ```bash
 php artisan make:eloquent-filter LowerCaseFilter --type=field
 ```
@@ -1480,6 +1478,21 @@ public function allowedFilters(): AllowedFilterList
 ```
 
 ##### Custom filter notes
+
+- To specify validation messages and attributes along with the rules, you can return a `IndexZer0\EloquentFiltering\Filter\Validation\ValidatorProvider` from the `::format()` method.
+
+```php
+public static function format(): ValidatorProvider
+{
+    return ValidatorProvider::from([
+        'value' => ['required', 'string'],
+    ], [
+        'string' => 'The :attribute must be a string.',
+    ], [
+        'value' => 'values real name',
+    ]);
+}
+```
 
 - Adding modifiers to your custom filters is achieved by:
     - Implementing `IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Modifiable` interface.
