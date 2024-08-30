@@ -1173,7 +1173,7 @@ User::filter([
 
 #### Defining Validation Rules
 
-You can define your own validation rules for any `AllowedType`.
+You can define your own validation rules, messages, and attributes for any `AllowedType`.
 
 - When a filter does not pass validation rules, a `MalformedFilterFormatException` is thrown.
 - `MalformedFilterFormatException` extends Laravels `ValidationException`.
@@ -1189,21 +1189,25 @@ class Order extends Model implements IsFilterable
     {
         return Filter::only(
             Filter::field('status', [
-                FilterType::EQUAL->withRules([
-                    'value' => [Rule::enum(OrderStatus::class)]
+                FilterType::EQUAL->withValidation([
+                    'value' => [Rule::enum(OrderStatus::class)],
+                ], [
+                    'enum' => 'The selected :attribute is invalid.',
+                ], [
+                    'value' => 'status value',
                 ]),
-                FilterType::IN->withRules([
+                FilterType::IN->withValidation([
                     'value.*' => [Rule::enum(OrderStatus::class)]
                 ])
             ]),
             Filter::field('paid_date', [
-                FilterType::BETWEEN->withRules([
+                FilterType::BETWEEN->withValidation([
                     'value.0' => ['date', 'before:value.1'],
                     'value.1' => ['date', 'after:value.0'],
                 ])
             ]),
             Filter::field('created_at', [
-                new AllowedType('$yourCustomFilterType')->withRules([
+                new AllowedType('$yourCustomFilterType')->withValidation([
                     'value' => [new YourCustomRule()],
                 ])
             ]),
