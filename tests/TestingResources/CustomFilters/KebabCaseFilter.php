@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
 use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\FieldFilter;
-use IndexZer0\EloquentFiltering\Rules\TargetRules;
 
 class KebabCaseFilter implements FilterMethod, Targetable
 {
@@ -34,7 +33,6 @@ class KebabCaseFilter implements FilterMethod, Targetable
     public static function format(): array
     {
         return [
-            ...TargetRules::get(),
             'value' => ['required', 'string'],
         ];
     }
