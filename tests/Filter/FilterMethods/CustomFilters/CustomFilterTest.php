@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters\LatestFilter;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters\OldestFilter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
 
@@ -48,3 +50,23 @@ it('can perform a custom "custom" filter | $latest', function (): void {
         ->and($models->first()->title)->toBe($models->first()->description);
 
 });
+
+it('can not perform a custom "custom" filter when not allowed | $latest', function (): void {
+
+    config()->set('eloquent-filtering.custom_filters', [
+        LatestFilter::class,
+        OldestFilter::class
+    ]);
+
+    Book::filter(
+        [
+            [
+                'type' => '$oldest',
+            ],
+        ],
+        Filter::only(
+            Filter::custom('$latest'),
+        )
+    );
+
+})->throws(DeniedFilterException::class, '"$oldest" filter is not allowed');
