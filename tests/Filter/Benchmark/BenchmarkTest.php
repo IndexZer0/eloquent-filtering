@@ -97,4 +97,4 @@ it('benchmarks', function (): void {
         'EloquentFiltering' => $eloquentFilteringFn, // 2.867ms
     ], iterations: 10000);*/
 
-})->only();
+});
