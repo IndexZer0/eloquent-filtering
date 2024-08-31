@@ -37,7 +37,7 @@ it('works when ::format() returns a ValidatorProvider', function (): void {
                     'attribute_value IS NOT A STRING',
                 ],
                 'target' => [
-                    'The target field is required.',
+                    'filter target is required.',
                 ],
             ]);
     }
