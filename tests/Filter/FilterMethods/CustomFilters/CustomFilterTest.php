@@ -55,7 +55,7 @@ it('can not perform a custom "custom" filter when not allowed | $latest', functi
 
     config()->set('eloquent-filtering.custom_filters', [
         LatestFilter::class,
-        OldestFilter::class
+        OldestFilter::class,
     ]);
 
     Book::filter(

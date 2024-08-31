@@ -21,7 +21,7 @@ trait HasTarget
             'target' => ['required', 'string'],
         ], [
             'target.required' => 'filter target is required.',
-            'target.string' => 'filter target must be a string.',
+            'target.string'   => 'filter target must be a string.',
         ]);
     }
 }
