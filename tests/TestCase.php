@@ -47,7 +47,7 @@ class TestCase extends Orchestra
             fn (string $modelName) => 'IndexZer0\\EloquentFiltering\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
 
-        Relation::enforceMorphMap([
+        Relation::morphMap([
             // Morph
             Article::class,
             UserProfile::class,
