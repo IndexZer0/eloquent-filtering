@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\ImageTwo;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\File;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Show;
 
 beforeEach(function (): void {
@@ -61,28 +61,28 @@ it('can include relation models allowed fields', function (): void {
 
 it('can include morph relation models allowed fields', function (): void {
 
-    $query = ImageTwo::filter([
+    $query = File::filter([
         [
-            'target' => 'imageable',
+            'target' => 'fileable',
             'type'   => '$hasMorph',
             'types'  => [
                 [
-                    'type'  => 'article_twos',
+                    'type'  => 'contracts',
                     'value' => [
                         [
                             'target' => 'title',
                             'type'   => '$eq',
-                            'value'  => 'article-1',
+                            'value'  => 'contract-1',
                         ],
                     ],
                 ],
                 [
-                    'type'  => 'user_profile_twos',
+                    'type'  => 'accounts',
                     'value' => [
                         [
                             'target' => 'name',
                             'type'   => '$eq',
-                            'value'  => 'user-profile-1',
+                            'value'  => 'account-1',
                         ],
                     ],
                 ],
@@ -91,7 +91,7 @@ it('can include morph relation models allowed fields', function (): void {
     ]);
 
     $expectedSql = <<< SQL
-        select * from "image_twos" where (("image_twos"."imageable_type" = 'article_twos' and exists (select * from "article_twos" where "image_twos"."imageable_id" = "article_twos"."id" and "article_twos"."title" = 'article-1')) or ("image_twos"."imageable_type" = 'user_profile_twos' and exists (select * from "user_profile_twos" where "image_twos"."imageable_id" = "user_profile_twos"."id" and "user_profile_twos"."name" = 'user-profile-1')))
+        select * from "files" where (("files"."fileable_type" = 'contracts' and exists (select * from "contracts" where "files"."fileable_id" = "contracts"."id" and "contracts"."title" = 'contract-1')) or ("files"."fileable_type" = 'accounts' and exists (select * from "accounts" where "files"."fileable_id" = "accounts"."id" and "accounts"."name" = 'account-1')))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

@@ -14,9 +14,9 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\AuthorProfile;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\ArticleTwo;
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\ImageTwo;
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\UserProfileTwo;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\Contract;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\File;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\Account;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Manufacturer;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ManyToManyMorph\Epic;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ManyToManyMorph\Issue;
@@ -48,10 +48,15 @@ class TestCase extends Orchestra
         );
 
         Relation::enforceMorphMap([
+            // Morph
             Article::class,
             UserProfile::class,
-            ArticleTwo::class,
-            UserProfileTwo::class,
+
+            // Morph (Include Relation Fields)
+            Contract::class,
+            Account::class,
+
+            // Many To Many Morph
             Epic::class,
             Issue::class,
         ]);
@@ -203,20 +208,21 @@ class TestCase extends Orchestra
             $table->timestamps();
         });
 
-        $schema->create('article_twos', function (Blueprint $table): void {
+        // Morph (Include Relation Fields)
+        $schema->create('contracts', function (Blueprint $table): void {
             $table->id();
             $table->string('title');
             $table->timestamps();
         });
-        $schema->create('user_profile_twos', function (Blueprint $table): void {
+        $schema->create('accounts', function (Blueprint $table): void {
             $table->id();
             $table->string('name');
             $table->timestamps();
         });
-        $schema->create('image_twos', function (Blueprint $table): void {
+        $schema->create('files', function (Blueprint $table): void {
             $table->id();
             $table->string('url');
-            $table->morphs('imageable');
+            $table->morphs('fileable');
             $table->timestamps();
         });
 
@@ -440,61 +446,61 @@ class TestCase extends Orchestra
         );
     }
 
-    public function createMorphTwoRecords(): void
+    public function createMorphRecordsForIncludeRelationFields(): void
     {
-        $article1 = ArticleTwo::create([
+        $contract1 = Contract::create([
             'title' => 'article-1',
         ]);
-        $article1->images()->save(
-            $image1 = new ImageTwo([
-                'url' => 'image-1',
+        $contract1->files()->save(
+            $file1 = new File([
+                'url' => 'file-1',
             ])
         );
-        $article1->images()->save(
-            $image2 = new ImageTwo([
-                'url' => 'image-2',
+        $contract1->files()->save(
+            $file2 = new File([
+                'url' => 'file-2',
             ])
         );
 
-        $article2 = ArticleTwo::create([
+        $contract2 = Contract::create([
             'title' => 'article-2',
         ]);
-        $article2->images()->save(
-            $image3 = new ImageTwo([
-                'url' => 'image-3',
+        $contract2->files()->save(
+            $file3 = new File([
+                'url' => 'file-3',
             ])
         );
-        $article2->images()->save(
-            $image4 = new ImageTwo([
-                'url' => 'image-4',
+        $contract2->files()->save(
+            $file4 = new File([
+                'url' => 'file-4',
             ])
         );
 
-        $userProfile1 = UserProfileTwo::create([
+        $account1 = Account::create([
             'name' => 'user-profile-1',
         ]);
-        $userProfile1->images()->save(
-            $image5 = new ImageTwo([
-                'url' => 'image-5',
+        $account1->files()->save(
+            $file5 = new File([
+                'url' => 'file-5',
             ])
         );
-        $userProfile1->images()->save(
-            $image6 = new ImageTwo([
-                'url' => 'image-6',
+        $account1->files()->save(
+            $file6 = new File([
+                'url' => 'file-6',
             ])
         );
 
-        $userProfile2 = UserProfileTwo::create([
+        $account2 = Account::create([
             'name' => 'user-profile-2',
         ]);
-        $userProfile2->images()->save(
-            $image7 = new ImageTwo([
-                'url' => 'image-7',
+        $account2->files()->save(
+            $file7 = new File([
+                'url' => 'file-7',
             ])
         );
-        $userProfile2->images()->save(
-            $image8 = new ImageTwo([
-                'url' => 'image-8',
+        $account2->files()->save(
+            $file8 = new File([
+                'url' => 'file-8',
             ])
         );
     }

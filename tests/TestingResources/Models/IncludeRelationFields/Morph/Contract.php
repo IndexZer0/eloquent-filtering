@@ -13,22 +13,22 @@ use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
 
-class UserProfileTwo extends Model implements IsFilterable
+class Contract extends Model implements IsFilterable
 {
     use Filterable;
     use Sortable;
 
     protected $guarded = [];
 
-    public function images(): MorphMany
+    public function files(): MorphMany
     {
-        return $this->morphMany(ImageTwo::class, 'imageable');
+        return $this->morphMany(File::class, 'fileable');
     }
 
     public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('name', [FilterType::EQUAL]),
+            Filter::field('title', [FilterType::EQUAL]),
         );
     }
 }

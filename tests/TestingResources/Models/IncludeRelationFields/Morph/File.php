@@ -14,14 +14,14 @@ use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
 use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
-class ImageTwo extends Model implements IsFilterable
+class File extends Model implements IsFilterable
 {
     use Filterable;
     use Sortable;
 
     protected $guarded = [];
 
-    public function imageable(): MorphTo
+    public function fileable(): MorphTo
     {
         return $this->morphTo();
     }
@@ -30,11 +30,11 @@ class ImageTwo extends Model implements IsFilterable
     {
         return Filter::only(
             Filter::morphRelation(
-                'imageable',
+                'fileable',
                 [FilterType::HAS_MORPH],
             )->includeRelationFields([
-                RelationUtils::getMorphAlias(ArticleTwo::class),
-                RelationUtils::getMorphAlias(UserProfileTwo::class),
+                RelationUtils::getMorphAlias(Contract::class),
+                RelationUtils::getMorphAlias(Account::class),
             ])
         );
     }
