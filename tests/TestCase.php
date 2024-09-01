@@ -24,6 +24,9 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ManyToManyMorph\La
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Article;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Image;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\UserProfile;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Business;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Client;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Invoice;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Post;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Tag;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
@@ -519,6 +522,65 @@ class TestCase extends Orchestra
         $account2->files()->save(
             $file8 = new File([
                 'url' => 'file-8',
+            ])
+        );
+    }
+
+    public function createMorphRecordsForWithoutMorphMap(): void
+    {
+        $business1 = Business::create([
+            'name' => 'business-1',
+        ]);
+        $business1->invoices()->save(
+            $invoice5 = new Invoice([
+                'amount' => 1,
+            ])
+        );
+        $business1->invoices()->save(
+            $invoice6 = new Invoice([
+                'amount' => 2,
+            ])
+        );
+
+        $business2 = Business::create([
+            'name' => 'business-2',
+        ]);
+        $business2->invoices()->save(
+            $invoice7 = new Invoice([
+                'amount' => 3,
+            ])
+        );
+        $business2->invoices()->save(
+            $invoice8 = new Invoice([
+                'amount' => 4,
+            ])
+        );
+
+        $client1 = Client::create([
+            'name' => 'client-1',
+        ]);
+        $client1->invoices()->save(
+            $invoice1 = new Invoice([
+                'amount' => 5,
+            ])
+        );
+        $client1->invoices()->save(
+            $invoice2 = new Invoice([
+                'amount' => 6,
+            ])
+        );
+
+        $client2 = Client::create([
+            'name' => 'client-2',
+        ]);
+        $client2->invoices()->save(
+            $invoice3 = new Invoice([
+                'amount' => 7,
+            ])
+        );
+        $client2->invoices()->save(
+            $invoice4 = new Invoice([
+                'amount' => 8,
             ])
         );
     }
