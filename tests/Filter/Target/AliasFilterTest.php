@@ -7,6 +7,8 @@ use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Target\Target;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Image;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Business;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Invoice;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Post;
 
 it('can alias field', function (): void {
@@ -121,6 +123,39 @@ it('can alias morph relation | morphRelation filter', function (): void {
 
     $expectedSql = <<< SQL
         select * from "images" where (("images"."imageable_type" = 'articles' and exists (select * from "articles" where "images"."imageable_id" = "articles"."id")))
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+});
+
+it('can alias morph relation morph type | morphRelation filter', function (): void {
+
+    $query = Invoice::filter(
+        [
+            [
+                'target' => 'invoiceable',
+                'type'   => '$hasMorph',
+                'types'  => [
+                    [
+                        'type' => 'business',
+                    ],
+                ],
+            ],
+        ],
+        Filter::only(
+            Filter::morphRelation(
+                'invoiceable',
+                [FilterType::HAS_MORPH],
+                Filter::morphType(
+                    Target::alias('business', Business::class),
+                )
+            )
+        )
+    );
+
+    $expectedSql = <<< SQL
+        select * from "invoices" where (("invoices"."invoiceable_type" = 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Business' and exists (select * from "businesses" where "invoices"."invoiceable_id" = "businesses"."id")))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

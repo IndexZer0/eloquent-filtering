@@ -97,7 +97,7 @@ class AllowedMorphRelation implements
             $class = Relation::getMorphedModel($relationType);
 
             $this->allowedFilters()->add(
-                new AllowedMorphType(
+                Filter::morphType(
                     $relationType,
                     Filter::only(
                         ...$this->getModelsAllowedFilters(new $class())->getAllowedFields()

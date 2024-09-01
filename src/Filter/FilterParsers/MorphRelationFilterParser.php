@@ -44,14 +44,16 @@ class MorphRelationFilterParser implements CustomFilterParser
 
             $allAllowedMorphTypes = collect($allowedFilter->allowedFilters()->getAll());
 
-            $allowedMorphType = $allAllowedMorphTypes->first(fn (AllowedMorphType $allowedMorphType) => $allowedMorphType->type === $type['type']);
+            $allowedMorphType = $allAllowedMorphTypes->first(fn (AllowedMorphType $allowedMorphType) => $allowedMorphType->getTarget($pendingFilter)->isFor($type['type']));
             if ($allowedMorphType === null) {
                 throw new DeniedFilterException($pendingFilter);
             }
             /** @var AllowedMorphType $allowedMorphType */
             $allowedMorphType->markMatched();
 
-            if ($type['type'] === '*') {
+            $morphTypeTarget = $allowedMorphType->getTarget($pendingFilter)->getReal();
+
+            if ($morphTypeTarget === '*') {
                 $model = $pendingFilter->model();
                 $polymorphicTypes = $model->newModelQuery()->distinct()->pluck($relation->getMorphType())->filter()->all();
 
@@ -71,12 +73,12 @@ class MorphRelationFilterParser implements CustomFilterParser
                 }
             } else {
 
-                $model = $this->getModel($type['type']);
+                $model = $this->getModel($morphTypeTarget);
 
                 $filters = $this->parseMorphTypesChildFilters($model, $type, $allowedMorphType);
 
                 $morphTypes->push(new MorphType(
-                    $type['type'],
+                    $morphTypeTarget,
                     $filters
                 ));
             }

@@ -76,10 +76,13 @@ class Filter
     }
 
     public static function morphType(
-        string $type,
+        string|AliasedTarget $type,
         AllowedFilterList $allowedFilters = new NoFiltersAllowed(),
     ): AllowedMorphType {
-        return new AllowedMorphType($type, $allowedFilters);
+        return new AllowedMorphType(
+            self::createAlias($type),
+            $allowedFilters
+        );
     }
 
     public static function custom(string|AllowedType $type): AllowedCustomFilter

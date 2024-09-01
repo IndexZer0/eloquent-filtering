@@ -22,7 +22,7 @@ class AllowedMorphType implements
     use CanBeRequired;
 
     public function __construct(
-        public string $type,
+        protected Target $target,
         public AllowedFilterList $allowedFilterList
     ) {
     }
@@ -39,11 +39,11 @@ class AllowedMorphType implements
 
     public function getTarget(PendingFilter $pendingFilter): ?Target
     {
-        return \IndexZer0\EloquentFiltering\Target\Target::alias($this->type);
+        return $this->target;
     }
 
     public function getIdentifier(): string
     {
-        return "\"{$this->type}\"";
+        return "\"{$this->target->target()}\"";
     }
 }
