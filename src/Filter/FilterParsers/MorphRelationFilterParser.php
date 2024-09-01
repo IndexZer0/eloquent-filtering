@@ -56,10 +56,11 @@ class MorphRelationFilterParser implements CustomFilterParser
                 $polymorphicTypes = $model->newModelQuery()->distinct()->pluck($relation->getMorphType())->filter()->all();
 
                 foreach ($polymorphicTypes as $polymorphicType) {
-                    $modelClass = Relation::getMorphedModel($polymorphicType);
+
+                    $model = $this->getModel($polymorphicType);
 
                     $filters = $this->parseMorphTypesChildFilters(
-                        new $modelClass(),
+                        $model,
                         $type,
                         $allowedMorphType,
                     );
@@ -69,9 +70,8 @@ class MorphRelationFilterParser implements CustomFilterParser
                     ));
                 }
             } else {
-                $modelClass = Relation::getMorphedModel($type['type']);
 
-                $model = $modelClass ? new $modelClass() : $pendingFilter->model();
+                $model = $this->getModel($type['type']);
 
                 $filters = $this->parseMorphTypesChildFilters($model, $type, $allowedMorphType);
 
@@ -100,5 +100,13 @@ class MorphRelationFilterParser implements CustomFilterParser
     {
         $filterParser = resolve(FilterParser::class);
         return $filterParser->parse($model, data_get($type, 'value', []), $allowedMorphType->allowedFilters());
+    }
+
+    protected function getModel(string $polymorphicType): Model
+    {
+        $modelFqcn = Relation::getMorphedModel($polymorphicType);
+        // If model fqcn is null, this model is not registered in the morph map.
+        // We can assume that the polymorphic type will be the fqcn.
+        return $modelFqcn === null ? new $polymorphicType() : new$modelFqcn();
     }
 }
