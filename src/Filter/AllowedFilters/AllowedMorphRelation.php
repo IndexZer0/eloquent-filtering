@@ -33,9 +33,9 @@ class AllowedMorphRelation implements
     protected Collection $includeRelationFields;
 
     public function __construct(
-        protected Target                  $target,
-        protected AllowedTypes            $types,
-        protected AllowedFilterList        $allowedFilterList,
+        protected Target            $target,
+        protected AllowedTypes      $types,
+        protected AllowedFilterList $allowedFilterList,
     ) {
         $this->includeRelationFields = collect();
     }
