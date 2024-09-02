@@ -18,6 +18,8 @@ interface RequireableFilter
 
     public function isScoped(): bool;
 
+    public function getRequiredMessage(): ?string;
+
     public function markMatched(): void;
 
     public function hasBeenMatched(): bool;

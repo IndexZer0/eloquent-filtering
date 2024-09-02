@@ -210,3 +210,64 @@ it('does not throw RequiredFilterException when required filters have been match
     }
 
 });
+
+it('allows specifying required failed validation message', function (): void {
+
+    config()->set('eloquent-filtering.custom_filters', [LatestFilter::class]);
+
+    try {
+        Author::filter(
+            [], // Filters intentionally empty.
+            Filter::only(
+                Filter::field('name', [FilterType::LIKE])->required(message: '1 is required'),
+                Filter::relation(
+                    'books',
+                    [FilterType::HAS],
+                    Filter::only(
+                        Filter::field('title', [FilterType::LIKE])->required(message: '2 is required'),
+                    )
+                )->required(message: '3 is required'),
+                Filter::morphRelation(
+                    'imageable',
+                    [FilterType::HAS_MORPH],
+                    Filter::morphType(
+                        'articles',
+                        Filter::only(
+                            Filter::field('title', [FilterType::LIKE])->required(message: '4 is required')
+                        )
+                    )->required(message: '5 is required')
+                )->required(message: '6 is required'),
+                Filter::custom('$latest')->required(message: '7 is required')
+            )
+        );
+
+        $this->fail('Should have thrown exception');
+
+    } catch (RequiredFilterException $rfe) {
+        expect($rfe->getMessage())->toBe('1 is required (and 6 more errors)')
+            ->and($rfe->errors())->toBe([
+                'name' => [
+                    '1 is required',
+                ],
+                'books' => [
+                    '3 is required',
+                ],
+                'books.title' => [
+                    '2 is required',
+                ],
+                'imageable' => [
+                    '6 is required',
+                ],
+                'imageable.articles' => [
+                    '5 is required',
+                ],
+                'imageable.articles.title' => [
+                    '4 is required',
+                ],
+                '$latest' => [
+                    '7 is required',
+                ],
+            ]);
+    }
+
+});

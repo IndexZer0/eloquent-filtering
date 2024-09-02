@@ -43,9 +43,12 @@ class RequiredFiltersChecker
             $identifier = $allowedFilter->getIdentifier();
 
             if ($this->filterShouldBeAdded($allowedFilter, $parentWasMatched)) {
+                $message = $allowedFilter->getRequiredMessage() ??
+                    collect([Str::ucfirst($identifier), 'filter is required.'])->join(' ');
+
                 $messageBag->add(
                     $identifier,
-                    collect([Str::ucfirst($identifier), 'filter is required.'])->join(' ')
+                    $message
                 );
             }
 
