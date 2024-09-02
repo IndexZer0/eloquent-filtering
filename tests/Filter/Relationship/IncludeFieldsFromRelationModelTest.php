@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\File;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Subscription;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Show;
 
 beforeEach(function (): void {
-
+    $this->createMorphRecordsForIncludeRelationFields();
+    $this->createMorphRecordsForWithoutMorphMapAndIncludeRelationFields();
 });
 
 it('can include relation models allowed fields', function (): void {
@@ -98,6 +100,49 @@ it('can include morph relation models allowed fields', function (): void {
 
     $models = $query->get();
 
-    expect($models->count())->toBe(0);
+    expect($models->count())->toBe(4);
+
+});
+
+it('can include morph relation models allowed fields | no morph map', function (): void {
+
+    $query = Subscription::filter([
+        [
+            'target' => 'subscribable',
+            'type'   => '$hasMorph',
+            'types'  => [
+                [
+                    'type'  => 'food_delivery_services',
+                    'value' => [
+                        [
+                            'target' => 'name',
+                            'type'   => '$eq',
+                            'value'  => 'food-delivery-service-1',
+                        ],
+                    ],
+                ],
+                [
+                    'type'  => 'sasses',
+                    'value' => [
+                        [
+                            'target' => 'name',
+                            'type'   => '$eq',
+                            'value'  => 'sass-1',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ]);
+
+    $expectedSql = <<< SQL
+        select * from "subscriptions" where (("subscriptions"."subscribable_type" = 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\FoodDeliveryService' and exists (select * from "food_delivery_services" where "subscriptions"."subscribable_id" = "food_delivery_services"."id" and "food_delivery_services"."name" = 'food-delivery-service-1')) or ("subscriptions"."subscribable_type" = 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Sass' and exists (select * from "sasses" where "subscriptions"."subscribable_id" = "sasses"."id" and "sasses"."name" = 'sass-1')))
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(4);
 
 });
