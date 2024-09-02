@@ -488,7 +488,7 @@ class TestCase extends Orchestra
     public function createMorphRecordsForIncludeRelationFields(): void
     {
         $contract1 = Contract::create([
-            'title' => 'article-1',
+            'title' => 'contract-1',
         ]);
         $contract1->files()->save(
             $file1 = new File([
@@ -502,7 +502,7 @@ class TestCase extends Orchestra
         );
 
         $contract2 = Contract::create([
-            'title' => 'article-2',
+            'title' => 'contract-2',
         ]);
         $contract2->files()->save(
             $file3 = new File([
@@ -516,7 +516,7 @@ class TestCase extends Orchestra
         );
 
         $account1 = Account::create([
-            'name' => 'user-profile-1',
+            'name' => 'account-1',
         ]);
         $account1->files()->save(
             $file5 = new File([
@@ -530,7 +530,7 @@ class TestCase extends Orchestra
         );
 
         $account2 = Account::create([
-            'name' => 'user-profile-2',
+            'name' => 'account-2',
         ]);
         $account2->files()->save(
             $file7 = new File([
