@@ -39,7 +39,6 @@ class RequiredFiltersChecker
 
         $allowedFilters = $allowedFilterList->getAll();
         foreach ($allowedFilters as $allowedFilter) {
-            /** @var AllowedFilter $allowedFilter */
             $identifier = $allowedFilter->getIdentifier();
 
             if ($this->filterShouldBeAdded($allowedFilter, $parentWasMatched)) {
