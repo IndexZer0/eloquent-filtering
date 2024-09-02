@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
 use IndexZer0\EloquentFiltering\Filter\Contracts\CustomFilterParser;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\RequestedFilter;
 use IndexZer0\EloquentFiltering\Filter\Validation\ValidatorProvider;
 use IndexZer0\EloquentFiltering\Filter\Validation\ValidatorService;
@@ -22,7 +23,9 @@ class PendingFilter
         protected string $filterFqcn,
         protected array  $data,
         protected Model $model,
-        protected ?Relation $relation = null,
+        protected ?Relation $relation,
+        protected ?PendingFilter $previousPendingFilter,
+        protected int $index,
     ) {
     }
 
@@ -118,5 +121,23 @@ class PendingFilter
         );
 
         return $filterMethod;
+    }
+
+    public function identifier(): string
+    {
+        $type = $this->requestedFilter->type;
+        if ($type === FilterType::OR->value || $type === FilterType::AND->value) {
+            return "{$type}.{$this->index}";
+        }
+        return $this->desiredTarget() ?? $type;
+    }
+
+    public function nestedIdentifer(): string
+    {
+        $parts = collect([$this->identifier()]);
+        if ($this->previousPendingFilter) {
+            $parts->prepend($this->previousPendingFilter->nestedIdentifer());
+        }
+        return $parts->join('.');
     }
 }

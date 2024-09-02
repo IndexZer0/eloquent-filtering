@@ -19,6 +19,7 @@ class FilterParser implements FilterParserContract
 
     protected Model $model;
     protected ?Relation $relation;
+    protected ?PendingFilter $previousPendingFilter;
 
     protected AllowedFilterList $allowedFilterList;
 
@@ -35,15 +36,17 @@ class FilterParser implements FilterParserContract
         array $filters,
         AllowedFilterList $allowedFilterList,
         ?Relation $relation = null,
+        ?PendingFilter $previousPendingFilter = null
     ): FilterCollection {
         $this->model = $model;
         $this->relation = $relation;
         $this->allowedFilterList = $allowedFilterList;
+        $this->previousPendingFilter = $previousPendingFilter;
 
-        foreach ($filters as $filter) {
-            Suppression::honour(function () use ($filter): void {
+        foreach ($filters as $index => $filter) {
+            Suppression::honour(function () use ($index, $filter): void {
                 $this->filterCollection->push(
-                    $this->parseFilter($filter)
+                    $this->parseFilter($index, $filter)
                 );
             });
         }
@@ -51,12 +54,20 @@ class FilterParser implements FilterParserContract
         return $this->filterCollection;
     }
 
-    private function parseFilter(mixed $filter): FilterMethod
+    private function parseFilter(int $index, mixed $filter): FilterMethod
     {
         $requestedFilter = $this->parseFilterType($filter);
         $filterFqcn = $this->findFilterMethodFqcn($requestedFilter->type);
 
-        $pendingFilter = new PendingFilter($requestedFilter, $filterFqcn, $filter, $this->model, $this->relation);
+        $pendingFilter = new PendingFilter(
+            $requestedFilter,
+            $filterFqcn,
+            $filter,
+            $this->model,
+            $this->relation,
+            $this->previousPendingFilter,
+            $index
+        );
 
         $pendingFilter->validate();
 

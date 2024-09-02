@@ -65,6 +65,7 @@ class MorphRelationFilterParser implements CustomFilterParser
                         $model,
                         $type,
                         $allowedMorphType,
+                        $pendingFilter,
                     );
                     $morphTypes->push(new MorphType(
                         $polymorphicType,
@@ -75,7 +76,12 @@ class MorphRelationFilterParser implements CustomFilterParser
 
                 $model = $this->getModel($morphTypeTarget);
 
-                $filters = $this->parseMorphTypesChildFilters($model, $type, $allowedMorphType);
+                $filters = $this->parseMorphTypesChildFilters(
+                    $model,
+                    $type,
+                    $allowedMorphType,
+                    $pendingFilter
+                );
 
                 $morphTypes->push(new MorphType(
                     $morphTypeTarget,
@@ -98,10 +104,19 @@ class MorphRelationFilterParser implements CustomFilterParser
             ->build();
     }
 
-    protected function parseMorphTypesChildFilters(Model $model, array $type, $allowedMorphType): FilterCollection
-    {
+    protected function parseMorphTypesChildFilters(
+        Model $model,
+        array $type,
+        AllowedMorphType $allowedMorphType,
+        PendingFilter $pendingFilter,
+    ): FilterCollection {
         $filterParser = resolve(FilterParser::class);
-        return $filterParser->parse($model, data_get($type, 'value', []), $allowedMorphType->allowedFilters());
+        return $filterParser->parse(
+            $model,
+            data_get($type, 'value', []),
+            $allowedMorphType->allowedFilters(),
+            previousPendingFilter: $pendingFilter,
+        );
     }
 
     protected function getModel(string $polymorphicType): Model

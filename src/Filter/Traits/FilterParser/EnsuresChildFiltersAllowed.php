@@ -36,6 +36,7 @@ trait EnsuresChildFiltersAllowed
                 $filters,
                 $allowedFilterList,
                 $relation ?? $pendingFilter->relation(),
+                $pendingFilter,
             );
         }
 
