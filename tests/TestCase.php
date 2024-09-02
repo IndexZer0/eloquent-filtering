@@ -247,6 +247,24 @@ class TestCase extends Orchestra
             $table->timestamps();
         });
 
+        // Morph (Without Morph Map & Include Relation Fields)
+        $schema->create('sasses', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('food_delivery_services', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('subscriptions', function (Blueprint $table): void {
+            $table->id();
+            $table->unsignedInteger('amount');
+            $table->morphs('subscribable');
+            $table->timestamps();
+        });
+
         // Many To Many Morph
         $schema->create('epics', function (Blueprint $table): void {
             $table->id();
