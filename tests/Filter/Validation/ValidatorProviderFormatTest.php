@@ -28,15 +28,15 @@ it('works when ::format() returns a ValidatorProvider', function (): void {
 
     } catch (MalformedFilterFormatException $mffe) {
 
-        expect($mffe->getMessage())->toBe('"$validatorProvider" filter does not match required format. (and 2 more errors)')
+        expect($mffe->getMessage())->toBe('$validatorProvider filter does not match required format. (and 2 more errors)')
             ->and($mffe->errors())->toBe([
-                'filter' => [
-                    '"$validatorProvider" filter does not match required format.',
+                '$validatorProvider' => [
+                    '$validatorProvider filter does not match required format.',
                 ],
-                'value' => [
+                '$validatorProvider.value' => [
                     'attribute_value IS NOT A STRING',
                 ],
-                'target' => [
+                '$validatorProvider.target' => [
                     'filter target is required.',
                 ],
             ]);

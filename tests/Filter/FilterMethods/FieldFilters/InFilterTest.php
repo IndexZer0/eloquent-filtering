@@ -76,76 +76,136 @@ it('can perform $in filter with :null modifier', function (): void {
 it('only accepts string, int, float, null for value', function (
     array $value_container,
     ?string $expected_sql,
-    bool $expect_exception
+    bool $expect_exception,
+    ?string $expected_exception_message,
+    ?array $expected_errors
 ): void {
 
-    if ($expect_exception) {
-        $this->expectException(MalformedFilterFormatException::class);
-        $this->expectExceptionMessage('"$in:null" filter does not match required format.');
+    try {
+
+        $query = Author::filter(
+            [
+                [
+                    'target' => 'name',
+                    'type'   => '$in:null',
+                    ...$value_container,
+                ],
+            ],
+            Filter::only(
+                Filter::field('name', [FilterType::IN]),
+            )
+        );
+
+        if ($expect_exception) {
+            $this->fail('Should have thrown an exception');
+        }
+
+        expect($query->toRawSql())->toBe($expected_sql);
+
+    } catch (MalformedFilterFormatException $mffe) {
+        if (!$expect_exception) {
+            $this->fail('Should not have thrown an exception');
+        }
+
+        expect($mffe->getMessage())->toBe($expected_exception_message)
+            ->and($mffe->errors())->toBe($expected_errors);
+
     }
 
-    $query = Author::filter(
-        [
-            [
-                'target' => 'name',
-                'type'   => '$in:null',
-                ...$value_container,
-            ],
-        ],
-        Filter::only(
-            Filter::field('name', [FilterType::IN]),
-        )
-    );
-
-    expect($query->toRawSql())->toBe($expected_sql);
 
 })->with([
     // Failing Cases
     'no value' => [
-        'value_container'  => [],
-        'expected_sql'     => null,
-        'expect_exception' => true,
-    ],
-    'bool' => [
-        'value_container'  => ['value' => [true], ],
-        'expected_sql'     => null,
-        'expect_exception' => true,
+        'value_container'            => [],
+        'expected_sql'               => null,
+        'expect_exception'           => true,
+        'expected_exception_message' => 'Name filter does not match required format. (and 1 more error)',
+        'expected_errors'            => [
+            'name' => [
+                'Name filter does not match required format.',
+            ],
+            'name.value' => [
+                'The value field is required.',
+            ],
+        ],
     ],
     'empty array' => [
-        'value_container'  => ['value' => [[]], ],
-        'expected_sql'     => null,
-        'expect_exception' => true,
+        'value_container'            => ['value' => [[]], ],
+        'expected_sql'               => null,
+        'expect_exception'           => true,
+        'expected_exception_message' => 'Name filter does not match required format. (and 1 more error)',
+        'expected_errors'            => [
+            'name' => [
+                'Name filter does not match required format.',
+            ],
+            'name.value.0' => [
+                'The value.0 must be string, integer, float or null.',
+            ],
+        ],
     ],
-    'object' => [
-        'value_container'  => ['value' => [new stdClass()], ],
-        'expected_sql'     => null,
-        'expect_exception' => true,
+    'array containing bool' => [
+        'value_container'            => ['value' => [true], ],
+        'expected_sql'               => null,
+        'expect_exception'           => true,
+        'expected_exception_message' => 'Name filter does not match required format. (and 1 more error)',
+        'expected_errors'            => [
+            'name' => [
+                'Name filter does not match required format.',
+            ],
+            'name.value.0' => [
+                'The value.0 must be string, integer, float or null.',
+            ],
+        ],
+    ],
+    'array containing object' => [
+        'value_container'            => ['value' => [new stdClass()], ],
+        'expected_sql'               => null,
+        'expect_exception'           => true,
+        'expected_exception_message' => 'Name filter does not match required format. (and 1 more error)',
+        'expected_errors'            => [
+            'name' => [
+                'Name filter does not match required format.',
+            ],
+            'name.value.0' => [
+                'The value.0 must be string, integer, float or null.',
+            ],
+        ],
     ],
 
     // Success Cases
-    'null' => [
-        'value_container'  => ['value' => [null], ],
-        'expected_sql'     => 'select * from "authors" where (0 = 1 or "authors"."name" is null)',
-        'expect_exception' => false,
+    'array containing null' => [
+        'value_container'            => ['value' => [null], ],
+        'expected_sql'               => 'select * from "authors" where (0 = 1 or "authors"."name" is null)',
+        'expect_exception'           => false,
+        'expected_exception_message' => null,
+        'expected_errors'            => null,
     ],
-    'int' => [
-        'value_container'  => ['value' => [420]],
-        'expected_sql'     => 'select * from "authors" where "authors"."name" in (420)',
-        'expect_exception' => false,
+    'array containing int' => [
+        'value_container'            => ['value' => [420]],
+        'expected_sql'               => 'select * from "authors" where "authors"."name" in (420)',
+        'expect_exception'           => false,
+        'expected_exception_message' => null,
+        'expected_errors'            => null,
     ],
-    'string' => [
-        'value_container'  => ['value' => ['string'], ],
-        'expected_sql'     => 'select * from "authors" where "authors"."name" in (\'string\')',
-        'expect_exception' => false,
+    'array containing string' => [
+        'value_container'            => ['value' => ['string'], ],
+        'expected_sql'               => 'select * from "authors" where "authors"."name" in (\'string\')',
+        'expect_exception'           => false,
+        'expected_exception_message' => null,
+        'expected_errors'            => null,
     ],
-    'numeric_string' => [
-        'value_container'  => ['value' => ['1'], ],
-        'expected_sql'     => 'select * from "authors" where "authors"."name" in (\'1\')',
-        'expect_exception' => false,
+    'array containing numeric_string' => [
+        'value_container'            => ['value' => ['1'], ],
+        'expected_sql'               => 'select * from "authors" where "authors"."name" in (\'1\')',
+        'expect_exception'           => false,
+        'expected_exception_message' => null,
+        'expected_errors'            => null,
     ],
-    'float' => [
-        'value_container'  => ['value' => [420.69], ],
-        'expected_sql'     => 'select * from "authors" where "authors"."name" in (420.69)',
-        'expect_exception' => false,
+    'array containing float' => [
+        'value_container'            => ['value' => [420.69], ],
+        'expected_sql'               => 'select * from "authors" where "authors"."name" in (420.69)',
+        'expect_exception'           => false,
+        'expected_exception_message' => null,
+        'expected_errors'            => null,
     ],
 ]);

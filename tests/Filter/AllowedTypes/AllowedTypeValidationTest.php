@@ -27,7 +27,7 @@ it('can set validation rules', function (): void {
         )
     );
 
-})->throws(MalformedFilterFormatException::class, '"$between" filter does not match required format.');
+})->throws(MalformedFilterFormatException::class, 'Starting_at filter does not match required format. (and 2 more errors)');
 
 it('can set validation messages and attributes', function (): void {
 
@@ -58,15 +58,15 @@ it('can set validation messages and attributes', function (): void {
         $this->fail('Should have thrown exception');
 
     } catch (MalformedFilterFormatException $mffe) {
-        expect($mffe->getMessage())->toBe('"$between" filter does not match required format. (and 2 more errors)')
+        expect($mffe->getMessage())->toBe('Starting_at filter does not match required format. (and 2 more errors)')
             ->and($mffe->errors())->toBe([
-                'filter' => [
-                    '"$between" filter does not match required format.',
+                'starting_at' => [
+                    'Starting_at filter does not match required format.',
                 ],
-                'value.0' => [
+                'starting_at.value.0' => [
                     'first date MUST BE A DATE',
                 ],
-                'value.1' => [
+                'starting_at.value.1' => [
                     'second date MUST BE A DATE',
                 ],
             ]);
