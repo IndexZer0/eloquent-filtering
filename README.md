@@ -1004,14 +1004,26 @@ public function allowedFilters(): AllowedFilterList
 
 $query = Model::filter([]);
 // RequiredFilterException errors
-'Missing required filters.' => [
-    '"name" filter is required.',
-    '"books" filter is required.',
-    '"books" -> "title" filter is required.',
-    '"imageable" filter is required.',
-    '"imageable" -> "articles" filter is required.',
-    '"imageable" -> "articles" -> "title" filter is required.',
-    '"$latest" filter is required.',
+'name' => [
+    'Name filter is required.',
+],
+'books' => [
+    'Books filter is required.',
+],
+'books.title' => [
+    'Title filter is required.',
+],
+'imageable' => [
+    'Imageable filter is required.',
+],
+'imageable.articles' => [
+    'Articles filter is required.',
+],
+'imageable.articles.title' => [
+    'Title filter is required.',
+],
+'$latest' => [
+    '$latest filter is required.',
 ],
 ```
 
@@ -1046,9 +1058,9 @@ $query = Model::filter([
     ]
 ]);
 // RequiredFilterException errors
-'Missing required filters.' => [
-    '"books" -> "title" filter is required.',
-]
+'books.title' => [
+    'Title filter is required.',
+],
 ```
 
 #### Pivot Filters
