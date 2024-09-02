@@ -59,4 +59,9 @@ class RelationUtils
     {
         return array_search($className, Relation::$morphMap, strict: true) ?: $className;
     }
+
+    public static function existsInMorphMap(string $className): bool
+    {
+        return collect(Relation::$morphMap)->containsStrict($className);
+    }
 }
