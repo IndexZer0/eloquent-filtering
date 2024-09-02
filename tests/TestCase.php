@@ -17,6 +17,9 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\Contract;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\File;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\Account;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\FoodDeliveryService;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Sass;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Subscription;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Manufacturer;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ManyToManyMorph\Epic;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ManyToManyMorph\Issue;
@@ -597,8 +600,66 @@ class TestCase extends Orchestra
             ])
         );
         $client2->invoices()->save(
-            $invoice4 = new Invoice([
             $invoice8 = new Invoice([
+                'amount' => 8,
+            ])
+        );
+    }
+
+    public function createMorphRecordsForWithoutMorphMapAndIncludeRelationFields(): void
+    {
+        $foodDeliveryService1 = FoodDeliveryService::create([
+            'name' => 'food-delivery-service-1',
+        ]);
+        $foodDeliveryService1->subscriptions()->save(
+            $subscription1 = new Subscription([
+                'amount' => 1,
+            ])
+        );
+        $foodDeliveryService1->subscriptions()->save(
+            $subscription2 = new Subscription([
+                'amount' => 2,
+            ])
+        );
+
+        $foodDeliveryService2 = FoodDeliveryService::create([
+            'name' => 'food-delivery-service-2',
+        ]);
+        $foodDeliveryService2->subscriptions()->save(
+            $subscription3 = new Subscription([
+                'amount' => 3,
+            ])
+        );
+        $foodDeliveryService2->subscriptions()->save(
+            $subscription4 = new Subscription([
+                'amount' => 4,
+            ])
+        );
+
+        $sass1 = Sass::create([
+            'name' => 'sass-1',
+        ]);
+        $sass1->subscriptions()->save(
+            $subscription5 = new Subscription([
+                'amount' => 5,
+            ])
+        );
+        $sass1->subscriptions()->save(
+            $subscription6 = new Subscription([
+                'amount' => 6,
+            ])
+        );
+
+        $sass2 = Sass::create([
+            'name' => 'sass-2',
+        ]);
+        $sass2->subscriptions()->save(
+            $subscription7 = new Subscription([
+                'amount' => 7,
+            ])
+        );
+        $sass2->subscriptions()->save(
+            $subscription8 = new Subscription([
                 'amount' => 8,
             ])
         );
