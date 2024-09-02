@@ -57,6 +57,6 @@ class AllowedField implements
 
     public function getIdentifier(): string
     {
-        return "\"{$this->target->target()}\"";
+        return $this->target->target();
     }
 }

@@ -44,6 +44,6 @@ class AllowedMorphType implements
 
     public function getIdentifier(): string
     {
-        return "\"{$this->target->target()}\"";
+        return $this->target->target();
     }
 }

@@ -42,16 +42,28 @@ it('throws RequiredFilterException when required filters have not been matched',
         $this->fail('Should have thrown exception');
 
     } catch (RequiredFilterException $rfe) {
-        expect($rfe->getMessage())->toBe('"name" filter is required. (and 6 more errors)')
+        expect($rfe->getMessage())->toBe('Name filter is required. (and 6 more errors)')
             ->and($rfe->errors())->toBe([
-                'Missing required filters.' => [
-                    '"name" filter is required.',
-                    '"books" filter is required.',
-                    '"books" -> "title" filter is required.',
-                    '"imageable" filter is required.',
-                    '"imageable" -> "articles" filter is required.',
-                    '"imageable" -> "articles" -> "title" filter is required.',
-                    '"$latest" filter is required.',
+                'name' => [
+                    'Name filter is required.',
+                ],
+                'books' => [
+                    'Books filter is required.',
+                ],
+                'books.title' => [
+                    'Title filter is required.',
+                ],
+                'imageable' => [
+                    'Imageable filter is required.',
+                ],
+                'imageable.articles' => [
+                    'Articles filter is required.',
+                ],
+                'imageable.articles.title' => [
+                    'Title filter is required.',
+                ],
+                '$latest' => [
+                    '$latest filter is required.',
                 ],
             ]);
     }
@@ -103,14 +115,22 @@ it('only includes required errors when parent has been matched when using scoped
         $this->fail('Should have thrown exception');
 
     } catch (RequiredFilterException $rfe) {
-        expect($rfe->getMessage())->toBe('"name" filter is required. (and 4 more errors)')
+        expect($rfe->getMessage())->toBe('Name filter is required. (and 4 more errors)')
             ->and($rfe->errors())->toBe([
-                'Missing required filters.' => [
-                    '"name" filter is required.',
-                    '"books" filter is required.',
-                    '"books2" -> "title" filter is required.',
-                    '"imageable" filter is required.',
-                    '"$latest" filter is required.',
+                'name' => [
+                    'Name filter is required.',
+                ],
+                'books' => [
+                    'Books filter is required.',
+                ],
+                'books2.title' => [
+                    'Title filter is required.',
+                ],
+                'imageable' => [
+                    'Imageable filter is required.',
+                ],
+                '$latest' => [
+                    '$latest filter is required.',
                 ],
             ]);
     }

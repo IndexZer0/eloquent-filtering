@@ -40,6 +40,6 @@ class AllowedCustomFilter implements AllowedFilter, RequireableFilter
 
     public function getIdentifier(): string
     {
-        return "\"{$this->type->type}\"";
+        return $this->type->type;
     }
 }
