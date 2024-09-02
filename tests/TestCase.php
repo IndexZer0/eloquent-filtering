@@ -550,12 +550,12 @@ class TestCase extends Orchestra
             'name' => 'business-1',
         ]);
         $business1->invoices()->save(
-            $invoice5 = new Invoice([
+            $invoice1 = new Invoice([
                 'amount' => 1,
             ])
         );
         $business1->invoices()->save(
-            $invoice6 = new Invoice([
+            $invoice2 = new Invoice([
                 'amount' => 2,
             ])
         );
@@ -564,12 +564,12 @@ class TestCase extends Orchestra
             'name' => 'business-2',
         ]);
         $business2->invoices()->save(
-            $invoice7 = new Invoice([
+            $invoice3 = new Invoice([
                 'amount' => 3,
             ])
         );
         $business2->invoices()->save(
-            $invoice8 = new Invoice([
+            $invoice4 = new Invoice([
                 'amount' => 4,
             ])
         );
@@ -578,12 +578,12 @@ class TestCase extends Orchestra
             'name' => 'client-1',
         ]);
         $client1->invoices()->save(
-            $invoice1 = new Invoice([
+            $invoice5 = new Invoice([
                 'amount' => 5,
             ])
         );
         $client1->invoices()->save(
-            $invoice2 = new Invoice([
+            $invoice6 = new Invoice([
                 'amount' => 6,
             ])
         );
@@ -592,12 +592,13 @@ class TestCase extends Orchestra
             'name' => 'client-2',
         ]);
         $client2->invoices()->save(
-            $invoice3 = new Invoice([
+            $invoice7 = new Invoice([
                 'amount' => 7,
             ])
         );
         $client2->invoices()->save(
             $invoice4 = new Invoice([
+            $invoice8 = new Invoice([
                 'amount' => 8,
             ])
         );
