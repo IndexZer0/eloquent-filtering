@@ -12,7 +12,6 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
-use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class File extends Model implements IsFilterable
 {
@@ -33,8 +32,8 @@ class File extends Model implements IsFilterable
                 'fileable',
                 [FilterType::HAS_MORPH],
             )->includeRelationFields([
-                RelationUtils::getMorphAlias(Contract::class),
-                RelationUtils::getMorphAlias(Account::class),
+                Contract::class,
+                Account::class,
             ])
         );
     }

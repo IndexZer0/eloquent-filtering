@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Contracts\Target;
@@ -21,6 +20,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBeRequired;
 use IndexZer0\EloquentFiltering\Utilities\ClassUtils;
+use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class AllowedMorphRelation implements
     AllowedFilter,
@@ -80,9 +80,9 @@ class AllowedMorphRelation implements
      * -----------------------------
      */
 
-    public function includeRelationFields(array $types): self
+    public function includeRelationFields(array $relatedModelFqcns): self
     {
-        $this->includeRelationFields = collect($types);
+        $this->includeRelationFields = collect($relatedModelFqcns);
         return $this;
     }
 
@@ -92,15 +92,24 @@ class AllowedMorphRelation implements
             return;
         }
 
-        foreach ($this->includeRelationFields as $relationType) {
+        foreach ($this->includeRelationFields as $relatedModelFqcn) {
 
-            $class = Relation::getMorphedModel($relationType);
+            $relatedModel = new $relatedModelFqcn();
+            $relatedModelTable = $relatedModel->getTable();
+
+            $hasMorphMap = RelationUtils::existsInMorphMap($relatedModelFqcn);
+
+            if ($hasMorphMap) {
+                $target = RelationUtils::getMorphAlias($relatedModelFqcn);
+            } else {
+                $target = \IndexZer0\EloquentFiltering\Target\Target::alias($relatedModelTable, $relatedModelFqcn);
+            }
 
             $this->allowedFilters()->add(
                 Filter::morphType(
-                    $relationType,
+                    $target,
                     Filter::only(
-                        ...$this->getModelsAllowedFilters(new $class())->getAllowedFields()
+                        ...$this->getModelsAllowedFilters($relatedModel)->getAllowedFields()
                     )
                 )
             );
