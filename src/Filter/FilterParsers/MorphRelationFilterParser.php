@@ -109,6 +109,6 @@ class MorphRelationFilterParser implements CustomFilterParser
         $modelFqcn = Relation::getMorphedModel($polymorphicType);
         // If model fqcn is null, this model is not registered in the morph map.
         // We can assume that the polymorphic type will be the fqcn.
-        return $modelFqcn === null ? new $polymorphicType() : new$modelFqcn();
+        return $modelFqcn === null ? new $polymorphicType() : new $modelFqcn();
     }
 }
