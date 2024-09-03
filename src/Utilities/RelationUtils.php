@@ -54,6 +54,9 @@ class RelationUtils
      *
      * RelationUtils::getMorphAlias() exists so that this package can support
      * the same functionality for laravel 10.x
+     *
+     * Though this may not be needed and could instead just do:
+     * (new $className())->getMorphClass()
      */
     public static function getMorphAlias(string $className)
     {
