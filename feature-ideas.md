@@ -51,6 +51,13 @@ $filter = [
 ```
 - etc
 
+### Scope filters?
+
+```php
+Filter::scope('active')
+// Would call $model->active() - ( scopeActive() )
+```
+
 ### Default filter types.
 
 A way to use a filter without specifying the type?
