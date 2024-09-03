@@ -8,6 +8,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\NoFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\InFilter;
 use IndexZer0\EloquentFiltering\Filter\RequestedFilter;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterParser\EnsuresChildFiltersAllowed;
 use IndexZer0\EloquentFiltering\Target\JsonPathTarget;
 use IndexZer0\EloquentFiltering\Target\Target;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
@@ -82,5 +83,38 @@ it('has = as default operator', function (): void {
     $sql = $query->toRawSql();
 
     expect($sql)->toBe('select * from "authors" where "authors"."name" = 1');
+
+});
+
+it('returns null from ensureChildFiltersAllowed when filter is not a HasChildFilters', function (): void {
+
+    $class = new class () {
+        use EnsuresChildFiltersAllowed;
+
+        public function __invoke(): null
+        {
+            return $this->ensureChildFiltersAllowed(
+                new PendingFilter(
+                    RequestedFilter::fromString('$in:null'),
+                    InFilter::class,
+                    [
+                        'target' => 'something',
+                        'type'   => '$in:null',
+                        'value'  => [
+                            1, 2, 3, null,
+                        ],
+                    ],
+                    new Author(),
+                    relation: null,
+                    previousPendingFilter: null,
+                    index: 1,
+                ),
+                new NoFiltersAllowed(),
+                new Author(),
+            );
+        }
+    };
+
+    expect($class())->toBeNull();
 
 });
