@@ -8,6 +8,7 @@ use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Target\Target;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters\LatestFilter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Article;
 
 it('throws RequiredFilterException when required filters have not been matched', function (): void {
 
@@ -29,7 +30,7 @@ it('throws RequiredFilterException when required filters have not been matched',
                     'imageable',
                     [FilterType::HAS_MORPH],
                     Filter::morphType(
-                        'articles',
+                        Article::class,
                         Filter::only(
                             Filter::field('title', [FilterType::LIKE])->required()
                         )
@@ -102,7 +103,7 @@ it('only includes required errors when parent has been matched when using scoped
                     'imageable',
                     [FilterType::HAS_MORPH],
                     Filter::morphType(
-                        'articles',
+                        Article::class,
                         Filter::only(
                             Filter::field('title', [FilterType::LIKE])->required(scoped: true)
                         )
@@ -193,7 +194,7 @@ it('does not throw RequiredFilterException when required filters have been match
                     'imageable',
                     [FilterType::HAS_MORPH],
                     Filter::morphType(
-                        'articles',
+                        Article::class,
                         Filter::only(
                             Filter::field('title', [FilterType::LIKE])->required()
                         )
@@ -231,7 +232,7 @@ it('allows specifying required failed validation message', function (): void {
                     'imageable',
                     [FilterType::HAS_MORPH],
                     Filter::morphType(
-                        'articles',
+                        Article::class,
                         Filter::only(
                             Filter::field('title', [FilterType::LIKE])->required(message: '4 is required')
                         )

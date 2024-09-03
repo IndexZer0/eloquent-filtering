@@ -18,6 +18,8 @@ use IndexZer0\EloquentFiltering\Filter\Types\Types;
 use IndexZer0\EloquentFiltering\Target\AliasedTarget;
 use IndexZer0\EloquentFiltering\Target\JsonPathTarget;
 use IndexZer0\EloquentFiltering\Target\Target;
+use IndexZer0\EloquentFiltering\Utilities\ClassUtils;
+use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class Filter
 {
@@ -80,7 +82,7 @@ class Filter
         AllowedFilterList $allowedFilters = new NoFiltersAllowed(),
     ): AllowedMorphType {
         return new AllowedMorphType(
-            self::createAlias($type),
+            self::createMorphRelationAlias($type),
             $allowedFilters
         );
     }
@@ -107,6 +109,29 @@ class Filter
         }
 
         return Target::alias($target);
+    }
+
+    public static function createMorphRelationAlias(string|AliasedTarget $target): TargetContract
+    {
+        // Gives full control to the developer.
+        if ($target instanceof AliasedTarget) {
+            return $target;
+        }
+
+        // "Querying All Related Models" support.
+        // https://laravel.com/docs/10.x/eloquent-relationships#querying-all-morph-to-related-models
+        if ($target === '*') {
+            return Target::alias($target);
+        }
+
+        ClassUtils::ensureFqcnIsModel($target);
+
+        if (RelationUtils::existsInMorphMap($target)) {
+            $alias = RelationUtils::getMorphAlias($target);
+            return Target::alias($alias);
+        }
+
+        return Target::alias((new $target())->getTable(), $target);
     }
 
     /*

@@ -101,7 +101,7 @@ it('can filter by specific morphs', function (): void {
             'type'   => '$hasMorph',
             'types'  => [
                 [
-                    'type'  => 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Business',
+                    'type'  => 'businesses',
                     'value' => [],
                 ],
             ],
@@ -138,7 +138,7 @@ it('can filter by specific morphs with child filters', function (): void {
             'type'   => '$hasMorph',
             'types'  => [
                 [
-                    'type'  => 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Business',
+                    'type'  => 'businesses',
                     'value' => [
                         [
                             'target' => 'name',
@@ -148,7 +148,7 @@ it('can filter by specific morphs with child filters', function (): void {
                     ],
                 ],
                 [
-                    'type'  => 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Client',
+                    'type'  => 'clients',
                     'value' => [
                         [
                             'target' => 'name',
@@ -194,7 +194,7 @@ it('can filter by nested relation in specific morph', function (): void {
             'type'   => '$hasMorph',
             'types'  => [
                 [
-                    'type'  => 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Business',
+                    'type'  => 'businesses',
                     'value' => [
                         [
                             'target' => 'name',

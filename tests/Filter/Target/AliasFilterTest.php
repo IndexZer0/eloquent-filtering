@@ -6,6 +6,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Target\Target;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Article;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Image;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Business;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Invoice;
@@ -116,7 +117,7 @@ it('can alias morph relation | morphRelation filter', function (): void {
             Filter::morphRelation(
                 Target::alias('image', 'imageable'),
                 [FilterType::HAS_MORPH],
-                Filter::morphType('articles')
+                Filter::morphType(Article::class)
             )
         )
     );
@@ -187,7 +188,7 @@ it('can alias morph relation field | morphRelation filter', function (): void {
             Filter::morphRelation(
                 Target::alias('image', 'imageable'),
                 [FilterType::HAS_MORPH],
-                Filter::morphType('articles', Filter::only(
+                Filter::morphType(Article::class, Filter::only(
                     Filter::field(Target::alias('article_title', 'title'), [FilterType::EQUAL])
                 ))
             )

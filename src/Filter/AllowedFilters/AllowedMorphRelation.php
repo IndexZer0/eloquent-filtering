@@ -95,19 +95,10 @@ class AllowedMorphRelation implements
         foreach ($this->includeRelationFields as $relatedModelFqcn) {
 
             $relatedModel = new $relatedModelFqcn();
-            $relatedModelTable = $relatedModel->getTable();
-
-            $hasMorphMap = RelationUtils::existsInMorphMap($relatedModelFqcn);
-
-            if ($hasMorphMap) {
-                $target = RelationUtils::getMorphAlias($relatedModelFqcn);
-            } else {
-                $target = \IndexZer0\EloquentFiltering\Target\Target::alias($relatedModelTable, $relatedModelFqcn);
-            }
 
             $this->allowedFilters()->add(
                 Filter::morphType(
-                    $target,
+                    $relatedModelFqcn,
                     Filter::only(
                         ...$this->getModelsAllowedFilters($relatedModel)->getAllowedFields()
                     )

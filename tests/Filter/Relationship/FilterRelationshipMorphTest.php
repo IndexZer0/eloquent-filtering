@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Article;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Image;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\UserProfile;
 
 beforeEach(function (): void {
     $this->createMorphRecords();
@@ -123,7 +125,7 @@ it('can filter by specific morphs', function (): void {
             'imageable',
             [FilterType::HAS_MORPH],
             Filter::morphType(
-                'articles',
+                Article::class,
             ),
         )
     ));
@@ -178,10 +180,10 @@ it('can filter by specific morphs with child filters', function (): void {
         Filter::morphRelation(
             'imageable',
             [FilterType::HAS_MORPH],
-            Filter::morphType('articles', Filter::only(
+            Filter::morphType(Article::class, Filter::only(
                 Filter::field('title', [FilterType::EQUAL])
             )),
-            Filter::morphType('user_profiles', Filter::only(
+            Filter::morphType(UserProfile::class, Filter::only(
                 Filter::field('name', [FilterType::EQUAL])
             ))
         )
@@ -239,7 +241,7 @@ it('can filter by nested relation in specific morph', function (): void {
             'imageable',
             [FilterType::HAS_MORPH],
             Filter::morphType(
-                'articles',
+                Article::class,
                 Filter::only(
                     Filter::field('title', [FilterType::EQUAL]),
                     Filter::relation(

@@ -326,10 +326,10 @@ public function allowedFilters(): AllowedFilterList
         Filter::morphRelation(
             'subscribable',
             [FilterType::HAS_MORPH],
-            Filter::morphType('food_delivery_services', Filter::only(
+            Filter::morphType(FoodDeliveryService::class, Filter::only(
                 Filter::field('name', [FilterType::EQUAL])
             )),
-            Filter::morphType('sasses', Filter::only(
+            Filter::morphType(Sass::class, Filter::only(
                 Filter::field('name', [FilterType::EQUAL])
             )),
         )
@@ -388,7 +388,22 @@ public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
         Filter::morphRelation('imageable', [FilterType::HAS_MORPH],
-            Filter::morphType('*'),
+            Filter::morphType('*', Filter::only(
+                Filter::field('created_at', [FilterType::LESS_THAN_EQUAL_TO])
+            )),
+        )
+    );
+}
+```
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::morphRelation('imageable', [FilterType::HAS_MORPH],
+            Filter::morphType('*', Filter::only(
+                Filter::field('created_at', [FilterType::LESS_THAN_EQUAL_TO])
+            )),
         )
     );
 }
@@ -1203,7 +1218,7 @@ public function allowedFilters(): AllowedFilterList
             'imageable',
             [FilterType::HAS_MORPH],
             Filter::morphType(
-                'articles',
+                Article::class,
                 Filter::only(
                     Filter::field('title', [FilterType::LIKE])->required()
                 )
