@@ -413,9 +413,10 @@ Filter::morphType('*', Filter::only(
 - `Fully Qualified Class Name` for specific polymorphic types.
 
 > [!NOTE]
-> This package will use the [registered relation morph map alias](https://laravel.com/docs/10.x/eloquent-relationships#custom-polymorphic-types) for the model as the value for the types array.
+> This package will use the [registered relation morph map alias](https://laravel.com/docs/10.x/eloquent-relationships#custom-polymorphic-types) of the model as the value for the types array (`types.*.type`).
 > 
-> When your model is not registered in the [relation morph map](https://laravel.com/docs/10.x/eloquent-relationships#custom-polymorphic-types) - Eloquent Filtering will use the database table name of the model for the value to be used in the types array.
+> When your model is not registered in the [relation morph map](https://laravel.com/docs/10.x/eloquent-relationships#custom-polymorphic-types) - this package will use the database table name of the model for the value to be used in the types array (`types.*.type`).
+> If you would like to not expose database names to the frontend then you should use Target::alias() (described below)
 
 ```php
 Relation::morphMap([
@@ -449,7 +450,7 @@ Subscription::filter([
         'type'   => '$hasMorph',
         'types'  => [
             [
-                'type'  => 'foodService', // Custom morphMap alias.
+                'type'  => 'foodService', // Custom morphMap alias from Relation::morphMap().
                 'value' => [
                     [
                         'target' => 'price',
