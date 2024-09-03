@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidModelFqcnException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Article;
@@ -270,3 +271,27 @@ it('can filter by nested relation in specific morph', function (): void {
             'image-2',
         ]);
 });
+
+it('throws exception when morphType is not a fqcn of a model', function (): void {
+
+    $query = Image::filter([
+        [
+            'target' => 'imageable',
+            'type'   => '$hasMorph',
+            'types'  => [
+                [
+                    'type'  => 'articles',
+                    'value' => [],
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::morphRelation(
+            'imageable',
+            [FilterType::HAS_MORPH],
+            Filter::morphType(
+                'not-a-fqcn',
+            ),
+        )
+    ));
+})->throws(InvalidModelFqcnException::class, 'Must be an eloquent model fully qualified class name.');
