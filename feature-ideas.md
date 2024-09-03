@@ -9,6 +9,16 @@
 - Max nested depth. (for protection against `$or` and `$and` nesting).
 - Disable/enable `$or` and `$and` globally.
 
+### Add a general $where filter that takes operator.
+```php
+$filter = [
+    'target'   => 'column',
+    'type'     => '$where',
+    'operator' => '=', // Rule::in(['=', '<', '<=', '>', '>='])
+    'value'    => 'value',
+],
+```
+
 ### Provide core filters for common laravel queries.
 
 - `$trashed`.
