@@ -8,6 +8,12 @@ use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 
 enum FilterType: string
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Field Filters
+    |--------------------------------------------------------------------------
+    */
+
     // Equal
     case EQUAL = '$eq';
     case NOT_EQUAL = '$notEq';
@@ -23,10 +29,6 @@ enum FilterType: string
     // Like
     case LIKE = '$like';
     case NOT_LIKE = '$notLike';
-
-    // Conditional
-    case OR = '$or';
-    case AND = '$and';
 
     // Null
     case NULL = '$null';
@@ -48,9 +50,30 @@ enum FilterType: string
     case JSON_NOT_CONTAINS = '$jsonNotContains';
     case JSON_LENGTH = '$jsonLength';
 
-    // Relationship
+    /*
+    |--------------------------------------------------------------------------
+    | Conditional Filters
+    |--------------------------------------------------------------------------
+    */
+
+    case OR = '$or';
+    case AND = '$and';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationship Filters
+    |--------------------------------------------------------------------------
+    */
+
     case HAS = '$has';
     case DOESNT_HAS = '$doesntHas';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Morph Relationship Filters
+    |--------------------------------------------------------------------------
+    */
+
     case HAS_MORPH = '$hasMorph';
     case DOESNT_HAS_MORPH = '$doesntHasMorph';
 
