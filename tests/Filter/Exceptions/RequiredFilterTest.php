@@ -271,3 +271,36 @@ it('allows specifying required failed validation message', function (): void {
     }
 
 });
+
+it('suppressed exceptions still cause RequiredFilterException to be thrown', function (): void {
+
+    $this->setSuppression("filter.malformed_format", true);
+
+    try {
+        Author::filter(
+            [
+                [
+                    'target' => 'name',
+                    'type'   => '$like',
+                    'value'  => 'George',
+                ]
+            ],
+            Filter::only(
+                Filter::field('name', [FilterType::LIKE->withValidation([
+                    'value' => ['size:100']
+                ])])->required(),
+            )
+        );
+
+        $this->fail('Should have thrown exception');
+
+    } catch (RequiredFilterException $rfe) {
+        expect($rfe->getMessage())->toBe('Name filter is required.')
+            ->and($rfe->errors())->toBe([
+                'name' => [
+                    'Name filter is required.',
+                ],
+            ]);
+    }
+
+});
