@@ -117,7 +117,7 @@ class AllowedRelation implements
 
         $relationModel = RelationUtils::getRelationModel($modelFqcn, $relationMethod);
 
-        $relatedModelsAllowedFilters = $this->getModelsAllowedFilters($relationModel);
+        $relatedModelsAllowedFilters = ClassUtils::getModelsAllowedFilters($relationModel);
 
         if ($relatedModelsAllowedFilters !== null) {
             $this->allowedFilters = $this->allowedFilters->add(
@@ -126,15 +126,5 @@ class AllowedRelation implements
         }
 
         return $relationModel::class;
-    }
-
-    private function getModelsAllowedFilters(Model $model): ?AllowedFilterList
-    {
-        if (!ClassUtils::modelIsFilterable($model)) {
-            return null;
-        }
-
-        /** @var IsFilterable $model */
-        return $model->allowedFilters();
     }
 }

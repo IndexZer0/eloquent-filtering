@@ -99,22 +99,12 @@ class AllowedMorphRelation implements
                 Filter::morphType(
                     $relatedModelFqcn,
                     Filter::only(
-                        ...$this->getModelsAllowedFilters($relatedModel)->getAllowedFields()
+                        ...ClassUtils::getModelsAllowedFilters($relatedModel)->getAllowedFields()
                     )
                 )
             );
         }
 
         $this->includeRelationFields([]);
-    }
-
-    private function getModelsAllowedFilters(Model $model): ?AllowedFilterList
-    {
-        if (!ClassUtils::modelIsFilterable($model)) {
-            return null;
-        }
-
-        /** @var IsFilterable $model */
-        return $model->allowedFilters();
     }
 }
