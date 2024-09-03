@@ -59,7 +59,7 @@ it('returns target from JsonPathTarget', function (): void {
 
 });
 
-it('d', function (): void {
+it('has = as default operator', function (): void {
 
     // This test is to make WhereFilter::operator() run for coverage.
 
