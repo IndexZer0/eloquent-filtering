@@ -1627,6 +1627,15 @@ config("eloquent-filtering.suppress.filter.denied");
 class DuplicateFiltersException
 // When you have registered a custom filter that has the same type as another filter.
 
+class InvalidFiltersPayloadException extends InvalidArgumentException
+// When filters are passed to ::filter() that are not list arrays.
+
+class InvalidModelFqcnException extends InvalidArgumentException
+// When an invalid model string is passed to `Filter::morphType()` or `Filter::morphRelation()->includeRelationFields()`.
+
+class UnsupportedModifierException extends InvalidArgumentException
+// When an invalid modifier it passed to ->withModifiers().
+
 class RequiredFilterException extends ValidationException
 // When required filter(s) were not applied.
 ``` 
