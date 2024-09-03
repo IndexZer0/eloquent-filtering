@@ -20,7 +20,6 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBeRequired;
 use IndexZer0\EloquentFiltering\Utilities\ClassUtils;
-use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class AllowedMorphRelation implements
     AllowedFilter,
