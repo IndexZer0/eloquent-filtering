@@ -115,6 +115,11 @@ WHERE "products"."name" = 'TV'
         - [Pass To Filter](#pass-to-filter)
         - [Including Relationship Model Filters](#including-relationship-model-filters)
         - [Nested Relationships](#nested-relationships)
+    - [AllowedFilter](#allowedfilter)
+        - [Field](#field)
+        - [Relation](#relation)
+        - [Morph Relation](#morph-relation)
+        - [Custom](#custom)
     - [Filter Structure](#filter-structure)
     - [Available Filters](#available-filters)
         - [Field Filters](#field-filters)
@@ -344,6 +349,58 @@ public function allowedFilters(): AllowedFilterList
             ->andNestedRelation(
                 Filter::relation('comments', [FilterType::HAS])->includeRelationFields()
             ),
+    );
+}
+```
+
+### AllowedFilter
+
+#### Field
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('name', [FilterType::EQUAL]),
+    );
+}
+```
+
+#### Relation
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation('comments', [FilterType::HAS],
+            Filter::only(
+                Filter::field('content', [FilterType::LIKE])
+            )
+        )
+    );
+}
+```
+
+#### Morph Relation
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::morphRelation('imageable', [FilterType::HAS_MORPH],
+            Filter::morphType('*'),
+        )
+    );
+}
+```
+
+#### Custom
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::custom('$latest')
     );
 }
 ```
