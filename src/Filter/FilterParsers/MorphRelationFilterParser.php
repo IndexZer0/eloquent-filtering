@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterParsers;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedMorphType;
 use IndexZer0\EloquentFiltering\Filter\Builder\FilterBuilder;
 use IndexZer0\EloquentFiltering\Filter\Context\EloquentContext;
@@ -27,6 +29,14 @@ class MorphRelationFilterParser implements CustomFilterParser
 {
     use EnsuresChildFiltersAllowed;
 
+    protected MorphTo $relation;
+    protected Collection $allAllowedMorphTypes;
+
+    public function __construct(
+        protected MorphTypes $morphTypes = new MorphTypes()
+    ) {
+    }
+
     public function parse(
         PendingFilter  $pendingFilter,
         ?AllowedFilter $allowedFilter = null,
@@ -34,73 +44,26 @@ class MorphRelationFilterParser implements CustomFilterParser
     ): FilterMethod {
         /** @var TargetedFilter&DefinesAllowedChildFilters $allowedFilter */
         $target = $allowedFilter->getTarget($pendingFilter);
-        $relation = $pendingFilter->model()->{$target->getReal()}();
+        $this->relation = $pendingFilter->model()->{$target->getReal()}();
+        $this->allAllowedMorphTypes = collect($allowedFilter->allowedFilters()->getAll());
 
         $types = $pendingFilter->data()['types'];
 
-        $morphTypes = new MorphTypes();
-
-        foreach ($types as &$type) {
-
-            $allAllowedMorphTypes = collect($allowedFilter->allowedFilters()->getAll());
-
-            $allowedMorphType = $allAllowedMorphTypes->first(fn (AllowedMorphType $allowedMorphType) => $allowedMorphType->getTarget($pendingFilter)->isFor($type['type']));
-            if ($allowedMorphType === null) {
-                throw new DeniedFilterException($pendingFilter);
-            }
-            /** @var AllowedMorphType $allowedMorphType */
-            $allowedMorphType->markMatched();
-
-            $morphTypeTarget = $allowedMorphType->getTarget($pendingFilter)->getReal();
-
-            if ($morphTypeTarget === '*') {
-                $model = $pendingFilter->model();
-                $polymorphicTypes = $model->newModelQuery()->distinct()->pluck($relation->getMorphType())->filter()->all();
-
-                foreach ($polymorphicTypes as $polymorphicType) {
-
-                    $model = $this->getModel($polymorphicType);
-
-                    $filters = $this->parseMorphTypesChildFilters(
-                        $model,
-                        $type,
-                        $allowedMorphType,
-                        $pendingFilter,
-                    );
-                    $morphTypes->push(new MorphType(
-                        $polymorphicType,
-                        $filters
-                    ));
-                }
-            } else {
-
-                $model = $this->getModel($morphTypeTarget);
-
-                $filters = $this->parseMorphTypesChildFilters(
-                    $model,
-                    $type,
-                    $allowedMorphType,
-                    $pendingFilter
-                );
-
-                $morphTypes->push(new MorphType(
-                    $morphTypeTarget,
-                    $filters
-                ));
-            }
+        foreach ($types as $type) {
+            $this->parseType($pendingFilter, $type);
         }
 
         $filterBuilder = new FilterBuilder(
             $pendingFilter,
             new EloquentContext(
                 $pendingFilter->model(),
-                $relation,
+                $this->relation,
             )
         );
 
         return $filterBuilder
             ->target($target)
-            ->morphTypes($morphTypes)
+            ->morphTypes($this->morphTypes)
             ->build();
     }
 
@@ -125,5 +88,67 @@ class MorphRelationFilterParser implements CustomFilterParser
         // If model fqcn is null, this model is not registered in the morph map.
         // We can assume that the polymorphic type will be the fqcn.
         return $modelFqcn === null ? new $polymorphicType() : new $modelFqcn();
+    }
+
+    protected function parseType(PendingFilter $pendingFilter, array $type): void
+    {
+        $allowedMorphType = $this->allAllowedMorphTypes->first(
+            fn (AllowedMorphType $allowedMorphType) => $allowedMorphType->getTarget($pendingFilter)->isFor($type['type'])
+        );
+
+        if ($allowedMorphType === null) {
+            throw new DeniedFilterException($pendingFilter);
+        }
+
+        /** @var AllowedMorphType $allowedMorphType */
+        $allowedMorphType->markMatched();
+
+        $morphTypeTarget = $allowedMorphType->getTarget($pendingFilter)->getReal();
+
+        if ($morphTypeTarget === '*') {
+            $model = $pendingFilter->model();
+
+            $polymorphicTypes = $model->newModelQuery()
+                ->distinct()
+                ->pluck($this->relation->getMorphType())
+                ->filter()
+                ->all();
+
+            foreach ($polymorphicTypes as $polymorphicType) {
+                $this->parseMorphType(
+                    $polymorphicType,
+                    $type,
+                    $allowedMorphType,
+                    $pendingFilter,
+                );
+            }
+        } else {
+            $this->parseMorphType(
+                $morphTypeTarget,
+                $type,
+                $allowedMorphType,
+                $pendingFilter,
+            );
+        }
+    }
+
+    protected function parseMorphType(
+        string $polymorphicType,
+        array $type,
+        AllowedMorphType $allowedMorphType,
+        PendingFilter $pendingFilter,
+    ): void {
+        $model = $this->getModel($polymorphicType);
+
+        $filters = $this->parseMorphTypesChildFilters(
+            $model,
+            $type,
+            $allowedMorphType,
+            $pendingFilter,
+        );
+        $this->morphTypes->push(new MorphType(
+            $polymorphicType,
+            $filters
+        ));
     }
 }
