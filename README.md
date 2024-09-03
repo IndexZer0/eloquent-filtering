@@ -385,6 +385,8 @@ public function allowedFilters(): AllowedFilterList
 
 #### Morph Relation
 
+- `Filter::morphRelation()` accepts many `Filter::morphType()`s.
+
 ```php
 public function allowedFilters(): AllowedFilterList
 {
@@ -398,17 +400,89 @@ public function allowedFilters(): AllowedFilterList
 }
 ```
 
+##### `Filter::morphType()` accepts either:
+
+- `*` for [querying all related models](https://laravel.com/docs/10.x/eloquent-relationships#querying-all-morph-to-related-models) 
+
 ```php
-public function allowedFilters(): AllowedFilterList
+Filter::morphType('*', Filter::only(
+    Filter::field('created_at', [FilterType::LESS_THAN_EQUAL_TO])
+)),
+```
+
+- `Fully Qualified Class Name` for specific polymorphic types.
+
+> [!NOTE]
+> This package will use the [registered relation morph map alias](https://laravel.com/docs/10.x/eloquent-relationships#custom-polymorphic-types) for the model as the value for the types array.
+> 
+> When your model is not registered in the [relation morph map](https://laravel.com/docs/10.x/eloquent-relationships#custom-polymorphic-types) - Eloquent Filtering will use the database table name of the model for the value to be used in the types array.
+
+```php
+Relation::morphMap([
+    'foodService' => FoodDeliveryService::class,
+]);
+
+class Subscription extends Model implements IsFilterable
 {
-    return Filter::only(
-        Filter::morphRelation('imageable', [FilterType::HAS_MORPH],
-            Filter::morphType('*', Filter::only(
-                Filter::field('created_at', [FilterType::LESS_THAN_EQUAL_TO])
-            )),
-        )
-    );
+    use Filterable;
+     
+    // ...
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::morphRelation('subscribable', [FilterType::HAS_MORPH],
+                Filter::morphType(FoodDeliveryService::class, Filter::only(
+                    Filter::field('price', [FilterType::EQUALS])
+                )),
+                Filter::morphType(Sass::class, Filter::only(
+                    Filter::field('plan', [FilterType::EQUALS])
+                )),
+            )
+        );
+    }
 }
+
+Subscription::filter([
+    [
+        'target' => 'subscribable',
+        'type'   => '$hasMorph',
+        'types'  => [
+            [
+                'type'  => 'foodService', // Custom morphMap alias.
+                'value' => [
+                    [
+                        'target' => 'price',
+                        'type'   => '$eq',
+                        'value'  => 9.99,
+                    ],
+                ],
+            ],
+            [
+                'type'  => 'sasses', // Model database table due to Sass::class not being in the Relation::morphMap().
+                'value' => [
+                    [
+                        'target' => 'plan',
+                        'type'   => '$eq',
+                        'value'  => 'basic',
+                    ],
+                ],
+            ],
+        ],
+    ],
+])
+
+```
+
+- Alias to provide you with full control over the array `types.*.type` value and database `*_type` column value.
+
+```php
+Filter::morphType(Target::alias('foodService', 'food_delivery_services'), Filter::only(
+    Filter::field('price', [FilterType::EQUALS])
+)),
+Filter::morphType(Target::alias('software', 'sasses'), Filter::only(
+    Filter::field('plan', [FilterType::EQUALS])
+)),
 ```
 
 #### Custom
