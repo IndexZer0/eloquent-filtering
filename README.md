@@ -261,11 +261,11 @@ Product::filter(
 
 #### Including Relationship Model Filters
 
-By default, when specifying an allowed relation filter, fields within that relationship are not included in the allowed filter list.
+By default, when specifying an `Filter::relation()` or `Filter::morphRelation()`, fields within that relationship are not included in the allowed filter list.
 
 You can specify allowed filters inside a relation in two ways.
 
-1. Use `->includeRelationFields()` on `Filter::relation()`.
+1. Use `->includeRelationFields()` on `Filter::relation()` or `Filter::morphRelation()`.
 
 ```php
 public function allowedFilters(): AllowedFilterList
@@ -276,13 +276,28 @@ public function allowedFilters(): AllowedFilterList
 }
 ```
 
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::morphRelation(
+            'subscribable',
+            [FilterType::HAS_MORPH],
+        )->includeRelationFields([
+            FoodDeliveryService::class,
+            Sass::class,
+        ])
+    );
+}
+```
+
 > [!NOTE]
 > This method instructs the package to look for `AllowedField` filters within the `allowedFilters()` method of the relation model.
 
 > [!IMPORTANT]
 > The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`.
 
-2. Define `allowedFilters` as 3rd parameter of `Filter::relation()` .
+2. Define `allowedFilters` in parameters of `Filter::relation()` or `Filter::morphType()`.
 
 ```php
 public function allowedFilters(): AllowedFilterList
@@ -294,6 +309,24 @@ public function allowedFilters(): AllowedFilterList
             allowedFilters: Filter::only(
                 Filter::field('name', [FilterType::LIKE])
             )
+        )
+    );
+}
+```
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::morphRelation(
+            'subscribable',
+            [FilterType::HAS_MORPH],
+            Filter::morphType('food_delivery_services', Filter::only(
+                Filter::field('name', [FilterType::EQUAL])
+            )),
+            Filter::morphType('sasses', Filter::only(
+                Filter::field('name', [FilterType::EQUAL])
+            )),
         )
     );
 }
