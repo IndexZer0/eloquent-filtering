@@ -10,6 +10,7 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser as FilterParserContract;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidFilterException;
+use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidFiltersPayloadException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Suppression\Suppression;
 
@@ -42,6 +43,10 @@ class FilterParser implements FilterParserContract
         $this->relation = $relation;
         $this->allowedFilterList = $allowedFilterList;
         $this->previousPendingFilter = $previousPendingFilter;
+
+        if (!array_is_list($filters)) {
+            throw new InvalidFiltersPayloadException('Filters must be an array list.');
+        }
 
         foreach ($filters as $index => $filter) {
             Suppression::honour(function () use ($index, $filter): void {
