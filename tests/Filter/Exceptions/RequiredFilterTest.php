@@ -283,11 +283,11 @@ it('suppressed exceptions still cause RequiredFilterException to be thrown', fun
                     'target' => 'name',
                     'type'   => '$like',
                     'value'  => 'George',
-                ]
+                ],
             ],
             Filter::only(
                 Filter::field('name', [FilterType::LIKE->withValidation([
-                    'value' => ['size:100']
+                    'value' => ['size:100'],
                 ])])->required(),
             )
         );
