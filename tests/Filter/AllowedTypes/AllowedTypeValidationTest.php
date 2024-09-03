@@ -83,12 +83,12 @@ it('can set validation rules for custom filter', function (): void {
     Event::filter(
         [
             [
-                'type'   => '$latest',
+                'type' => '$latest',
             ],
         ],
         Filter::only(
             Filter::custom((new AllowedType('$latest'))->withValidation([
-                'value' => ['required']
+                'value' => ['required'],
             ])),
         )
     );
