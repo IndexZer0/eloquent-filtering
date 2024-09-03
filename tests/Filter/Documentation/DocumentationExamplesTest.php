@@ -6,6 +6,7 @@ use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Documentation\Package;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\Image;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Person;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Project;
@@ -13,6 +14,7 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\User;
 
 beforeEach(function (): void {
     $this->createPackages();
+    $this->createMorphRecords();
 });
 
 it('EqualFilter | $eq', function (): void {
@@ -540,6 +542,62 @@ it('DoesntHasFilter | $doesntHas', function (): void {
 
     $expectedSql = <<< SQL
         select * from "projects" where not exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "comments"."content" LIKE '%boring%')
+        SQL;
+
+    expect($sql)->toBe($expectedSql);
+
+});
+
+it('HasMorphFilter | $hasMorph', function (): void {
+    $sql = Image::filter([
+        [
+            'target' => 'imageable',
+            'type'   => '$hasMorph',
+            'types'  => [
+                [
+                    'type'  => '*',
+                    'value' => [],
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::morphRelation(
+            'imageable',
+            [FilterType::HAS_MORPH],
+            Filter::morphType('*'),
+        )
+    ))->toRawSql();
+
+    $expectedSql = <<< SQL
+        select * from "images" where (("images"."imageable_type" = 'articles' and exists (select * from "articles" where "images"."imageable_id" = "articles"."id")) or ("images"."imageable_type" = 'user_profiles' and exists (select * from "user_profiles" where "images"."imageable_id" = "user_profiles"."id")))
+        SQL;
+
+    expect($sql)->toBe($expectedSql);
+
+});
+
+it('DoesntHasMorphFilter | $doesntHasMorph', function (): void {
+    $sql = Image::filter([
+        [
+            'target' => 'imageable',
+            'type'   => '$doesntHasMorph',
+            'types'  => [
+                [
+                    'type'  => '*',
+                    'value' => [],
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::morphRelation(
+            'imageable',
+            [FilterType::DOESNT_HAS_MORPH],
+            Filter::morphType('*'),
+        )
+    ))->toRawSql();
+
+    $expectedSql = <<< SQL
+        select * from "images" where (("images"."imageable_type" = 'articles' and not exists (select * from "articles" where "images"."imageable_id" = "articles"."id")) or ("images"."imageable_type" = 'user_profiles' and not exists (select * from "user_profiles" where "images"."imageable_id" = "user_profiles"."id")))
         SQL;
 
     expect($sql)->toBe($expectedSql);
