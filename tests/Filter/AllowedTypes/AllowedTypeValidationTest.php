@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\MalformedFilterFormatException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters\LatestFilter;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Event;
 
 it('can set validation rules', function (): void {
@@ -73,3 +75,22 @@ it('can set validation messages and attributes', function (): void {
     }
 
 });
+
+it('can set validation rules for custom filter', function (): void {
+
+    config()->set('eloquent-filtering.custom_filters', [LatestFilter::class]);
+
+    Event::filter(
+        [
+            [
+                'type'   => '$latest',
+            ],
+        ],
+        Filter::only(
+            Filter::custom((new AllowedType('$latest'))->withValidation([
+                'value' => ['required']
+            ])),
+        )
+    );
+
+})->throws(MalformedFilterFormatException::class, '$latest filter does not match required format. (and 1 more error)');
