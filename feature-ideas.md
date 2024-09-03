@@ -9,6 +9,38 @@
 - Max nested depth. (for protection against `$or` and `$and` nesting).
 - Disable/enable `$or` and `$and` globally.
 
+### Provide core filters for common laravel queries.
+
+- `$trashed`.
+```php
+// e.g.
+$filter = [
+    'type' => '$trashed',
+    'value' => 'all' | 'true' | 'false'
+]
+
+$filter = [
+    'type' => '$onlyTrashed'
+]
+
+$filter = [
+    'type' => '$withTrashed'
+]
+```
+- `$latest`.
+```php
+// e.g.
+$filter = [
+    'type' => '$latest',
+    'value' => 'created_at',
+]
+
+$filter = [
+    'type' => '$latest'
+]
+```
+- etc
+
 ### Default filter types.
 
 A way to use a filter without specifying the type?
