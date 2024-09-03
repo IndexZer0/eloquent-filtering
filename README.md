@@ -388,6 +388,8 @@ See [Conditional Filters Note](#condition-filters-note)
 - `value` = `string` | `int` | `float`.
 
 ```php
+Filter::field('name', [FilterType::EQUAL]);
+
 $sql = Person::filter([
     [
         'type'   => '$eq',
@@ -406,6 +408,8 @@ select * from "people" where "people"."name" = 'Taylor'
 - `value` = `string` | `int` | `float`.
 
 ```php
+Filter::field('name', [FilterType::NOT_EQUAL]);
+
 $sql = Person::filter([
     [
         'type'   => '$notEq',
@@ -424,6 +428,8 @@ select * from "people" where "people"."name" != 'Taylor'
 - `value` = `string` | `int` | `float`.
 
 ```php
+Filter::field('age', [FilterType::GREATER_THAN]);
+
 $sql = Person::filter([
     [
         'type'   => '$gt',
@@ -442,6 +448,8 @@ select * from "people" where "people"."age" > 18
 - `value` = `string` | `int` | `float`.
 
 ```php
+Filter::field('age', [FilterType::GREATER_THAN_EQUAL_TO]);
+
 $sql = Person::filter([
     [
         'type'   => '$gte',
@@ -460,6 +468,8 @@ select * from "people" where "people"."age" >= 18
 - `value` = `string` | `int` | `float`.
 
 ```php
+Filter::field('age', [FilterType::LESS_THAN])
+
 $sql = Person::filter([
     [
         'type'   => '$lt',
@@ -478,6 +488,8 @@ select * from "people" where "people"."age" < 18
 - `value` = `string` | `int` | `float`.
 
 ```php
+Filter::field('age', [FilterType::LESS_THAN_EQUAL_TO]);
+
 $sql = Person::filter([
     [
         'type'   => '$lte',
@@ -496,6 +508,8 @@ select * from "people" where "people"."age" <= 18
 - `value` = `string` | `int` | `float`.
 
 ```php
+Filter::field('description', [FilterType::LIKE]);
+
 $sql = Project::filter([
     [
         'type'   => '$like',
@@ -525,6 +539,8 @@ select * from "projects" where "projects"."description" LIKE '%Laravel'
 - `value` = `string` | `int` | `float`.
 
 ```php
+Filter::field('description', [FilterType::NOT_LIKE]);
+
 $sql = Project::filter([
     [
         'type'   => '$notLike',
@@ -556,6 +572,9 @@ select * from "projects" where "projects"."description" NOT LIKE '%Symfony'
 - `false` for `is not null`.
 
 ```php
+Filter::field('age', [FilterType::NULL]);
+Filter::field('weight', [FilterType::NULL]);
+        
 $sql = Person::filter([
     [
         'type'   => '$null',
@@ -579,6 +598,8 @@ select * from "people" where "people"."age" is null and "people"."weight" is not
 - `value` = array of `string` | `int` | `float` (minimum 1).
 
 ```php
+Filter::field('name', [FilterType::IN]);
+
 $sql = Person::filter([
     [
         'type'   => '$in',
@@ -604,6 +625,8 @@ select * from "people" where ("people"."name" in ('Taylor', 'Otwell') or "people
 - `value` = array of `string` | `int` | `float` (minimum 1).
 
 ```php
+Filter::field('name', [FilterType::NOT_IN]);
+
 $sql = Person::filter([
     [
         'type'   => '$notIn',
@@ -629,6 +652,8 @@ select * from "people" where "people"."name" not in ('Nuno', 'Maduro') and "peop
 - `value` = array of `string` | `int` | `float`.
 
 ```php
+Filter::field('age', [FilterType::BETWEEN]);
+
 $sql = Person::filter([
     [
         'type'   => '$between',
@@ -647,6 +672,8 @@ select * from "people" where "people"."age" between 18 and 65
 - `value` = array of `string` | `int` | `float`.
 
 ```php
+Filter::field('age', [FilterType::NOT_BETWEEN]);
+
 $sql = Person::filter([
     [
         'type'   => '$notBetween',
@@ -665,6 +692,8 @@ select * from "people" where "people"."age" not between 18 and 65
 - `value` = `array` of strings.
 
 ```php
+Filter::field('price', [FilterType::BETWEEN_COLUMNS]);
+
 $sql = Product::filter([
     [
         'type'   => '$betweenColumns',
@@ -686,6 +715,8 @@ select * from "products" where "products"."price" between "products"."min_allowe
 - `value` = `array` of strings.
 
 ```php
+Filter::field('price', [FilterType::NOT_BETWEEN_COLUMNS]);
+
 $sql = Product::filter([
     [
         'type'   => '$notBetweenColumns',
@@ -707,6 +738,8 @@ select * from "products" where "products"."price" not between "products"."min_al
 - `value` = `string` | `int` | `float`.
 
 ```php
+Filter::field('options->languages', [FilterType::JSON_CONTAINS]);
+
 $sql = User::filter([
     [
         'type'   => '$jsonContains',
@@ -725,6 +758,8 @@ select * from "users" where json_contains("users"."options", '\"en\"', '$."langu
 - `value` = `string` | `int` | `float`.
 
 ```php
+Filter::field('options->languages', [FilterType::JSON_NOT_CONTAINS]);
+
 $sql = User::filter([
     [
         'type'   => '$jsonNotContains',
@@ -744,6 +779,8 @@ select * from "users" where not json_contains("users"."options", '\"en\"', '$."l
 - `value` = `int`.
 
 ```php
+Filter::field('options->languages', [FilterType::JSON_LENGTH]);
+
 $sql = User::filter([
     [
         'type'     => '$jsonLength',
@@ -765,6 +802,12 @@ select * from "users" where json_length("users"."options", '$."languages"') >= 2
 - `value` = `array` of filters.
 
 ```php
+Filter::relation('comments', [FilterType::HAS],
+    Filter::only(
+        Filter::field('content', [FilterType::LIKE])
+    )
+);
+
 $sql = Project::filter([
     [
         'type'   => '$has',
@@ -789,6 +832,12 @@ select * from "projects" where exists (select * from "comments" where "projects"
 - `value` = `array` of filters.
 
 ```php
+Filter::relation('comments', [FilterType::DOESNT_HAS],
+    Filter::only(
+        Filter::field('content', [FilterType::LIKE])
+    )
+);
+
 $sql = Project::filter([
     [
         'type'   => '$doesntHas',
@@ -817,6 +866,10 @@ select * from "projects" where not exists (select * from "comments" where "proje
 - `types.*.value` = `array` of filters.
 
 ```php
+Filter::morphRelation('imageable', [FilterType::HAS_MORPH],
+    Filter::morphType('*'),
+);
+
 $sql = Image::filter([
     [
         'target' => 'imageable',
@@ -842,6 +895,10 @@ select * from "images" where (("images"."imageable_type" = 'articles' and exists
 - `types.*.value` = `array` of filters.
 
 ```php
+Filter::morphRelation('imageable', [FilterType::DOESNT_HAS_MORPH],
+    Filter::morphType('*'),
+);
+
 $sql = Image::filter([
     [
         'target' => 'imageable',
