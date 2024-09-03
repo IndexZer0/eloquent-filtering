@@ -178,15 +178,6 @@ it('can filter by specific morphs with child filters', function (): void {
         Filter::morphRelation(
             'imageable',
             [FilterType::HAS_MORPH],
-            // TODO maybe this.
-            /*Filter::morphTypes([
-                'articles' => Filter::only(
-                    Filter::field('title', [FilterType::EQUAL]),
-                ),
-                'user_profiles' => Filter::only(
-                    Filter::field('name', [FilterType::EQUAL])
-                )
-            ]),*/
             Filter::morphType('articles', Filter::only(
                 Filter::field('title', [FilterType::EQUAL])
             )),
