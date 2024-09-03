@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidModelFqcnException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
@@ -295,3 +296,26 @@ it('throws exception when morphType is not a fqcn of a model', function (): void
         )
     ));
 })->throws(InvalidModelFqcnException::class, 'Must be an eloquent model fully qualified class name.');
+
+it('throws DeniedFilterException when target not allowed', function (): void {
+
+    Image::filter([
+        [
+            'target' => 'imageable2',
+            'type'   => '$hasMorph',
+            'types'  => [
+                [
+                    'type'  => '*',
+                    'value' => [],
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::morphRelation(
+            'imageable',
+            [FilterType::HAS_MORPH],
+            Filter::morphType('*'),
+        )
+    ));
+
+})->throws(DeniedFilterException::class, '"$hasMorph" filter for "imageable2" is not allowed');
