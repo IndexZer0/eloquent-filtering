@@ -281,6 +281,8 @@ public function allowedFilters(): AllowedFilterList
 }
 ```
 
+- For `Filter::morphRelation()`, you should specify the models for which to include the relation fields for.
+
 ```php
 public function allowedFilters(): AllowedFilterList
 {
