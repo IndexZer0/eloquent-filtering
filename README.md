@@ -108,7 +108,7 @@ WHERE "products"."name" = 'TV'
 - [Simple Example](#simple-example-with-relationship-filter)
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Filter Usage](#filter-usage)
     - [Making Model Filterable](#making-model-filterable)
     - [Allowing Filters](#allowing-filters)
         - [Define On Model](#define-on-model)
@@ -137,7 +137,10 @@ WHERE "products"."name" = 'TV'
             - [Field Filter](#field-filter)
             - [Custom Filter](#custom-filter)
             - [Custom Filter Notes](#custom-filter-notes)
-    - [Error Handling](#error-handling)
+- [Sort Usage](#sort-usage)
+    - [Making Model Sortable](#making-model-sortable)
+    - [Sorting Models](#sorting-models)
+- [Error Handling](#error-handling)
 - [Changelog](#changelog)
 
 ---
@@ -165,7 +168,7 @@ php artisan eloquent-filtering:install
 
 ---
 
-## Usage
+## Filter Usage
 
 ### Making Model Filterable
 
@@ -1556,7 +1559,48 @@ public function apply(Builder $query): Builder
 }
 ```
 
-### Error Handling
+## Sort Usage
+
+> [!IMPORTANT]
+> Sorting feature of this package is in its infancy and subject to changes.
+
+### Making Model Sortable
+
+- Use `Sortable` trait.
+- Define `allowedSorts()` method.
+
+```php
+use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
+use IndexZer0\EloquentFiltering\Sort\Sortable\Sort;
+
+class Product extends Model
+{
+    use Sortable;
+    
+    public function allowedSorts(): AllowedSortList
+    {
+        return Sort::only(
+            Sort::field('name'),
+        );
+    }
+}
+```
+
+### Sorting Models
+```php
+$sql = Product::sort([
+    [
+        'target' => 'name',
+        'value'  => 'desc',
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "products" order by "name" desc
+```
+
+## Error Handling
 
 All exceptions thrown by the package implement `\IndexZer0\EloquentFiltering\Contracts\EloquentFilteringException`.
 
