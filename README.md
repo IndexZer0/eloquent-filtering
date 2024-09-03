@@ -119,6 +119,7 @@ WHERE "products"."name" = 'TV'
     - [Available Filters](#available-filters)
         - [Field Filters](#field-filters)
         - [Relationship Filters](#relationship-filters)
+        - [Morph Relationship Filters](#morph-relationship-filters)
         - [Condition Filters](#condition-filters)
     - [Digging Deeper](#digging-deeper)
         - [Config](#config)
@@ -358,6 +359,14 @@ This package provides core filters that give you the ability to perform the vast
 |-------------------------------------------------|--------------|----------------------------------------------|
 | [HasFilter](#HasFilter---has)                   | `$has`       | `where exists (select * from {$target})`     |
 | [DoesntHasFilter](#DoesntHasFilter---doesnthas) | `$doesntHas` | `where not exists (select * from {$target})` |
+
+#### Morph Relationship Filters
+
+| Filter                                                         | Type              | Query                                        |
+|----------------------------------------------------------------|-------------------|----------------------------------------------|
+| [HasMorphFilter](#HasMorphFilter---hasmorph)                   | `$hasMorph`       | `where exists (select * from {$target})`     |
+| [DoesntHasMorphFilter](#DoesntHasMorphFilter---doesnthasmorph) | `$doesntHasMorph` | `where not exists (select * from {$target})` |
+
 
 #### Condition Filters
 
@@ -797,6 +806,58 @@ $sql = Project::filter([
 
 ```sql
 select * from "projects" where not exists (select * from "comments" where "projects"."id" = "comments"."project_id" and "comments"."content" LIKE '%boring%')
+```
+
+---
+
+#### HasMorphFilter - `$hasMorph`
+
+- `types` = `array` of morph types (minimum 1).
+- `types.*.type` = string.
+- `types.*.value` = `array` of filters.
+
+```php
+$sql = Image::filter([
+    [
+        'target' => 'imageable',
+        'type'   => '$hasMorph',
+        'types'  => [
+            [
+                'type'  => '*',
+                'value' => [],
+            ],
+        ],
+    ],
+])->toRawSql()
+```
+
+```sql
+select * from "images" where (("images"."imageable_type" = 'articles' and exists (select * from "articles" where "images"."imageable_id" = "articles"."id")) or ("images"."imageable_type" = 'user_profiles' and exists (select * from "user_profiles" where "images"."imageable_id" = "user_profiles"."id")))
+```
+
+#### DoesntHasMorphFilter - `$doesntHasMorph`
+
+- `types` = `array` of morph types (minimum 1).
+- `types.*.type` = string.
+- `types.*.value` = `array` of filters.
+
+```php
+$sql = Image::filter([
+    [
+        'target' => 'imageable',
+        'type'   => '$doesntHasMorph',
+        'types'  => [
+            [
+                'type'  => '*',
+                'value' => [],
+            ],
+        ],
+    ],
+])->toRawSql()
+```
+
+```sql
+select * from "images" where (("images"."imageable_type" = 'articles' and not exists (select * from "articles" where "images"."imageable_id" = "articles"."id")) or ("images"."imageable_type" = 'user_profiles' and not exists (select * from "user_profiles" where "images"."imageable_id" = "user_profiles"."id")))
 ```
 
 ---
