@@ -297,7 +297,7 @@ it('throws exception when morphType is not a fqcn of a model', function (): void
     ));
 })->throws(InvalidModelFqcnException::class, 'Must be an eloquent model fully qualified class name.');
 
-it('throws DeniedFilterException when target not allowed', function (): void {
+it('throws DeniedFilterException when morphRelation not allowed', function (): void {
 
     Image::filter([
         [
@@ -319,3 +319,34 @@ it('throws DeniedFilterException when target not allowed', function (): void {
     ));
 
 })->throws(DeniedFilterException::class, '"$hasMorph" filter for "imageable2" is not allowed');
+
+it('throws DeniedFilterException when morphType not allowed', function (): void {
+
+    Image::filter([
+        [
+            'target' => 'imageable',
+            'type'   => '$hasMorph',
+            'types'  => [
+                [
+                    'type'  => 'articles',
+                    'value' => [
+                        [
+                            'target' => 'title',
+                            'type'   => '$eq',
+                            'value'  => 'article-1',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::morphRelation(
+            'imageable',
+            [FilterType::HAS_MORPH],
+            Filter::morphType(UserProfile::class, Filter::only(
+                Filter::field('name', [FilterType::EQUAL])
+            ))
+        )
+    ));
+
+})->throws(DeniedFilterException::class, '"$hasMorph" filter for "imageable" is not allowed');
