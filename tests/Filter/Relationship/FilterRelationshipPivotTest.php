@@ -5,6 +5,7 @@ declare(strict_types=1);
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\BlogPost;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Video;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Post;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Tag;
@@ -168,7 +169,7 @@ it('can not use pivot filter when not in context of a relationship', function ()
 
 })->throws(DeniedFilterException::class, '"$eq" filter for "tagged_by" is not allowed');
 
-it('can not use pivot filter when in context of different relationship', function (): void {
+it('can not use pivot filter when in context of different relationship (BelongsTo)', function (): void {
 
     Video::filter([
         [
@@ -190,6 +191,38 @@ it('can not use pivot filter when in context of different relationship', functio
     ], Filter::only(
         Filter::relation(
             'tag',
+            [FilterType::HAS],
+            allowedFilters: Filter::only(
+                Filter::field('name', [FilterType::EQUAL]),
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+            ),
+        )
+    ));
+
+})->throws(DeniedFilterException::class, '"$eq" filter for "tagged_by" is not allowed');
+
+it('can not use pivot filter when in context of different relationship (BelongsToMany)', function (): void {
+
+    BlogPost::filter([
+        [
+            'target' => 'tags',
+            'type'   => '$has',
+            'value'  => [
+                [
+                    'target' => 'name',
+                    'type'   => '$eq',
+                    'value'  => 'tag-name-1',
+                ],
+                [
+                    'target' => 'tagged_by',
+                    'type'   => '$eq',
+                    'value'  => 'tagged-by-user-1',
+                ],
+            ],
+        ],
+    ], Filter::only(
+        Filter::relation(
+            'tags',
             [FilterType::HAS],
             allowedFilters: Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),

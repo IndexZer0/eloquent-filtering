@@ -178,6 +178,11 @@ class TestCase extends Orchestra
         });
 
         // Pivot
+        $schema->create('blog_posts', function (Blueprint $table): void {
+            $table->id();
+            $table->string('title');
+            $table->timestamps();
+        });
         $schema->create('posts', function (Blueprint $table): void {
             $table->id();
             $table->string('title');
@@ -191,6 +196,13 @@ class TestCase extends Orchestra
         $schema->create('post_tag', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('post_id')->constrained();
+            $table->foreignId('tag_id')->constrained();
+            $table->string('tagged_by');
+            $table->timestamps();
+        });
+        $schema->create('blog_post_tag', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('blog_post_id')->constrained();
             $table->foreignId('tag_id')->constrained();
             $table->string('tagged_by');
             $table->timestamps();
