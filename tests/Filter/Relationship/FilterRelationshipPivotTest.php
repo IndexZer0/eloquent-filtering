@@ -39,7 +39,7 @@ it('can filter by pivot field when allowed', function (): void {
             [FilterType::HAS],
             allowedFilters: Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),
-                Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
             ),
         )
     ));
@@ -78,7 +78,7 @@ it('can filter by pivot field when allowed', function (): void {
             'posts',
             [FilterType::HAS],
             allowedFilters: Filter::only(
-                Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Tag::class),
             ),
         )
     ));
@@ -131,7 +131,7 @@ it('ors with pivot', function (): void {
             [FilterType::HAS],
             allowedFilters: Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),
-                Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
             ),
         )
     ));
@@ -164,7 +164,7 @@ it('can not use pivot filter when not in context of a relationship', function ()
         ],
     ], Filter::only(
         Filter::field('name', [FilterType::EQUAL]),
-        Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+        Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
     ));
 
 })->throws(DeniedFilterException::class, '"$eq" filter for "tagged_by" is not allowed');
@@ -194,7 +194,7 @@ it('can not use pivot filter when in context of different relationship (BelongsT
             [FilterType::HAS],
             allowedFilters: Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),
-                Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
             ),
         )
     ));
@@ -226,7 +226,7 @@ it('can not use pivot filter when in context of different relationship (BelongsT
             [FilterType::HAS],
             allowedFilters: Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),
-                Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+                Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
             ),
         )
     ));

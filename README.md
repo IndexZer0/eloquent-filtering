@@ -1369,13 +1369,13 @@ $query = Model::filter([
 #### Pivot Filters
 
 - `Filter::field()` filters can be marked as pivot filters if you want the filter to be applied to a column on the intermediate table linking the models.
-- You must specify the intermediate table name.
+- You must specify the parent model fqcn.
 
 ```php
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
-        Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+        Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
     );
 }
 ```
@@ -1398,7 +1398,7 @@ class Post extends Model implements IsFilterable
     public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+            Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Tag::class),
             Filter::relation('tags', [FilterType::HAS])->includeRelationFields()
         );
     }
@@ -1416,7 +1416,7 @@ class Tag extends Model implements IsFilterable
     public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('tagged_by', [FilterType::EQUAL])->pivot('post_tag'),
+            Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
             Filter::relation('posts', [FilterType::HAS])->includeRelationFields()
         );
     }
@@ -1484,6 +1484,44 @@ User::filter([
         ]        
     ]
 ]);
+```
+
+- `Many to Many (Polymorphic)` Pivot example.
+- When defining a pivot filter for `MorphToMany` relations, you can specify a list of models in the `->pivot()` method.
+
+```php
+class Epic extends Model implements IsFilterable
+{
+    // ...
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::relation('labels', [FilterType::HAS])->includeRelationFields()
+        );
+    }
+}
+
+class Issue extends Model implements IsFilterable
+{
+    // ...
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::relation('labels', [FilterType::HAS])->includeRelationFields()
+        );
+    }
+}
+
+class Label extends Model implements IsFilterable
+{
+    // ...
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('labeled_by', [FilterType::EQUAL])->pivot(Epic::class, Issue::class)
+        );
+    }
+}
 ```
 
 #### Defining Validation Rules

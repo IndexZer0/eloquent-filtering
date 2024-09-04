@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter;
 
+use Illuminate\Support\Collection;
+
 trait CanBePivot
 {
-    protected ?string $pivotTable = null;
+    protected ?Collection $pivotParentModelFqcns = null;
 
-    public function pivot(string $pivotTable): self
+    public function pivot(string $pivotParentModelFqcn, string ...$pivotParentModelFqcns): static
     {
-        $this->pivotTable = $pivotTable;
+        $this->pivotParentModelFqcns = collect($pivotParentModelFqcns)->prepend($pivotParentModelFqcn);
         return $this;
     }
 
     public function isPivot(): bool
     {
-        return $this->pivotTable !== null;
+        return $this->pivotParentModelFqcns !== null;
     }
 
-    public function getPivotTable(): string
+    public function getPivotParentModelFqcns(): Collection
     {
-        return $this->pivotTable;
+        return $this->pivotParentModelFqcns;
     }
 }

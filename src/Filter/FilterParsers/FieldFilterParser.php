@@ -32,7 +32,9 @@ class FieldFilterParser implements CustomFilterParser
                 throw new DeniedFilterException($pendingFilter);
             }
 
-            if ($relation->getTable() !== $allowedFilter->getPivotTable()) {
+            $parentModelFqcn = get_class($relation->getParent());
+
+            if (!$allowedFilter->getPivotParentModelFqcns()->containsStrict($parentModelFqcn)) {
                 throw new DeniedFilterException($pendingFilter);
             }
         }

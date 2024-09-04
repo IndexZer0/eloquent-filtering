@@ -24,6 +24,6 @@ class Label extends Model implements IsFilterable
 
     public function issues(): MorphToMany
     {
-        return $this->morphedByMany(Epic::class, 'labelable');
+        return $this->morphedByMany(Issue::class, 'labelable');
     }
 }

@@ -203,7 +203,7 @@ it('can alias morph relation field | morphRelation filter', function (): void {
 
 });
 
-it('can alias pivot | Filter::all()', function (): void {
+it('can alias pivot', function (): void {
 
     $query = Post::filter([
         [
@@ -228,7 +228,7 @@ it('can alias pivot | Filter::all()', function (): void {
             Target::alias('target_from_request_2', 'tags'),
             [FilterType::HAS],
             allowedFilters: Filter::only(
-                Filter::field(Target::alias('target_from_request_1', 'tagged_by'), [FilterType::EQUAL])->pivot('post_tag'),
+                Filter::field(Target::alias('target_from_request_1', 'tagged_by'), [FilterType::EQUAL])->pivot(Post::class),
             ),
         )
     ));
