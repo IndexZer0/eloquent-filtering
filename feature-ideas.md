@@ -19,9 +19,9 @@ $filter = [
 ],
 ```
 
-### Provide core filters for common laravel queries.
+### Provide more core filters.
 
-- `$trashed`.
+- `$trashed` - for soft deletes.
 ```php
 // e.g.
 $filter = [
@@ -37,7 +37,7 @@ $filter = [
     'type' => '$withTrashed'
 ]
 ```
-- `$latest`.
+- `$latest` - for order by.
 ```php
 // e.g.
 $filter = [
@@ -49,7 +49,22 @@ $filter = [
     'type' => '$latest'
 ]
 ```
-- etc
+
+- `$empty` / `$blank`.
+```php
+$filter = [
+    'type' => '$empty'
+]
+// where column = '' or column is null
+```
+
+- `$filled`.
+```php
+$filter = [
+    'type' => '$filled'
+]
+// where column != '' and column is not null
+```
 
 ### Scope filters?
 
