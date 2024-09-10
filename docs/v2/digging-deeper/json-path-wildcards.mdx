@@ -1,0 +1,35 @@
+---
+title: 'JSON Path Wildcards'
+version: 'v2'
+icon: 'brackets-curly'
+iconType: 'solid'
+---
+
+## Overview
+
+When specifying the target of a json database field you can specify wildcards in the json path.
+
+## Example
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('data->*->array', [FilterType::JSON_CONTAINS]),
+    );
+}
+
+/*
+ * Allows:
+ */
+$filters = [
+    [
+        'type'   => '$jsonContains',
+        'target' => 'data->languages->array',
+        'value'  => [
+            'en',
+            'de',
+        ]
+    ]
+];
+```

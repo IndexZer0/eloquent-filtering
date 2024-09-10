@@ -1,0 +1,59 @@
+---
+title: 'Null'
+version: 'v2'
+icon: 'empty-set'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('age', [FilterType::NULL]);
+Filter::field('weight', [FilterType::NULL]);
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$null" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="true|false" required>
+</ParamField>
+
+## Example
+
+```php
+$filters = [
+    [
+        'type'   => '$null',
+        'target' => 'age',
+        'value'  => true,
+    ],
+    [
+        'type'   => '$null',
+        'target' => 'weight',
+        'value'  => false,
+    ],
+];
+```
+
+```php
+$sql = Person::filter([$filters])->toRawSql();
+```
+
+### SQL
+
+```sql
+select *
+  from "people"
+ where "people"."age" is null
+   and "people"."weight" is not null
+```
+
+## Modifiers
+
+None available.

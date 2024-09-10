@@ -1,0 +1,48 @@
+---
+title: 'Equal'
+version: 'v2'
+icon: 'equals'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('name', [FilterType::EQUAL]);
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$eq" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="string|int|float" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'   => '$eq',
+    'target' => 'name',
+    'value'  => 'Taylor',
+];
+```
+
+```php
+$sql = Person::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select * from "people" where "people"."name" = 'Taylor'
+```
+
+## Modifiers
+
+None available.

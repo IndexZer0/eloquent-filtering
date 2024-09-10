@@ -1,0 +1,173 @@
+---
+title: 'Pivot Filters'
+version: 'v2'
+icon: 'scale-unbalanced'
+iconType: 'solid'
+---
+
+## Overview
+
+`Filter::field()` filters can be marked as pivot filters if you want the filter to be applied to a column on the intermediate table linking the models.
+
+You must specify the parent model fqcn.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
+    );
+}
+```
+
+## BelongsToMany
+
+In the below example of `class Post` and `class Tag`.
+
+- The pivot filter can **only** be used when in the context of the `posts` or `tags` relationship.
+
+```php
+class Post extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Tag::class),
+            Filter::relation('tags', [FilterType::HAS])->includeRelationFields()
+        );
+    }
+}
+
+class Tag extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class);
+    }
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
+            Filter::relation('posts', [FilterType::HAS])->includeRelationFields()
+        );
+    }
+}
+
+// Applying `tagged_by` filter within `tags` `$has` relation filter.
+// Allowed
+Post::filter([
+    [
+        'type'   => '$has',
+        'target' => 'tags',
+        'value'  => [
+            [
+                'type'   => '$eq',
+                'target' => 'tagged_by',
+                'value'  => 'admin',
+            ]
+        ]
+    ]
+]);
+
+// Applying `tagged_by` filter within `posts` `$has` relation filter.
+// Allowed
+Tag::filter([
+    [
+        'type'   => '$has',
+        'target' => 'posts',
+        'value'  => [
+            [
+                'type'   => '$eq',
+                'target' => 'tagged_by',
+                'value'  => 'admin',
+            ]
+        ]
+    ]
+]);
+
+// Applying `tagged_by` filter when not in context of `tags` `$has` relation filter.
+// throws DeniedFilterException.
+Post::filter([
+    [
+        'type'   => '$eq',
+        'target' => 'tagged_by',
+        'value'  => 'admin',
+    ]
+]);
+
+// Applying `tagged_by` filter when not in context of `posts` `$has` relation filter.
+// throws DeniedFilterException.
+Tag::filter([
+    [
+        'type'   => '$eq',
+        'target' => 'tagged_by',
+        'value'  => 'admin',
+    ]
+]);
+
+// Applying `tagged_by` filter when in context of another BelongsToMany relation
+// but User::class not defined in the ->pivot() method in the tags model.
+// throws DeniedFilterException.
+User::filter([
+    [
+        'type'   => '$has',
+        'target' => 'tags',
+        'value'  => [
+            [
+                'type'   => '$eq',
+                'target' => 'tagged_by',
+                'value'  => 'admin',
+            ]
+        ]
+    ]
+]);
+```
+
+## Many To Many (Polymorphic)
+
+When defining a pivot filter for `MorphToMany` relations, you can specify a list of models in the `->pivot()` method.
+
+```php
+class Epic extends Model implements IsFilterable
+{
+    // ...
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::relation('labels', [FilterType::HAS])->includeRelationFields()
+        );
+    }
+}
+
+class Issue extends Model implements IsFilterable
+{
+    // ...
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::relation('labels', [FilterType::HAS])->includeRelationFields()
+        );
+    }
+}
+
+class Label extends Model implements IsFilterable
+{
+    // ...
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('labeled_by', [FilterType::EQUAL])->pivot(Epic::class, Issue::class)
+        );
+    }
+}
+```

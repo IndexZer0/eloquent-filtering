@@ -1,0 +1,64 @@
+---
+title: 'Or'
+version: 'v2'
+icon: 'split'
+iconType: 'solid'
+---
+
+## Definition
+import ConditionFiltersNote from '/snippets/condition-filters-note.mdx';
+
+<ConditionFiltersNote />
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$or" />
+
+<ParamField body="value" type="array,min:2" required>
+</ParamField>
+
+<ParamField body="value.*" type="array" required>
+Any other filter
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'  => '$or',
+    'value' => [
+        [
+            'type'   => '$like',
+            'target' => 'content',
+            'value'  => 'awesome',
+        ],
+        [
+            'type'   => '$like',
+            'target' => 'content',
+            'value'  => 'boring',
+        ]
+    ]
+];
+```
+
+```php
+$sql = Comment::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select *
+  from "comments"
+ where (
+       ("comments"."content" LIKE '%awesome%')
+    or
+       ("comments"."content" LIKE '%boring%')
+ )
+```
+
+## Modifiers
+
+None available.

@@ -1,0 +1,57 @@
+---
+title: 'Not In'
+version: 'v2'
+icon: 'brackets-square'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('name', [FilterType::NOT_IN]);
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$notIn" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="array,min:1" required>
+</ParamField>
+
+<ParamField body="value.*" type="string|int|float" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'   => '$notIn',
+    'target' => 'name',
+    'value'  => ['Nuno', 'Maduro',]
+];
+```
+
+```php
+$sql = Person::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select * from "people" where "people"."name" not in ('Nuno', 'Maduro')
+```
+
+## Modifiers
+
+### Null
+
+<TypeParameterField type="$notIn:null" />
+
+```sql
+select * from "people" where "people"."name" not in ('Nuno', 'Maduro') and "people"."name" is not null
+```

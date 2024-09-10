@@ -1,0 +1,30 @@
+---
+title: 'Make Model Sortable'
+version: 'v2'
+icon: 'sort'
+iconType: 'solid'
+---
+
+import SortingNote from '/snippets/sorting-note.mdx';
+
+<SortingNote />
+
+- Use `Sortable` trait.
+- Define `allowedSorts()` method.
+
+```php
+use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
+use IndexZer0\EloquentFiltering\Sort\Sortable\Sort;
+
+class Product extends Model
+{
+    use Sortable;
+
+    public function allowedSorts(): AllowedSortList
+    {
+        return Sort::only(
+            Sort::field('name'),
+        );
+    }
+}
+```
