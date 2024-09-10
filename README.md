@@ -1673,7 +1673,7 @@ class InvalidModelFqcnException extends InvalidArgumentException
 // When an invalid model string is passed to `Filter::morphType()` or `Filter::morphRelation()->includeRelationFields()`.
 
 class UnsupportedModifierException extends InvalidArgumentException
-// When an invalid modifier it passed to ->withModifiers().
+// When an invalid modifier is passed to ->withModifiers().
 
 class RequiredFilterException extends ValidationException
 // When required filter(s) were not applied.
