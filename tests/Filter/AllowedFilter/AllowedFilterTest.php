@@ -26,7 +26,7 @@ it('does not allow filters that are not for same context', function (
         )
     );
 
-})->only()->with([
+})->with([
     // Field filter
     'field filter | relation allowed filter' => [
         'filter' => [
