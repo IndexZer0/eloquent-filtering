@@ -18,6 +18,8 @@
 
 ---
 
+<h3 align="center">[View The Docs](https://docs.eloquentfiltering.com)</h3>
+
 Features:
 
 - Filter 
