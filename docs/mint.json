@@ -1,10 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "name": "Eloquent Filtering",
-  "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
-  },
   "versions": ["v2", "v1"],
   "favicon": "/favicon.svg",
   "colors": {
