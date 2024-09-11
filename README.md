@@ -64,7 +64,7 @@ You can install the package via composer:
 composer require indexzer0/eloquent-filtering
 ```
 
-Run the `install` artisan command to publish the config and service provider:
+Run the `install` artisan command to publish the config:
 
 ```bash
 php artisan eloquent-filtering:install
