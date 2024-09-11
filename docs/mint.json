@@ -27,8 +27,9 @@
   "topbarLinks": [
   ],
   "topbarCtaButton": {
-    "name": "GitHub",
-    "url": "https://github.com/IndexZer0/eloquent-filtering"
+    "name": "Star on GitHub",
+    "url": "https://github.com/IndexZer0/eloquent-filtering",
+    "arrow": true
   },
   "tabs": [
   ],
