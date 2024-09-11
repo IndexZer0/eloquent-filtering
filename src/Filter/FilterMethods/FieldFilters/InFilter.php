@@ -11,7 +11,7 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\Composables\HasModifiers;
 use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\FieldFilter;
-use IndexZer0\EloquentFiltering\Rules\NullableWhereValue;
+use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
 class InFilter implements FilterMethod, Modifiable, Targetable
 {
@@ -38,23 +38,19 @@ class InFilter implements FilterMethod, Modifiable, Targetable
     {
         return [
             'value'   => ['required', 'array', 'min:1'],
-            'value.*' => [new NullableWhereValue()],
+            'value.*' => [new WhereValue()],
         ];
     }
 
     public function apply(Builder $query): Builder
     {
-        $value = collect($this->value);
-        $valueContainNull = $value->containsStrict(null);
-        $hasNullModifier = $this->hasModifier('null');
-
         $target = $this->eloquentContext->qualifyColumn($this->target);
 
         return $query->whereIn(
             $target,
-            $value->filter(fn ($item) => $item !== null),
+            $this->value,
             not: $this->not()
-        )->when($valueContainNull && $hasNullModifier, function (Builder $query) use ($target): void {
+        )->when($this->hasModifier('null'), function (Builder $query) use ($target): void {
             $query->whereNull(
                 $target,
                 $this->not() ? 'and' : 'or',

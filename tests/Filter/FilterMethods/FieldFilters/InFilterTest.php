@@ -49,7 +49,6 @@ it('can perform $in filter with :null modifier', function (): void {
                 'type'   => '$in:null',
                 'value'  => [
                     'George Raymond Richard Martin',
-                    null,
                 ],
             ],
         ],
@@ -73,7 +72,7 @@ it('can perform $in filter with :null modifier', function (): void {
 
 });
 
-it('only accepts string, int, float, null for value', function (
+it('only accepts string, int, float for value', function (
     array $value_container,
     ?string $expected_sql,
     bool $expect_exception,
@@ -139,7 +138,7 @@ it('only accepts string, int, float, null for value', function (
                 'Name filter does not match required format.',
             ],
             'name.value.0' => [
-                'The value.0 must be string, integer, float or null.',
+                'The value.0 must be string, integer or float.',
             ],
         ],
     ],
@@ -153,7 +152,7 @@ it('only accepts string, int, float, null for value', function (
                 'Name filter does not match required format.',
             ],
             'name.value.0' => [
-                'The value.0 must be string, integer, float or null.',
+                'The value.0 must be string, integer or float.',
             ],
         ],
     ],
@@ -167,43 +166,50 @@ it('only accepts string, int, float, null for value', function (
                 'Name filter does not match required format.',
             ],
             'name.value.0' => [
-                'The value.0 must be string, integer, float or null.',
+                'The value.0 must be string, integer or float.',
+            ],
+        ],
+    ],
+    'array containing null' => [
+        'value_container'            => ['value' => [null], ],
+        'expected_sql'               => 'select * from "authors" where (0 = 1 or "authors"."name" is null)',
+        'expect_exception'           => true,
+        'expected_exception_message' => 'Name filter does not match required format. (and 1 more error)',
+        'expected_errors'            => [
+            'name' => [
+                'Name filter does not match required format.',
+            ],
+            'name.value.0' => [
+                'The value.0 must be string, integer or float.',
             ],
         ],
     ],
 
     // Success Cases
-    'array containing null' => [
-        'value_container'            => ['value' => [null], ],
-        'expected_sql'               => 'select * from "authors" where (0 = 1 or "authors"."name" is null)',
-        'expect_exception'           => false,
-        'expected_exception_message' => null,
-        'expected_errors'            => null,
-    ],
     'array containing int' => [
         'value_container'            => ['value' => [420]],
-        'expected_sql'               => 'select * from "authors" where "authors"."name" in (420)',
+        'expected_sql'               => 'select * from "authors" where ("authors"."name" in (420) or "authors"."name" is null)',
         'expect_exception'           => false,
         'expected_exception_message' => null,
         'expected_errors'            => null,
     ],
     'array containing string' => [
         'value_container'            => ['value' => ['string'], ],
-        'expected_sql'               => 'select * from "authors" where "authors"."name" in (\'string\')',
+        'expected_sql'               => 'select * from "authors" where ("authors"."name" in (\'string\') or "authors"."name" is null)',
         'expect_exception'           => false,
         'expected_exception_message' => null,
         'expected_errors'            => null,
     ],
     'array containing numeric_string' => [
         'value_container'            => ['value' => ['1'], ],
-        'expected_sql'               => 'select * from "authors" where "authors"."name" in (\'1\')',
+        'expected_sql'               => 'select * from "authors" where ("authors"."name" in (\'1\') or "authors"."name" is null)',
         'expect_exception'           => false,
         'expected_exception_message' => null,
         'expected_errors'            => null,
     ],
     'array containing float' => [
         'value_container'            => ['value' => [420.69], ],
-        'expected_sql'               => 'select * from "authors" where "authors"."name" in (420.69)',
+        'expected_sql'               => 'select * from "authors" where ("authors"."name" in (420.69) or "authors"."name" is null)',
         'expect_exception'           => false,
         'expected_exception_message' => null,
         'expected_errors'            => null,

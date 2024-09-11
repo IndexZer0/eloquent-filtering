@@ -48,7 +48,6 @@ it('can perform $notIn filter with :null modifier', function (): void {
                 'type'   => '$notIn:null',
                 'value'  => [
                     'George Raymond Richard Martin',
-                    null,
                 ],
             ],
         ],

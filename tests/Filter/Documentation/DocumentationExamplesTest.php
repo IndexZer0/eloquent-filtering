@@ -294,7 +294,7 @@ it('InFilter | $in:null', function (): void {
         [
             'type'   => '$in:null',
             'target' => 'name',
-            'value'  => ['Taylor', 'Otwell', null, ],
+            'value'  => ['Taylor', 'Otwell', ],
         ],
     ], Filter::only(
         Filter::field('name', [FilterType::IN]),
@@ -332,7 +332,7 @@ it('NotInFilter | $notIn:null', function (): void {
         [
             'type'   => '$notIn:null',
             'target' => 'name',
-            'value'  => ['Nuno', 'Maduro', null],
+            'value'  => ['Nuno', 'Maduro', ],
         ],
     ], Filter::only(
         Filter::field('name', [FilterType::NOT_IN]),
