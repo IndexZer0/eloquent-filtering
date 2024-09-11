@@ -15,6 +15,30 @@ Eloquent Filtering helps you **avoid** writing custom query logic for filtering 
 
 The main use case of filtering models from http request parameters is achieved by **simply** defining allowed filters on your models and pass filters from http request to the model.
 
+## Quick Look
+
+```php
+class Product extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('name', [FilterType::EQUAL]),
+        );
+    }
+}
+
+$products = Product::filter([
+    [
+        'target' => 'name',
+        'type'   => '$eq',
+        'value'  => 'TV'
+    ]
+])->get();
+```
+
 ## Features
 
 ### Filter
