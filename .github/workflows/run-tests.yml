@@ -19,8 +19,8 @@ jobs:
         os: [ubuntu-latest]
         php: [8.3, 8.2]
         laravel-testbench: [
-          {laravel: 10.*, testbench: ^8.22.0, pest: 2.*},
-          {laravel: 11.*, testbench: 9.*, pest: 3.*}
+          {laravel: 10.*, testbench: ^8.22.0, pest: 2.*, pest-plugin-arch: ^2.7.0},
+          {laravel: 11.*, testbench: 9.*, pest: 3.*, pest-plugin-arch: 3.*}
         ]
         stability: [prefer-lowest, prefer-stable]
         include:
@@ -46,7 +46,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel-testbench.laravel }}" "orchestra/testbench:${{ matrix.laravel-testbench.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" "pestphp/pest:${{ matrix.laravel-testbench.pest }}" "pestphp/pest-plugin-arch:${{ matrix.laravel-testbench.pest }}" "pestphp/pest-plugin-laravel:${{ matrix.laravel-testbench.pest }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel-testbench.laravel }}" "orchestra/testbench:${{ matrix.laravel-testbench.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" "pestphp/pest:${{ matrix.laravel-testbench.pest }}" "pestphp/pest-plugin-arch:${{ matrix.laravel-testbench.pest-plugin-arch }}" "pestphp/pest-plugin-laravel:${{ matrix.laravel-testbench.pest }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: List Installed Dependencies
