@@ -8,12 +8,12 @@
   "versions": ["v2", "v1"],
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#0F9DD9",
+    "light": "#0F9DD9",
+    "dark": "#0F9DD9",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#0F9DD9",
+      "to": "#0F9DD9"
     }
   },
   "theme": "prism",
