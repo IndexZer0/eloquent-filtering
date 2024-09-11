@@ -9,7 +9,6 @@
 [![PHP Version Require](http://poser.pugx.org/indexzer0/eloquent-filtering/require/php?style=for-the-badge)](https://packagist.org/packages/indexzer0/eloquent-filtering)
 [![Laravel Version Require](http://poser.pugx.org/indexzer0/eloquent-filtering/require/illuminate/contracts?style=for-the-badge)](https://packagist.org/packages/indexzer0/eloquent-filtering)
 
-
 ---
 
 <h3 align="center">Easily filter eloquent models using arrays</h3>
