@@ -23,12 +23,12 @@ it('can perform $notIn filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$notIn']),
+            Filter::field('name', [FilterType::NOT_IN]),
         )
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" not in ('J. K. Rowling', 'William Shakespeare')
+        select * from "authors" where "authors"."name" not in ('J. K. Rowling', 'William Shakespeare')
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -48,7 +48,6 @@ it('can perform $notIn filter with :null modifier', function (): void {
                 'type'   => '$notIn:null',
                 'value'  => [
                     'George Raymond Richard Martin',
-                    null,
                 ],
             ],
         ],
@@ -60,7 +59,7 @@ it('can perform $notIn filter with :null modifier', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" not in ('George Raymond Richard Martin') and "name" is not null
+        select * from "authors" where "authors"."name" not in ('George Raymond Richard Martin') and "authors"."name" is not null
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

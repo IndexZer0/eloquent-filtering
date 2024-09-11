@@ -1,0 +1,46 @@
+---
+title: 'Config'
+version: 'v2'
+icon: 'gear'
+iconType: 'solid'
+---
+
+## Overview
+
+Suppress exceptions and register your custom filters in the published config file.
+
+- This package throws various exception which can be [suppressed](/v2/digging-deeper/suppressing-exceptions).
+- [Custom filters](/v2/digging-deeper/custom-filters) should be registered in the config.
+
+## Install
+
+`eloquent-filtering.php` config file will be published via the install command.
+
+```bash
+php artisan eloquent-filtering:install
+```
+
+## Default Configuration File
+
+```php
+return [
+    'default_allowed_sort_list'   => 'none',
+
+    'suppress' => [
+        'filter' => [
+            'invalid'          => false,
+            'missing'          => false,
+            'malformed_format' => false,
+            'denied'           => false,
+        ],
+        'sort' => [
+            'malformed_format' => false,
+            'denied'           => false,
+        ],
+    ],
+
+    'custom_filters' => [
+
+    ],
+];
+```

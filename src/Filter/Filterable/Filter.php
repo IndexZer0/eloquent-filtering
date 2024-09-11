@@ -7,15 +7,19 @@ namespace IndexZer0\EloquentFiltering\Filter\Filterable;
 use IndexZer0\EloquentFiltering\Contracts\Target as TargetContract;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedCustomFilter;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedField;
+use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedMorphRelation;
+use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedMorphType;
 use IndexZer0\EloquentFiltering\Filter\AllowedFilters\AllowedRelation;
 use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Types\Types;
 use IndexZer0\EloquentFiltering\Target\AliasedTarget;
 use IndexZer0\EloquentFiltering\Target\JsonPathTarget;
 use IndexZer0\EloquentFiltering\Target\Target;
+use IndexZer0\EloquentFiltering\Utilities\ClassUtils;
+use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class Filter
 {
@@ -28,11 +32,6 @@ class Filter
     public static function none(): NoFiltersAllowed
     {
         return new NoFiltersAllowed();
-    }
-
-    public static function all(TargetContract ...$targets): AllFiltersAllowed
-    {
-        return new AllFiltersAllowed(...$targets);
     }
 
     public static function only(AllowedFilter ...$allowedFilters): SomeFiltersAllowed
@@ -62,6 +61,28 @@ class Filter
         return new AllowedRelation(
             self::createAlias($target),
             self::createTypes($types),
+            $allowedFilters,
+        );
+    }
+
+    public static function morphRelation(
+        string|AliasedTarget $target,
+        array|AllowedTypes   $types,
+        AllowedMorphType ...$allowedMorphTypes,
+    ): AllowedMorphRelation {
+        return new AllowedMorphRelation(
+            self::createAlias($target),
+            self::createTypes($types),
+            new SomeFiltersAllowed(...$allowedMorphTypes)
+        );
+    }
+
+    public static function morphType(
+        string|AliasedTarget $type,
+        AllowedFilterList $allowedFilters = new NoFiltersAllowed(),
+    ): AllowedMorphType {
+        return new AllowedMorphType(
+            self::createMorphRelationAlias($type),
             $allowedFilters
         );
     }
@@ -88,6 +109,29 @@ class Filter
         }
 
         return Target::alias($target);
+    }
+
+    public static function createMorphRelationAlias(string|AliasedTarget $target): TargetContract
+    {
+        // Gives full control to the developer.
+        if ($target instanceof AliasedTarget) {
+            return $target;
+        }
+
+        // "Querying All Related Models" support.
+        // https://laravel.com/docs/10.x/eloquent-relationships#querying-all-morph-to-related-models
+        if ($target === '*') {
+            return Target::alias($target);
+        }
+
+        ClassUtils::ensureFqcnIsModel($target);
+
+        if (RelationUtils::existsInMorphMap($target)) {
+            $alias = RelationUtils::getMorphAlias($target);
+            return Target::alias($alias);
+        }
+
+        return Target::alias((new $target())->getTable(), $target);
     }
 
     /*

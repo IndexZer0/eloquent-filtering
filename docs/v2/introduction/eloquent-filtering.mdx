@@ -1,0 +1,134 @@
+---
+title: 'Eloquent Filtering'
+version: 'v2'
+icon: 'filter'
+iconType: 'solid'
+---
+
+<Frame>
+    <img src="/images/hero.png" noZoom />
+</Frame>
+
+|                                                                                                                                                                                        |                                                                                                                                                                                                                                                                                 |                                                                                                                                                                                          |                                                                                                                                                                             |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [![Latest Version on Packagist](https://img.shields.io/packagist/v/indexzer0/eloquent-filtering.svg?style=for-the-badge)](https://packagist.org/packages/indexzer0/eloquent-filtering) | [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/indexzer0/eloquent-filtering/run-tests.yml?branch=main&label=tests&style=for-the-badge)](https://github.com/indexzer0/eloquent-filtering/actions?query=workflow%3Arun-tests+branch%3Amain) | [![Codecov](https://img.shields.io/codecov/c/github/IndexZer0/eloquent-filtering?token=34B3NIPBRM&style=for-the-badge&logo=codecov)](https://codecov.io/gh/IndexZer0/eloquent-filtering) | [![Total Downloads](https://img.shields.io/packagist/dt/indexzer0/eloquent-filtering.svg?style=for-the-badge)](https://packagist.org/packages/indexzer0/eloquent-filtering) |
+
+## Overview
+
+Eloquent Filtering helps you **avoid** writing custom query logic for filtering your models.
+
+The main use case of filtering models from http request parameters is achieved by **simply** defining allowed filters on your models and pass filters from http request to the model.
+
+## Quick Look
+
+```php
+class Product extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('name', [FilterType::EQUAL]),
+        );
+    }
+}
+
+$products = Product::filter([
+    [
+        'target' => 'name',
+        'type'   => '$eq',
+        'value'  => 'TV'
+    ]
+])->get();
+```
+
+## Features
+
+### Filter
+
+- Many **core** filter methods.
+- Filter by **fields**.
+- Filter by **relationship** existence.
+  - Filter by **nested relationship** existence.
+  - Filter by **fields** on **relationships**.
+- Alias **fields** and **relationships**.
+- Specify filter types per field/relationship.
+- Filter json columns.
+  - Json path wildcard support.
+- Validation.
+- Required filters.
+- Pivot filters.
+- Custom filters.
+
+### Sort
+
+- Sort by fields.
+- Alias fields.
+
+## Field And Relationship Filter Example
+
+```php
+class Product extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('name', [FilterType::EQUAL]),
+            Filter::relation('manufacturer', [FilterType::HAS])->includeRelationFields()
+        );
+    }
+
+    public function manufacturer(): HasOne
+    {
+        return $this->hasOne(Manufacturer::class);
+    }
+}
+
+class Manufacturer extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('name', [FilterType::EQUAL])
+        );
+    }
+}
+
+$filters = [
+    [
+        'target' => 'name',
+        'type'   => '$eq',
+        'value'  => 'TV',
+    ],
+    [
+        'type'   => '$has',
+        'target' => 'manufacturer',
+        'value'  => [
+            [
+                'type'   => '$eq',
+                'target' => 'name',
+                'value'  => 'Sony',
+            ]
+        ]
+    ]
+];
+
+$sql = Product::filter($filters)->toRawSql();
+```
+
+```sql
+SELECT *
+FROM "products"
+WHERE "products"."name" = 'TV'
+  AND EXISTS (
+    SELECT *
+    FROM "manufacturers"
+    WHERE "products"."manufacturer_id" = "manufacturers"."id"
+      AND "manufacturers"."name" = 'Sony'
+  )
+```

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
@@ -23,12 +24,12 @@ it('can perform $null filter | null', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$null']),
+            Filter::field('name', [FilterType::NULL]),
         )
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" is null
+        select * from "authors" where "authors"."name" is null
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -50,12 +51,12 @@ it('can perform $null filter | not null', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$null']),
+            Filter::field('name', [FilterType::NULL]),
         )
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" is not null
+        select * from "authors" where "authors"."name" is not null
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

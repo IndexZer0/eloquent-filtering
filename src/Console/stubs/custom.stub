@@ -3,10 +3,13 @@
 namespace {{ namespace }};
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractCustomFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\CustomFilter;
 
-class {{ class }} extends AbstractCustomFilter
+class {{ class }} implements FilterMethod
 {
+    use CustomFilter;
+
     /*
      * The unique identifier of the filter.
      */
@@ -20,6 +23,9 @@ class {{ class }} extends AbstractCustomFilter
      */
     public function apply(Builder $query): Builder
     {
-        return $query->where('some_field', 'some_value');
+        return $query->where(
+            $this->eloquentContext()->qualifyColumn('some_field'),
+            'some_value'
+        );
     }
 }

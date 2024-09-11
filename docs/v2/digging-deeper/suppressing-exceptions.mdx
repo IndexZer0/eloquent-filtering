@@ -1,0 +1,55 @@
+---
+title: 'Suppressing Exceptions'
+version: 'v2'
+icon: 'hexagon-exclamation'
+iconType: 'solid'
+---
+
+## Overview
+
+Various exceptions are thrown by this package.
+
+Many can be suppressed globally in the config file.
+
+## Suppressible
+
+<Note>
+When suppressing an exception, filters that caused the exception will be ignored.
+</Note>
+
+```php
+class InvalidFilterException
+config("eloquent-filtering.suppress.filter.invalid");
+// Filter does not have `type` key.
+
+class MissingFilterException
+config("eloquent-filtering.suppress.filter.missing");
+// Can't find filter of `type` specified.
+
+class MalformedFilterFormatException extends ValidationException
+config("eloquent-filtering.suppress.filter.malformed_format");
+// The filter was found, but the rest of the data does not match required format of the filter.
+
+class DeniedFilterException
+config("eloquent-filtering.suppress.filter.denied");
+// Filter is not allowed.
+```
+
+## Not Suppressible
+
+```php
+class DuplicateFiltersException
+// When you have registered a custom filter that has the same type as another filter.
+
+class InvalidFiltersPayloadException extends InvalidArgumentException
+// When filters are passed to ::filter() that are not list arrays.
+
+class InvalidModelFqcnException extends InvalidArgumentException
+// When an invalid model string is passed to `Filter::morphType()` or `Filter::morphRelation()->includeRelationFields()`.
+
+class UnsupportedModifierException extends InvalidArgumentException
+// When an invalid modifier is passed to ->withModifiers().
+
+class RequiredFilterException extends ValidationException
+// When required filter(s) were not applied.
+```

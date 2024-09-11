@@ -1,0 +1,84 @@
+---
+title: 'Has Morph'
+version: 'v2'
+icon: 'check'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::morphRelation('imageable', [FilterType::HAS_MORPH],
+    Filter::morphType('*'),
+);
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$hasMorph" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="types" type="array,min:1" required>
+</ParamField>
+
+<ParamField body="types.*.type" type="string" required>
+</ParamField>
+
+<ParamField body="types.*.value" type="array">
+</ParamField>
+
+<ParamField body="types.*.value" type="array">
+Any other filter
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'target' => 'imageable',
+    'type'   => '$hasMorph',
+    'types'  => [
+        [
+            'type'  => '*',
+            'value' => [],
+        ],
+    ],
+];
+```
+
+```php
+$sql = Image::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+SELECT *
+FROM "images"
+WHERE (
+		(
+			"images"."imageable_type" = 'articles'
+			AND EXISTS (
+				SELECT *
+				FROM "articles"
+				WHERE "images"."imageable_id" = "articles"."id"
+				)
+			)
+		OR (
+			"images"."imageable_type" = 'user_profiles'
+			AND EXISTS (
+				SELECT *
+				FROM "user_profiles"
+				WHERE "images"."imageable_id" = "user_profiles"."id"
+				)
+			)
+		)
+```
+
+## Modifiers
+
+None available.

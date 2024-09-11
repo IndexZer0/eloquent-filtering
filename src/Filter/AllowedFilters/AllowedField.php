@@ -7,16 +7,23 @@ namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\PivotableFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\RequireableFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\TargetedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
-use IndexZer0\EloquentFiltering\Filter\Filterable\AllFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
-use IndexZer0\EloquentFiltering\Filter\Traits\CanBeRequired;
+use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBePivot;
+use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBeRequired;
 
-class AllowedField implements AllowedFilter
+class AllowedField implements
+    AllowedFilter,
+    TargetedFilter,
+    RequireableFilter,
+    PivotableFilter
 {
     use CanBeRequired;
+    use CanBePivot;
 
     public function __construct(
         protected Target $target,
@@ -29,11 +36,6 @@ class AllowedField implements AllowedFilter
      * Interface methods
      * -----------------------------
      */
-
-    public function allowedFilters(): AllowedFilterList
-    {
-        return new AllFiltersAllowed();
-    }
 
     public function getAllowedType(PendingFilter $pendingFilter): ?AllowedType
     {
@@ -50,11 +52,11 @@ class AllowedField implements AllowedFilter
 
     public function getTarget(PendingFilter $pendingFilter): Target
     {
-        return $this->target->getForApprovedFilter($pendingFilter);
+        return $this->target->getForFilterMethod($pendingFilter);
     }
 
-    public function getDescription(): string
+    public function getIdentifier(): string
     {
-        return sprintf('"%s" filter', $this->target->target());
+        return $this->target->target();
     }
 }

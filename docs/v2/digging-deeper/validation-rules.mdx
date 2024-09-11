@@ -1,0 +1,51 @@
+---
+title: 'Validation Rules'
+version: 'v2'
+icon: 'shield-check'
+iconType: 'solid'
+---
+
+## Overview
+
+You can define your own validation rules, messages, and attributes for any `AllowedType`.
+
+- When a filter does not pass validation rules, a `MalformedFilterFormatException` is thrown.
+- `MalformedFilterFormatException` extends Laravels `ValidationException`.
+    - You can let this bubble up to your controller for the default laravel 422 response.
+- This exception **CAN** be [suppressed](/v2/digging-deeper/suppressing-exceptions).
+
+```php
+class Order extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('status', [
+                FilterType::EQUAL->withValidation([
+                    'value' => [Rule::enum(OrderStatus::class)],
+                ], [
+                    'enum' => 'The selected :attribute is invalid.',
+                ], [
+                    'value' => 'status value',
+                ]),
+                FilterType::IN->withValidation([
+                    'value.*' => [Rule::enum(OrderStatus::class)]
+                ])
+            ]),
+            Filter::field('paid_date', [
+                FilterType::BETWEEN->withValidation([
+                    'value.0' => ['date', 'before:value.1'],
+                    'value.1' => ['date', 'after:value.0'],
+                ])
+            ]),
+            Filter::field('created_at', [
+                new AllowedType('$yourCustomFilterType')->withValidation([
+                    'value' => [new YourCustomRule()],
+                ])
+            ]),
+        );
+    }
+}
+```

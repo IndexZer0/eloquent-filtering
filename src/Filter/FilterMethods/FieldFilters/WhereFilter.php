@@ -5,20 +5,17 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
-use IndexZer0\EloquentFiltering\Filter\Traits\HasModifiers;
-use IndexZer0\EloquentFiltering\Rules\TargetRules;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\FieldFilter;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
-abstract class WhereFilter extends AbstractFieldFilter
+abstract class WhereFilter implements FilterMethod, Targetable
 {
-    use HasModifiers;
+    use FieldFilter;
 
-    final public function __construct(
-        protected string           $target,
+    public function __construct(
         protected string|float|int $value,
-        protected array $modifiers,
     ) {
     }
 
@@ -31,23 +28,17 @@ abstract class WhereFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            ...TargetRules::get(),
             'value' => ['required', new WhereValue()],
         ];
     }
 
-    public static function from(ApprovedFilter $approvedFilter): static
-    {
-        return new static(
-            $approvedFilter->target()->getReal(),
-            $approvedFilter->data_get('value'),
-            $approvedFilter->modifiers(),
-        );
-    }
-
     public function apply(Builder $query): Builder
     {
-        return $query->where($this->target(), $this->operator(), $this->value());
+        return $query->where(
+            $this->eloquentContext()->qualifyColumn($this->target),
+            $this->operator(),
+            $this->value()
+        );
     }
 
     /*
@@ -56,15 +47,13 @@ abstract class WhereFilter extends AbstractFieldFilter
      * -----------------------------
      */
 
-    abstract protected function operator(): string;
+    protected function operator(): string
+    {
+        return '=';
+    }
 
     protected function value(): string|float|int
     {
         return $this->value;
-    }
-
-    public function target(): string
-    {
-        return $this->target;
     }
 }

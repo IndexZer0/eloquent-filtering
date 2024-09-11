@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
@@ -19,12 +20,12 @@ it('can perform $notEq filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$notEq']),
+            Filter::field('name', [FilterType::NOT_EQUAL]),
         )
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" != 'J. R. R. Tolkien'
+        select * from "authors" where "authors"."name" != 'J. R. R. Tolkien'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

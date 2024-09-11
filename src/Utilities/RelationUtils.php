@@ -46,4 +46,25 @@ class RelationUtils
 
         return $query->getRelated();
     }
+
+    /*
+     * \Illuminate\Database\Eloquent\Relations\Relation::getMorphAlias()
+     * was added in laravel/framework v11.11.0
+     * https://github.com/laravel/framework/releases/tag/v11.11.0
+     *
+     * RelationUtils::getMorphAlias() exists so that this package can support
+     * the same functionality for laravel 10.x
+     *
+     * Though this may not be needed and could instead just do:
+     * (new $className())->getMorphClass()
+     */
+    public static function getMorphAlias(string $className)
+    {
+        return array_search($className, Relation::$morphMap, strict: true) ?: $className;
+    }
+
+    public static function existsInMorphMap(string $className): bool
+    {
+        return collect(Relation::$morphMap)->containsStrict($className);
+    }
 }

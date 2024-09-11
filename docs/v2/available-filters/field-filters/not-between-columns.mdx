@@ -1,0 +1,60 @@
+---
+title: 'Not Between Columns'
+version: 'v2'
+icon: 'arrows-left-right-to-line'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('price', [FilterType::NOT_BETWEEN_COLUMNS]);
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$notBetweenColumns" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="array,size:2" required>
+</ParamField>
+
+<ParamField body="value.*" type="string" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'   => '$notBetweenColumns',
+    'target' => 'price',
+    'value'  => [
+        'min_allowed_price',
+        'max_allowed_price',
+    ],
+];
+```
+
+```php
+$sql = Product::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select
+  *
+from
+  "products"
+where
+  "products"."price" not between "products"."min_allowed_price"
+  and "products"."max_allowed_price"
+```
+
+## Modifiers
+
+None available.

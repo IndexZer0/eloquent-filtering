@@ -11,6 +11,12 @@ class AllTypesAllowed implements AllowedTypes
 {
     public function get(RequestedFilter $requestedFilter): ?AllowedType
     {
-        return new AllowedType($requestedFilter->type);
+        $allowedType = new AllowedType($requestedFilter->type);
+
+        if ($allowedType->matches($requestedFilter)) {
+            return $allowedType;
+        }
+
+        return null;
     }
 }

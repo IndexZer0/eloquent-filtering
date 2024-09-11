@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
@@ -45,11 +46,20 @@ it('can perform $or and $and filter', function (): void {
                 ],
             ],
         ],
-        Filter::all()
+        Filter::only(
+            Filter::field('name', [FilterType::EQUAL]),
+            Filter::relation(
+                'books',
+                [FilterType::HAS],
+                allowedFilters: Filter::only(
+                    Filter::field('title', [FilterType::EQUAL]),
+                )
+            )
+        )
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where (("name" = 'George Raymond Richard Martin') or ((("name" = 'J. R. R. Tolkien') and (exists (select * from "books" where "authors"."id" = "books"."author_id" and "title" = 'The Lord of the Rings')))))
+        select * from "authors" where (("authors"."name" = 'George Raymond Richard Martin') or ((("authors"."name" = 'J. R. R. Tolkien') and (exists (select * from "books" where "authors"."id" = "books"."author_id" and "books"."title" = 'The Lord of the Rings')))))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

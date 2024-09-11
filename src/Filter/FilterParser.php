@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser as FilterParserContract;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidFilterException;
+use IndexZer0\EloquentFiltering\Filter\Exceptions\InvalidFiltersPayloadException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Suppression\Suppression;
 
 class FilterParser implements FilterParserContract
 {
     protected FilterCollection $filterCollection;
+
+    protected Model $model;
+    protected ?Relation $relation;
+    protected ?PendingFilter $previousPendingFilter;
 
     protected AllowedFilterList $allowedFilterList;
 
@@ -25,30 +32,51 @@ class FilterParser implements FilterParserContract
         $this->availableFilters = resolve(AvailableFilters::class);
     }
 
-    public function parse(array $filters, AllowedFilterList $allowedFilterList): FilterCollection
-    {
+    public function parse(
+        Model $model,
+        array $filters,
+        AllowedFilterList $allowedFilterList,
+        ?Relation $relation = null,
+        ?PendingFilter $previousPendingFilter = null
+    ): FilterCollection {
+        $this->model = $model;
+        $this->relation = $relation;
         $this->allowedFilterList = $allowedFilterList;
+        $this->previousPendingFilter = $previousPendingFilter;
 
-        foreach ($filters as $filter) {
-            Suppression::honour(function () use ($filter): void {
-                $filterMethod = $this->parseFilter($filter);
-                $this->filterCollection->push($filterMethod);
+        if (!array_is_list($filters)) {
+            throw new InvalidFiltersPayloadException('Filters must be an array list.');
+        }
+
+        foreach ($filters as $index => $filter) {
+            Suppression::honour(function () use ($index, $filter): void {
+                $this->filterCollection->push(
+                    $this->parseFilter($index, $filter)
+                );
             });
         }
 
         return $this->filterCollection;
     }
 
-    private function parseFilter(mixed $filter): FilterMethod
+    private function parseFilter(int $index, mixed $filter): FilterMethod
     {
         $requestedFilter = $this->parseFilterType($filter);
         $filterFqcn = $this->findFilterMethodFqcn($requestedFilter->type);
 
-        $approvedFilter = $this->allowedFilterList->ensureAllowed(
-            new PendingFilter($requestedFilter, $filterFqcn, $filter)
+        $pendingFilter = new PendingFilter(
+            $requestedFilter,
+            $filterFqcn,
+            $filter,
+            $this->model,
+            $this->relation,
+            $this->previousPendingFilter,
+            $index
         );
 
-        return $approvedFilter->createFilter();
+        $pendingFilter->validate();
+
+        return $this->allowedFilterList->ensureAllowed($pendingFilter);
     }
 
     private function parseFilterType(mixed $filter): RequestedFilter

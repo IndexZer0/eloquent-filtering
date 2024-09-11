@@ -9,8 +9,8 @@ use IndexZer0\EloquentFiltering\Filter\AllowedFilterResolver;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
-use IndexZer0\EloquentFiltering\Filter\Exceptions\RequiredFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\RequiredFilters\RequiredFiltersChecker;
 
 trait Filterable
 {
@@ -28,12 +28,17 @@ trait Filterable
 
         /** @var FilterParser $filterParser */
         $filterParser = resolve(FilterParser::class);
-        $filters = $filterParser->parse($filters, $allowedFilterList);
+        $filters = $filterParser->parse(
+            model: $this,
+            filters: $filters,
+            allowedFilterList: $allowedFilterList
+        );
 
-        $unmatchedRequiredFilters = $allowedFilterList->getUnmatchedRequiredFilters();
-        if ($unmatchedRequiredFilters->isNotEmpty()) {
-            throw RequiredFilterException::fromRequiredFilters(...$unmatchedRequiredFilters->toArray());
-        }
+        $requiredFiltersChecker = new RequiredFiltersChecker(
+            $allowedFilterList,
+            true
+        );
+        $requiredFiltersChecker->__invoke();
 
         /** @var FilterApplier $filterApplier */
         $filterApplier = resolve(FilterApplier::class);
@@ -45,8 +50,6 @@ trait Filterable
 
     public function allowedFilters(): AllowedFilterList
     {
-        $defaultAllowedList = config('eloquent-filtering.default_allowed_filter_list', 'none');
-
-        return $defaultAllowedList === 'none' ? Filter::none() : Filter::all();
+        return Filter::none();
     }
 }

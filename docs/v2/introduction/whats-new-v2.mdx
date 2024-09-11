@@ -1,0 +1,135 @@
+---
+title: 'Whats New v2'
+version: 'v2'
+icon: 'sparkles'
+iconType: 'solid'
+---
+
+## Added
+
+### FilterType Enum
+
+All core filters provided by this package can be used via string or via new `FilterType` enum.
+
+```php
+Filter::field('name', ['$like']);
+Filter::field('name', [FilterType::LIKE]);
+```
+
+### Required Filters
+
+Filters can be marked as required.
+
+```php
+Filter::field('name', [FilterType::LIKE])->required();
+```
+
+<Tip>
+[Required Filters Documentation](/v2/digging-deeper/required-filters)
+</Tip>
+
+### Pivot Filters
+
+Pivot filter support for `BelongsToMany` and `MorphToMany` relationships.
+
+```php
+Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class);
+```
+
+<Tip>
+[Pivot Filters Documentation](/v2/digging-deeper/pivot-filters)
+</Tip>
+
+### Morph Filters
+
+```php
+FilterType::HAS_MORPH
+FilterType::DOESNT_HAS_MORPH
+```
+
+```php
+Filter::morphRelation(
+    'subscribable',
+    [FilterType::HAS_MORPH],
+)->includeRelationFields([
+    FoodDeliveryService::class,
+    Sass::class,
+])
+```
+
+<Tip>
+[Morph Filters Documentation](/v2/basics/in-detail#morph-relation)
+</Tip>
+
+### Validation Rules
+
+Validation rules, messages, and attributes can be defined on a per `FilterType` basis.
+
+```php
+Filter::field('status', [
+    FilterType::IN->withValidation([
+        'value.*' => [Rule::enum(OrderStatus::class)]
+    ])
+]),
+```
+
+<Tip>
+[Validation Rules Documentation](/v2/digging-deeper/validation-rules)
+</Tip>
+
+### Filter Modifiers
+
+`$like:start` [<Icon icon="link" iconType="solid" />](/v2/available-filters/field-filters/like#modifiers)
+
+`$like:end` [<Icon icon="link" iconType="solid" />](/v2/available-filters/field-filters/like#modifiers)
+
+`$notLike:start` [<Icon icon="link" iconType="solid" />](/v2/available-filters/field-filters/not-like#modifiers)
+
+`$notLike:end` [<Icon icon="link" iconType="solid" />](/v2/available-filters/field-filters/not-like#modifiers)
+
+`$in:null` [<Icon icon="link" iconType="solid" />](/v2/available-filters/field-filters/in#modifiers)
+
+`$notIn:null` [<Icon icon="link" iconType="solid" />](/v2/available-filters/field-filters/not-in#modifiers)
+
+### Exceptions
+
+```php
+class InvalidFiltersPayloadException extends InvalidArgumentException
+// When filters are passed to ::filter() that are not list arrays.
+
+class InvalidModelFqcnException extends InvalidArgumentException
+// When an invalid model string is passed to `Filter::morphType()` or `Filter::morphRelation()->includeRelationFields()`.
+
+class UnsupportedModifierException extends InvalidArgumentException
+// When an invalid modifier is passed to ->withModifiers().
+
+class RequiredFilterException extends ValidationException
+// When required filter(s) were not applied.
+```
+
+## Changed
+
+### Qualifying Columns
+
+By default, columns are now qualified with database table when using `Filter::field()` with any of the core filters provided by this package.
+
+### Custom Filters Structure
+
+Custom filters no longer should extend abstract classes.
+
+<Tip>
+See [custom filters](/v2/digging-deeper/custom-filters) for how custom filter classes should now be structured.
+</Tip>
+
+## Removed
+
+### Filter::all()
+
+`Filter::all()` has been removed due to not being able to support pivot filters feature.
+
+### Config
+
+`default_allowed_filter_list` has been removed from the config file due to `Filter::all()` being removed.
+
+All `Filterable` models default to no filters allowed.
+

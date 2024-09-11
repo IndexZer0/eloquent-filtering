@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Sort\Sortable\Sort;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
@@ -20,7 +21,7 @@ it('can filter and sort together', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$like']),
+            Filter::field('name', [FilterType::LIKE]),
         ),
     )->sort(
         [
@@ -35,7 +36,7 @@ it('can filter and sort together', function (): void {
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" LIKE '%R%' order by "name" desc
+        select * from "authors" where "authors"."name" LIKE '%R%' order by "name" desc
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

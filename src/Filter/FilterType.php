@@ -8,6 +8,12 @@ use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 
 enum FilterType: string
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Field Filters
+    |--------------------------------------------------------------------------
+    */
+
     // Equal
     case EQUAL = '$eq';
     case NOT_EQUAL = '$notEq';
@@ -23,10 +29,6 @@ enum FilterType: string
     // Like
     case LIKE = '$like';
     case NOT_LIKE = '$notLike';
-
-    // Conditional
-    case OR = '$or';
-    case AND = '$and';
 
     // Null
     case NULL = '$null';
@@ -48,9 +50,32 @@ enum FilterType: string
     case JSON_NOT_CONTAINS = '$jsonNotContains';
     case JSON_LENGTH = '$jsonLength';
 
-    // Relationship
+    /*
+    |--------------------------------------------------------------------------
+    | Conditional Filters
+    |--------------------------------------------------------------------------
+    */
+
+    case OR = '$or';
+    case AND = '$and';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationship Filters
+    |--------------------------------------------------------------------------
+    */
+
     case HAS = '$has';
     case DOESNT_HAS = '$doesntHas';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Morph Relationship Filters
+    |--------------------------------------------------------------------------
+    */
+
+    case HAS_MORPH = '$hasMorph';
+    case DOESNT_HAS_MORPH = '$doesntHasMorph';
 
     public function withModifiers(string ...$modifiers): AllowedType
     {
@@ -62,9 +87,12 @@ enum FilterType: string
         return $this->toAllowedType()->withModifiers();
     }
 
-    public function withRules(array $rules): AllowedType
-    {
-        return $this->toAllowedType()->withRules($rules);
+    public function withValidation(
+        array $rules,
+        array $messages = [],
+        array $attributes = []
+    ): AllowedType {
+        return $this->toAllowedType()->withValidation($rules, $messages, $attributes);
     }
 
     public function toAllowedType(): AllowedType

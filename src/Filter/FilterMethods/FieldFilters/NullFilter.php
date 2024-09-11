@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
-use IndexZer0\EloquentFiltering\Rules\TargetRules;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\FieldFilter;
 
-class NullFilter extends AbstractFieldFilter
+class NullFilter implements FilterMethod, Targetable
 {
-    final public function __construct(
-        protected string $target,
+    use FieldFilter;
+
+    public function __construct(
         protected bool $value,
     ) {
 
@@ -33,21 +34,15 @@ class NullFilter extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            ...TargetRules::get(),
             'value' => ['required', 'boolean'],
         ];
     }
 
-    public static function from(ApprovedFilter $approvedFilter): static
-    {
-        return new static(
-            $approvedFilter->target()->getReal(),
-            $approvedFilter->data_get('value'),
-        );
-    }
-
     public function apply(Builder $query): Builder
     {
-        return $query->whereNull($this->target, not: !$this->value);
+        return $query->whereNull(
+            $this->eloquentContext->qualifyColumn($this->target),
+            not: !$this->value
+        );
     }
 }
