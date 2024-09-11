@@ -1,0 +1,116 @@
+---
+title: 'Required Filters'
+version: 'v2'
+icon: 'asterisk'
+iconType: 'solid'
+---
+
+## Overview
+
+You can specify that `Filter::field()`, `Filter::relation()`, `Filter::morphRelation()`, `Filter::morphType()` and `Filter::custom()` filters must be required.
+
+- When a required filter is not used, a `RequiredFilterException` is thrown.
+- `RequiredFilterException` extends Laravels `ValidationException`.
+  - You can let this bubble up to your controller for the default laravel 422 response.
+- This exception **CAN NOT** be [suppressed](/v2/digging-deeper/suppressing-exceptions).
+
+## Marking As Required
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        /*
+         * Field
+         */
+        Filter::field('name', [FilterType::LIKE])->required(),
+        /*
+         * Relation
+         */
+        Filter::relation('books', [FilterType::HAS],
+            Filter::only(
+                Filter::field('title', [FilterType::LIKE])->required()
+            )
+        )->required(),
+        /*
+         * Morph Relation
+         */
+        Filter::morphRelation('imageable', [FilterType::HAS_MORPH],
+            /*
+             * Morph Type
+             */
+            Filter::morphType(Article::class,
+                Filter::only(
+                    Filter::field('title', [FilterType::LIKE])->required()
+                )
+            )->required()
+        )->required(),
+        /*
+         * Custom
+         */
+        Filter::custom('$latest')->required()
+    );
+}
+
+Model::filter([]);
+// RequiredFilterException errors
+[
+    'name' => [
+        'Name filter is required.',
+    ],
+    'books' => [
+        'Books filter is required.',
+    ],
+    'books.title' => [
+        'Title filter is required.',
+    ],
+    'imageable' => [
+        'Imageable filter is required.',
+    ],
+    'imageable.articles' => [
+        'Articles filter is required.',
+    ],
+    'imageable.articles.title' => [
+        'Title filter is required.',
+    ],
+    '$latest' => [
+        '$latest filter is required.',
+    ],
+]
+```
+
+## Relaxing The Required Scope
+
+- Sometimes you may want a filter to be required **ONLY** if it's parent has been filtered.
+  - You can set the `scoped` parameter to `true` to achieve this.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation('books', [FilterType::HAS],
+            Filter::only(
+                Filter::field('title', [FilterType::LIKE])->required(scoped: true)
+            )
+        ),
+    );
+}
+
+Model::filter([]);
+// 'books' relation filter not used
+// RequiredFilterException not thrown.
+
+Model::filter([
+    [
+        'target' => 'books',
+        'type' => '$has',
+    ]
+]);
+// 'books' relation filter used
+// RequiredFilterException errors
+[
+    'books.title' => [
+        'Title filter is required.',
+    ],
+]
+```

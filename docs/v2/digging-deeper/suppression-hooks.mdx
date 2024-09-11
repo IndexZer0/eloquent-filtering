@@ -1,0 +1,38 @@
+---
+title: 'Suppression Hooks'
+version: 'v2'
+icon: 'square-exclamation'
+iconType: 'solid'
+---
+
+## Overview
+
+You can hook into the suppression system if you want to perform some custom actions.
+
+## Example
+
+```php
+use IndexZer0\EloquentFiltering\Suppression\Suppression;
+
+Suppression::handleDeniedFilterUsing(function (SuppressibleException $se): void {
+    Log::channel('slack')->info('Bug in frontend client, trying to use filter type that is not allowed: ' . $se->getMessage());
+    throw new FrontendBugException($se->getMessage());
+});
+```
+
+## Available Suppression Hooks.
+
+```php
+// All
+Suppression::handleAllUsing();
+// Filter
+Suppression::handleFilterUsing();
+Suppression::handleInvalidFilterUsing();
+Suppression::handleMissingFilterUsing();
+Suppression::handleMalformedFilterUsing();
+Suppression::handleDeniedFilterUsing();
+// Sort
+Suppression::handleSortUsing();
+Suppression::handleMalformedSortUsing();
+Suppression::handleDeniedSortUsing();
+```

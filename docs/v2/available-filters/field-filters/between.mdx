@@ -1,0 +1,51 @@
+---
+title: 'Between'
+version: 'v2'
+icon: 'arrows-left-right-to-line'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('age', [FilterType::BETWEEN]);
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$between" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="array,size:2" required>
+</ParamField>
+
+<ParamField body="value.*" type="string|int|float" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'   => '$between',
+    'target' => 'age',
+    'value'  => [18, 65,],
+];
+```
+
+```php
+$sql = Person::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select * from "people" where "people"."age" between 18 and 65
+```
+
+## Modifiers
+
+None available.

@@ -1,0 +1,48 @@
+---
+title: 'Less Than Equal To'
+version: 'v2'
+icon: 'less-than-equal'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('age', [FilterType::LESS_THAN_EQUAL_TO])
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$lte" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="string|int|float" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'   => '$lte',
+    'target' => 'age',
+    'value'  => 18,
+];
+```
+
+```php
+$sql = Person::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select * from "people" where "people"."age" <= 18
+```
+
+## Modifiers
+
+None available.

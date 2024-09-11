@@ -1,0 +1,32 @@
+---
+title: 'Aliasing Targets'
+version: 'v2'
+icon: 'eye'
+iconType: 'solid'
+---
+
+## Overview
+
+You can alias your target fields and relations if you don't wish to expose database field names and relationship method names to your frontend.
+
+The below example:
+ - Allows `name` and uses `first_name` in the database query.
+ - Allows `documents` and uses `files` as the relationship method name.
+
+```php
+Person::filter([
+    [
+        'type'   => '$eq',
+        'target' => 'name',
+        'value'  => 'Taylor',
+    ],
+    [
+        'type'   => '$has',
+        'target' => 'documents',
+        'value'  => [],
+    ],
+], Filter::only(
+    Filter::field(Target::alias('name', 'first_name'), [FilterType::EQUAL]),
+    Filter::relation(Target::alias('documents', 'files'), [FilterType::HAS])
+));
+```

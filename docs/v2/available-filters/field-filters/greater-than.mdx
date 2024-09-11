@@ -1,0 +1,48 @@
+---
+title: 'Greater Than'
+version: 'v2'
+icon: 'greater-than'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('age', [FilterType::GREATER_THAN]);
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$gt" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="string|int|float" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'   => '$gt',
+    'target' => 'age',
+    'value'  => 18,
+];
+```
+
+```php
+$sql = Person::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select * from "people" where "people"."age" > 18
+```
+
+## Modifiers
+
+None available.

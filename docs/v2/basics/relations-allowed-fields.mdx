@@ -1,0 +1,86 @@
+---
+title: 'Relations Allowed Fields'
+version: 'v2'
+icon: 'plus'
+iconType: 'solid'
+---
+
+## Overview
+
+By default, when specifying an `Filter::relation()` or `Filter::morphRelation()`, fields within that relationship are not included in the allowed filter list.
+
+You can specify allowed filters inside a relation in two ways.
+
+### `includeRelationFields()`
+
+Use `->includeRelationFields()` on `Filter::relation()` or `Filter::morphRelation()`.
+
+<Note>
+This method instructs the package to look for `AllowedField` filters within the `allowedFilters()` method of the relation model.
+</Note>
+
+<Warning>
+The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`.
+</Warning>
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation('manufacturer', [FilterType::HAS])->includeRelationFields()
+    );
+}
+```
+
+For `Filter::morphRelation()`, you should specify the models for which to include the relation fields for.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::morphRelation(
+            'subscribable',
+            [FilterType::HAS_MORPH],
+        )->includeRelationFields([
+            FoodDeliveryService::class,
+            Sass::class,
+        ])
+    );
+}
+```
+
+### Define `allowedFilters`
+
+Alternatively, if you don't want to use `->includeRelationFields()`, you can define `allowedFilters` for each `Filter::relation()` and `Filter::morphType()`.
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation(
+            target: 'manufacturer',
+            types: [FilterType::HAS],
+            allowedFilters: Filter::only(
+                Filter::field('name', [FilterType::LIKE])
+            )
+        )
+    );
+}
+```
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::morphRelation(
+            'subscribable',
+            [FilterType::HAS_MORPH],
+            Filter::morphType(FoodDeliveryService::class, Filter::only(
+                Filter::field('name', [FilterType::EQUAL])
+            )),
+            Filter::morphType(Sass::class, Filter::only(
+                Filter::field('name', [FilterType::EQUAL])
+            )),
+        )
+    );
+}
+```

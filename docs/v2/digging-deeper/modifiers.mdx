@@ -1,0 +1,66 @@
+---
+title: 'Modifiers'
+version: 'v2'
+icon: 'pen'
+iconType: 'solid'
+---
+
+## Overview
+
+Modifiers are ways to slightly alter the way that a filter works.
+
+## How To Use
+
+Append `:{modifierName}` to the `type` of the filter.
+    - i.e. `$like:start`.
+
+Multiple modifiers can be applied.
+    - i.e. `$like:start:end`.
+
+## Core Filter Modifiers
+
+Some of the core filters provided by this package have modifiers.
+
+`$like` [<Icon icon="link" iconType="solid" />](/v2/available-filters/field-filters/like#modifiers)
+- `:start` - matches only the start of field `LIKE 'Laravel%'`.
+- `:end`  - matches only the end of field `LIKE '%Laravel'`.
+
+`$notLike` [<Icon icon="link" iconType="solid" />](/v2/available-filters/field-filters/not-like#modifiers)
+- `:start` - matches only the start of field `NOT LIKE 'Laravel%'`.
+- `:end` - matches only the end of field `NOT LIKE '%Laravel'`.
+
+`$in` [<Icon icon="link" iconType="solid" />](/v2/available-filters/field-filters/in#modifiers)
+- `:null` - also does a `or "{$target}" is null` if `null` is sent in the `values` array.
+
+`$notIn` [<Icon icon="link" iconType="solid" />](/v2/available-filters/field-filters/not-in#modifiers)
+- `:null`- also does a `and "{$target}" is not null` if `null` is sent in the `values` array.
+
+## Configuring Modifiers
+
+By default, all filter modifiers are enabled.
+
+### Allowing
+
+Though, you can specify only specific modifiers to enable.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('name', [FilterType::LIKE->withModifiers('end')])
+    );
+}
+```
+
+### Disabling
+
+You can also disable all modifiers.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('name', [FilterType::LIKE->withoutModifiers()])
+    );
+}
+```

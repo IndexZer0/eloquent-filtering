@@ -1,0 +1,62 @@
+---
+title: 'Like'
+version: 'v2'
+icon: 'percent'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('description', [FilterType::LIKE])
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$like" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="string|int|float" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'   => '$like',
+    'target' => 'description',
+    'value'  => 'Laravel',
+];
+```
+
+```php
+$sql = Project::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select * from "projects" where "projects"."description" LIKE '%Laravel%'
+```
+
+## Modifiers
+
+### Start
+
+<TypeParameterField type="$like:start" />
+
+```sql
+select * from "projects" where "projects"."description" LIKE 'Laravel%'
+```
+
+### End
+
+<TypeParameterField type="$like:end" />
+
+```sql
+select * from "projects" where "projects"."description" LIKE '%Laravel'
+```
