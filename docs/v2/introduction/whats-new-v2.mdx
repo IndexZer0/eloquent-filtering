@@ -93,6 +93,8 @@ Filter::field('status', [
 
 ### Exceptions
 
+New exceptions for new features.
+
 ```php
 class InvalidFiltersPayloadException extends InvalidArgumentException
 // When filters are passed to ::filter() that are not list arrays.
@@ -123,9 +125,38 @@ See [custom filters](/v2/digging-deeper/custom-filters) for how custom filter cl
 
 ## Removed
 
+### Filters
+
+Some dedicated filter classes were removed in favour of new **modifiers** feature.
+
+- `$like:start`.
+- `$like:end`.
+- `$notLike:start`.
+- `$notLike:end`.
+
+allowedFilter definitions should be updated.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        // old
+        // Filter::field('name', ['$notLike:end']),
+        // new
+        Filter::field('name', [FilterType::NOT_LIKE]),
+    );
+}
+
+```
+
 ### Filter::all()
 
 `Filter::all()` has been removed due to not being able to support pivot filters feature.
+`Target::relationAlias()` has been removed due to `Filter::all()` being removed.
+
+### Types::except()
+
+Removed due to un-needed complexity.
 
 ### Config
 
