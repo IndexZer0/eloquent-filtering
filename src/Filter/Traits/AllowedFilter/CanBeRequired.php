@@ -14,7 +14,7 @@ trait CanBeRequired
     public function required(
         bool $required = true,
         ?string $message = null,
-        $scoped = false,
+        bool $scoped = false,
     ): self {
         $this->required = $required;
         $this->message = $message;
