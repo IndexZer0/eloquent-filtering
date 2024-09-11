@@ -19,7 +19,7 @@
 
 ---
 
-<h2 align="center">[View The Docs](https://docs.eloquentfiltering.com)</h2>
+# [View The Docs](https://docs.eloquentfiltering.com)
 
 ---
 
