@@ -2,7 +2,11 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Eloquent Filtering",
   "versions": ["v2", "v1"],
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.png",
+  "logo": {
+    "dark": "/images/logo.png",
+    "light": "/images/logo.png"
+  },
   "colors": {
     "primary": "#0F9DD9",
     "light": "#0F9DD9",
