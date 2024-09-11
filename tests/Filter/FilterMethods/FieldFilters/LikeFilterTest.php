@@ -36,7 +36,7 @@ it('can perform $like filter', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::LIKE]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -63,7 +63,7 @@ it('can perform $like filter with :start modifier', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::LIKE]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -90,7 +90,7 @@ it('can perform $like filter with :end modifier', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::LIKE]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

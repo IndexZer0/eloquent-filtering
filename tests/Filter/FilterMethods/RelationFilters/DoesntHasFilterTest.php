@@ -21,7 +21,7 @@ it('can perform $doesntHas filter', function (): void {
         ],
         Filter::only(
             Filter::relation('books', [FilterType::DOESNT_HAS]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

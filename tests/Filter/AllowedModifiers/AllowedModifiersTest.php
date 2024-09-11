@@ -24,7 +24,7 @@ it('defaults to have all supported modifiers allowed', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::LIKE]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -51,7 +51,7 @@ it('can have only specific modifiers allowed | valid modifier', function (): voi
         ],
         Filter::only(
             Filter::field('name', [FilterType::LIKE->withModifiers('end')]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -78,7 +78,7 @@ it('can have only specific modifiers allowed | invalid modifier', function (): v
         ],
         Filter::only(
             Filter::field('name', [FilterType::LIKE->withModifiers('end')]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -106,7 +106,7 @@ it('can have zero modifiers allowed', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::LIKE->withoutModifiers()]),
-        )
+        ),
     );
 
 })->throws(DeniedFilterException::class, '"$like:end" filter for "name" is not allowed');
@@ -123,7 +123,7 @@ it('exceptions when unsupported modifier specified', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::LIKE->withModifiers('unsupported-modifier')]),
-        )
+        ),
     );
 
 })->throws(UnsupportedModifierException::class, '"unsupported-modifier" is not a supported modifier');
@@ -140,7 +140,7 @@ it('exceptions when using AllTypesAllowed with invalid modifier', function (): v
         ],
         Filter::only(
             Filter::field('name', Types::all()),
-        )
+        ),
     );
 
 })->throws(DeniedFilterException::class, '"$like:this-modifier-does-not-exist" filter for "name" is not allowed');

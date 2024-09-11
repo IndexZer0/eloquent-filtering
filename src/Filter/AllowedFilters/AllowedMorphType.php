@@ -23,7 +23,7 @@ class AllowedMorphType implements
 
     public function __construct(
         protected Target $target,
-        public AllowedFilterList $allowedFilterList
+        public AllowedFilterList $allowedFilterList,
     ) {
     }
 

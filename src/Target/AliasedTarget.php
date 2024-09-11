@@ -11,7 +11,7 @@ readonly class AliasedTarget implements TargetContract
 {
     public function __construct(
         public string  $target,
-        public ?string $targetAlias = null
+        public ?string $targetAlias = null,
     ) {
     }
 

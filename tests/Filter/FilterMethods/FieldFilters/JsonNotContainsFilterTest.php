@@ -21,7 +21,7 @@ it('can perform $jsonContains filter', function (): void {
         ],
         Filter::only(
             Filter::field('data->array', [FilterType::JSON_NOT_CONTAINS]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

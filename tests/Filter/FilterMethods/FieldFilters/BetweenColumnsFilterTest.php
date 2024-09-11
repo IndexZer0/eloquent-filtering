@@ -24,7 +24,7 @@ it('can perform $betweenColumns filter', function (): void {
         ],
         Filter::only(
             Filter::field('price', [FilterType::BETWEEN_COLUMNS]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

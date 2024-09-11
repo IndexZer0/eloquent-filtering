@@ -35,7 +35,7 @@ class Show extends Model implements IsFilterable
             Filter::field(Target::alias('organizer', 'organizer_name'), [FilterType::EQUAL]),
             Filter::relation(Target::alias('e', 'events'), [FilterType::HAS])->includeRelationFields()
                 ->andNestedRelation(
-                    Filter::relation('tickets', [FilterType::HAS])->includeRelationFields()
+                    Filter::relation('tickets', [FilterType::HAS])->includeRelationFields(),
                 ),
         );
     }

@@ -35,7 +35,7 @@ class ConditionalFilterParser implements CustomFilterParser
             new EloquentContext(
                 $pendingFilter->model(),
                 $pendingFilter->relation(),
-            )
+            ),
         );
 
         return $filterBuilder

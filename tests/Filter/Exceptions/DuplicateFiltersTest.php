@@ -14,4 +14,4 @@ it('exceptions when duplicate filter is registered', function (): void {
         [],
     );
 
-})->throws(DuplicateFiltersException::class, "Filters with the following types have been registered more than once: \"\$eq\"");
+})->throws(DuplicateFiltersException::class, 'Filters with the following types have been registered more than once: "$eq"');

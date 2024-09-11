@@ -24,7 +24,7 @@ it('throws RequiredFilterException when required filters have not been matched',
                     [FilterType::HAS],
                     Filter::only(
                         Filter::field('title', [FilterType::LIKE])->required(),
-                    )
+                    ),
                 )->required(),
                 Filter::morphRelation(
                     'imageable',
@@ -32,12 +32,12 @@ it('throws RequiredFilterException when required filters have not been matched',
                     Filter::morphType(
                         Article::class,
                         Filter::only(
-                            Filter::field('title', [FilterType::LIKE])->required()
-                        )
-                    )->required()
+                            Filter::field('title', [FilterType::LIKE])->required(),
+                        ),
+                    )->required(),
                 )->required(),
-                Filter::custom('$latest')->required()
-            )
+                Filter::custom('$latest')->required(),
+            ),
         );
 
         $this->fail('Should have thrown exception');
@@ -90,14 +90,14 @@ it('only includes required errors when parent has been matched when using scoped
                     [FilterType::HAS],
                     Filter::only(
                         Filter::field('title', [FilterType::LIKE])->required(scoped: true),
-                    )
+                    ),
                 )->required(scoped: true),
                 Filter::relation(
                     Target::alias('books2', 'books'),
                     [FilterType::HAS],
                     Filter::only(
                         Filter::field('title', [FilterType::LIKE])->required(scoped: true),
-                    )
+                    ),
                 )->required(scoped: true),
                 Filter::morphRelation(
                     'imageable',
@@ -105,12 +105,12 @@ it('only includes required errors when parent has been matched when using scoped
                     Filter::morphType(
                         Article::class,
                         Filter::only(
-                            Filter::field('title', [FilterType::LIKE])->required(scoped: true)
-                        )
-                    )->required(scoped: true)
+                            Filter::field('title', [FilterType::LIKE])->required(scoped: true),
+                        ),
+                    )->required(scoped: true),
                 )->required(scoped: true),
-                Filter::custom('$latest')->required(scoped: true)
-            )
+                Filter::custom('$latest')->required(scoped: true),
+            ),
         );
 
         $this->fail('Should have thrown exception');
@@ -187,8 +187,8 @@ it('does not throw RequiredFilterException when required filters have been match
                     'books',
                     [FilterType::HAS],
                     Filter::only(
-                        Filter::field('title', [FilterType::LIKE])->required()
-                    )
+                        Filter::field('title', [FilterType::LIKE])->required(),
+                    ),
                 )->required(),
                 Filter::morphRelation(
                     'imageable',
@@ -196,12 +196,12 @@ it('does not throw RequiredFilterException when required filters have been match
                     Filter::morphType(
                         Article::class,
                         Filter::only(
-                            Filter::field('title', [FilterType::LIKE])->required()
-                        )
-                    )->required()
+                            Filter::field('title', [FilterType::LIKE])->required(),
+                        ),
+                    )->required(),
                 )->required(),
-                Filter::custom('$latest')->required()
-            )
+                Filter::custom('$latest')->required(),
+            ),
         );
 
         $this->assertTrue(true);
@@ -226,7 +226,7 @@ it('allows specifying required failed validation message', function (): void {
                     [FilterType::HAS],
                     Filter::only(
                         Filter::field('title', [FilterType::LIKE])->required(message: '2 is required'),
-                    )
+                    ),
                 )->required(message: '3 is required'),
                 Filter::morphRelation(
                     'imageable',
@@ -234,12 +234,12 @@ it('allows specifying required failed validation message', function (): void {
                     Filter::morphType(
                         Article::class,
                         Filter::only(
-                            Filter::field('title', [FilterType::LIKE])->required(message: '4 is required')
-                        )
-                    )->required(message: '5 is required')
+                            Filter::field('title', [FilterType::LIKE])->required(message: '4 is required'),
+                        ),
+                    )->required(message: '5 is required'),
                 )->required(message: '6 is required'),
-                Filter::custom('$latest')->required(message: '7 is required')
-            )
+                Filter::custom('$latest')->required(message: '7 is required'),
+            ),
         );
 
         $this->fail('Should have thrown exception');
@@ -275,7 +275,7 @@ it('allows specifying required failed validation message', function (): void {
 
 it('suppressed exceptions still cause RequiredFilterException to be thrown', function (): void {
 
-    $this->setSuppression("filter.malformed_format", true);
+    $this->setSuppression('filter.malformed_format', true);
 
     try {
         Author::filter(
@@ -290,7 +290,7 @@ it('suppressed exceptions still cause RequiredFilterException to be thrown', fun
                 Filter::field('name', [FilterType::LIKE->withValidation([
                     'value' => ['size:100'],
                 ])])->required(),
-            )
+            ),
         );
 
         $this->fail('Should have thrown exception');

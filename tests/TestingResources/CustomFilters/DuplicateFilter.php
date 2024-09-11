@@ -33,7 +33,7 @@ class DuplicateFilter implements FilterMethod
     {
         return $query->where(
             $this->eloquentContext->qualifyColumn($this->target),
-            'value'
+            'value',
         );
     }
 }

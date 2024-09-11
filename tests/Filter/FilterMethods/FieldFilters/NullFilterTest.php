@@ -25,7 +25,7 @@ it('can perform $null filter | null', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::NULL]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -52,7 +52,7 @@ it('can perform $null filter | not null', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::NULL]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

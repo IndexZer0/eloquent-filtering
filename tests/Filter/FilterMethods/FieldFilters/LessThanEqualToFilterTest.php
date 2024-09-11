@@ -21,7 +21,7 @@ it('can perform $lte filter', function (): void {
         ],
         Filter::only(
             Filter::field('age', [FilterType::LESS_THAN_EQUAL_TO]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

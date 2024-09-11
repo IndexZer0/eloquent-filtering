@@ -11,7 +11,7 @@ use Laravel\SerializableClosure\SerializableClosure;
 it('does not allow filters that are not for same context', function (
     array $filter,
     SerializableClosure $allowed_filter,
-    string $expected_exception_message
+    string $expected_exception_message,
 ): void {
 
     $this->expectException(DeniedFilterException::class);
@@ -22,8 +22,8 @@ it('does not allow filters that are not for same context', function (
             $filter,
         ],
         Filter::only(
-            $allowed_filter->getClosure()()
-        )
+            $allowed_filter->getClosure()(),
+        ),
     );
 
 })->with([
@@ -35,7 +35,7 @@ it('does not allow filters that are not for same context', function (
             'value'  => 'George Raymond Richard Martin',
         ],
         'allowed_filter' => new SerializableClosure(
-            fn () => Filter::relation('name', [FilterType::EQUAL])
+            fn () => Filter::relation('name', [FilterType::EQUAL]),
         ),
         'expected_exception_message' => '"$eq" filter for "name" is not allowed',
     ],
@@ -46,7 +46,7 @@ it('does not allow filters that are not for same context', function (
             'value'  => 'George Raymond Richard Martin',
         ],
         'allowed_filter' => new SerializableClosure(
-            fn () => Filter::morphRelation('name', [FilterType::EQUAL])
+            fn () => Filter::morphRelation('name', [FilterType::EQUAL]),
         ),
         'expected_exception_message' => '"$eq" filter for "name" is not allowed',
     ],
@@ -57,7 +57,7 @@ it('does not allow filters that are not for same context', function (
             'value'  => 'George Raymond Richard Martin',
         ],
         'allowed_filter' => new SerializableClosure(
-            fn () => Filter::custom('$eq')
+            fn () => Filter::custom('$eq'),
         ),
         'expected_exception_message' => '"$eq" filter for "name" is not allowed',
     ],
@@ -70,7 +70,7 @@ it('does not allow filters that are not for same context', function (
             'value'  => [],
         ],
         'allowed_filter' => new SerializableClosure(
-            fn () => Filter::field('books', [FilterType::HAS])
+            fn () => Filter::field('books', [FilterType::HAS]),
         ),
         'expected_exception_message' => '"$has" filter for "books" is not allowed',
     ],
@@ -81,7 +81,7 @@ it('does not allow filters that are not for same context', function (
             'value'  => [],
         ],
         'allowed_filter' => new SerializableClosure(
-            fn () => Filter::morphRelation('books', [FilterType::HAS])
+            fn () => Filter::morphRelation('books', [FilterType::HAS]),
         ),
         'expected_exception_message' => '"$has" filter for "books" is not allowed',
     ],
@@ -92,7 +92,7 @@ it('does not allow filters that are not for same context', function (
             'value'  => [],
         ],
         'allowed_filter' => new SerializableClosure(
-            fn () => Filter::custom('$has')
+            fn () => Filter::custom('$has'),
         ),
         'expected_exception_message' => '"$has" filter for "books" is not allowed',
     ],
@@ -109,7 +109,7 @@ it('does not allow filters that are not for same context', function (
             ],
         ],
         'allowed_filter' => new SerializableClosure(
-            fn () => Filter::field('books', [FilterType::HAS_MORPH])
+            fn () => Filter::field('books', [FilterType::HAS_MORPH]),
         ),
         'expected_exception_message' => '"$hasMorph" filter for "books" is not allowed',
     ],
@@ -124,7 +124,7 @@ it('does not allow filters that are not for same context', function (
             ],
         ],
         'allowed_filter' => new SerializableClosure(
-            fn () => Filter::relation('books', [FilterType::HAS_MORPH])
+            fn () => Filter::relation('books', [FilterType::HAS_MORPH]),
         ),
         'expected_exception_message' => '"$hasMorph" filter for "books" is not allowed',
     ],
@@ -139,7 +139,7 @@ it('does not allow filters that are not for same context', function (
             ],
         ],
         'allowed_filter' => new SerializableClosure(
-            fn () => Filter::custom('$hasMorph')
+            fn () => Filter::custom('$hasMorph'),
         ),
         'expected_exception_message' => '"$hasMorph" filter for "books" is not allowed',
     ],

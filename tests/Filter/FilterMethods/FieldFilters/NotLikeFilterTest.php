@@ -36,7 +36,7 @@ it('can perform $notLike filter', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::NOT_LIKE]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -63,7 +63,7 @@ it('can perform $notLike filter with :end modifier', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::NOT_LIKE]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -90,7 +90,7 @@ it('can perform $notLike filter with :start modifier', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::NOT_LIKE]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

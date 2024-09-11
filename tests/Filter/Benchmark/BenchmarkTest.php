@@ -82,12 +82,12 @@ it('benchmarks', function (): void {
                         'comments',
                         [FilterType::HAS],
                         Filter::only(
-                            Filter::field('content', [FilterType::EQUAL])
-                        )
-                    )
-                )
-            )
-        )
+                            Filter::field('content', [FilterType::EQUAL]),
+                        ),
+                    ),
+                ),
+            ),
+        ),
     );
 
     expect($queryBuilderFn()->toRawSql())->toBe($eloquentFilteringFn()->toRawSql());

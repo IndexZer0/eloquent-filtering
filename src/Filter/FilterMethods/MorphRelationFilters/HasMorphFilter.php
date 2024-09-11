@@ -44,7 +44,7 @@ class HasMorphFilter implements FilterMethod, Targetable, HasMorphFilters
                     $filterApplier->apply($query, $childFilters);
                 }
             },
-            $this->operator()
+            $this->operator(),
         );
     }
 

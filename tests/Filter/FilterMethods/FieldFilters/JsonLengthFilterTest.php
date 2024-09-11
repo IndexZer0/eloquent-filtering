@@ -23,7 +23,7 @@ it('can perform $jsonLength filter', function (): void {
         ],
         Filter::only(
             Filter::field('data->array', [FilterType::JSON_LENGTH]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -44,7 +44,7 @@ it('only accepts int for value', function (
     ?string $expected_sql,
     bool    $expect_exception,
     ?string $expected_exception_message,
-    ?array $expected_errors
+    ?array $expected_errors,
 ): void {
 
     try {
@@ -59,7 +59,7 @@ it('only accepts int for value', function (
             ],
             Filter::only(
                 Filter::field('data->array', [FilterType::JSON_LENGTH]),
-            )
+            ),
         );
 
         if ($expect_exception) {

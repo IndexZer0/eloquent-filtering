@@ -33,7 +33,7 @@ class MorphRelationFilterParser implements CustomFilterParser
     protected Collection $allAllowedMorphTypes;
 
     public function __construct(
-        protected MorphTypes $morphTypes = new MorphTypes()
+        protected MorphTypes $morphTypes = new MorphTypes(),
     ) {
     }
 
@@ -58,7 +58,7 @@ class MorphRelationFilterParser implements CustomFilterParser
             new EloquentContext(
                 $pendingFilter->model(),
                 $this->relation,
-            )
+            ),
         );
 
         return $filterBuilder
@@ -93,7 +93,7 @@ class MorphRelationFilterParser implements CustomFilterParser
     protected function parseType(PendingFilter $pendingFilter, array $type): void
     {
         $allowedMorphType = $this->allAllowedMorphTypes->first(
-            fn (AllowedMorphType $allowedMorphType) => $allowedMorphType->getTarget($pendingFilter)->isFor($type['type'])
+            fn (AllowedMorphType $allowedMorphType) => $allowedMorphType->getTarget($pendingFilter)->isFor($type['type']),
         );
 
         if ($allowedMorphType === null) {
@@ -148,7 +148,7 @@ class MorphRelationFilterParser implements CustomFilterParser
         );
         $this->morphTypes->push(new MorphType(
             $polymorphicType,
-            $filters
+            $filters,
         ));
     }
 }

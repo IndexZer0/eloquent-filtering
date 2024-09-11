@@ -46,8 +46,8 @@ it('can alias field | Sort::field()', function (): void {
             ],
         ],
         Sort::only(
-            Sort::field(Target::alias('name', 'name_alias'))
-        )
+            Sort::field(Target::alias('name', 'name_alias')),
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -69,8 +69,8 @@ it('can alias field | Sort::all()', function (): void {
             ],
         ],
         Sort::all(
-            Target::alias('name', 'name_alias')
-        )
+            Target::alias('name', 'name_alias'),
+        ),
     );
 
     $expectedSql = <<< SQL

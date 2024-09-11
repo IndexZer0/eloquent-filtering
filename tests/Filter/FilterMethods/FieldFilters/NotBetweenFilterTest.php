@@ -24,7 +24,7 @@ it('can perform $notBetween filter', function (): void {
         ],
         Filter::only(
             Filter::field('age', [FilterType::NOT_BETWEEN]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

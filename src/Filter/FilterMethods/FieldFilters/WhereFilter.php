@@ -37,7 +37,7 @@ abstract class WhereFilter implements FilterMethod, Targetable
         return $query->where(
             $this->eloquentContext()->qualifyColumn($this->target),
             $this->operator(),
-            $this->value()
+            $this->value(),
         );
     }
 

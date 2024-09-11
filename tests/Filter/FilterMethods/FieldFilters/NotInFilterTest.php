@@ -24,7 +24,7 @@ it('can perform $notIn filter', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::NOT_IN]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -55,7 +55,7 @@ it('can perform $notIn filter with :null modifier', function (): void {
             Filter::field('name', [
                 FilterType::NOT_IN->withModifiers('null'),
             ]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

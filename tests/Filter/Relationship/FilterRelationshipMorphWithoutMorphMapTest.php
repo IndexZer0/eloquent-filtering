@@ -30,7 +30,7 @@ it('can filter by all morphs', function (): void {
             'invoiceable',
             [FilterType::HAS_MORPH],
             Filter::morphType('*'),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -73,10 +73,10 @@ it('can filter by all morphs with child filters', function (): void {
             Filter::morphType(
                 '*',
                 Filter::only(
-                    Filter::field('created_at', [FilterType::LESS_THAN_EQUAL_TO])
-                )
+                    Filter::field('created_at', [FilterType::LESS_THAN_EQUAL_TO]),
+                ),
             ),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -111,9 +111,9 @@ it('can filter by specific morphs', function (): void {
             'invoiceable',
             [FilterType::HAS_MORPH],
             Filter::morphType(
-                Business::class
+                Business::class,
             ),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -164,12 +164,12 @@ it('can filter by specific morphs with child filters', function (): void {
             'invoiceable',
             [FilterType::HAS_MORPH],
             Filter::morphType(Business::class, Filter::only(
-                Filter::field('name', [FilterType::EQUAL])
+                Filter::field('name', [FilterType::EQUAL]),
             )),
             Filter::morphType(Client::class, Filter::only(
-                Filter::field('name', [FilterType::EQUAL])
-            ))
-        )
+                Filter::field('name', [FilterType::EQUAL]),
+            )),
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -228,12 +228,12 @@ it('can filter by nested relation in specific morph', function (): void {
                         'invoices',
                         [FilterType::HAS],
                         Filter::only(
-                            Filter::field('amount', [FilterType::EQUAL])
-                        )
+                            Filter::field('amount', [FilterType::EQUAL]),
+                        ),
                     ),
-                )
+                ),
             ),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL

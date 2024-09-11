@@ -21,7 +21,7 @@ it('works when ::format() returns a ValidatorProvider', function (): void {
             ],
             Filter::only(
                 Filter::field('name', ['$validatorProvider']),
-            )
+            ),
         );
 
         $this->fail('Should have thrown exception');

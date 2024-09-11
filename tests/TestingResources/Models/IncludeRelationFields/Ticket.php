@@ -33,7 +33,7 @@ class Ticket extends Model implements IsFilterable
             Filter::field('price', [FilterType::BETWEEN]),
             Filter::relation('event', [FilterType::HAS])->includeRelationFields()
                 ->andNestedRelation(
-                    Filter::relation('show', [FilterType::HAS])->includeRelationFields()
+                    Filter::relation('show', [FilterType::HAS])->includeRelationFields(),
                 ),
         );
     }

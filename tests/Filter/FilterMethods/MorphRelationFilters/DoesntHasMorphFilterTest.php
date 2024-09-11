@@ -27,7 +27,7 @@ it('can perform $doesntHasMorph filter', function (): void {
             'imageable',
             [FilterType::DOESNT_HAS_MORPH],
             Filter::morphType('*'),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL

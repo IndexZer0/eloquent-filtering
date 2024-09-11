@@ -37,7 +37,7 @@ class FilterParser implements FilterParserContract
         array $filters,
         AllowedFilterList $allowedFilterList,
         ?Relation $relation = null,
-        ?PendingFilter $previousPendingFilter = null
+        ?PendingFilter $previousPendingFilter = null,
     ): FilterCollection {
         $this->model = $model;
         $this->relation = $relation;
@@ -51,7 +51,7 @@ class FilterParser implements FilterParserContract
         foreach ($filters as $index => $filter) {
             Suppression::honour(function () use ($index, $filter): void {
                 $this->filterCollection->push(
-                    $this->parseFilter($index, $filter)
+                    $this->parseFilter($index, $filter),
                 );
             });
         }
@@ -71,7 +71,7 @@ class FilterParser implements FilterParserContract
             $this->model,
             $this->relation,
             $this->previousPendingFilter,
-            $index
+            $index,
         );
 
         $pendingFilter->validate();

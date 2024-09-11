@@ -32,7 +32,7 @@ it('can filter by all morphs', function (): void {
             'imageable',
             [FilterType::HAS_MORPH],
             Filter::morphType('*'),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -82,10 +82,10 @@ it('can filter by all morphs with child filters', function (): void {
             Filter::morphType(
                 '*',
                 Filter::only(
-                    Filter::field('created_at', [FilterType::LESS_THAN_EQUAL_TO])
-                )
+                    Filter::field('created_at', [FilterType::LESS_THAN_EQUAL_TO]),
+                ),
             ),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -129,7 +129,7 @@ it('can filter by specific morphs', function (): void {
             Filter::morphType(
                 Article::class,
             ),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -183,12 +183,12 @@ it('can filter by specific morphs with child filters', function (): void {
             'imageable',
             [FilterType::HAS_MORPH],
             Filter::morphType(Article::class, Filter::only(
-                Filter::field('title', [FilterType::EQUAL])
+                Filter::field('title', [FilterType::EQUAL]),
             )),
             Filter::morphType(UserProfile::class, Filter::only(
-                Filter::field('name', [FilterType::EQUAL])
-            ))
-        )
+                Filter::field('name', [FilterType::EQUAL]),
+            )),
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -250,12 +250,12 @@ it('can filter by nested relation in specific morph', function (): void {
                         'images',
                         [FilterType::HAS],
                         Filter::only(
-                            Filter::field('url', [FilterType::EQUAL])
-                        )
+                            Filter::field('url', [FilterType::EQUAL]),
+                        ),
                     ),
-                )
+                ),
             ),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -293,7 +293,7 @@ it('throws exception when morphType is not a fqcn of a model', function (): void
             Filter::morphType(
                 'not-a-fqcn',
             ),
-        )
+        ),
     ));
 })->throws(InvalidModelFqcnException::class, 'Must be an eloquent model fully qualified class name.');
 
@@ -315,7 +315,7 @@ it('throws DeniedFilterException when morphRelation not allowed', function (): v
             'imageable',
             [FilterType::HAS_MORPH],
             Filter::morphType('*'),
-        )
+        ),
     ));
 
 })->throws(DeniedFilterException::class, '"$hasMorph" filter for "imageable2" is not allowed');
@@ -344,9 +344,9 @@ it('throws DeniedFilterException when morphType not allowed', function (): void 
             'imageable',
             [FilterType::HAS_MORPH],
             Filter::morphType(UserProfile::class, Filter::only(
-                Filter::field('name', [FilterType::EQUAL])
-            ))
-        )
+                Filter::field('name', [FilterType::EQUAL]),
+            )),
+        ),
     ));
 
 })->throws(DeniedFilterException::class, '"$hasMorph" filter for "imageable" is not allowed');

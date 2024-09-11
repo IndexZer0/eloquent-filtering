@@ -19,14 +19,14 @@ it('throws exception when filter format is invalid | not suppressed', function (
         ],
         Filter::only(
             Filter::field('name', [FilterType::NULL]),
-        )
+        ),
     );
 
 })->throws(MalformedFilterFormatException::class, 'Name filter does not match required format. (and 1 more error)');
 
 it('does not throw exception when filter format is invalid | suppressed', function (): void {
 
-    $this->setSuppression("filter.malformed_format", true);
+    $this->setSuppression('filter.malformed_format', true);
 
     $query = Author::filter(
         [
@@ -38,7 +38,7 @@ it('does not throw exception when filter format is invalid | suppressed', functi
         ],
         Filter::only(
             Filter::field('name', [FilterType::NULL]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -112,12 +112,12 @@ it('has correct nested validation error keys', function (): void {
                             'comments',
                             [FilterType::HAS],
                             Filter::only(
-                                Filter::field('content', [FilterType::EQUAL])
-                            )
-                        )
-                    )
-                )
-            )
+                                Filter::field('content', [FilterType::EQUAL]),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         );
     } catch (MalformedFilterFormatException $mffe) {
         expect($mffe->getMessage())->toBe('Content filter does not match required format. (and 1 more error)')
@@ -193,12 +193,12 @@ it('has correct nested validation error keys with $or', function (): void {
                             'comments',
                             [FilterType::HAS],
                             Filter::only(
-                                Filter::field('content', [FilterType::EQUAL])
-                            )
-                        )
-                    )
-                )
-            )
+                                Filter::field('content', [FilterType::EQUAL]),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         );
     } catch (MalformedFilterFormatException $mffe) {
         expect($mffe->getMessage())->toBe('Description filter does not match required format. (and 1 more error)')

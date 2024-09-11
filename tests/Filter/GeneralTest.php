@@ -18,7 +18,7 @@ it('throws InvalidFiltersPayloadException when providing a non list array', func
         ],
         Filter::only(
             Filter::field('name', [FilterType::EQUAL]),
-        )
+        ),
     );
 
 })->throws(InvalidFiltersPayloadException::class, 'Filters must be an array list.');

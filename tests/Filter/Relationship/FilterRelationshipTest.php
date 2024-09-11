@@ -25,8 +25,8 @@ it('can filter by relationship when allowed', function (): void {
             Filter::relation(
                 'books',
                 [FilterType::HAS],
-            )
-        )
+            ),
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -72,7 +72,7 @@ it('can not filter by relationship when not explicitly allowed | not suppressed'
 
 it('can not filter by relationship when not explicitly allowed | suppressed', function (): void {
 
-    $this->setSuppression("filter.denied", true);
+    $this->setSuppression('filter.denied', true);
 
     $query = Author::filter(
         [
@@ -112,8 +112,8 @@ it('can filter by relationship with no child filters', function (): void {
             Filter::relation(
                 'books',
                 [FilterType::HAS],
-            )
-        )
+            ),
+        ),
     );
 
     $expectedSql = <<< SQL

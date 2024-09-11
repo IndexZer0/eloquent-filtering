@@ -23,7 +23,7 @@ it('can filter by field with dot notation', function (): void {
         ],
         Filter::only(
             Filter::field('authors.name', [FilterType::EQUAL]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -50,7 +50,7 @@ it('can filter by field with dot notation with alias', function (): void {
         ],
         Filter::only(
             Filter::field(Target::alias('name', 'authors.name'), [FilterType::EQUAL]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -77,7 +77,7 @@ it('can filter by field with dot notation on a join column', function (): void {
         ],
         Filter::only(
             Filter::field('author_profiles.age', [FilterType::EQUAL]),
-        )
+        ),
     )->join('author_profiles', function (JoinClause $join): void {
         $join->on('authors.id', '=', 'author_profiles.author_id');
     });

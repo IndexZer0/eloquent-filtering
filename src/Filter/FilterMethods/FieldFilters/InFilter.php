@@ -49,12 +49,12 @@ class InFilter implements FilterMethod, Modifiable, Targetable
         return $query->whereIn(
             $target,
             $this->value,
-            not: $this->not()
+            not: $this->not(),
         )->when($this->hasModifier('null'), function (Builder $query) use ($target): void {
             $query->whereNull(
                 $target,
                 $this->not() ? 'and' : 'or',
-                $this->not()
+                $this->not(),
             );
         });
     }

@@ -23,7 +23,7 @@ it('works with pagination', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::EQUAL]),
-        )
+        ),
     );
 
     DB::enableQueryLog();
@@ -35,15 +35,15 @@ it('works with pagination', function (): void {
 
     expect($queryLog->toArray())->toBe([
         [
-            "query"    => "select count(*) as aggregate from \"authors\" where \"authors\".\"name\" = ?",
-            "bindings" => [
-                "George Raymond Richard Martin",
+            'query'    => 'select count(*) as aggregate from "authors" where "authors"."name" = ?',
+            'bindings' => [
+                'George Raymond Richard Martin',
             ],
         ],
         [
-            "query"    => "select * from \"authors\" where \"authors\".\"name\" = ? limit 15 offset 0",
-            "bindings" => [
-                "George Raymond Richard Martin",
+            'query'    => 'select * from "authors" where "authors"."name" = ? limit 15 offset 0',
+            'bindings' => [
+                'George Raymond Richard Martin',
             ],
         ],
     ])

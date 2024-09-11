@@ -42,7 +42,7 @@ class NullFilter implements FilterMethod, Targetable
     {
         return $query->whereNull(
             $this->eloquentContext->qualifyColumn($this->target),
-            not: !$this->value
+            not: !$this->value,
         );
     }
 }

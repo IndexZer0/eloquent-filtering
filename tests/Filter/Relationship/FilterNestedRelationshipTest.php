@@ -70,12 +70,12 @@ it('can filter by nested relationships when allowed', function (): void {
                         'comments',
                         [FilterType::HAS],
                         Filter::only(
-                            Filter::field('content', [FilterType::EQUAL])
-                        )
-                    )
-                )
-            )
-        )
+                            Filter::field('content', [FilterType::EQUAL]),
+                        ),
+                    ),
+                ),
+            ),
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -164,7 +164,7 @@ it('can not filter by nested relationship when not explicitly allowed | not supp
             ],
         ],
         Filter::only(
-            Filter::relation('books', [FilterType::HAS])
+            Filter::relation('books', [FilterType::HAS]),
         ),
     );
 
@@ -172,7 +172,7 @@ it('can not filter by nested relationship when not explicitly allowed | not supp
 
 it('can not filter by nested relationship when not explicitly allowed | suppressed', function (): void {
 
-    $this->setSuppression("filter.denied", true);
+    $this->setSuppression('filter.denied', true);
 
     $query = Author::filter(
         [
@@ -220,7 +220,7 @@ it('can not filter by nested relationship when not explicitly allowed | suppress
             ],
         ],
         Filter::only(
-            Filter::relation('books', [FilterType::HAS])
+            Filter::relation('books', [FilterType::HAS]),
         ),
     );
 
@@ -238,7 +238,7 @@ it('can not filter by nested relationship when not explicitly allowed | suppress
 
 it('honours the allowed filter list all the way down the nested relation chain | suppressed', function (): void {
 
-    $this->setSuppression("filter.denied", true);
+    $this->setSuppression('filter.denied', true);
 
     $query = Author::filter(
         [
@@ -293,9 +293,9 @@ it('honours the allowed filter list all the way down the nested relation chain |
                     Filter::relation(
                         'comments',
                         [FilterType::HAS],
-                    )
-                )
-            )
+                    ),
+                ),
+            ),
         ),
     );
 

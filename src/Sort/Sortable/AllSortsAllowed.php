@@ -16,7 +16,7 @@ class AllSortsAllowed implements AllowedSortList
     public function __construct(AliasedTarget ...$targets)
     {
         $this->targets = collect($targets)->keyBy(
-            fn (AliasedTarget $target) => $target->target
+            fn (AliasedTarget $target) => $target->target,
         );
     }
 

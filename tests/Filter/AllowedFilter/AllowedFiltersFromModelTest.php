@@ -10,7 +10,7 @@ beforeEach(function (): void {
 
 it('uses allowed filters from model as default', function (): void {
 
-    $this->setSuppression("filter.denied", true);
+    $this->setSuppression('filter.denied', true);
 
     $query = Product::filter(
         [
@@ -24,7 +24,7 @@ it('uses allowed filters from model as default', function (): void {
                 'type'   => '$eq',
                 'value'  => 'Product 1',
             ],
-        ]
+        ],
     );
 
     $expectedSql = <<< SQL

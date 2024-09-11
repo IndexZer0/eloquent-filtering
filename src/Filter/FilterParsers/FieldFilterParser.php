@@ -44,8 +44,8 @@ class FieldFilterParser implements CustomFilterParser
             new EloquentContext(
                 $pendingFilter->model(),
                 $relation,
-                is_a($allowedFilter, PivotableFilter::class) && $allowedFilter->isPivot()
-            )
+                is_a($allowedFilter, PivotableFilter::class) && $allowedFilter->isPivot(),
+            ),
         );
 
         return $filterBuilder

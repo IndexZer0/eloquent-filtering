@@ -30,8 +30,8 @@ it('throws exception when filter is invalid | not suppressed', function (mixed $
             $filter,
         ],
         Filter::only(
-            Filter::field('name', [FilterType::EQUAL])
-        )
+            Filter::field('name', [FilterType::EQUAL]),
+        ),
     );
 
 })
@@ -40,15 +40,15 @@ it('throws exception when filter is invalid | not suppressed', function (mixed $
 
 it('does not throw exception when filter is invalid | suppressed', function (mixed $filter): void {
 
-    $this->setSuppression("filter.invalid", true);
+    $this->setSuppression('filter.invalid', true);
 
     $query = Author::filter(
         [
             $filter,
         ],
         Filter::only(
-            Filter::field('name', [FilterType::EQUAL])
-        )
+            Filter::field('name', [FilterType::EQUAL]),
+        ),
     );
 
     $expectedSql = <<< SQL

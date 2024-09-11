@@ -31,7 +31,7 @@ it('can filter and sort together', function (): void {
             ],
         ],
         Sort::only(
-            Sort::field('name')
+            Sort::field('name'),
         ),
     );
 

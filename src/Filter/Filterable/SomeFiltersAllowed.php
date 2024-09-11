@@ -76,7 +76,7 @@ class SomeFiltersAllowed implements AllowedFilterList
     {
         return $this->allowedFilters
             ->filter(
-                fn (AllowedFilter $allowedFilter) => $allowedFilter instanceof AllowedField
+                fn (AllowedFilter $allowedFilter) => $allowedFilter instanceof AllowedField,
             )
             ->toArray();
     }
@@ -86,7 +86,7 @@ class SomeFiltersAllowed implements AllowedFilterList
         return $this->allowedFilters
             ->filter(
                 fn (AllowedFilter $allowedFilter) => $allowedFilter instanceof AllowedRelation ||
-                    $allowedFilter instanceof AllowedMorphRelation
+                    $allowedFilter instanceof AllowedMorphRelation,
             )
             ->toArray();
     }

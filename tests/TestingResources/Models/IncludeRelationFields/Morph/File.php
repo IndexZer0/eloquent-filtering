@@ -34,7 +34,7 @@ class File extends Model implements IsFilterable
             )->includeRelationFields([
                 Contract::class,
                 Account::class,
-            ])
+            ]),
         );
     }
 }

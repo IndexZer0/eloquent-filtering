@@ -90,7 +90,7 @@ enum FilterType: string
     public function withValidation(
         array $rules,
         array $messages = [],
-        array $attributes = []
+        array $attributes = [],
     ): AllowedType {
         return $this->toAllowedType()->withValidation($rules, $messages, $attributes);
     }

@@ -50,7 +50,7 @@ it('throws Exception when calling getAllowedType() on AllowedMorphType', functio
         index: 1,
     ));
 
-})->throws(Exception::class, "Not implemented");
+})->throws(Exception::class, 'Not implemented');
 
 it('returns target from JsonPathTarget', function (): void {
 
@@ -74,7 +74,7 @@ it('has = as default operator', function (): void {
 
     $fakeFilter = new FakeFilter(1);
     $fakeFilter->setEloquentContext(new EloquentContext(
-        new Author()
+        new Author(),
     ));
     $fakeFilter->setTarget('name');
 

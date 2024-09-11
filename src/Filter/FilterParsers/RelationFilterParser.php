@@ -40,7 +40,7 @@ class RelationFilterParser implements CustomFilterParser
             new EloquentContext(
                 $pendingFilter->model(),
                 $relation,
-            )
+            ),
         );
 
         return $filterBuilder->target($target)

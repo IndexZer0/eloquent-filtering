@@ -22,7 +22,7 @@ it('can filter by field when allowed', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::EQUAL]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -68,7 +68,7 @@ it('can not filter by field when not explicitly allowed | not suppressed', funct
 
 it('can not filter by field when not explicitly allowed | suppressed', function (): void {
 
-    $this->setSuppression("filter.denied", true);
+    $this->setSuppression('filter.denied', true);
 
     $query = Author::filter(
         [

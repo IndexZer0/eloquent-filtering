@@ -43,7 +43,7 @@ class JsonContainsFilter implements FilterMethod, Targetable
         return $query->whereJsonContains(
             $this->eloquentContext->qualifyColumn($this->target),
             $this->value,
-            not: $this->not()
+            not: $this->not(),
         );
     }
 

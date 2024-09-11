@@ -34,7 +34,7 @@ it('can perform a custom "custom" filter | $latest', function (): void {
         ],
         Filter::only(
             Filter::custom('$latest'),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -66,7 +66,7 @@ it('can not perform a custom "custom" filter when not allowed | $latest', functi
         ],
         Filter::only(
             Filter::custom('$latest'),
-        )
+        ),
     );
 
 })->throws(DeniedFilterException::class, '"$oldest" filter is not allowed');

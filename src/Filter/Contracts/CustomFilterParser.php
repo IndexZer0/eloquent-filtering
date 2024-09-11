@@ -12,6 +12,6 @@ interface CustomFilterParser
     public function parse(
         PendingFilter  $pendingFilter,
         ?AllowedFilter $allowedFilter = null,
-        ?AllowedFilterList $allowedFilterList = null
+        ?AllowedFilterList $allowedFilterList = null,
     ): FilterMethod;
 }

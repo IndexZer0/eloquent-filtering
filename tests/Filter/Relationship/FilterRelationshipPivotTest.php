@@ -41,7 +41,7 @@ it('can filter by pivot field when allowed', function (): void {
                 Filter::field('name', [FilterType::EQUAL]),
                 Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
             ),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -80,7 +80,7 @@ it('can filter by pivot field when allowed', function (): void {
             allowedFilters: Filter::only(
                 Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Tag::class),
             ),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -133,7 +133,7 @@ it('ors with pivot', function (): void {
                 Filter::field('name', [FilterType::EQUAL]),
                 Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
             ),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL
@@ -196,7 +196,7 @@ it('can not use pivot filter when in context of different relationship (BelongsT
                 Filter::field('name', [FilterType::EQUAL]),
                 Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
             ),
-        )
+        ),
     ));
 
 })->throws(DeniedFilterException::class, '"$eq" filter for "tagged_by" is not allowed');
@@ -228,7 +228,7 @@ it('can not use pivot filter when in context of different relationship (BelongsT
                 Filter::field('name', [FilterType::EQUAL]),
                 Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
             ),
-        )
+        ),
     ));
 
 })->throws(DeniedFilterException::class, '"$eq" filter for "tagged_by" is not allowed');

@@ -107,7 +107,7 @@ class AllowedRelation implements
         if (
             !RelationUtils::relationMethodExists(
                 $relationMethod = $this->target->getReal(),
-                $modelFqcn
+                $modelFqcn,
             )
         ) {
             return null;
@@ -119,7 +119,7 @@ class AllowedRelation implements
 
         if ($relatedModelsAllowedFilters !== null) {
             $this->allowedFilters = $this->allowedFilters->add(
-                ...$relatedModelsAllowedFilters->getAllowedFields()
+                ...$relatedModelsAllowedFilters->getAllowedFields(),
             );
         }
 

@@ -44,7 +44,7 @@ class AvailableFiltersLoader
             function (string $filterMethodFqcn) {
                 /** @var $filterMethodFqcn FilterMethod */
                 return $filterMethodFqcn::type();
-            }
+            },
         );
     }
 
@@ -111,7 +111,7 @@ class AvailableFiltersLoader
             function (string $filterMethodFqcn) {
                 /** @var $filterMethodFqcn FilterMethod */
                 return $filterMethodFqcn::type();
-            }
+            },
         )->duplicates();
 
         if ($duplicateTypes->count() > 0) {

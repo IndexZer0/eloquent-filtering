@@ -64,7 +64,7 @@ class PendingFilter
             $messageParts->push("for \"{$target}\"");
         }
 
-        $messageParts->push("is not allowed");
+        $messageParts->push('is not allowed');
 
         return $messageParts->join(' ');
     }
@@ -108,7 +108,7 @@ class PendingFilter
     protected function getFilterConstructorParameters(): array
     {
         return collect($this->data)->only(
-            ClassUtils::getClassConstructorParameterNames($this->filterFqcn)
+            ClassUtils::getClassConstructorParameterNames($this->filterFqcn),
         )->toArray();
     }
 
@@ -117,7 +117,7 @@ class PendingFilter
         $filterFqcn = $this->filterFqcn;
 
         $filterMethod = new $filterFqcn(
-            ...$this->getFilterConstructorParameters()
+            ...$this->getFilterConstructorParameters(),
         );
 
         return $filterMethod;

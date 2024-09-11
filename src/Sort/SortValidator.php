@@ -36,7 +36,7 @@ class SortValidator implements SortValidatorContract
     {
         if (!is_array($sort)) {
             throw MalformedSortFormatException::withMessages([
-                'sort' => ["Sort must be an array."],
+                'sort' => ['Sort must be an array.'],
             ]);
         }
 
@@ -46,7 +46,7 @@ class SortValidator implements SortValidatorContract
                 'value'  => ['required', Rule::in(['asc', 'desc'])],
             ], ['value.in' => 'The :attribute must be one of the following types: :values']);
             $this->pendingSorts->push(
-                new PendingSort($sort['target'], $sort['value'])
+                new PendingSort($sort['target'], $sort['value']),
             );
         } catch (ValidationException $ve) {
             throw MalformedSortFormatException::withMessages([

@@ -22,7 +22,7 @@ it('can perform $jsonContains filter', function (): void {
         ],
         Filter::only(
             Filter::field('data->array', [FilterType::JSON_CONTAINS]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -42,7 +42,7 @@ it('supports various wildcard and non wildcard targets', function (
     string  $allowed_target,
     string  $requested_target,
     ?string $expected_sql,
-    ?string $expected_exception_message
+    ?string $expected_exception_message,
 ): void {
 
     if ($expected_exception_message !== null) {
@@ -60,7 +60,7 @@ it('supports various wildcard and non wildcard targets', function (
         ],
         Filter::only(
             Filter::field($allowed_target, [FilterType::JSON_CONTAINS]),
-        )
+        ),
     );
 
     expect($query->toRawSql())->toBe($expected_sql);

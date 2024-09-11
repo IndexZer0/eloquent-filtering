@@ -25,7 +25,7 @@ it('can perform $in filter', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::IN]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -56,7 +56,7 @@ it('can perform $in filter with :null modifier', function (): void {
             Filter::field('name', [
                 FilterType::IN->withModifiers('null'),
             ]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -77,7 +77,7 @@ it('only accepts string, int, float for value', function (
     ?string $expected_sql,
     bool $expect_exception,
     ?string $expected_exception_message,
-    ?array $expected_errors
+    ?array $expected_errors,
 ): void {
 
     try {
@@ -92,7 +92,7 @@ it('only accepts string, int, float for value', function (
             ],
             Filter::only(
                 Filter::field('name', [FilterType::IN]),
-            )
+            ),
         );
 
         if ($expect_exception) {

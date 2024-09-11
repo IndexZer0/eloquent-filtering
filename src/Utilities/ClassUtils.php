@@ -26,7 +26,7 @@ class ClassUtils
         $constructorParameters = collect($constructor->getParameters());
 
         return $constructorParameters->map(
-            fn (ReflectionParameter $constructorParameter) => $constructorParameter->name
+            fn (ReflectionParameter $constructorParameter) => $constructorParameter->name,
         )->toArray();
     }
 

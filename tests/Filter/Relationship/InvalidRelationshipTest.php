@@ -26,8 +26,8 @@ it('doesnt resolveRelationsAllowedFields when relation method does not exist', f
             Filter::relation(
                 'nonExistingRelationship',
                 [FilterType::HAS],
-            )->includeRelationFields()
-        )
+            )->includeRelationFields(),
+        ),
     );
 
 })->throws(BadMethodCallException::class);
@@ -52,8 +52,8 @@ it('doesnt includeRelationFields when relation model is not filterable', functio
             Filter::relation(
                 'notFilterable',
                 [FilterType::HAS],
-            )->includeRelationFields()
-        )
+            )->includeRelationFields(),
+        ),
     );
 
 })->throws(DeniedFilterException::class, '"$eq" filter for "name" is not allowed');

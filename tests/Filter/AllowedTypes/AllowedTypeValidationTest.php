@@ -26,7 +26,7 @@ it('can set validation rules', function (): void {
                 'value.0' => ['date', 'before:value.1'],
                 'value.1' => ['date', 'after:value.0'],
             ])]),
-        )
+        ),
     );
 
 })->throws(MalformedFilterFormatException::class, 'Starting_at filter does not match required format. (and 2 more errors)');
@@ -54,7 +54,7 @@ it('can set validation messages and attributes', function (): void {
                     'value.0' => 'first date',
                     'value.1' => 'second date',
                 ])]),
-            )
+            ),
         );
 
         $this->fail('Should have thrown exception');
@@ -90,7 +90,7 @@ it('can set validation rules for custom filter', function (): void {
             Filter::custom((new AllowedType('$latest'))->withValidation([
                 'value' => ['required'],
             ])),
-        )
+        ),
     );
 
 })->throws(MalformedFilterFormatException::class, '$latest filter does not match required format. (and 1 more error)');

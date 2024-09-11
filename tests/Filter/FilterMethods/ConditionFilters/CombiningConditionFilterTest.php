@@ -53,9 +53,9 @@ it('can perform $or and $and filter', function (): void {
                 [FilterType::HAS],
                 allowedFilters: Filter::only(
                     Filter::field('title', [FilterType::EQUAL]),
-                )
-            )
-        )
+                ),
+            ),
+        ),
     );
 
     $expectedSql = <<< SQL

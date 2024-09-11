@@ -24,7 +24,7 @@ it('can perform $between filter', function (): void {
         ],
         Filter::only(
             Filter::field('age', [FilterType::BETWEEN]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

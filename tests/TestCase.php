@@ -50,7 +50,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'IndexZer0\\EloquentFiltering\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => 'IndexZer0\\EloquentFiltering\\Database\\Factories\\' . class_basename($modelName) . 'Factory',
         );
 
         Relation::morphMap([
@@ -449,12 +449,12 @@ class TestCase extends Orchestra
         $article1->images()->save(
             $image1 = new Image([
                 'url' => 'image-1',
-            ])
+            ]),
         );
         $article1->images()->save(
             $image2 = new Image([
                 'url' => 'image-2',
-            ])
+            ]),
         );
 
         $article2 = Article::create([
@@ -463,12 +463,12 @@ class TestCase extends Orchestra
         $article2->images()->save(
             $image3 = new Image([
                 'url' => 'image-3',
-            ])
+            ]),
         );
         $article2->images()->save(
             $image4 = new Image([
                 'url' => 'image-4',
-            ])
+            ]),
         );
 
         $userProfile1 = UserProfile::create([
@@ -477,12 +477,12 @@ class TestCase extends Orchestra
         $userProfile1->images()->save(
             $image5 = new Image([
                 'url' => 'image-5',
-            ])
+            ]),
         );
         $userProfile1->images()->save(
             $image6 = new Image([
                 'url' => 'image-6',
-            ])
+            ]),
         );
 
         $userProfile2 = UserProfile::create([
@@ -491,12 +491,12 @@ class TestCase extends Orchestra
         $userProfile2->images()->save(
             $image7 = new Image([
                 'url' => 'image-7',
-            ])
+            ]),
         );
         $userProfile2->images()->save(
             $image8 = new Image([
                 'url' => 'image-8',
-            ])
+            ]),
         );
     }
 
@@ -508,12 +508,12 @@ class TestCase extends Orchestra
         $contract1->files()->save(
             $file1 = new File([
                 'url' => 'file-1',
-            ])
+            ]),
         );
         $contract1->files()->save(
             $file2 = new File([
                 'url' => 'file-2',
-            ])
+            ]),
         );
 
         $contract2 = Contract::create([
@@ -522,12 +522,12 @@ class TestCase extends Orchestra
         $contract2->files()->save(
             $file3 = new File([
                 'url' => 'file-3',
-            ])
+            ]),
         );
         $contract2->files()->save(
             $file4 = new File([
                 'url' => 'file-4',
-            ])
+            ]),
         );
 
         $account1 = Account::create([
@@ -536,12 +536,12 @@ class TestCase extends Orchestra
         $account1->files()->save(
             $file5 = new File([
                 'url' => 'file-5',
-            ])
+            ]),
         );
         $account1->files()->save(
             $file6 = new File([
                 'url' => 'file-6',
-            ])
+            ]),
         );
 
         $account2 = Account::create([
@@ -550,12 +550,12 @@ class TestCase extends Orchestra
         $account2->files()->save(
             $file7 = new File([
                 'url' => 'file-7',
-            ])
+            ]),
         );
         $account2->files()->save(
             $file8 = new File([
                 'url' => 'file-8',
-            ])
+            ]),
         );
     }
 
@@ -567,12 +567,12 @@ class TestCase extends Orchestra
         $business1->invoices()->save(
             $invoice1 = new Invoice([
                 'amount' => 1,
-            ])
+            ]),
         );
         $business1->invoices()->save(
             $invoice2 = new Invoice([
                 'amount' => 2,
-            ])
+            ]),
         );
 
         $business2 = Business::create([
@@ -581,12 +581,12 @@ class TestCase extends Orchestra
         $business2->invoices()->save(
             $invoice3 = new Invoice([
                 'amount' => 3,
-            ])
+            ]),
         );
         $business2->invoices()->save(
             $invoice4 = new Invoice([
                 'amount' => 4,
-            ])
+            ]),
         );
 
         $client1 = Client::create([
@@ -595,12 +595,12 @@ class TestCase extends Orchestra
         $client1->invoices()->save(
             $invoice5 = new Invoice([
                 'amount' => 5,
-            ])
+            ]),
         );
         $client1->invoices()->save(
             $invoice6 = new Invoice([
                 'amount' => 6,
-            ])
+            ]),
         );
 
         $client2 = Client::create([
@@ -609,12 +609,12 @@ class TestCase extends Orchestra
         $client2->invoices()->save(
             $invoice7 = new Invoice([
                 'amount' => 7,
-            ])
+            ]),
         );
         $client2->invoices()->save(
             $invoice8 = new Invoice([
                 'amount' => 8,
-            ])
+            ]),
         );
     }
 
@@ -626,12 +626,12 @@ class TestCase extends Orchestra
         $foodDeliveryService1->subscriptions()->save(
             $subscription1 = new Subscription([
                 'amount' => 1,
-            ])
+            ]),
         );
         $foodDeliveryService1->subscriptions()->save(
             $subscription2 = new Subscription([
                 'amount' => 2,
-            ])
+            ]),
         );
 
         $foodDeliveryService2 = FoodDeliveryService::create([
@@ -640,12 +640,12 @@ class TestCase extends Orchestra
         $foodDeliveryService2->subscriptions()->save(
             $subscription3 = new Subscription([
                 'amount' => 3,
-            ])
+            ]),
         );
         $foodDeliveryService2->subscriptions()->save(
             $subscription4 = new Subscription([
                 'amount' => 4,
-            ])
+            ]),
         );
 
         $sass1 = Sass::create([
@@ -654,12 +654,12 @@ class TestCase extends Orchestra
         $sass1->subscriptions()->save(
             $subscription5 = new Subscription([
                 'amount' => 5,
-            ])
+            ]),
         );
         $sass1->subscriptions()->save(
             $subscription6 = new Subscription([
                 'amount' => 6,
-            ])
+            ]),
         );
 
         $sass2 = Sass::create([
@@ -668,12 +668,12 @@ class TestCase extends Orchestra
         $sass2->subscriptions()->save(
             $subscription7 = new Subscription([
                 'amount' => 7,
-            ])
+            ]),
         );
         $sass2->subscriptions()->save(
             $subscription8 = new Subscription([
                 'amount' => 8,
-            ])
+            ]),
         );
     }
 

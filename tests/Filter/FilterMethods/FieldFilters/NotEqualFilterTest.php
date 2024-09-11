@@ -21,7 +21,7 @@ it('can perform $notEq filter', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::NOT_EQUAL]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

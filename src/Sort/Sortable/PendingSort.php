@@ -23,7 +23,7 @@ class PendingSort
     {
         return new ApprovedSort(
             $target,
-            $this->direction
+            $this->direction,
         );
     }
 }

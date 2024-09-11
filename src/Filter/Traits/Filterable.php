@@ -17,12 +17,12 @@ trait Filterable
     public function scopeFilter(
         Builder $query,
         array $filters,
-        ?AllowedFilterList $allowedFilterList = null
+        ?AllowedFilterList $allowedFilterList = null,
     ): Builder {
 
         $allowedFilterResolver = new AllowedFilterResolver(
             $allowedFilterList ?? $this->allowedFilters(),
-            self::class
+            self::class,
         );
         $allowedFilterList = $allowedFilterResolver->resolve();
 
@@ -31,12 +31,12 @@ trait Filterable
         $filters = $filterParser->parse(
             model: $this,
             filters: $filters,
-            allowedFilterList: $allowedFilterList
+            allowedFilterList: $allowedFilterList,
         );
 
         $requiredFiltersChecker = new RequiredFiltersChecker(
             $allowedFilterList,
-            true
+            true,
         );
         $requiredFiltersChecker->__invoke();
 
@@ -44,7 +44,7 @@ trait Filterable
         $filterApplier = resolve(FilterApplier::class);
         return $filterApplier->apply(
             $query,
-            $filters
+            $filters,
         );
     }
 

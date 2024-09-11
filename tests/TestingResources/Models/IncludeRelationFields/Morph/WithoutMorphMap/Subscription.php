@@ -34,7 +34,7 @@ class Subscription extends Model implements IsFilterable
             )->includeRelationFields([
                 FoodDeliveryService::class,
                 Sass::class,
-            ])
+            ]),
         );
     }
 }

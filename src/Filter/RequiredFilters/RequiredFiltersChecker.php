@@ -24,7 +24,7 @@ class RequiredFiltersChecker
     {
         $messageBag = $this->getUnmatchedRequiredFiltersIdentifiers(
             $this->allowedFilterList,
-            parentWasMatched: $this->parentWasMatched
+            parentWasMatched: $this->parentWasMatched,
         );
         if ($messageBag->isNotEmpty()) {
             throw RequiredFilterException::withMessages($messageBag->messages());
@@ -33,7 +33,7 @@ class RequiredFiltersChecker
 
     public function getUnmatchedRequiredFiltersIdentifiers(
         AllowedFilterList $allowedFilterList,
-        bool $parentWasMatched
+        bool $parentWasMatched,
     ): MessageBag {
         $messageBag = new MessageBag();
 
@@ -47,7 +47,7 @@ class RequiredFiltersChecker
 
                 $messageBag->add(
                     $identifier,
-                    $message
+                    $message,
                 );
             }
 
@@ -58,11 +58,11 @@ class RequiredFiltersChecker
                     collect(
                         $this->getUnmatchedRequiredFiltersIdentifiers(
                             $allowedFilter->allowedFilters(),
-                            $beenMatched
-                        )->getMessages()
+                            $beenMatched,
+                        )->getMessages(),
                     )
                         ->mapWithKeys(fn ($value, $key) => ["{$identifier}.{$key}" => $value])
-                        ->toArray()
+                        ->toArray(),
                 );
             }
         }

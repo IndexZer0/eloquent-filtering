@@ -17,7 +17,7 @@ class FilterApplier implements FilterApplierContract
 
     public function apply(
         Builder          $query,
-        FilterCollection $filters
+        FilterCollection $filters,
     ): Builder {
         /** @var FilterMethod $filter */
         foreach ($filters as $filter) {

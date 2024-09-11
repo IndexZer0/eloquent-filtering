@@ -18,7 +18,7 @@ trait EnsuresChildFiltersAllowed
         PendingFilter $pendingFilter,
         AllowedFilterList $allowedFilterList,
         Model $model,
-        ?Relation $relation = null
+        ?Relation $relation = null,
     ): ?FilterCollection {
         $filterFqcn = $pendingFilter->filterFqcn();
 

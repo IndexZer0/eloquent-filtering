@@ -34,7 +34,7 @@ it('can have all types allowed', function (): void {
         ],
         Filter::only(
             Filter::field('name', Types::all()),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -52,7 +52,7 @@ it('can have all types allowed', function (): void {
 
 it('can have only some types allowed', function (): void {
 
-    $this->setSuppression("filter.denied", true);
+    $this->setSuppression('filter.denied', true);
 
     $query = Author::filter(
         [
@@ -76,7 +76,7 @@ it('can have only some types allowed', function (): void {
         ],
         Filter::only(
             Filter::field('name', Types::only([FilterType::EQUAL, FilterType::LIKE])),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

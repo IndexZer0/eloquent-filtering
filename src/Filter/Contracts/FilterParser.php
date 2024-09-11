@@ -16,6 +16,6 @@ interface FilterParser
         array $filters,
         AllowedFilterList $allowedFilterList,
         ?Relation $relation = null,
-        ?PendingFilter $previousPendingFilter = null
+        ?PendingFilter $previousPendingFilter = null,
     ): FilterCollection;
 }

@@ -24,7 +24,7 @@ it('can perform $eq filter', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::EQUAL]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -44,7 +44,7 @@ it('only accepts string, int, float for value', function (
     ?string $expected_sql,
     bool $expect_exception,
     ?string $expected_exception_message,
-    ?array $expected_errors
+    ?array $expected_errors,
 ): void {
 
     try {
@@ -58,7 +58,7 @@ it('only accepts string, int, float for value', function (
             ],
             Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),
-            )
+            ),
         );
 
         if ($expect_exception) {
@@ -205,7 +205,7 @@ it('can perform $eq filter on json field', function (): void {
         ],
         Filter::only(
             Filter::field('data->own-key-1', [FilterType::EQUAL]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

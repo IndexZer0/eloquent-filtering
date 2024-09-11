@@ -23,8 +23,8 @@ it('can alias field', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field(Target::alias('name', 'name_alias'), [FilterType::EQUAL])
-        )
+            Filter::field(Target::alias('name', 'name_alias'), [FilterType::EQUAL]),
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -46,8 +46,8 @@ it('can alias relation', function (): void {
             ],
         ],
         Filter::only(
-            Filter::relation(Target::alias('documents', 'books'), [FilterType::HAS])
-        )
+            Filter::relation(Target::alias('documents', 'books'), [FilterType::HAS]),
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -86,9 +86,9 @@ it('can alias relations field', function (): void {
                 [FilterType::HAS],
                 allowedFilters: Filter::only(
                     Filter::field(Target::alias('target_from_request_1', 'title'), [FilterType::EQUAL]),
-                )
+                ),
             ),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -117,9 +117,9 @@ it('can alias morph relation | morphRelation filter', function (): void {
             Filter::morphRelation(
                 Target::alias('image', 'imageable'),
                 [FilterType::HAS_MORPH],
-                Filter::morphType(Article::class)
-            )
-        )
+                Filter::morphType(Article::class),
+            ),
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -150,9 +150,9 @@ it('can alias morph relation morph type | morphRelation filter', function (): vo
                 [FilterType::HAS_MORPH],
                 Filter::morphType(
                     Target::alias('business', Business::class),
-                )
-            )
-        )
+                ),
+            ),
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -189,10 +189,10 @@ it('can alias morph relation field | morphRelation filter', function (): void {
                 Target::alias('image', 'imageable'),
                 [FilterType::HAS_MORPH],
                 Filter::morphType(Article::class, Filter::only(
-                    Filter::field(Target::alias('article_title', 'title'), [FilterType::EQUAL])
-                ))
-            )
-        )
+                    Filter::field(Target::alias('article_title', 'title'), [FilterType::EQUAL]),
+                )),
+            ),
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -230,7 +230,7 @@ it('can alias pivot', function (): void {
             allowedFilters: Filter::only(
                 Filter::field(Target::alias('target_from_request_1', 'tagged_by'), [FilterType::EQUAL])->pivot(Post::class),
             ),
-        )
+        ),
     ));
 
     $expectedSql = <<< SQL

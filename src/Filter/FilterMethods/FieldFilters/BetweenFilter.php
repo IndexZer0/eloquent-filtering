@@ -44,7 +44,7 @@ class BetweenFilter implements FilterMethod, Targetable
         return $query->whereBetween(
             $this->eloquentContext->qualifyColumn($this->target),
             $this->value,
-            not: $this->not()
+            not: $this->not(),
         );
     }
 

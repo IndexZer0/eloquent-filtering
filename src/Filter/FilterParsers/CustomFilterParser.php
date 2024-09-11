@@ -24,7 +24,7 @@ class CustomFilterParser implements CustomFilterParserContract
             new EloquentContext(
                 $pendingFilter->model(),
                 $pendingFilter->relation(),
-            )
+            ),
         );
 
         return $filterBuilder->build();

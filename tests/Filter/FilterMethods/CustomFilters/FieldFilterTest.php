@@ -32,7 +32,7 @@ it('custom filter must be in config file', function (): void {
         ],
         Filter::only(
             Filter::field('name', ['$kebabCase']),
-        )
+        ),
     );
 
 })->throws(MissingFilterException::class, 'Can not find filter for "$kebabCase"');
@@ -51,7 +51,7 @@ it('can perform a custom "field" filter | $kebabCase', function (): void {
         ],
         Filter::only(
             Filter::field('name', ['$kebabCase']),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL

@@ -33,7 +33,7 @@ it('can perform $or filter on base model', function (): void {
         ],
         Filter::only(
             Filter::field('name', [FilterType::EQUAL]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -69,7 +69,7 @@ it('can perform $or filter | multiple exists', function (): void {
         ],
         Filter::only(
             Filter::relation('books', [FilterType::HAS, FilterType::DOESNT_HAS]),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -103,17 +103,17 @@ it('has the correct DeniedFilterException message', function (): void {
                 ],
             ],
         ],
-        Filter::none()
+        Filter::none(),
     );
 
-})->throws(DeniedFilterException::class, "\"\$or\" filter is not allowed");
+})->throws(DeniedFilterException::class, '"$or" filter is not allowed');
 
 it('must have at least two child filters', function (
     array $value_container,
     ?string $expected_sql,
     bool    $expect_exception,
     ?string $expected_exception_message,
-    ?array $expected_errors
+    ?array $expected_errors,
 ): void {
 
     try {
@@ -126,7 +126,7 @@ it('must have at least two child filters', function (
             ],
             Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),
-            )
+            ),
         );
 
         if ($expect_exception) {

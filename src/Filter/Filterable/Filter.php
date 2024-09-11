@@ -49,7 +49,7 @@ class Filter
     {
         return new AllowedField(
             self::createAlias($target),
-            self::createTypes($types)
+            self::createTypes($types),
         );
     }
 
@@ -73,7 +73,7 @@ class Filter
         return new AllowedMorphRelation(
             self::createAlias($target),
             self::createTypes($types),
-            new SomeFiltersAllowed(...$allowedMorphTypes)
+            new SomeFiltersAllowed(...$allowedMorphTypes),
         );
     }
 
@@ -83,7 +83,7 @@ class Filter
     ): AllowedMorphType {
         return new AllowedMorphType(
             self::createMorphRelationAlias($type),
-            $allowedFilters
+            $allowedFilters,
         );
     }
 

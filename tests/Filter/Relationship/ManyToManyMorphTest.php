@@ -29,9 +29,9 @@ it('can perform $has filter on many to many morph', function (): void {
         ],
         Filter::only(
             Filter::relation('labels', [FilterType::HAS], Filter::only(
-                Filter::field('name', [FilterType::EQUAL])
+                Filter::field('name', [FilterType::EQUAL]),
             )),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -74,9 +74,9 @@ it('can perform pivot filter on many to many morph', function (): void {
         Filter::only(
             Filter::relation('labels', [FilterType::HAS], Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),
-                $pivotFilter
+                $pivotFilter,
             )),
-        )
+        ),
     );
 
     $expectedEpicQuerySql = <<< SQL
@@ -112,9 +112,9 @@ it('can perform pivot filter on many to many morph', function (): void {
         Filter::only(
             Filter::relation('labels', [FilterType::HAS], Filter::only(
                 Filter::field('name', [FilterType::EQUAL]),
-                $pivotFilter
+                $pivotFilter,
             )),
-        )
+        ),
     );
 
     $expectedIssueQuerySql = <<< SQL
@@ -160,12 +160,12 @@ it('can perform pivot filter on many to many morph', function (): void {
         ],
         Filter::only(
             Filter::relation('epics', [FilterType::HAS], Filter::only(
-                Filter::field('labeled_by', [FilterType::EQUAL])->pivot(Label::class)
+                Filter::field('labeled_by', [FilterType::EQUAL])->pivot(Label::class),
             )),
             Filter::relation('issues', [FilterType::HAS], Filter::only(
-                Filter::field('labeled_by', [FilterType::EQUAL])->pivot(Label::class)
+                Filter::field('labeled_by', [FilterType::EQUAL])->pivot(Label::class),
             )),
-        )
+        ),
     );
 
     $expectedLabelQuerySql = <<< SQL

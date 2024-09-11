@@ -12,7 +12,7 @@ it('throws exception when sort is not array | not suppressed', function (): void
         [
             'string',
         ],
-        Sort::all()
+        Sort::all(),
     );
 
 })->throws(MalformedSortFormatException::class, 'Sort must be an array.');
@@ -25,7 +25,7 @@ it('throws exception when sort value is missing | not suppressed', function (): 
                 'target' => 'name',
             ],
         ],
-        Sort::all()
+        Sort::all(),
     );
 
 })->throws(MalformedSortFormatException::class, 'The value field is required.');
@@ -39,7 +39,7 @@ it('throws exception when sort value is invalid | not suppressed', function (): 
                 'value'  => 'invalid',
             ],
         ],
-        Sort::all()
+        Sort::all(),
     );
 
 })->throws(MalformedSortFormatException::class, 'The value must be one of the following types: asc, desc');
@@ -52,7 +52,7 @@ it('throws exception when sort target is missing | not suppressed', function ():
                 'value' => 'asc',
             ],
         ],
-        Sort::all()
+        Sort::all(),
     );
 
 })->throws(MalformedSortFormatException::class, 'The target field is required.');
@@ -66,14 +66,14 @@ it('throws exception when sort target is invalid | not suppressed', function ():
                 'value'  => 'asc',
             ],
         ],
-        Sort::all()
+        Sort::all(),
     );
 
 })->throws(MalformedSortFormatException::class, 'The target field must be a string.');
 
 it('does not throw exception when sort format is invalid | suppressed', function (): void {
 
-    $this->setSuppression("sort.malformed_format", true);
+    $this->setSuppression('sort.malformed_format', true);
 
     $query = Author::sort(
         [
@@ -81,7 +81,7 @@ it('does not throw exception when sort format is invalid | suppressed', function
                 'target' => 'name',
             ],
         ],
-        Sort::all()
+        Sort::all(),
     );
 
     $expectedSql = <<< SQL

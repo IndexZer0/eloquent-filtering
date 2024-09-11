@@ -43,7 +43,7 @@ class OrFilter implements FilterMethod, HasChildFilters
                     $filterApplier = resolve(FilterApplier::class);
                     $filterApplier->apply(
                         $query,
-                        new FilterCollection([$filter])
+                        new FilterCollection([$filter]),
                     );
                 });
             }

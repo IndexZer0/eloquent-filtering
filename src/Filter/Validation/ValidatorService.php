@@ -21,7 +21,7 @@ class ValidatorService
                 $pendingFilter->data(),
                 $rules->getRules(),
                 $rules->getMessages(),
-                $rules->getAttributes()
+                $rules->getAttributes(),
             );
             $validator->validate();
         } catch (ValidationException $ve) {

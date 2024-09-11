@@ -11,7 +11,7 @@ beforeEach(function (): void {
 
 it('ignores missing filter when suppressed', function (): void {
 
-    $this->setSuppression("filter.missing", true);
+    $this->setSuppression('filter.missing', true);
 
     $query = Author::filter(
         [

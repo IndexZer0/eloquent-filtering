@@ -17,7 +17,7 @@ class ModelIsNotFilterable extends Model
     public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('name', [FilterType::EQUAL])
+            Filter::field('name', [FilterType::EQUAL]),
         );
     }
 }

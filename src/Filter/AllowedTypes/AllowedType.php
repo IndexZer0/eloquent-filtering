@@ -43,7 +43,7 @@ class AllowedType
     public function withValidation(
         array $rules,
         array $messages = [],
-        array $attributes = []
+        array $attributes = [],
     ): self {
         $this->validatorProvider = ValidatorProvider::from($rules, $messages, $attributes);
         return $this;
