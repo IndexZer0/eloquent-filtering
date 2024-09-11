@@ -5,17 +5,22 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Modifiable;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\Composables\HasModifiers;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\FieldFilter;
 use IndexZer0\EloquentFiltering\Rules\WhereValue;
 
-class InFilter extends AbstractFieldFilter
+class InFilter implements FilterMethod, Modifiable, Targetable
 {
-    final public function __construct(
-        protected string $target,
+    use FieldFilter;
+    use HasModifiers;
+
+    public function __construct(
         protected array $value,
     ) {
-
     }
 
     /*
@@ -26,29 +31,37 @@ class InFilter extends AbstractFieldFilter
 
     public static function type(): string
     {
-        return '$in';
+        return FilterType::IN->value;
     }
 
     public static function format(): array
     {
         return [
-            'target'  => ['required', 'string'],
-            'value'   => ['required', 'array'],
-            'value.*' => ['required', new WhereValue()],
+            'value'   => ['required', 'array', 'min:1'],
+            'value.*' => [new WhereValue()],
         ];
-    }
-
-    public static function from(ApprovedFilter $approvedFilter): static
-    {
-        return new static(
-            $approvedFilter->target()->getReal(),
-            $approvedFilter->data_get('value'),
-        );
     }
 
     public function apply(Builder $query): Builder
     {
-        return $query->whereIn($this->target, $this->value, not: $this->not());
+        $target = $this->eloquentContext->qualifyColumn($this->target);
+
+        return $query->whereIn(
+            $target,
+            $this->value,
+            not: $this->not(),
+        )->when($this->hasModifier('null'), function (Builder $query) use ($target): void {
+            $query->whereNull(
+                $target,
+                $this->not() ? 'and' : 'or',
+                $this->not(),
+            );
+        });
+    }
+
+    public static function supportedModifiers(): array
+    {
+        return ['null'];
     }
 
     /*

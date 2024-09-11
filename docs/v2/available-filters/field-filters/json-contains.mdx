@@ -1,0 +1,52 @@
+---
+title: 'JSON Contains'
+version: 'v2'
+icon: 'brackets-curly'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('options->languages', [FilterType::JSON_CONTAINS]);
+```
+
+<Note>
+    [See JSON Path Wildcards](/v2/digging-deeper/json-path-wildcards)
+</Note>
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$jsonContains" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="string|int|float" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'   => '$jsonContains',
+    'target' => 'options->languages',
+    'value'  => 'en',
+];
+```
+
+```php
+$sql = User::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select * from "users" where json_contains("users"."options", '\"en\"', '$."languages"')
+```
+
+## Modifiers
+
+None available.

@@ -1,0 +1,34 @@
+---
+title: 'Allowed Types'
+version: 'v2'
+icon: 'filter-list'
+iconType: 'solid'
+---
+
+## Overview
+
+When specifying an allowed filter, you should specify the type of filters to be allowed.
+
+## Example: Only `$eq` Allowed
+
+```php
+use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\Types\Types;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+
+// By enum
+Filter::field('name', [FilterType::EQUAL])
+Filter::field('name', Types::only([FilterType::EQUAL]))
+// By string
+Filter::field('name', ['$eq'])
+Filter::field('name', Types::only(['$eq']))
+```
+
+## Example: All Types Allowed
+
+```php
+use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\Types\Types;
+
+Filter::field('name', Types::all())
+```

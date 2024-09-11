@@ -3,14 +3,16 @@
 namespace {{ namespace }};
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\FieldFilter;
 
-class {{ class }} extends AbstractFieldFilter
+class {{ class }} implements FilterMethod, Targetable
 {
-    final public function __construct(
-        protected string $target,
-        protected mixed  $value,
+    use FieldFilter;
+
+    public function __construct(
+        protected mixed $value,
     ) {
     }
 
@@ -30,20 +32,8 @@ class {{ class }} extends AbstractFieldFilter
     public static function format(): array
     {
         return [
-            'target' => ['required', 'string'],
-            'value'  => ['required'],
+            'value' => ['required'],
         ];
-    }
-
-    /*
-     * Instantiate filter class from ApprovedFilter.
-     */
-    public static function from(ApprovedFilter $approvedFilter): static
-    {
-        return new static(
-            $approvedFilter->target()->getReal(),
-            $approvedFilter->data_get('value')
-        );
     }
 
     /*
@@ -51,6 +41,9 @@ class {{ class }} extends AbstractFieldFilter
      */
     public function apply(Builder $query): Builder
     {
-        return $query->where($this->target, $this->value);
+        return $query->where(
+            $this->eloquentContext->qualifyColumn($this->target),
+            $this->value
+        );
     }
 }

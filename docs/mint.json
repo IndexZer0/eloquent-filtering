@@ -1,0 +1,169 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Eloquent Filtering",
+  "versions": ["v2", "v1"],
+  "favicon": "/favicon.png",
+  "logo": {
+    "dark": "/images/logo.png",
+    "light": "/images/logo.png"
+  },
+  "colors": {
+    "primary": "#0F9DD9",
+    "light": "#0F9DD9",
+    "dark": "#0F9DD9",
+    "anchors": {
+      "from": "#0F9DD9",
+      "to": "#0F9DD9"
+    }
+  },
+  "theme": "prism",
+  "modeToggle": {
+    "default": "dark",
+    "isHidden": true
+  },
+  "sidebar": {
+    "items": "card"
+  },
+  "topbarLinks": [
+  ],
+  "topbarCtaButton": {
+    "name": "Star on GitHub",
+    "url": "https://github.com/IndexZer0/eloquent-filtering",
+    "arrow": true
+  },
+  "tabs": [
+  ],
+  "anchors": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/IndexZer0/eloquent-filtering",
+      "icon": "github"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Introduction",
+      "version": "v2",
+      "pages": [
+        "v2/introduction/eloquent-filtering",
+        "v2/introduction/whats-new-v2"
+      ]
+    },
+    {
+      "group": "Basics",
+      "version": "v2",
+      "pages": [
+        "v2/basics/installation",
+        "v2/basics/make-model-filterable",
+        "v2/basics/filtering-models",
+        {
+          "group": "Allowing Filters",
+          "icon": "list",
+          "pages": [
+            "v2/basics/allowing-filters",
+            "v2/basics/in-detail"
+          ]
+        },
+        {
+          "group": "Relationships",
+          "icon": "circle-nodes",
+          "pages": [
+            "v2/basics/relations-allowed-fields",
+            "v2/basics/nested-relationships"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Available Filters",
+      "version": "v2",
+      "pages": [
+        {
+          "group": "Field Filters",
+          "icon": "database",
+          "pages": [
+            "v2/available-filters/field-filters/between",
+            "v2/available-filters/field-filters/between-columns",
+            "v2/available-filters/field-filters/equal",
+            "v2/available-filters/field-filters/greater-than-equal-to",
+            "v2/available-filters/field-filters/greater-than",
+            "v2/available-filters/field-filters/in",
+            "v2/available-filters/field-filters/json-contains",
+            "v2/available-filters/field-filters/json-length",
+            "v2/available-filters/field-filters/json-not-contains",
+            "v2/available-filters/field-filters/less-than",
+            "v2/available-filters/field-filters/less-than-equal-to",
+            "v2/available-filters/field-filters/like",
+            "v2/available-filters/field-filters/not-between",
+            "v2/available-filters/field-filters/not-between-columns",
+            "v2/available-filters/field-filters/not-equal",
+            "v2/available-filters/field-filters/not-in",
+            "v2/available-filters/field-filters/not-like",
+            "v2/available-filters/field-filters/null"
+          ]
+        },
+        {
+          "group": "Relation Filters",
+          "icon": "link",
+          "pages": [
+            "v2/available-filters/relation-filters/has",
+            "v2/available-filters/relation-filters/doesnt-has"
+          ]
+        },
+        {
+          "group": "Morph Relation Filters",
+          "icon": "rectangle-history",
+          "pages": [
+            "v2/available-filters/morph-relation-filters/has-morph",
+            "v2/available-filters/morph-relation-filters/doesnt-has-morph"
+          ]
+        },
+        {
+          "group": "Condition Filters",
+          "icon": "ampersand",
+          "pages": [
+            "v2/available-filters/condition-filters/and",
+            "v2/available-filters/condition-filters/or"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Digging Deeper",
+      "version": "v2",
+      "pages": [
+        "v2/digging-deeper/aliasing-targets",
+        "v2/digging-deeper/allowed-types",
+        "v2/digging-deeper/config",
+        "v2/digging-deeper/custom-filters",
+        "v2/digging-deeper/dot-notation",
+        "v2/digging-deeper/error-handling",
+        "v2/digging-deeper/json-path-wildcards",
+        "v2/digging-deeper/modifiers",
+        "v2/digging-deeper/pivot-filters",
+        "v2/digging-deeper/required-filters",
+        "v2/digging-deeper/suppressing-exceptions",
+        "v2/digging-deeper/suppression-hooks",
+        "v2/digging-deeper/validation-rules"
+      ]
+    },
+    {
+      "group": "Sorting",
+      "version": "v2",
+      "pages": [
+        "v2/sorting/make-model-sortable",
+        "v2/sorting/sorting-models"
+      ]
+    },
+    {
+      "group": "Introduction",
+      "version": "v1",
+      "pages": [
+        "v1/introduction/eloquent-filtering"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/IndexZer0/eloquent-filtering"
+  }
+}

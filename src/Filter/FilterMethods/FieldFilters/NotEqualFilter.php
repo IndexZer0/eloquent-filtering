@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+
 class NotEqualFilter extends WhereFilter
 {
     /*
@@ -14,7 +16,7 @@ class NotEqualFilter extends WhereFilter
 
     public static function type(): string
     {
-        return '$notEq';
+        return FilterType::NOT_EQUAL->value;
     }
 
     /*

@@ -6,10 +6,16 @@ namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractRelationFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\HasChildFilters;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Targetable;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\RelationFilter;
 
-class HasFilter extends AbstractRelationFilter
+class HasFilter implements FilterMethod, Targetable, HasChildFilters
 {
+    use RelationFilter;
+
     /*
      * -----------------------------
      * Interface methods
@@ -18,7 +24,7 @@ class HasFilter extends AbstractRelationFilter
 
     public static function type(): string
     {
-        return '$has';
+        return FilterType::HAS->value;
     }
 
     public function apply(Builder $query): Builder
@@ -27,7 +33,7 @@ class HasFilter extends AbstractRelationFilter
 
             /** @var FilterApplier $filterApplier */
             $filterApplier = resolve(FilterApplier::class);
-            $filterApplier->apply($query, $this->value);
+            $filterApplier->apply($query, $this->filters);
 
         }, $this->operator());
     }

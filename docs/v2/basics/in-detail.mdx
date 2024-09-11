@@ -1,0 +1,149 @@
+---
+title: 'In Detail'
+version: 'v2'
+icon: 'square-info'
+iconType: 'solid'
+---
+
+## Field
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::field('name', [FilterType::EQUAL]),
+    );
+}
+```
+
+## Relation
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation('comments', [FilterType::HAS],
+            Filter::only(
+                Filter::field('content', [FilterType::LIKE])
+            )
+        )
+    );
+}
+```
+
+## Morph Relation
+
+`Filter::morphRelation()` accepts many `Filter::morphType()`s.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::morphRelation('imageable', [FilterType::HAS_MORPH],
+            Filter::morphType('*', Filter::only(
+                Filter::field('created_at', [FilterType::LESS_THAN_EQUAL_TO])
+            )),
+        )
+    );
+}
+```
+
+### Morph Type
+
+`Filter::morphType()` accepts either:
+
+- `*` for [querying all related models](https://laravel.com/docs/10.x/eloquent-relationships#querying-all-morph-to-related-models)
+
+```php
+Filter::morphType('*', Filter::only(
+    Filter::field('created_at', [FilterType::LESS_THAN_EQUAL_TO])
+)),
+```
+
+- `Fully Qualified Class Name` for specific polymorphic types.
+
+<Note>
+This package will use the [registered relation morph map alias](https://laravel.com/docs/10.x/eloquent-relationships#custom-polymorphic-types) of the model as the value for the types array (`types.*.type`).
+
+When your model is not registered in the [relation morph map](https://laravel.com/docs/10.x/eloquent-relationships#custom-polymorphic-types) - this package will use the database table name of the model for the value to be used in the types array (`types.*.type`).
+If you would like to not expose database names to the frontend then you should use `Target::alias()` (described below)
+</Note>
+
+```php
+Relation::morphMap([
+    'foodService' => FoodDeliveryService::class,
+]);
+
+class Subscription extends Model implements IsFilterable
+{
+    use Filterable;
+
+    // ...
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::morphRelation('subscribable', [FilterType::HAS_MORPH],
+                Filter::morphType(FoodDeliveryService::class, Filter::only(
+                    Filter::field('price', [FilterType::EQUALS])
+                )),
+                Filter::morphType(Sass::class, Filter::only(
+                    Filter::field('plan', [FilterType::EQUALS])
+                )),
+            )
+        );
+    }
+}
+
+Subscription::filter([
+    [
+        'target' => 'subscribable',
+        'type'   => '$hasMorph',
+        'types'  => [
+            [
+                'type'  => 'foodService', // Custom morphMap alias from Relation::morphMap().
+                'value' => [
+                    [
+                        'target' => 'price',
+                        'type'   => '$eq',
+                        'value'  => 9.99,
+                    ],
+                ],
+            ],
+            [
+                'type'  => 'sasses', // Model database table due to Sass::class not being in the Relation::morphMap().
+                'value' => [
+                    [
+                        'target' => 'plan',
+                        'type'   => '$eq',
+                        'value'  => 'basic',
+                    ],
+                ],
+            ],
+        ],
+    ],
+])
+
+```
+
+- Using `Target::alias()` will provide you with full control over the array `types.*.type` value and database `*_type` column value.
+
+```php
+Filter::morphType(Target::alias('foodService', 'food_delivery_services'), Filter::only(
+    Filter::field('price', [FilterType::EQUALS])
+)),
+Filter::morphType(Target::alias('software', 'sasses'), Filter::only(
+    Filter::field('plan', [FilterType::EQUALS])
+)),
+```
+
+## Custom
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::custom('$latest')
+    );
+}
+```

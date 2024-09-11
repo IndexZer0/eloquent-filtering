@@ -28,10 +28,8 @@ class EloquentFilteringServiceProvider extends PackageServiceProvider
         $package
             ->name('eloquent-filtering')
             ->hasConfigFile()
-            ->publishesServiceProvider('EloquentFilteringServiceProvider')
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->publishConfigFile()
-                    ->copyAndRegisterServiceProviderInApp()
                     ->askToStarRepoOnGitHub('IndexZer0/eloquent-filtering');
             })
             ->hasCommand(EloquentFilterMakeCommand::class);

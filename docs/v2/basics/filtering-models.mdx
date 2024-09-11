@@ -1,0 +1,26 @@
+---
+title: 'Filtering Models'
+version: 'v2'
+icon: 'filters'
+iconType: 'solid'
+---
+
+## Overview
+
+Once you have [made your model `Filterable`](/v2/basics/make-model-filterable).
+
+You should pass filters to `::filter()` on the model.
+
+```php
+$sql = Product::filter([
+    [
+        'target' => 'name',
+        'type'   => '$eq',
+        'value'  => 'TV',
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "products" WHERE "products"."name" = 'TV'
+```

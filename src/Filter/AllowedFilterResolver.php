@@ -10,7 +10,7 @@ class AllowedFilterResolver
 {
     public function __construct(
         protected AllowedFilterList $allowedFilterList,
-        protected string $modelFqcn
+        protected string $modelFqcn,
     ) {
 
     }

@@ -1,0 +1,23 @@
+---
+title: 'Sorting Models'
+version: 'v2'
+icon: 'arrow-down-a-z'
+iconType: 'solid'
+---
+
+import SortingNote from '/snippets/sorting-note.mdx';
+
+<SortingNote />
+
+```php
+$sql = Product::sort([
+    [
+        'target' => 'name',
+        'value'  => 'desc',
+    ],
+])->toRawSql();
+```
+
+```sql
+select * from "products" order by "name" desc
+```

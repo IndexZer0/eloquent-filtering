@@ -1,0 +1,56 @@
+---
+title: 'JSON Length'
+version: 'v2'
+icon: 'brackets-curly'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('options->languages', [FilterType::JSON_LENGTH]);
+```
+
+<Note>
+    [See JSON Path Wildcards](/v2/digging-deeper/json-path-wildcards)
+</Note>
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$jsonLength" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="operator" type="string,['=', '<', '<=', '>', '>=']" required>
+</ParamField>
+
+<ParamField body="value" type="int" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'     => '$jsonLength',
+    'target'   => 'options->languages',
+    'operator' => '>=',
+    'value'    => 2,
+];
+```
+
+```php
+$sql = User::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select * from "users" where json_length("users"."options", '$."languages"') >= 2
+```
+
+## Modifiers
+
+None available.

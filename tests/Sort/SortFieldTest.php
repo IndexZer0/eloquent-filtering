@@ -46,7 +46,7 @@ it('can sort by field when allowed', function (): void {
         ],
         Sort::only(
             Sort::field('name'),
-        )
+        ),
     );
 
     $expectedSql = <<< SQL
@@ -82,7 +82,7 @@ it('can sort by field with "Sort::all()"', function (): void {
                 'value'  => 'desc',
             ],
         ],
-        Sort::all()
+        Sort::all(),
     );
 
     $expectedSql = <<< SQL
@@ -114,7 +114,7 @@ it('can not sort by field when not explicitly allowed | not suppressed', functio
 
 it('can not sort by field when not explicitly allowed | suppressed', function (): void {
 
-    $this->setSuppression("sort.denied", true);
+    $this->setSuppression('sort.denied', true);
 
     $query = Author::sort(
         [

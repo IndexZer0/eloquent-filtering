@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+
 class NotInFilter extends InFilter
 {
     /*
@@ -14,7 +16,7 @@ class NotInFilter extends InFilter
 
     public static function type(): string
     {
-        return '$notIn';
+        return FilterType::NOT_IN->value;
     }
 
     /*

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 
 beforeEach(function (): void {
@@ -34,12 +35,12 @@ it('can perform $notLike filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('name', ['$notLike']),
-        )
+            Filter::field('name', [FilterType::NOT_LIKE]),
+        ),
     );
 
     $expectedSql = <<< SQL
-        select * from "authors" where "name" NOT LIKE '%text%'
+        select * from "authors" where "authors"."name" NOT LIKE '%text%'
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);
@@ -48,5 +49,59 @@ it('can perform $notLike filter', function (): void {
 
     expect($models->count())->toBe(1)
     ->and($models->pluck('name')->toArray())->toBe(['other']);
+
+});
+
+it('can perform $notLike filter with :end modifier', function (): void {
+    $query = Author::filter(
+        [
+            [
+                'target' => 'name',
+                'type'   => '$notLike:end',
+                'value'  => 'text',
+            ],
+        ],
+        Filter::only(
+            Filter::field('name', [FilterType::NOT_LIKE]),
+        ),
+    );
+
+    $expectedSql = <<< SQL
+        select * from "authors" where "authors"."name" NOT LIKE '%text'
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(3)
+        ->and($models->pluck('name')->toArray())->toBe(['__text__', 'text__', 'other']);
+
+});
+
+it('can perform $notLike filter with :start modifier', function (): void {
+    $query = Author::filter(
+        [
+            [
+                'target' => 'name',
+                'type'   => '$notLike:start',
+                'value'  => 'text',
+            ],
+        ],
+        Filter::only(
+            Filter::field('name', [FilterType::NOT_LIKE]),
+        ),
+    );
+
+    $expectedSql = <<< SQL
+        select * from "authors" where "authors"."name" NOT LIKE 'text%'
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(3)
+        ->and($models->pluck('name')->toArray())->toBe(['__text__', '__text', 'other']);
 
 });

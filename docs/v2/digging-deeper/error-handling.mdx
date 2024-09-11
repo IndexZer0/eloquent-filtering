@@ -1,0 +1,39 @@
+---
+title: 'Error Handling'
+version: 'v2'
+icon: 'bug'
+iconType: 'solid'
+---
+
+## Overview
+
+All exceptions thrown by the package implement `\IndexZer0\EloquentFiltering\Contracts\EloquentFilteringException`.
+
+How-ever it doesn't harm to also catch `\Throwable`.
+
+```php
+try {
+    Person::filter($filters)->get();
+} catch (\IndexZer0\EloquentFiltering\Contracts\EloquentFilteringException $exception) {
+    $exception->getMessage();
+} catch (\Throwable $t) {
+    // Shouldn't happen - but failsafe.
+}
+```
+
+## Exception Hierarchy
+
+```php
+Exception (SPL)
+└── ValidationException (Illuminate)
+    ├── MalformedFilterFormatException (Suppressible)
+    ├── RequiredFilterException (Not Suppressible)
+└── InvalidArgumentException (SPL)
+    ├── InvalidFiltersPayloadException (Not Suppressible)
+    ├── InvalidModelFqcnException (Not Suppressible)
+    ├── UnsupportedModifierException (Not Suppressible)
+└── DeniedFilterException (Suppressible)
+└── InvalidFilterException (Suppressible)
+└── DuplicateFiltersException (Not Suppressible)
+└── MissingFilterException (Suppressible)
+```

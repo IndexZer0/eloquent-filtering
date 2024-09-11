@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters;
 
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+
 class DoesntHasFilter extends HasFilter
 {
     /*
@@ -14,7 +16,7 @@ class DoesntHasFilter extends HasFilter
 
     public static function type(): string
     {
-        return '$doesntHas';
+        return FilterType::DOESNT_HAS->value;
     }
 
     /*

@@ -1,0 +1,57 @@
+---
+title: 'In'
+version: 'v2'
+icon: 'brackets-square'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('name', [FilterType::IN]);
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$in" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="array,min:1" required>
+</ParamField>
+
+<ParamField body="value.*" type="string|int|float" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'   => '$in',
+    'target' => 'name',
+    'value'  => ['Taylor', 'Otwell',]
+];
+```
+
+```php
+$sql = Person::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select * from "people" where "people"."name" in ('Taylor', 'Otwell')
+```
+
+## Modifiers
+
+### Null
+
+<TypeParameterField type="$in:null" />
+
+```sql
+select * from "people" where ("people"."name" in ('Taylor', 'Otwell') or "people"."name" is null)
+```

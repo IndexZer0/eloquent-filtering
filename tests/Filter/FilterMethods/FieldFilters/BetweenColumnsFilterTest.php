@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
 
 beforeEach(function (): void {
@@ -22,12 +23,12 @@ it('can perform $betweenColumns filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('price', ['$betweenColumns']),
-        )
+            Filter::field('price', [FilterType::BETWEEN_COLUMNS]),
+        ),
     );
 
     $expectedSql = <<< SQL
-        select * from "products" where "price" between "min_allowed_price" and "max_allowed_price"
+        select * from "products" where "products"."price" between "products"."min_allowed_price" and "products"."max_allowed_price"
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

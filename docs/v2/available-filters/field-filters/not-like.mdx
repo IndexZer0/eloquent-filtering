@@ -1,0 +1,62 @@
+---
+title: 'Not Like'
+version: 'v2'
+icon: 'percent'
+iconType: 'solid'
+---
+
+## Definition
+```php
+Filter::field('description', [FilterType::NOT_LIKE])
+```
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$notLike" />
+
+import TargetParameterField from '/snippets/target-parameter-field.mdx';
+
+<TargetParameterField />
+
+<ParamField body="value" type="string|int|float" required>
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'   => '$notLike',
+    'target' => 'description',
+    'value'  => 'Symfony',
+];
+```
+
+```php
+$sql = Project::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select * from "projects" where "projects"."description" NOT LIKE '%Symfony%'
+```
+
+## Modifiers
+
+### Start
+
+<TypeParameterField type="$notLike:start" />
+
+```sql
+select * from "projects" where "projects"."description" NOT LIKE 'Symfony%'
+```
+
+### End
+
+<TypeParameterField type="$notLike:end" />
+
+```sql
+select * from "projects" where "projects"."description" NOT LIKE '%Symfony'
+```

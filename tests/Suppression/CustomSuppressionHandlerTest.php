@@ -26,7 +26,6 @@ it('can specify invalid filter handler', function (): void {
 
             ],
         ],
-        Filter::all()
     );
 
 })->throws(CustomException::class);
@@ -43,7 +42,6 @@ it('can specify missing filter handler', function (): void {
                 'type' => '$this-filter-does-not-exist',
             ],
         ],
-        Filter::all()
     );
 
 })->throws(CustomException::class);
@@ -60,7 +58,6 @@ it('can specify malformed filter handler', function (): void {
                 'type' => '$eq',
             ],
         ],
-        Filter::all()
     );
 
 })->throws(CustomException::class);
@@ -79,7 +76,6 @@ it('can specify denied filter handler', function (): void {
                 'value'  => 'George Raymond Richard Martin',
             ],
         ],
-        Filter::none()
     );
 
 })->throws(CustomException::class);
@@ -98,11 +94,10 @@ it('can specify filter handler', function (): void {
 
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.filter.invalid", $ce->getMessage());
+        $this->assertSame('suppress.filter.invalid', $ce->getMessage());
     }
 
     // Missing filter
@@ -113,11 +108,10 @@ it('can specify filter handler', function (): void {
                     'type' => '$this-filter-does-not-exist',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.filter.missing", $ce->getMessage());
+        $this->assertSame('suppress.filter.missing', $ce->getMessage());
     }
 
     // Malformed filter
@@ -128,11 +122,10 @@ it('can specify filter handler', function (): void {
                     'type' => '$eq',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.filter.malformed_format", $ce->getMessage());
+        $this->assertSame('suppress.filter.malformed_format', $ce->getMessage());
     }
 
     // Denied filter
@@ -145,11 +138,10 @@ it('can specify filter handler', function (): void {
                     'value'  => 'George Raymond Richard Martin',
                 ],
             ],
-            Filter::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.filter.denied", $ce->getMessage());
+        $this->assertSame('suppress.filter.denied', $ce->getMessage());
     }
 
 });
@@ -166,7 +158,6 @@ it('can specify malformed sort handler', function (): void {
                 'target' => 'name',
             ],
         ],
-        Sort::all()
     );
 
 })->throws(CustomException::class);
@@ -184,7 +175,6 @@ it('can specify denied sort handler', function (): void {
                 'value'  => 'desc',
             ],
         ],
-        Sort::none()
     );
 
 })->throws(CustomException::class);
@@ -203,11 +193,10 @@ it('can specify sort handler', function (): void {
                     'target' => 'name',
                 ],
             ],
-            Sort::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.sort.malformed_format", $ce->getMessage());
+        $this->assertSame('suppress.sort.malformed_format', $ce->getMessage());
     }
 
     // Denied sort
@@ -219,11 +208,10 @@ it('can specify sort handler', function (): void {
                     'value'  => 'desc',
                 ],
             ],
-            Sort::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.sort.denied", $ce->getMessage());
+        $this->assertSame('suppress.sort.denied', $ce->getMessage());
     }
 
 });
@@ -242,11 +230,10 @@ it('can specify all handler', function (): void {
 
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.filter.invalid", $ce->getMessage());
+        $this->assertSame('suppress.filter.invalid', $ce->getMessage());
     }
 
     // Missing filter
@@ -257,11 +244,10 @@ it('can specify all handler', function (): void {
                     'type' => '$this-filter-does-not-exist',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.filter.missing", $ce->getMessage());
+        $this->assertSame('suppress.filter.missing', $ce->getMessage());
     }
 
     // Malformed filter
@@ -272,11 +258,10 @@ it('can specify all handler', function (): void {
                     'type' => '$eq',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.filter.malformed_format", $ce->getMessage());
+        $this->assertSame('suppress.filter.malformed_format', $ce->getMessage());
     }
 
     // Denied filter
@@ -289,11 +274,10 @@ it('can specify all handler', function (): void {
                     'value'  => 'George Raymond Richard Martin',
                 ],
             ],
-            Filter::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.filter.denied", $ce->getMessage());
+        $this->assertSame('suppress.filter.denied', $ce->getMessage());
     }
 
     // Malformed sort
@@ -304,11 +288,10 @@ it('can specify all handler', function (): void {
                     'target' => 'name',
                 ],
             ],
-            Sort::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.sort.malformed_format", $ce->getMessage());
+        $this->assertSame('suppress.sort.malformed_format', $ce->getMessage());
     }
 
     // Denied sort
@@ -320,11 +303,10 @@ it('can specify all handler', function (): void {
                     'value'  => 'desc',
                 ],
             ],
-            Sort::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("suppress.sort.denied", $ce->getMessage());
+        $this->assertSame('suppress.sort.denied', $ce->getMessage());
     }
 
 });
@@ -333,19 +315,19 @@ it('can specify all handler', function (): void {
 it('prioritises a more specific handler', function (): void {
 
     Suppression::handleAllUsing(function (SuppressibleException $se): void {
-        throw new CustomException("all");
+        throw new CustomException('all');
     });
     Suppression::handleFilterUsing(function (SuppressibleException $se): void {
-        throw new CustomException("filter");
+        throw new CustomException('filter');
     });
     Suppression::handleInvalidFilterUsing(function (SuppressibleException $se): void {
-        throw new CustomException("invalid");
+        throw new CustomException('invalid');
     });
     Suppression::handleSortUsing(function (SuppressibleException $se): void {
-        throw new CustomException("sort");
+        throw new CustomException('sort');
     });
     Suppression::handleDeniedSortUsing(function (SuppressibleException $se): void {
-        throw new CustomException("denied");
+        throw new CustomException('denied');
     });
 
     // Invalid filter
@@ -356,11 +338,10 @@ it('prioritises a more specific handler', function (): void {
 
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("invalid", $ce->getMessage());
+        $this->assertSame('invalid', $ce->getMessage());
     }
 
     // Missing filter
@@ -371,11 +352,10 @@ it('prioritises a more specific handler', function (): void {
                     'type' => '$this-filter-does-not-exist',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("filter", $ce->getMessage());
+        $this->assertSame('filter', $ce->getMessage());
     }
 
     // Malformed filter
@@ -386,11 +366,10 @@ it('prioritises a more specific handler', function (): void {
                     'type' => '$eq',
                 ],
             ],
-            Filter::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("filter", $ce->getMessage());
+        $this->assertSame('filter', $ce->getMessage());
     }
 
     // Denied filter
@@ -403,11 +382,10 @@ it('prioritises a more specific handler', function (): void {
                     'value'  => 'George Raymond Richard Martin',
                 ],
             ],
-            Filter::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("filter", $ce->getMessage());
+        $this->assertSame('filter', $ce->getMessage());
     }
 
     // Malformed sort
@@ -418,11 +396,10 @@ it('prioritises a more specific handler', function (): void {
                     'target' => 'name',
                 ],
             ],
-            Sort::all()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("sort", $ce->getMessage());
+        $this->assertSame('sort', $ce->getMessage());
     }
 
     // Denied sort
@@ -434,11 +411,10 @@ it('prioritises a more specific handler', function (): void {
                     'value'  => 'desc',
                 ],
             ],
-            Sort::none()
         );
         $this->fail('Should have thrown exception');
     } catch (CustomException $ce) {
-        $this->assertSame("denied", $ce->getMessage());
+        $this->assertSame('denied', $ce->getMessage());
     }
 
 });
@@ -455,7 +431,6 @@ it('throws package exception if no custom exception thrown in handler', function
 
             ],
         ],
-        Filter::all()
     );
 
 })->throws(InvalidFilterException::class);

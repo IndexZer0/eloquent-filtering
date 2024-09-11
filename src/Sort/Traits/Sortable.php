@@ -15,7 +15,7 @@ trait Sortable
     public function scopeSort(
         Builder          $query,
         array            $pendingSorts,
-        ?AllowedSortList $allowedSortList = null
+        ?AllowedSortList $allowedSortList = null,
     ): Builder {
 
         /** @var SortValidator $sortValidator */

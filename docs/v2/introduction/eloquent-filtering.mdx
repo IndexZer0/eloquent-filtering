@@ -1,0 +1,135 @@
+---
+title: 'Eloquent Filtering'
+version: 'v2'
+icon: 'filter'
+iconType: 'solid'
+---
+
+<Frame>
+    <img src="/images/hero.png" noZoom />
+</Frame>
+
+import Badges from '/snippets/badges.mdx';
+
+<br/>
+<Badges/>
+
+## Overview
+
+Eloquent Filtering helps you **avoid** writing custom query logic for filtering your models.
+
+The main use case of filtering models from http request parameters is achieved by **simply** defining allowed filters on your models and pass filters from http request to the model.
+
+## Quick Look
+
+```php
+class Product extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('name', [FilterType::EQUAL]),
+        );
+    }
+}
+
+$products = Product::filter([
+    [
+        'target' => 'name',
+        'type'   => '$eq',
+        'value'  => 'TV'
+    ]
+])->get();
+```
+
+## Features
+
+### Filter
+
+- Many **core** filter methods.
+- Filter by **fields**.
+- Filter by **relationship** existence.
+  - Filter by **nested relationship** existence.
+  - Filter by **fields** on **relationships**.
+- Alias **fields** and **relationships**.
+- Specify filter types per field/relationship.
+- Filter json columns.
+  - Json path wildcard support.
+- Validation.
+- Required filters.
+- Pivot filters.
+- Custom filters.
+
+### Sort
+
+- Sort by fields.
+- Alias fields.
+
+## Field And Relationship Filter Example
+
+```php
+class Product extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('name', [FilterType::EQUAL]),
+            Filter::relation('manufacturer', [FilterType::HAS])->includeRelationFields()
+        );
+    }
+
+    public function manufacturer(): HasOne
+    {
+        return $this->hasOne(Manufacturer::class);
+    }
+}
+
+class Manufacturer extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('name', [FilterType::EQUAL])
+        );
+    }
+}
+
+$filters = [
+    [
+        'target' => 'name',
+        'type'   => '$eq',
+        'value'  => 'TV',
+    ],
+    [
+        'type'   => '$has',
+        'target' => 'manufacturer',
+        'value'  => [
+            [
+                'type'   => '$eq',
+                'target' => 'name',
+                'value'  => 'Sony',
+            ]
+        ]
+    ]
+];
+
+$sql = Product::filter($filters)->toRawSql();
+```
+
+```sql
+SELECT *
+FROM "products"
+WHERE "products"."name" = 'TV'
+  AND EXISTS (
+    SELECT *
+    FROM "manufacturers"
+    WHERE "products"."manufacturer_id" = "manufacturers"."id"
+      AND "manufacturers"."name" = 'Sony'
+  )
+```

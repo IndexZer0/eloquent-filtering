@@ -6,8 +6,9 @@ namespace IndexZer0\EloquentFiltering\Tests\TestingResources\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
-use IndexZer0\EloquentFiltering\Filter\Filterable\SomeFiltersAllowed;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
 
@@ -24,10 +25,10 @@ class Manufacturer extends Model implements IsFilterable
      * ----------------------------------
      */
 
-    public function allowedFilters(): SomeFiltersAllowed
+    public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('name', ['$eq'])
+            Filter::field('name', [FilterType::EQUAL]),
         );
     }
 }

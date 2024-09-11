@@ -12,7 +12,7 @@ interface IsFilterable
     public function scopeFilter(
         Builder $query,
         array $filters,
-        ?AllowedFilterList $allowedFilterList = null
+        ?AllowedFilterList $allowedFilterList = null,
     ): Builder;
 
     public function allowedFilters(): AllowedFilterList;

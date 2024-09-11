@@ -1,0 +1,64 @@
+---
+title: 'And'
+version: 'v2'
+icon: 'merge'
+iconType: 'solid'
+---
+
+## Definition
+import ConditionFiltersNote from '/snippets/condition-filters-note.mdx';
+
+<ConditionFiltersNote />
+
+## Array/Object Structure
+
+import TypeParameterField from '/snippets/type-parameter-field.mdx';
+
+<TypeParameterField type="$and" />
+
+<ParamField body="value" type="array,min:2" required>
+</ParamField>
+
+<ParamField body="value.*" type="array" required>
+Any other filter
+</ParamField>
+
+## Example
+
+```php
+$filter = [
+    'type'  => '$and',
+    'value' => [
+        [
+            'type'   => '$like',
+            'target' => 'content',
+            'value'  => 'is awesome',
+        ],
+        [
+            'type'   => '$like',
+            'target' => 'content',
+            'value'  => 'is not boring',
+        ]
+    ]
+];
+```
+
+```php
+$sql = Comment::filter([$filter])->toRawSql();
+```
+
+### SQL
+
+```sql
+select *
+  from "comments"
+ where (
+       ("comments"."content" LIKE '%is awesome%')
+    and
+       ("comments"."content" LIKE '%is not boring%')
+ )
+```
+
+## Modifiers
+
+None available.

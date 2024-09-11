@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters;
 
-class LikeFilter extends WhereFilter
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod\Modifiable;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\Composables\HasModifiers;
+
+class LikeFilter extends WhereFilter implements Modifiable
 {
+    use HasModifiers;
+
     /*
      * -----------------------------
      * Interface methods
@@ -14,7 +20,12 @@ class LikeFilter extends WhereFilter
 
     public static function type(): string
     {
-        return '$like';
+        return FilterType::LIKE->value;
+    }
+
+    public static function supportedModifiers(): array
+    {
+        return ['start', 'end', ];
     }
 
     /*
@@ -25,12 +36,12 @@ class LikeFilter extends WhereFilter
 
     protected function valueBefore(): string
     {
-        return '%';
+        return $this->hasModifier('start') ? '' : '%';
     }
 
     protected function valueAfter(): string
     {
-        return '%';
+        return $this->hasModifier('end') ? '' : '%';
     }
 
     protected function operator(): string

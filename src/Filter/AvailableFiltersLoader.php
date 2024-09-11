@@ -8,29 +8,27 @@ use Illuminate\Support\Collection;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
 use IndexZer0\EloquentFiltering\Filter\Exceptions\DuplicateFiltersException;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\ConditionFilters\AndFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\ConditionFilters\OrFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\BetweenColumnsFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\BetweenFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\EqualFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\GreaterThanEqualToFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\GreaterThanFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\InFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonContainsFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonLengthFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonNotContainsFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\LessThanEqualToFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\LessThanFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\LikeEndFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\LikeFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\LikeStartFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotBetweenColumnsFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotBetweenFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotEqualFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotInFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotLikeEndFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotLikeFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NotLikeStartFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\NullFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\ConditionFilters\OrFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonContainsFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonLengthFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\FieldFilters\JsonNotContainsFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\MorphRelationFilters\DoesntHasMorphFilter;
+use IndexZer0\EloquentFiltering\Filter\FilterMethods\MorphRelationFilters\HasMorphFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters\DoesntHasFilter;
 use IndexZer0\EloquentFiltering\Filter\FilterMethods\RelationFilters\HasFilter;
 
@@ -46,7 +44,7 @@ class AvailableFiltersLoader
             function (string $filterMethodFqcn) {
                 /** @var $filterMethodFqcn FilterMethod */
                 return $filterMethodFqcn::type();
-            }
+            },
         );
     }
 
@@ -67,13 +65,7 @@ class AvailableFiltersLoader
 
             // Like
             LikeFilter::class,
-            LikeStartFilter::class,
-            LikeEndFilter::class,
-
-            // Not Like
             NotLikeFilter::class,
-            NotLikeStartFilter::class,
-            NotLikeEndFilter::class,
 
             // Conditional
             OrFilter::class,
@@ -102,6 +94,8 @@ class AvailableFiltersLoader
             // Relationship
             HasFilter::class,
             DoesntHasFilter::class,
+            HasMorphFilter::class,
+            DoesntHasMorphFilter::class,
         ]);
     }
 
@@ -117,7 +111,7 @@ class AvailableFiltersLoader
             function (string $filterMethodFqcn) {
                 /** @var $filterMethodFqcn FilterMethod */
                 return $filterMethodFqcn::type();
-            }
+            },
         )->duplicates();
 
         if ($duplicateTypes->count() > 0) {

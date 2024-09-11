@@ -1,0 +1,22 @@
+---
+title: 'Nested Relationships'
+version: 'v2'
+icon: 'diagram-nested'
+iconType: 'solid'
+---
+
+## Overview
+
+There is an convenience method on `Filter::relation` that allows you to easily define nested relationships.
+
+```php
+public function allowedFilters(): AllowedFilterList
+{
+    return Filter::only(
+        Filter::relation('posts', [FilterType::HAS])->includeRelationFields()
+            ->andNestedRelation(
+                Filter::relation('comments', [FilterType::HAS])->includeRelationFields()
+            ),
+    );
+}
+```

@@ -10,37 +10,46 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\FilterApplier;
 use IndexZer0\EloquentFiltering\Filter\Contracts\FilterParser;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\RequiredFilters\RequiredFiltersChecker;
 
 trait Filterable
 {
     public function scopeFilter(
         Builder $query,
         array $filters,
-        ?AllowedFilterList $allowedFilterList = null
+        ?AllowedFilterList $allowedFilterList = null,
     ): Builder {
 
         $allowedFilterResolver = new AllowedFilterResolver(
             $allowedFilterList ?? $this->allowedFilters(),
-            self::class
+            self::class,
         );
         $allowedFilterList = $allowedFilterResolver->resolve();
 
         /** @var FilterParser $filterParser */
         $filterParser = resolve(FilterParser::class);
-        $filters = $filterParser->parse($filters, $allowedFilterList);
+        $filters = $filterParser->parse(
+            model: $this,
+            filters: $filters,
+            allowedFilterList: $allowedFilterList,
+        );
+
+        $requiredFiltersChecker = new RequiredFiltersChecker(
+            $allowedFilterList,
+            true,
+        );
+        $requiredFiltersChecker->__invoke();
 
         /** @var FilterApplier $filterApplier */
         $filterApplier = resolve(FilterApplier::class);
         return $filterApplier->apply(
             $query,
-            $filters
+            $filters,
         );
     }
 
     public function allowedFilters(): AllowedFilterList
     {
-        $defaultAllowedList = config('eloquent-filtering.default_allowed_filter_list', 'none');
-
-        return $defaultAllowedList === 'none' ? Filter::none() : Filter::all();
+        return Filter::none();
     }
 }

@@ -37,7 +37,7 @@ readonly class JsonPathTarget implements TargetContract
         return $this->target;
     }
 
-    public function getForApprovedFilter(PendingFilter $pendingFilter): TargetContract
+    public function getForFilterMethod(PendingFilter $pendingFilter): TargetContract
     {
         return Target::alias($pendingFilter->desiredTarget());
     }

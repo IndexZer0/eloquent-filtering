@@ -1,0 +1,38 @@
+---
+title: 'Dot Notation'
+version: 'v2'
+icon: 'period'
+iconType: 'solid'
+---
+
+## Overview
+
+You can use dot notation for filter targets.
+
+This may be useful when wanting to filter by a join column.
+
+## Example
+
+```php
+$sql = Author::filter(
+    [
+        [
+            'target' => 'age',
+            'type'   => '$eq',
+            'value'  => 20,
+        ],
+    ],
+    Filter::only(
+        Filter::field(
+            Target::alias('age', 'author_profiles.age'),
+            [FilterType::EQUAL]
+        ),
+    )
+)->join('author_profiles', function (JoinClause $join): void {
+    $join->on('authors.id', '=', 'author_profiles.author_id');
+})->toRawSql();
+```
+
+```sql
+select * from "authors" inner join "author_profiles" on "authors"."id" = "author_profiles"."author_id" where "author_profiles"."age" = 20
+```

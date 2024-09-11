@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Tests\TestingResources\CustomFilters;
 
 use Illuminate\Database\Eloquent\Builder;
-use IndexZer0\EloquentFiltering\Filter\Filterable\ApprovedFilter;
-use IndexZer0\EloquentFiltering\Filter\FilterMethods\Abstract\AbstractFieldFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\FilterMethod;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\FilterContext\FieldFilter;
 
-class DuplicateFilter extends AbstractFieldFilter
+class DuplicateFilter implements FilterMethod
 {
+    use FieldFilter;
+
     /*
      * -----------------------------
      * Interface methods
@@ -18,7 +21,7 @@ class DuplicateFilter extends AbstractFieldFilter
 
     public static function type(): string
     {
-        return '$eq';
+        return FilterType::EQUAL->value;
     }
 
     public static function format(): array
@@ -26,13 +29,11 @@ class DuplicateFilter extends AbstractFieldFilter
         return [];
     }
 
-    public static function from(ApprovedFilter $approvedFilter): static
-    {
-        return new static();
-    }
-
     public function apply(Builder $query): Builder
     {
-        return $query->where('field', 'value');
+        return $query->where(
+            $this->eloquentContext->qualifyColumn($this->target),
+            'value',
+        );
     }
 }

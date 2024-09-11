@@ -8,6 +8,7 @@ enum FilterContext: string
 {
     case FIELD = 'field';
     case RELATION = 'relation';
+    case MORPH_RELATION = 'morph_relation';
     case CUSTOM = 'custom';
     case CONDITION = 'condition';
 }

@@ -5,15 +5,26 @@ declare(strict_types=1);
 namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
 use IndexZer0\EloquentFiltering\Contracts\Target;
+use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter;
-use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\AllowedFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\PivotableFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\RequireableFilter;
+use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilter\TargetedFilter;
 use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
-use IndexZer0\EloquentFiltering\Filter\Filterable\AllFiltersAllowed;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
+use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBePivot;
+use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBeRequired;
 
-class AllowedField implements AllowedFilter
+class AllowedField implements
+    AllowedFilter,
+    TargetedFilter,
+    RequireableFilter,
+    PivotableFilter
 {
+    use CanBeRequired;
+    use CanBePivot;
+
     public function __construct(
         protected Target $target,
         protected AllowedTypes $types,
@@ -26,23 +37,26 @@ class AllowedField implements AllowedFilter
      * -----------------------------
      */
 
-    public function allowedFilters(): AllowedFilterList
-    {
-        return new AllFiltersAllowed();
-    }
-
-    public function matches(PendingFilter $pendingFilter): bool
+    public function getAllowedType(PendingFilter $pendingFilter): ?AllowedType
     {
         if (!$pendingFilter->is(FilterContext::FIELD)) {
-            return false;
+            return null;
         }
 
-        return $this->types->contains($pendingFilter->type()) &&
-            $this->target->isFor($pendingFilter->desiredTarget());
+        if (!$this->target->isFor($pendingFilter->desiredTarget())) {
+            return null;
+        }
+
+        return $this->types->get($pendingFilter->requestedFilter());
     }
 
     public function getTarget(PendingFilter $pendingFilter): Target
     {
-        return $this->target->getForApprovedFilter($pendingFilter);
+        return $this->target->getForFilterMethod($pendingFilter);
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->target->target();
     }
 }

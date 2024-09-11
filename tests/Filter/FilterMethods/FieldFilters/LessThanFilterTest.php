@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\AuthorProfile;
 
 beforeEach(function (): void {
@@ -19,12 +20,12 @@ it('can perform $lt filter', function (): void {
             ],
         ],
         Filter::only(
-            Filter::field('age', ['$lt']),
-        )
+            Filter::field('age', [FilterType::LESS_THAN]),
+        ),
     );
 
     $expectedSql = <<< SQL
-        select * from "author_profiles" where "age" < 30
+        select * from "author_profiles" where "author_profiles"."age" < 30
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

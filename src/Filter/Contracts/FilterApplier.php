@@ -10,7 +10,7 @@ use IndexZer0\EloquentFiltering\Filter\FilterCollection;
 interface FilterApplier
 {
     public function apply(
-        Builder $query,
-        FilterCollection $filters
+        Builder          $query,
+        FilterCollection $filters,
     ): Builder;
 }
