@@ -29,6 +29,16 @@
         "logical_operators": true,
         "array_push": true,
         "no_useless_else": true,
-        "no_useless_return": true
+        "no_useless_return": true,
+        "single_quote": true,
+        "single_space_after_construct": true,
+        "trailing_comma_in_multiline": {
+            "elements": [
+                "arguments",
+                "arrays",
+                "match",
+                "parameters"
+            ]
+        }
     }
 }
