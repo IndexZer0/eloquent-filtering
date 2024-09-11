@@ -4,13 +4,16 @@
   "versions": ["v2", "v1"],
   "favicon": "/favicon.png",
   "logo": {
-    "dark": "/images/logo.png",
-    "light": "/images/logo.png"
+    "dark": "/images/logo-dark.png",
+    "light": "/images/logo-light.png"
   },
   "colors": {
     "primary": "#0F9DD9",
     "light": "#0F9DD9",
     "dark": "#0F9DD9",
+    "background": {
+      "light": "#E8EDFA"
+    },
     "anchors": {
       "from": "#0F9DD9",
       "to": "#0F9DD9"
@@ -19,7 +22,7 @@
   "theme": "prism",
   "modeToggle": {
     "default": "dark",
-    "isHidden": true
+    "isHidden": false
   },
   "sidebar": {
     "items": "card"
