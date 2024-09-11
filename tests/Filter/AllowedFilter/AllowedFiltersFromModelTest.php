@@ -37,5 +37,4 @@ it('uses allowed filters from model as default', function (): void {
 
     expect($models->count())->toBe(1)
         ->and($models->first()->id)->toBe(1);
-
 });
