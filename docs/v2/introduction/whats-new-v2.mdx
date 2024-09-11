@@ -134,7 +134,7 @@ Some dedicated filter classes were removed in favour of new **modifiers** featur
 - `$notLike:start`.
 - `$notLike:end`.
 
-allowedFilter definitions should be updated.
+`allowedFilters()` definitions should be updated.
 
 ```php
 public function allowedFilters(): AllowedFilterList
@@ -142,11 +142,12 @@ public function allowedFilters(): AllowedFilterList
     return Filter::only(
         // old
         // Filter::field('name', ['$notLike:end']),
-        // new
+        // new (start & end modifiers enabled)
         Filter::field('name', [FilterType::NOT_LIKE]),
+        // new (just end modifier enabled)
+        Filter::field('name', [FilterType::NOT_LIKE->withModifiers('end')]),
     );
 }
-
 ```
 
 ### Filter::all()
