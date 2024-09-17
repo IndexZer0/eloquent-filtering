@@ -16,9 +16,12 @@ import Badges from '/snippets/badges.mdx';
 
 ## Overview
 
-Eloquent Filtering helps you **avoid** writing custom query logic for filtering your models.
+*Eloquent Filtering* **simplifies** implementing search functionality for your Eloquent models, whether simple or complex, by **eliminating** the need for custom query logic.
+It allows you to **easily** define and manage filters directly within your models, and **seamlessly** apply them using incoming HTTP request data to dynamically filter your models.
 
-The main use case of filtering models from http request parameters is achieved by **simply** defining allowed filters on your models and pass filters from http request to the model.
+With this package, you can build more readable, maintainable, and scalable code, **boosting** your productivity and **speeding up** development.
+
+Whether you’re building APIs, dashboards, or advanced search systems, *Eloquent Filtering* provides a **powerful** and **flexible** way to streamline your Eloquent queries, making it easier to manage and extend your application’s filtering capabilities.
 
 ## Quick Look
 
@@ -46,26 +49,38 @@ $products = Product::filter([
 
 ## Features
 
-### Filter
-
-- Many **core** filter methods.
-- Filter by **fields**.
-- Filter by **relationship** existence.
-  - Filter by **nested relationship** existence.
-  - Filter by **fields** on **relationships**.
-- Alias **fields** and **relationships**.
-- Specify filter types per field/relationship.
-- Filter json columns.
-  - Json path wildcard support.
-- Validation.
-- Required filters.
-- Pivot filters.
-- Custom filters.
-
-### Sort
-
-- Sort by fields.
-- Alias fields.
+<CardGroup cols={2}>
+    <Card title="Large Filter Library" icon="list" href="/v2/available-filters/full-filter-list#field-filters" horizontal>
+        Many core filter methods.
+    </Card>
+    <Card title="Field Filters" icon="database" href="/v2/basics/in-detail#field" horizontal>
+        Filter your models fields.
+    </Card>
+    <Card title="Relationship Filters" icon="link" href="/v2/basics/in-detail#relation" horizontal>
+        Filter by relationship existence.
+    </Card>
+    <Card title="Pivot Filters" icon="scale-unbalanced" href="/v2/digging-deeper/pivot-filters#overview" horizontal>
+        Filter your intermediate table.
+    </Card>
+    <Card title="Required Filters" icon="asterisk" href="/v2/digging-deeper/required-filters#overview" horizontal>
+        Set filters as required.
+    </Card>
+    <Card title="Validation" icon="shield-check" href="/v2/digging-deeper/validation-rules#overview" horizontal>
+        Add validation to your defined filters.
+    </Card>
+    <Card title="Custom Filters" icon="code" href="/v2/digging-deeper/custom-filters#overview" horizontal>
+        Create your own custom filters.
+    </Card>
+    <Card title="Alias" icon="eye" href="/v2/digging-deeper/aliasing-targets#overview" horizontal>
+        Alias fields and relationships.
+    </Card>
+    <Card title="Filter JSON Columns" icon="brackets-curly" href="/v2/digging-deeper/json-path-wildcards#overview" horizontal>
+        Json path wildcard support.
+    </Card>
+    <Card title="Granular Control" icon="filter-list" href="/v2/digging-deeper/allowed-types#overview" horizontal>
+        Specify filter types.
+    </Card>
+</CardGroup>
 
 ## Field And Relationship Filter Example
 
