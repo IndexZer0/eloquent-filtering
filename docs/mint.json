@@ -81,6 +81,7 @@
       "group": "Available Filters",
       "version": "v2",
       "pages": [
+        "v2/available-filters/full-filter-list",
         {
           "group": "Field Filters",
           "icon": "database",
