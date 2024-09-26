@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
@@ -113,16 +116,34 @@ class AllowedRelation implements
             return null;
         }
 
-        $relationModel = RelationUtils::getRelationModel($modelFqcn, $relationMethod);
+        $model = new $modelFqcn();
 
-        $relatedModelsAllowedFilters = ClassUtils::getModelsAllowedFilters($relationModel);
+        /** @var Relation $query */
+        $query = $model->$relationMethod();
 
-        if ($relatedModelsAllowedFilters !== null) {
-            $this->allowedFilters = $this->allowedFilters->add(
-                ...$relatedModelsAllowedFilters->getAllowedFields(),
-            );
+        $models = [$relationModel = $query->getRelated()];
+
+        if ($query instanceof BelongsToMany) {
+            $pivotClass = $query->getPivotClass();
+            $models[] = new $pivotClass();
         }
 
+        $this->addAllowedFiltersFromRelatedModels(...$models);
+
         return $relationModel::class;
+    }
+
+    private function addAllowedFiltersFromRelatedModels(Model ...$models): void
+    {
+        foreach ($models as $model) {
+            $modelsAllowedFilters = ClassUtils::getModelsAllowedFilters($model);
+
+            if ($modelsAllowedFilters !== null) {
+                $this->allowedFilters = $this->allowedFilters->add(
+                    ...$modelsAllowedFilters->getAllowedFields(),
+                );
+            }
+        }
+
     }
 }
