@@ -14,9 +14,9 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Author;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\AuthorProfile;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Book;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Comment;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\Account;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\Contract;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\File;
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\Account;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\FoodDeliveryService;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Sass;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Subscription;
@@ -30,6 +30,11 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\UserProfile;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Business;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Client;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Morph\WithoutMorphMap\Invoice;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\BelongsToMany\Role;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\BelongsToMany\User;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\MorphToMany\Group;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\MorphToMany\Individual;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\MorphToMany\Task;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Post;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Tag;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
@@ -206,6 +211,47 @@ class TestCase extends Orchestra
             $table->foreignId('tag_id')->constrained();
             $table->string('tagged_by');
             $table->timestamps();
+        });
+
+        // Pivot (Include Relation Fields)
+        $schema->create('role_user', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('role_id');
+            $table->foreignId('user_id');
+            $table->string('assigned_by');
+            $table->timestamps();
+        });
+        $schema->create('roles', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('users', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        // Pivot (Many To Many Morph) (Include Relation Fields)
+        $schema->create('groups', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('individuals', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('tasks', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+        $schema->create('taskables', function (Blueprint $table): void {
+            $table->foreignId('task_id');
+            $table->morphs('taskable');
+            $table->string('assigned_by');
         });
 
         // Morph
@@ -439,6 +485,21 @@ class TestCase extends Orchestra
         $t2 = new Tag(['name' => 'tag-name-2']);
         $t2->save();
         $p2->tags()->save($t2, ['tagged_by' => 'tagged-by-user-2']);
+    }
+
+    public function createUserRolePivotRecords(): void
+    {
+        $user1 = new User(['name' => 'user-name-1']);
+        $user1->save();
+        $role1 = new Role(['name' => 'role-name-1']);
+        $role1->save();
+        $user1->roles()->save($role1, ['assigned_by' => 'user-name-2']);
+
+        $user2 = new User(['name' => 'user-name-2']);
+        $user2->save();
+        $role2 = new Role(['name' => 'role-name-2']);
+        $role2->save();
+        $user2->roles()->save($role2, ['assigned_by' => 'user-name-1']);
     }
 
     public function createMorphRecords(): void
@@ -702,6 +763,36 @@ class TestCase extends Orchestra
         $issue1->labels()->save($label1, ['labeled_by' => 'user-2']);
         $epic2->labels()->save($label2, ['labeled_by' => 'user-3']);
         $issue2->labels()->save($label2, ['labeled_by' => 'user-4']);
+    }
+
+    public function createManyToManyPivotRecords(): void
+    {
+        $individual1 = Individual::create([
+            'name' => 'individual-name-1',
+        ]);
+        $individual2 = Individual::create([
+            'name' => 'individual-name-2',
+        ]);
+
+        $group1 = Group::create([
+            'name' => 'group-name-1',
+        ]);
+        $group2 = Group::create([
+            'name' => 'group-name-2',
+        ]);
+
+        $task1 = Task::create([
+            'name' => 'task-name-1',
+        ]);
+        $task2 = Task::create([
+            'name' => 'task-name-2',
+        ]);
+
+        $individual1->tasks()->save($task1, ['assigned_by' => 'individual-name-2']);
+        $group1->tasks()->save($task1, ['assigned_by' => 'group-name-2']);
+
+        $individual2->tasks()->save($task2, ['assigned_by' => 'individual-name-1']);
+        $group2->tasks()->save($task2, ['assigned_by' => 'group-name-1']);
     }
 
     public function createPackages(): void
