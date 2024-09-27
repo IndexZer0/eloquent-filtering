@@ -18,7 +18,10 @@ Pivot filters can be specified in two ways:
 </Note>
 
 <Tip>
-    This is the recommended way as it allows you to define the allowed pivot filters once in the Custom Intermediate Table Model.
+    This is the recommended way
+    - Define the allowed pivot filters once in the Custom Intermediate Table Model.
+    - Not required to call `->pivot()`.
+    - **Caveat**: Must call `->includeRelationFields()` on `Filter::relation()`.
 </Tip>
 
 If you are utilising [Custom Intermediate Table Models](https://laravel.com/docs/10.x/eloquent-relationships#defining-custom-intermediate-table-models), you may define filters on that model.
