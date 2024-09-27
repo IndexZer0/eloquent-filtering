@@ -6,7 +6,10 @@ use IndexZer0\EloquentFiltering\Filter\Exceptions\DeniedFilterException;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\BlogPost;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\BelongsToMany\AllowedFilters\OnlyPivotFromUser;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\BelongsToMany\AllowedFilters\WithoutPivot;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\BelongsToMany\Role;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\BelongsToMany\RoleUser;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\BelongsToMany\User;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\MorphToMany\Individual;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\IncludeRelationFields\MorphToMany\Task;
@@ -400,5 +403,102 @@ it('can include pivot filters from custom intermediate table models (MorphToMany
 
     expect($individualHasModels->count())->toBe(1)
         ->and($individualHasModels->first()->name)->toBe('individual-name-1');
+
+});
+
+it('honours ->pivot() parent models', function (): void {
+
+    RoleUser::$allowedFiltersClass = OnlyPivotFromUser::class;
+
+    $userHasRoleQuery = User::filter([
+        [
+            'target' => 'name',
+            'type'   => '$eq',
+            'value'  => 'user-name-1',
+        ],
+        [
+            'target' => 'roles',
+            'type'   => '$has',
+            'value'  => [
+                [
+                    'target' => 'name',
+                    'type'   => '$eq',
+                    'value'  => 'role-name-1',
+                ],
+                [
+                    'target' => 'assigned_by',
+                    'type'   => '$eq',
+                    'value'  => 'user-name-2',
+                ],
+            ],
+        ],
+    ]);
+
+    $userHasRoleQueryExpectedSql = <<< SQL
+        select * from "users" where "users"."name" = 'user-name-1' and exists (select * from "roles" inner join "role_user" on "roles"."id" = "role_user"."role_id" where "users"."id" = "role_user"."user_id" and "roles"."name" = 'role-name-1' and "role_user"."assigned_by" = 'user-name-2')
+        SQL;
+
+    expect($userHasRoleQuery->toRawSql())->toBe($userHasRoleQueryExpectedSql);
+
+    $userHasRoleModels = $userHasRoleQuery->get();
+
+    expect($userHasRoleModels->count())->toBe(1)
+        ->and($userHasRoleModels->first()->name)->toBe('user-name-1');
+
+    try {
+        Role::filter([
+            [
+                'target' => 'name',
+                'type'   => '$eq',
+                'value'  => 'role-name-2',
+            ],
+            [
+                'target' => 'users',
+                'type'   => '$has',
+                'value'  => [
+                    [
+                        'target' => 'name',
+                        'type'   => '$eq',
+                        'value'  => 'user-name-2',
+                    ],
+                    [
+                        'target' => 'assigned_by',
+                        'type'   => '$eq',
+                        'value'  => 'user-name-1',
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->fail('Should have thrown exception');
+
+    } catch (DeniedFilterException $dfe) {
+        $this->assertSame('"$eq" filter for "assigned_by" is not allowed', $dfe->getMessage());
+    }
+
+    RoleUser::$allowedFiltersClass = WithoutPivot::class;
+
+});
+
+it('can filter the pivot model itself', function (): void {
+
+    $query = RoleUser::filter([
+        [
+            'target' => 'assigned_by',
+            'type'   => '$eq',
+            'value'  => 'user-name-2',
+        ],
+    ]);
+
+    $expectedSql = <<< SQL
+        select * from "role_user" where "role_user"."assigned_by" = 'user-name-2'
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(1)
+        ->and($models->first()->assigned_by)->toBe('user-name-2');
 
 });
