@@ -8,9 +8,9 @@
     "light": "/images/logo-light.png"
   },
   "colors": {
-    "primary": "#0F9DD9",
+    "primary": "#0F59D9",
     "light": "#0F9DD9",
-    "dark": "#0F9DD9",
+    "dark": "#0F59D9",
     "background": {
       "light": "#E8EDFA"
     },
