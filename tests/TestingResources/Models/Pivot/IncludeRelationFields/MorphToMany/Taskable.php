@@ -20,8 +20,7 @@ class Taskable extends MorphPivot implements IsFilterable
     public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('assigned_by', [FilterType::EQUAL])
-                ->pivot(Group::class, Individual::class, Task::class),
+            Filter::field('assigned_by', [FilterType::EQUAL]),
         );
     }
 }
