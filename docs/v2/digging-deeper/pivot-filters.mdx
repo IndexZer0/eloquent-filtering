@@ -7,6 +7,152 @@ iconType: 'solid'
 
 ## Overview
 
+Pivot filters can be specified in two ways:
+- on Custom Intermediate Table Models (`Pivot`, `MorphPivot`).
+- on your main models (`Model`).
+
+## With Custom Intermediate Table Models
+
+<Note>
+    Added in 2.1.0
+</Note>
+
+<Tip>
+    This is the recommended way as it allows you to define the allowed pivot filters once in the Custom Intermediate Table Model.
+</Tip>
+
+If you are utilising [Custom Intermediate Table Models](https://laravel.com/docs/10.x/eloquent-relationships#defining-custom-intermediate-table-models), you may define filters on that model.
+
+Filters defined on this model will be applied to the intermediate table.
+
+
+
+```php
+/*
+ * User Model
+ */
+class User extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class)->using(RoleUser::class);
+    }
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::relation('roles', [FilterType::HAS])->includeRelationFields(),
+        );
+    }
+}
+
+/*
+ * Role Model
+ */
+class Role extends Model implements IsFilterable
+{
+    use Filterable;
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)->using(RoleUser::class);
+    }
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::relation('users', [FilterType::HAS])->includeRelationFields(),
+        );
+    }
+}
+
+/*
+ * RoleUser Pivot Model
+ */
+class RoleUser extends Pivot implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('assigned_by', [FilterType::EQUAL]),
+        );
+    }
+}
+
+/*
+ * Applying `assigned_by` pivot filter
+ * within `roles` `$has` relation filter.
+ */
+User::filter([
+    [
+        'type'   => '$has',
+        'target' => 'roles',
+        'value'  => [
+            [
+                'type'   => '$eq',
+                'target' => 'assigned_by',
+                'value'  => 'admin',
+            ]
+        ]
+    ]
+]);
+
+/*
+ * Applying `assigned_by` pivot filter
+ * within `users` `$has` relation filter.
+ */
+Role::filter([
+    [
+        'type'   => '$has',
+        'target' => 'users',
+        'value'  => [
+            [
+                'type'   => '$eq',
+                'target' => 'assigned_by',
+                'value'  => 'admin',
+            ]
+        ]
+    ]
+]);
+```
+
+### Restricting Allowed Pivot Filters.
+
+Sometimes you may only want the pivot filter to be allowed when filtering by relationship one way but not the other way.
+
+For example:
+- **Allowed** when filtering `User` `$has` `Role`.
+- **Denied** when filtering `Role` `$has` `User`.
+
+To achieve this you can specify the allowed "from" model for the pivot filter.
+
+```php
+/*
+ * RoleUser Pivot Model
+ */
+class RoleUser extends Pivot implements IsFilterable
+{
+    use Filterable;
+
+    public function allowedFilters(): AllowedFilterList
+    {
+        return Filter::only(
+            Filter::field('assigned_by', [FilterType::EQUAL])
+                ->pivot(User::class),
+        );
+    }
+}
+```
+
+## Without Custom Intermediate Table Models
+
+If you are **NOT** utilising [Custom Intermediate Table Models](https://laravel.com/docs/10.x/eloquent-relationships#defining-custom-intermediate-table-models),
+you may define pivot filters on your main models.
+
 `Filter::field()` filters can be marked as pivot filters if you want the filter to be applied to a column on the intermediate table linking the models.
 
 You must specify the parent model fqcn.
@@ -20,10 +166,11 @@ public function allowedFilters(): AllowedFilterList
 }
 ```
 
-## BelongsToMany
+### BelongsToMany
 
 In the below example of `class Post` and `class Tag`.
 
+- The pivot filter is specified in the `allowedFilters` method of both classes.
 - The pivot filter can **only** be used when in the context of the `posts` or `tags` relationship.
 
 ```php
@@ -62,9 +209,17 @@ class Tag extends Model implements IsFilterable
         );
     }
 }
+```
 
-// Applying `tagged_by` filter within `tags` `$has` relation filter.
-// Allowed
+#### Allowed
+
+With the models setup as described above. The following filters are allowed.
+
+```php
+/*
+ * Applying `tagged_by` pivot filter
+ * within `tags` `$has` relation filter.
+ */
 Post::filter([
     [
         'type'   => '$has',
@@ -79,8 +234,10 @@ Post::filter([
     ]
 ]);
 
-// Applying `tagged_by` filter within `posts` `$has` relation filter.
-// Allowed
+/*
+ * Applying `tagged_by` pivot filter
+ * within `posts` `$has` relation filter.
+ */
 Tag::filter([
     [
         'type'   => '$has',
@@ -94,9 +251,18 @@ Tag::filter([
         ]
     ]
 ]);
+```
 
-// Applying `tagged_by` filter when not in context of `tags` `$has` relation filter.
-// throws DeniedFilterException.
+#### DeniedFilterException
+
+With the models setup as described above. The following filters are denied.
+
+```php
+/*
+ * Applying `tagged_by` pivot filter
+ * when not in context of `tags` `$has` relation filter.
+ * throws DeniedFilterException.
+ */
 Post::filter([
     [
         'type'   => '$eq',
@@ -105,8 +271,11 @@ Post::filter([
     ]
 ]);
 
-// Applying `tagged_by` filter when not in context of `posts` `$has` relation filter.
-// throws DeniedFilterException.
+/*
+ * Applying `tagged_by` pivot filter
+ * when not in context of `posts` `$has` relation filter.
+ * throws DeniedFilterException.
+ */
 Tag::filter([
     [
         'type'   => '$eq',
@@ -115,9 +284,12 @@ Tag::filter([
     ]
 ]);
 
-// Applying `tagged_by` filter when in context of another BelongsToMany relation
-// but User::class not defined in the ->pivot() method in the tags model.
-// throws DeniedFilterException.
+/*
+ * Applying `tagged_by` pivot filter
+ * when in context of another BelongsToMany relation
+ * but User::class not defined in the ->pivot() method in the tags model.
+ * throws DeniedFilterException.
+ */
 User::filter([
     [
         'type'   => '$has',
@@ -133,7 +305,7 @@ User::filter([
 ]);
 ```
 
-## Many To Many (Polymorphic)
+### MorphToMany (Polymorphic)
 
 When defining a pivot filter for `MorphToMany` relations, you can specify a list of models in the `->pivot()` method.
 
@@ -166,7 +338,8 @@ class Label extends Model implements IsFilterable
     public function allowedFilters(): AllowedFilterList
     {
         return Filter::only(
-            Filter::field('labeled_by', [FilterType::EQUAL])->pivot(Epic::class, Issue::class)
+            Filter::field('labeled_by', [FilterType::EQUAL])
+                ->pivot(Epic::class, Issue::class)
         );
     }
 }
