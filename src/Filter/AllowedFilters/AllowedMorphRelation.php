@@ -97,7 +97,7 @@ class AllowedMorphRelation implements
                 Filter::morphType(
                     $relatedModelFqcn,
                     Filter::only(
-                        ...ClassUtils::getModelsAllowedFilters($relatedModel)->getAllowedFields(),
+                        ...ClassUtils::getModelAllowedFilters($relatedModel)->getAllowedFields(),
                     ),
                 ),
             );

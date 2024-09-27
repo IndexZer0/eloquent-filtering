@@ -42,7 +42,7 @@ class ClassUtils
         }
     }
 
-    public static function getModelsAllowedFilters(Model $model): ?AllowedFilterList
+    public static function getModelAllowedFilters(Model $model): ?AllowedFilterList
     {
         if (!self::modelIsFilterable($model)) {
             return null;
