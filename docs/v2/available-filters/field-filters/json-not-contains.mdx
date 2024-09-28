@@ -44,7 +44,8 @@ $sql = User::filter([$filter])->toRawSql();
 ### SQL
 
 ```sql
-select * from "users" where not json_contains("users"."options", '\"en\"', '$."languages"')
+select * from "users"
+where not json_contains("users"."options", '\"en\"', '$."languages"')
 ```
 
 ## Modifiers

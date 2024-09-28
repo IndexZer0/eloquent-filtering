@@ -48,7 +48,8 @@ $sql = User::filter([$filter])->toRawSql();
 ### SQL
 
 ```sql
-select * from "users" where json_length("users"."options", '$."languages"') >= 2
+select * from "users"
+where json_length("users"."options", '$."languages"') >= 2
 ```
 
 ## Modifiers

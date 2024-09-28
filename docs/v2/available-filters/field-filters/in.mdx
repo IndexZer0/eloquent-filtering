@@ -53,5 +53,11 @@ select * from "people" where "people"."name" in ('Taylor', 'Otwell')
 <TypeParameterField type="$in:null" />
 
 ```sql
-select * from "people" where ("people"."name" in ('Taylor', 'Otwell') or "people"."name" is null)
+select *
+from "people"
+where (
+    "people"."name" in ('Taylor', 'Otwell')
+        or
+    "people"."name" is null
+)
 ```
