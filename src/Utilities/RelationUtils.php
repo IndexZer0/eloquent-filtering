@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Utilities;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use ReflectionClass;
@@ -13,10 +12,10 @@ use ReflectionNamedType;
 
 class RelationUtils
 {
-    public static function relationMethodExists(string $relationMethod, string $modelFqcn): bool
+    public static function relationMethodExists(string $modelFqcn, string $relationMethodName): bool
     {
         $relationMethods = self::getRelationMethodNames($modelFqcn);
-        return $relationMethods->contains($relationMethod);
+        return $relationMethods->contains($relationMethodName);
     }
 
     public static function getRelationMethodNames(string $modelFqcn): Collection
@@ -37,14 +36,9 @@ class RelationUtils
             ->values();
     }
 
-    public static function getRelationModel(string $modelFqcn, string $relationName): Model
+    public static function getRelationModels(string $modelFqcn, string $relationMethodName): RelationModels
     {
-        $model = new $modelFqcn();
-
-        /** @var Relation $query */
-        $query = $model->$relationName();
-
-        return $query->getRelated();
+        return new RelationModels($modelFqcn, $relationMethodName);
     }
 
     /*

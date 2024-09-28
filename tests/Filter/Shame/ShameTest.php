@@ -41,7 +41,7 @@ it('throws Exception when calling getAllowedType() on AllowedMorphType', functio
             'target' => 'something',
             'type'   => '$in:null',
             'value'  => [
-                1, 2, 3, null,
+                1, 2, 3,
             ],
         ],
         new Author(),

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IndexZer0\EloquentFiltering\Filter\AllowedFilters;
 
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use IndexZer0\EloquentFiltering\Contracts\Target;
 use IndexZer0\EloquentFiltering\Filter\AllowedTypes\AllowedType;
 use IndexZer0\EloquentFiltering\Filter\Context\FilterContext;
@@ -16,6 +17,7 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedTypes;
 use IndexZer0\EloquentFiltering\Filter\Filterable\PendingFilter;
 use IndexZer0\EloquentFiltering\Filter\Traits\AllowedFilter\CanBeRequired;
 use IndexZer0\EloquentFiltering\Utilities\ClassUtils;
+use IndexZer0\EloquentFiltering\Utilities\RelationModels;
 use IndexZer0\EloquentFiltering\Utilities\RelationUtils;
 
 class AllowedRelation implements
@@ -104,25 +106,46 @@ class AllowedRelation implements
 
     protected function resolveRelationsAllowedFields(string $modelFqcn): ?string
     {
-        if (
-            !RelationUtils::relationMethodExists(
-                $relationMethod = $this->target->getReal(),
-                $modelFqcn,
-            )
-        ) {
+        $relationMethodName = $this->target->getReal();
+
+        if (!RelationUtils::relationMethodExists($modelFqcn, $relationMethodName)) {
             return null;
         }
 
-        $relationModel = RelationUtils::getRelationModel($modelFqcn, $relationMethod);
+        $relationModels = RelationUtils::getRelationModels($modelFqcn, $relationMethodName);
 
-        $relatedModelsAllowedFilters = ClassUtils::getModelsAllowedFilters($relationModel);
+        $this->addAllowedFiltersFromRelatedModels($modelFqcn, $relationModels);
 
-        if ($relatedModelsAllowedFilters !== null) {
+        return $relationModels->getRelated()::class;
+    }
+
+    private function addAllowedFiltersFromRelatedModels(string $modelFqcn, RelationModels $relationModels): void
+    {
+        foreach ($relationModels->getAll() as $model) {
+            $modelsAllowedFilters = ClassUtils::getModelAllowedFilters($model);
+
+            if ($modelsAllowedFilters === null) {
+                continue;
+            }
+
+            $allowedFilters = $modelsAllowedFilters->getAllowedFields();
+
+            // This allows the developer to NOT have to mark an AllowedField as ->pivot()
+            // when in the context of a Pivot/MorphPivot model by default.
+            if ($model instanceof Pivot) {
+                $allowedFilters = collect($allowedFilters)
+                    ->each(function (AllowedField $allowedFilter) use ($modelFqcn): void {
+                        if (!$allowedFilter->isPivot()) {
+                            $allowedFilter->pivot($modelFqcn);
+                        }
+                    })
+                    ->toArray();
+            }
+
             $this->allowedFilters = $this->allowedFilters->add(
-                ...$relatedModelsAllowedFilters->getAllowedFields(),
+                ...$allowedFilters,
             );
         }
 
-        return $relationModel::class;
     }
 }
