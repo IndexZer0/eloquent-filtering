@@ -2,6 +2,10 @@
 
 All notable changes to `eloquent-filtering` will be documented in this file.
 
+## 2.1.0 - 2024-09-28
+### Added
+- Support defining pivot filters on Custom Intermediate Table Models.
+
 ## 2.0.0 - 2024-09-11
 ### Added
 - [Docs](https://docs.eloquentfiltering.com)
