@@ -24,6 +24,16 @@ Filter::field('name', ['$eq'])
 Filter::field('name', Types::only(['$eq']))
 ```
 
+## Example: Multiple types Allowed
+
+```php
+use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
+use IndexZer0\EloquentFiltering\Filter\Types\Types;
+use IndexZer0\EloquentFiltering\Filter\FilterType;
+
+Filter::field('name', [FilterType::EQUAL, FilterType::IN, '$yourCustomFilter'])
+```
+
 ## Example: All Types Allowed
 
 ```php
