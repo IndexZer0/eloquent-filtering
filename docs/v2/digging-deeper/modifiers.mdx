@@ -12,10 +12,23 @@ Modifiers are ways to slightly alter the way that a filter works.
 ## How To Use
 
 Append `:{modifierName}` to the `type` of the filter.
-    - i.e. `$like:start`.
+
+```php {2}
+$filter = [
+    'type'   => '$like:start',
+    'target' => 'framework',
+    'value'  => 'laravel',
+];
+```
 
 Multiple modifiers can be applied.
-    - i.e. `$like:start:end`.
+```php {2}
+$filter = [
+    'type'   => '$like:start:end',
+    'target' => 'framework',
+    'value'  => 'laravel',
+];
+```
 
 ## Core Filter Modifiers
 
