@@ -133,7 +133,7 @@ For example:
 
 To achieve this you can specify the allowed "from" model for the pivot filter.
 
-```php
+```php {12}
 /*
  * RoleUser Pivot Model
  */
@@ -160,11 +160,12 @@ you may define pivot filters on your main models.
 
 You must specify the parent model fqcn.
 
-```php
+```php {5}
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
-        Filter::field('tagged_by', [FilterType::EQUAL])->pivot(Post::class),
+        Filter::field('tagged_by', [FilterType::EQUAL])
+            ->pivot(Post::class),
     );
 }
 ```

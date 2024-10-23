@@ -23,18 +23,19 @@ This method instructs the package to look for `AllowedField` filters within the 
 The relationship method **MUST** have return type specified, and the related model **MUST** also implement `IsFilterable`.
 </Warning>
 
-```php
+```php {5}
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
-        Filter::relation('manufacturer', [FilterType::HAS])->includeRelationFields()
+        Filter::relation('manufacturer', [FilterType::HAS])
+            ->includeRelationFields()
     );
 }
 ```
 
 For `Filter::morphRelation()`, you should specify the models for which to include the relation fields for.
 
-```php
+```php {7-10}
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
@@ -52,7 +53,7 @@ public function allowedFilters(): AllowedFilterList
 ### Define `allowedFilters`
 
 Alternatively, if you don't want to use `->includeRelationFields()`, you can define `allowedFilters` for each `Filter::relation()` and `Filter::morphType()`.
-```php
+```php {7-9}
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
@@ -67,19 +68,23 @@ public function allowedFilters(): AllowedFilterList
 }
 ```
 
-```php
+```php {7-9,13-15}
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(
-        Filter::morphRelation(
-            'subscribable',
-            [FilterType::HAS_MORPH],
-            Filter::morphType(FoodDeliveryService::class, Filter::only(
-                Filter::field('name', [FilterType::EQUAL])
-            )),
-            Filter::morphType(Sass::class, Filter::only(
-                Filter::field('name', [FilterType::EQUAL])
-            )),
+        Filter::morphRelation('subscribable', [FilterType::HAS_MORPH],
+            Filter::morphType(
+                type: FoodDeliveryService::class,
+                allowedFilters: Filter::only(
+                    Filter::field('name', [FilterType::EQUAL])
+                )
+            ),
+            Filter::morphType(
+                type: Sass::class,
+                allowedFilters: Filter::only(
+                    Filter::field('name', [FilterType::EQUAL])
+                )
+            ),
         )
     );
 }

@@ -164,8 +164,11 @@ Adding modifiers to your custom filters is achieved by:
 - Define `supportedModifiers()` method on the filter class.
 - Using `$this->hasModifier('modifier_name')` in the `apply()` implementation.
 
-```php
-class YourFilterWithModifiers implements FilterMethod, Targetable, Modifiable
+```php {4,7,11-14,18}
+class YourFilterWithModifiers implements
+    FilterMethod,
+    Targetable,
+    Modifiable
 {
     use FieldFilter;
     use HasModifiers;
@@ -201,7 +204,7 @@ Benefits of using this method:
 - Prevents ambiguous columns in queries where you're also joining to another table with the same column.
 - Handles using the correct table name for `->pivot()` allowed field filters.
 
-```php
+```php {4}
 public function apply(Builder $query): Builder
 {
     return $query->where(

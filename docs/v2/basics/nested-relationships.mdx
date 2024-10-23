@@ -9,7 +9,7 @@ iconType: 'solid'
 
 There is an convenience method on `Filter::relation` that allows you to easily define nested relationships.
 
-```php
+```php {5-7}
 public function allowedFilters(): AllowedFilterList
 {
     return Filter::only(

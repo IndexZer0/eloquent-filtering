@@ -13,7 +13,7 @@ You can define allowed filters in two ways:
 
 ### Define On Model
 
-```php
+```php {11-23}
 use IndexZer0\EloquentFiltering\Contracts\IsFilterable;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
@@ -51,7 +51,7 @@ class Product extends Model implements IsFilterable
 Passing in an `AllowedFilterList` to `::filter()` method takes priority over `allowedFilters()` on the model.
 </Note>
 
-```php
+```php {3-12}
 Product::filter(
     $filters,
     Filter::only(
