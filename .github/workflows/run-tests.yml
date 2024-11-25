@@ -56,7 +56,7 @@ jobs:
         run: vendor/bin/pest --ci
 
       - name: Code Coverage Upload
-        uses: codecov/codecov-action@v4.6.0
+        uses: codecov/codecov-action@v5.0.7
         if: matrix.php == '8.2' && matrix.laravel-testbench.laravel == '10.*' && matrix.stability == 'prefer-lowest'
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
