@@ -46,17 +46,14 @@ class InFilter implements FilterMethod, Modifiable, Targetable
     {
         $target = $this->eloquentContext->qualifyColumn($this->target);
 
-        return $query->whereIn(
-            $target,
-            $this->value,
-            not: $this->not(),
-        )->when($this->hasModifier('null'), function (Builder $query) use ($target): void {
-            $query->whereNull(
-                $target,
-                $this->not() ? 'and' : 'or',
-                $this->not(),
-            );
-        });
+        if ($this->hasModifier('null')) {
+            return $query->where(function (Builder $query) use ($target): void {
+                $query->whereIn($target, $this->value, not: $this->not())
+                    ->whereNull($target, $this->not() ? 'and' : 'or', $this->not());
+            });
+        }
+
+        return $query->whereIn($target, $this->value, not: $this->not());
     }
 
     public static function supportedModifiers(): array

@@ -339,7 +339,7 @@ it('NotInFilter | $notIn:null', function (): void {
     ))->toRawSql();
 
     $expectedSql = <<< SQL
-        select * from "people" where "people"."name" not in ('Nuno', 'Maduro') and "people"."name" is not null
+        select * from "people" where ("people"."name" not in ('Nuno', 'Maduro') and "people"."name" is not null)
         SQL;
 
     expect($sql)->toBe($expectedSql);
