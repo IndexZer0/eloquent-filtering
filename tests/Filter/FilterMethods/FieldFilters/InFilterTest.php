@@ -28,7 +28,7 @@ it('can perform $in filter', function (): void {
         ),
     );
 
-    $expectedSql = <<< SQL
+    $expectedSql = <<< 'SQL'
         select * from "authors" where "authors"."name" in ('George Raymond Richard Martin', 'J. R. R. Tolkien')
         SQL;
 
@@ -41,6 +41,8 @@ it('can perform $in filter', function (): void {
 });
 
 it('can perform $in filter with :null modifier', function (): void {
+
+    Author::create(['name' => null]);
 
     $query = Author::filter(
         [
@@ -59,7 +61,7 @@ it('can perform $in filter with :null modifier', function (): void {
         ),
     );
 
-    $expectedSql = <<< SQL
+    $expectedSql = <<< 'SQL'
         select * from "authors" where ("authors"."name" in ('George Raymond Richard Martin') or "authors"."name" is null)
         SQL;
 
@@ -67,8 +69,8 @@ it('can perform $in filter with :null modifier', function (): void {
 
     $models = $query->get();
 
-    expect($models->count())->toBe(1)
-        ->and($models->pluck('name')->toArray())->toBe(['George Raymond Richard Martin']);
+    expect($models->count())->toBe(2)
+        ->and($models->pluck('name')->toArray())->toBe(['George Raymond Richard Martin', null]);
 
 });
 
@@ -215,3 +217,41 @@ it('only accepts string, int, float for value', function (
         'expected_errors'            => null,
     ],
 ]);
+
+it('can perform $in filter with :null modifier in combination with other filter.', function (): void {
+
+    $query = Author::filter(
+        [
+            [
+                'target' => 'name',
+                'type'   => '$notEq',
+                'value'  => 'William Shakespeare',
+            ],
+            [
+                'target' => 'name',
+                'type'   => '$in:null',
+                'value'  => [
+                    'George Raymond Richard Martin',
+                ],
+            ],
+        ],
+        Filter::only(
+            Filter::field('name', [
+                FilterType::IN->withModifiers('null'),
+                FilterType::NOT_EQUAL,
+            ]),
+        ),
+    );
+
+    $expectedSql = <<< 'SQL'
+        select * from "authors" where "authors"."name" != 'William Shakespeare' and ("authors"."name" in ('George Raymond Richard Martin') or "authors"."name" is null)
+        SQL;
+
+    expect($query->toRawSql())->toBe($expectedSql);
+
+    $models = $query->get();
+
+    expect($models->count())->toBe(1)
+        ->and($models->pluck('name')->toArray())->toBe(['George Raymond Richard Martin']);
+
+});
