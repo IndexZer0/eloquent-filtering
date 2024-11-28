@@ -2,6 +2,10 @@
 
 All notable changes to `eloquent-filtering` will be documented in this file.
 
+## 2.1.1 - 2024-11-28
+### Fixed
+- `:null` modifier for `$in` and `$notIn` not having correct query logical grouping when used in combination with other filters.
+
 ## 2.1.0 - 2024-09-28
 ### Added
 - Support defining pivot filters on Custom Intermediate Table Models.
