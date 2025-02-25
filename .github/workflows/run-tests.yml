@@ -21,7 +21,7 @@ jobs:
         laravel-testbench: [
           {laravel: 10.*, testbench: ^8.22.0, pest: 2.*, pest-plugin-arch: ^2.7.0, carbon: ^2.63},
           {laravel: 11.*, testbench: 9.*, pest: 3.*, pest-plugin-arch: 3.*, carbon: ^2.63},
-          {laravel: 12.*, testbench: 9.*, pest: 3.*, pest-plugin-arch: 3.*, carbon: ^3.00}
+          {laravel: 12.*, testbench: 10.*, pest: 3.*, pest-plugin-arch: 3.*, carbon: ^3.00}
         ]
         stability: [prefer-lowest, prefer-stable]
 
