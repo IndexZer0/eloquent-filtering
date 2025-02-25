@@ -33,7 +33,7 @@ class Subscription extends Model implements IsFilterable
                 [FilterType::HAS_MORPH],
             )->includeRelationFields([
                 FoodDeliveryService::class,
-                Sass::class,
+                Saas::class,
             ]),
         );
     }

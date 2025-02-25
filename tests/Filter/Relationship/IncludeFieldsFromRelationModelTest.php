@@ -122,12 +122,12 @@ it('can include morph relation models allowed fields | no morph map', function (
                     ],
                 ],
                 [
-                    'type'  => 'sasses',
+                    'type'  => 'saas',
                     'value' => [
                         [
                             'target' => 'name',
                             'type'   => '$eq',
-                            'value'  => 'sass-1',
+                            'value'  => 'saas-1',
                         ],
                     ],
                 ],
@@ -136,7 +136,7 @@ it('can include morph relation models allowed fields | no morph map', function (
     ]);
 
     $expectedSql = <<< SQL
-        select * from "subscriptions" where (("subscriptions"."subscribable_type" = 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\FoodDeliveryService' and exists (select * from "food_delivery_services" where "subscriptions"."subscribable_id" = "food_delivery_services"."id" and "food_delivery_services"."name" = 'food-delivery-service-1')) or ("subscriptions"."subscribable_type" = 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Sass' and exists (select * from "sasses" where "subscriptions"."subscribable_id" = "sasses"."id" and "sasses"."name" = 'sass-1')))
+        select * from "subscriptions" where (("subscriptions"."subscribable_type" = 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\FoodDeliveryService' and exists (select * from "food_delivery_services" where "subscriptions"."subscribable_id" = "food_delivery_services"."id" and "food_delivery_services"."name" = 'food-delivery-service-1')) or ("subscriptions"."subscribable_type" = 'IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Saas' and exists (select * from "saas" where "subscriptions"."subscribable_id" = "saas"."id" and "saas"."name" = 'saas-1')))
         SQL;
 
     expect($query->toRawSql())->toBe($expectedSql);

@@ -18,7 +18,7 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFie
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\Contract;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\File;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\FoodDeliveryService;
-use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Sass;
+use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Saas;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\IncludeRelationFields\Morph\WithoutMorphMap\Subscription;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Manufacturer;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\ManyToManyMorph\Epic;
@@ -309,7 +309,7 @@ class TestCase extends Orchestra
         });
 
         // Morph (Without Morph Map & Include Relation Fields)
-        $schema->create('sasses', function (Blueprint $table): void {
+        $schema->create('saas', function (Blueprint $table): void {
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -709,29 +709,29 @@ class TestCase extends Orchestra
             ]),
         );
 
-        $sass1 = Sass::create([
-            'name' => 'sass-1',
+        $saas1 = Saas::create([
+            'name' => 'saas-1',
         ]);
-        $sass1->subscriptions()->save(
+        $saas1->subscriptions()->save(
             $subscription5 = new Subscription([
                 'amount' => 5,
             ]),
         );
-        $sass1->subscriptions()->save(
+        $saas1->subscriptions()->save(
             $subscription6 = new Subscription([
                 'amount' => 6,
             ]),
         );
 
-        $sass2 = Sass::create([
-            'name' => 'sass-2',
+        $saas2 = Saas::create([
+            'name' => 'saas-2',
         ]);
-        $sass2->subscriptions()->save(
+        $saas2->subscriptions()->save(
             $subscription7 = new Subscription([
                 'amount' => 7,
             ]),
         );
-        $sass2->subscriptions()->save(
+        $saas2->subscriptions()->save(
             $subscription8 = new Subscription([
                 'amount' => 8,
             ]),
