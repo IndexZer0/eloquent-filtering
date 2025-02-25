@@ -42,7 +42,7 @@ class AvailableFiltersLoader
 
         return $filters->keyBy(
             function (string $filterMethodFqcn) {
-                /** @var $filterMethodFqcn FilterMethod */
+                /** @var FilterMethod $filterMethodFqcn */
                 return $filterMethodFqcn::type();
             },
         );
@@ -109,7 +109,7 @@ class AvailableFiltersLoader
     {
         $duplicateTypes = $filters->map(
             function (string $filterMethodFqcn) {
-                /** @var $filterMethodFqcn FilterMethod */
+                /** @var FilterMethod $filterMethodFqcn */
                 return $filterMethodFqcn::type();
             },
         )->duplicates();
