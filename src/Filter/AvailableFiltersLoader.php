@@ -41,10 +41,10 @@ class AvailableFiltersLoader
         $this->ensureNoDuplicateTypes($filters);
 
         return $filters->keyBy(
-            function (string $filterMethodFqcn) {
-                /** @var $filterMethodFqcn FilterMethod */
-                return $filterMethodFqcn::type();
-            },
+            /**
+             * @param class-string<FilterMethod> $filterMethodFqcn
+             */
+            fn (string $filterMethodFqcn) => $filterMethodFqcn::type(),
         );
     }
 
@@ -108,10 +108,10 @@ class AvailableFiltersLoader
     private function ensureNoDuplicateTypes(Collection $filters): void
     {
         $duplicateTypes = $filters->map(
-            function (string $filterMethodFqcn) {
-                /** @var $filterMethodFqcn FilterMethod */
-                return $filterMethodFqcn::type();
-            },
+            /**
+             * @param class-string<FilterMethod> $filterMethodFqcn
+             */
+            fn (string $filterMethodFqcn) => $filterMethodFqcn::type(),
         )->duplicates();
 
         if ($duplicateTypes->count() > 0) {

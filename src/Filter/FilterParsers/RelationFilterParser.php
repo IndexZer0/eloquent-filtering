@@ -25,6 +25,7 @@ class RelationFilterParser implements CustomFilterParser
         ?AllowedFilterList $allowedFilterList = null,
     ): FilterMethod {
         /** @var TargetedFilter&DefinesAllowedChildFilters $allowedFilter */
+        // @phpstan-ignore varTag.nativeType
         $target = $allowedFilter->getTarget($pendingFilter);
         $relation = $pendingFilter->model()->{$target->getReal()}();
 

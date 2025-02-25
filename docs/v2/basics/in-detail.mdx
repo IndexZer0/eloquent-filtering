@@ -87,7 +87,7 @@ class Subscription extends Model implements IsFilterable
                 Filter::morphType(FoodDeliveryService::class, Filter::only(
                     Filter::field('price', [FilterType::EQUALS])
                 )),
-                Filter::morphType(Sass::class, Filter::only(
+                Filter::morphType(Saas::class, Filter::only(
                     Filter::field('plan', [FilterType::EQUALS])
                 )),
             )
@@ -111,7 +111,7 @@ Subscription::filter([
                 ],
             ],
             [
-                'type'  => 'sasses', // Model database table due to Sass::class not being in the Relation::morphMap().
+                'type'  => 'saas', // Model database table due to Saas::class not being in the Relation::morphMap().
                 'value' => [
                     [
                         'target' => 'plan',
@@ -132,7 +132,7 @@ Subscription::filter([
 Filter::morphType(Target::alias('foodService', 'food_delivery_services'), Filter::only(
     Filter::field('price', [FilterType::EQUALS])
 )),
-Filter::morphType(Target::alias('software', 'sasses'), Filter::only(
+Filter::morphType(Target::alias('software', 'saas'), Filter::only(
     Filter::field('plan', [FilterType::EQUALS])
 )),
 ```

@@ -9,6 +9,7 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\CustomFilterParser as CustomFil
 use IndexZer0\EloquentFiltering\Filter\FilterParsers\CustomFilterParser;
 use IndexZer0\EloquentFiltering\Filter\Traits\FilterMethod\Composables\HasEloquentContext;
 
+// @phpstan-ignore trait.unused
 trait CustomFilter
 {
     use HasEloquentContext;

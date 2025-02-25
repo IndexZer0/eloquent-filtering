@@ -2,6 +2,12 @@
 
 All notable changes to `eloquent-filtering` will be documented in this file.
 
+## 2.2.0 - 2025-02-25
+### Added
+- Laravel 12 support.
+### Fixed
+- Deprecation warnings for implicitly marking method parameters as nullable for PHP 8.4.
+
 ## 2.1.1 - 2024-11-28
 ### Fixed
 - `:null` modifier for `$in` and `$notIn` not having correct query logical grouping when used in combination with other filters.

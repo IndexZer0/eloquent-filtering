@@ -44,7 +44,7 @@ public function allowedFilters(): AllowedFilterList
             [FilterType::HAS_MORPH],
         )->includeRelationFields([
             FoodDeliveryService::class,
-            Sass::class,
+            Saas::class,
         ])
     );
 }
@@ -80,7 +80,7 @@ public function allowedFilters(): AllowedFilterList
                 )
             ),
             Filter::morphType(
-                type: Sass::class,
+                type: Saas::class,
                 allowedFilters: Filter::only(
                     Filter::field('name', [FilterType::EQUAL])
                 )

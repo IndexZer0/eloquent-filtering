@@ -68,7 +68,7 @@ class Suppression
      * All
      */
 
-    public static function handleAllUsing(callable $callback = null): void
+    public static function handleAllUsing(?callable $callback = null): void
     {
         self::$suppressionHandlers['suppress'] = $callback;
     }
@@ -77,27 +77,27 @@ class Suppression
      * Filter
      */
 
-    public static function handleFilterUsing(callable $callback = null): void
+    public static function handleFilterUsing(?callable $callback = null): void
     {
         self::$suppressionHandlers['suppress.filter'] = $callback;
     }
 
-    public static function handleInvalidFilterUsing(callable $callback = null): void
+    public static function handleInvalidFilterUsing(?callable $callback = null): void
     {
         self::$suppressionHandlers['suppress.filter.invalid'] = $callback;
     }
 
-    public static function handleMissingFilterUsing(callable $callback = null): void
+    public static function handleMissingFilterUsing(?callable $callback = null): void
     {
         self::$suppressionHandlers['suppress.filter.missing'] = $callback;
     }
 
-    public static function handleMalformedFilterUsing(callable $callback = null): void
+    public static function handleMalformedFilterUsing(?callable $callback = null): void
     {
         self::$suppressionHandlers['suppress.filter.malformed_format'] = $callback;
     }
 
-    public static function handleDeniedFilterUsing(callable $callback = null): void
+    public static function handleDeniedFilterUsing(?callable $callback = null): void
     {
         self::$suppressionHandlers['suppress.filter.denied'] = $callback;
     }
@@ -106,17 +106,17 @@ class Suppression
      * Sort
      */
 
-    public static function handleSortUsing(callable $callback = null): void
+    public static function handleSortUsing(?callable $callback = null): void
     {
         self::$suppressionHandlers['suppress.sort'] = $callback;
     }
 
-    public static function handleMalformedSortUsing(callable $callback = null): void
+    public static function handleMalformedSortUsing(?callable $callback = null): void
     {
         self::$suppressionHandlers['suppress.sort.malformed_format'] = $callback;
     }
 
-    public static function handleDeniedSortUsing(callable $callback = null): void
+    public static function handleDeniedSortUsing(?callable $callback = null): void
     {
         self::$suppressionHandlers['suppress.sort.denied'] = $callback;
     }

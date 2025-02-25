@@ -13,7 +13,7 @@ use IndexZer0\EloquentFiltering\Filter\FilterType;
 use IndexZer0\EloquentFiltering\Filter\Traits\Filterable;
 use IndexZer0\EloquentFiltering\Sort\Traits\Sortable;
 
-class Sass extends Model implements IsFilterable
+class Saas extends Model implements IsFilterable
 {
     use Filterable;
     use Sortable;
