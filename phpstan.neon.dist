@@ -10,5 +10,6 @@ parameters:
     checkOctaneCompatibility: true
     checkModelProperties: true
     ignoreErrors:
-        - missingType.iterableValue
+        -
+            identifier: missingType.iterableValue
 
