@@ -12,6 +12,7 @@ use IndexZer0\EloquentFiltering\Filter\Contracts\AllowedFilterList;
 use IndexZer0\EloquentFiltering\Filter\Filterable\Filter;
 use IndexZer0\EloquentFiltering\Filter\RequiredFilters\RequiredFiltersChecker;
 
+// @phpstan-ignore trait.unused
 trait Filterable
 {
     public function scopeFilter(

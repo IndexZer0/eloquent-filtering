@@ -43,6 +43,7 @@ class MorphRelationFilterParser implements CustomFilterParser
         ?AllowedFilterList $allowedFilterList = null,
     ): FilterMethod {
         /** @var TargetedFilter&DefinesAllowedChildFilters $allowedFilter */
+        // @phpstan-ignore varTag.nativeType
         $target = $allowedFilter->getTarget($pendingFilter);
         $this->relation = $pendingFilter->model()->{$target->getReal()}();
         $this->allAllowedMorphTypes = collect($allowedFilter->allowedFilters()->getAll());

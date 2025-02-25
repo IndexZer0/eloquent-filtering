@@ -10,6 +10,7 @@ use IndexZer0\EloquentFiltering\Sort\Contracts\SortValidator;
 use IndexZer0\EloquentFiltering\Sort\Sortable\Sort;
 use IndexZer0\EloquentFiltering\Sort\SortApplier;
 
+// @phpstan-ignore trait.unused
 trait Sortable
 {
     public function scopeSort(

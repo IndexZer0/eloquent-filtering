@@ -49,6 +49,7 @@ class ClassUtils
         }
 
         /** @var IsFilterable $model */
+        // @phpstan-ignore varTag.nativeType
         return $model->allowedFilters();
     }
 }

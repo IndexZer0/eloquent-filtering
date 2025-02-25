@@ -24,6 +24,7 @@ class FieldFilterParser implements CustomFilterParser
         ?AllowedFilterList $allowedFilterList = null,
     ): FilterMethod {
         /** @var TargetedFilter $allowedFilter */
+        // @phpstan-ignore varTag.nativeType
         $target = $allowedFilter->getTarget($pendingFilter);
         $relation = $pendingFilter->relation();
 
