@@ -40,6 +40,7 @@ use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Pivot\Tag;
 use IndexZer0\EloquentFiltering\Tests\TestingResources\Models\Product;
 use Orchestra\Testbench\Concerns\InteractsWithPublishedFiles;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\LaravelRay\RayServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -79,6 +80,7 @@ class TestCase extends Orchestra
     {
         return [
             EloquentFilteringServiceProvider::class,
+            RayServiceProvider::class,
         ];
     }
 
