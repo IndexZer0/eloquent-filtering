@@ -27,9 +27,9 @@ jobs:
           {laravel: 11.*, php: 8.4, testbench: 9.*, pest: 3.*, pest-plugin-arch: 3.*, carbon: ^2.63},
           # laravel 12
           {laravel: 12.*, php: 8.2, testbench: 10.*, pest: 3.*, pest-plugin-arch: 3.*, carbon: ^3.00},
-          {laravel: 12.*, php: 8.3, testbench: 10.*, pest: ^4.0.4, pest-plugin-arch: 4.*, carbon: ^3.00},
-          {laravel: 12.*, php: 8.4, testbench: 10.*, pest: ^4.0.4, pest-plugin-arch: 4.*, carbon: ^3.00},
-          {laravel: 12.*, php: 8.5, testbench: 10.*, pest: ^4.0.4, pest-plugin-arch: 4.*, carbon: ^3.00}
+          {laravel: 12.*, php: 8.3, testbench: 10.*, pest: ^4.1.4, pest-plugin-arch: 4.*, carbon: ^3.00},
+          {laravel: 12.*, php: 8.4, testbench: 10.*, pest: ^4.1.4, pest-plugin-arch: 4.*, carbon: ^3.00},
+          {laravel: 12.*, php: 8.5, testbench: 10.*, pest: ^4.1.4, pest-plugin-arch: 4.*, carbon: ^3.00}
         ]
         stability: [prefer-lowest, prefer-stable]
 
