@@ -33,7 +33,7 @@ jobs:
         ]
         stability: [prefer-lowest, prefer-stable]
 
-    name: P${{ matrix.laravel.php }} - L${{ matrix.laravel.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: PHP ${{ matrix.laravel.php }} - Laravel ${{ matrix.laravel.laravel }} - PEST ${{ matrix.laravel.pest }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
