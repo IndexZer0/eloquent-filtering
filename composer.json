@@ -32,9 +32,9 @@
         "illuminate/contracts": "^10.0||^11.0||^12.0||^13.0"
     },
     "require-dev": {
-        "larastan/larastan": "^3.3",
         "laravel/pint": "^1.14",
         "nunomaduro/collision": "^8.1.1||^7.10.0",
+        "larastan/larastan": "^2.9||v3.1.0||^3.9.3",
         "orchestra/testbench": "^9.0.0||^8.22.0",
         "pestphp/pest": "^3.0.0",
         "pestphp/pest-plugin-arch": "^3.0.0",
