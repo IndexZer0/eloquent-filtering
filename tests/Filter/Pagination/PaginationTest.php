@@ -32,7 +32,7 @@ it('works with pagination', function (): void {
     $paginator = $query->paginate();
 
     $queryLog = collect(DB::getQueryLog())->map(
-        fn ($query) => collect($query)->only('query', 'bindings')->toArray()
+        fn ($query) => collect($query)->only('query', 'bindings')->toArray(),
     );
 
     expect($queryLog->toArray())->toBe([
