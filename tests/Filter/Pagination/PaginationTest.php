@@ -31,7 +31,9 @@ it('works with pagination', function (): void {
     /** @var LengthAwarePaginator $paginator */
     $paginator = $query->paginate();
 
-    $queryLog = collect(DB::getQueryLog())->map(fn ($query) => collect($query)->except('time')->toArray());
+    $queryLog = collect(DB::getQueryLog())->map(
+        fn ($query) => collect($query)->only('query', 'bindings')->toArray(),
+    );
 
     expect($queryLog->toArray())->toBe([
         [
